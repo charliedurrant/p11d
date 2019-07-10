@@ -1,0 +1,10 @@
+[STATICDATA]
+Contact=For help, please contact TCS on (020) 7438 3669
+Version=5.0.5
+ApplicationName=TestProject
+DBName=Test_Auto
+DataSource2=TestAutoDS2
+ServerName=londs3103
+NetDriver=
+User=sa
+Password=ukcentral

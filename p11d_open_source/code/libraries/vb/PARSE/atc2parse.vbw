@@ -1,0 +1,5 @@
+Parser = 0, 0, 0, 0, C
+IParseItem = 0, 0, 0, 0, C
+IParseSettings = 0, 0, 0, 0, C
+CONST = 0, 0, 0, 0, C
+DefaultParseSettings = 0, 0, 0, 0, C

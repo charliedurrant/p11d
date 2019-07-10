@@ -1,0 +1,252 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.K.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE FIXED IMPURE
+BEGIN
+    101                     "    <STYLE>
+	    BODY
+			{
+			FONT-FAMILY: Arial;
+			}
+      TD.UP
+      {
+        BORDER-BOTTOM: #ff6600 2px solid;
+        BORDER-LEFT: #ff6600 2px solid;
+        BORDER-RIGHT: #ff6600 2px solid;
+        BORDER-TOP: #ff6600 2px solid;
+        COLOR: #ff6600;
+        FONT-FAMILY: Arial;
+        FONT-WEIGHT: BOLD;
+        CURSOR: hand;
+      }
+      TD.DOWN
+      {
+        BACKGROUND-COLOR: #ffffff;
+        BORDER-BOTTOM: #ffffff 2px solid;
+        BORDER-LEFT: #ffffff 2px solid;
+        BORDER-RIGHT: #ffffff 2px solid;
+        BORDER-TOP: #ffffff 2px solid;
+        COLOR: black;
+        FONT-FAMILY: Arial;
+        FONT-WEIGHT: BOLD;
+        CURSOR: hand;
+      }
+      TD.NOACTION
+      {
+        BACKGROUND-COLOR: #ffffff;
+        BORDER-BOTTOM: #ffffff 2px solid;
+        BORDER-LEFT: #ffffff 2px solid;
+        BORDER-RIGHT: #ffffff 2px solid;
+        BORDER-TOP: #ffffff 2px solid;
+        COLOR: #ff6600;
+        FONT-FAMILY: Arial;
+        FONT-WEIGHT: BOLD;
+      }
+    </STYLE>"
+	102						"<SCRIPT LANGUAGE=javascript>
+<!--
+var CurrentPage;
+var MaxPage;
+var CurrentPrintPage;
+var SetPage = true;
+MaxPage=[MaxPage];
+CurrentPage=1;
+function PrintPages()
+{
+  SetPage=false;
+  CurrentPrintPage=1;
+  document.all('Page' + CurrentPage).style.display='none';
+  Nav.style.display='none';
+  Holder.style.overflow='visible';
+  while (CurrentPrintPage <= MaxPage)
+  {
+    if ( CurrentPrintPage != 1 )
+    { document.all('Page' + (CurrentPrintPage - 1)).style.display='none'; }
+    document.all('Page' + CurrentPrintPage).style.display='block';
+    if((CurrentPrintPage % 2)==0)
+    { window.resizeBy(0,-1); }
+    else
+    { window.resizeBy(0,+1); }
+    top.status='Printing: ' + CurrentPrintPage;Print();
+    document.all('Page' + CurrentPrintPage).style.display='none';
+    CurrentPrintPage++;
+  }
+  Nav.style.display='block';
+  Holder.style.overflow='scroll';
+  document.all('Page' + CurrentPage).style.display='block';
+  top.status='';SetPage=true;
+}
+
+function ChangePage(PageDir)
+{
+document.all('Page' + CurrentPage).style.display='none';
+if(PageDir==1)
+{
+CurrentPage=1;
+}
+else if(PageDir==2)
+{
+CurrentPage--;
+if(CurrentPage<1)
+{
+CurrentPage=1;
+}
+}
+else if(PageDir==3)
+{
+CurrentPage++;
+if(CurrentPage>MaxPage)
+{
+CurrentPage=MaxPage;
+}
+}
+else if(PageDir==4)
+{
+CurrentPage=MaxPage;
+}
+document.all('Page' + CurrentPage).style.display='block';      Info.innerHTML='Page ' + CurrentPage + ' of ' + MaxPage;
+}
+function ShowHelp()
+{
+showModalDialog(window.location.href,""Dialog"",""dialogheight: 300px; dialogwidth: 400px; help: no; status: no;"");
+}
+function SetDownload()
+{
+var bIsIE = navigator.appName == ""Microsoft Internet Explorer"" ;
+var MSIE=navigator.userAgent;
+var iMSIE=MSIE.indexOf(""MSIE "");
+var iMajor=MSIE.charAt(iMSIE+5);
+var iMinor=MSIE.charAt(iMSIE+7);
+var bIsIE55 = bIsIE && (iMajor==5) && (iMinor==5);
+var bIsIE5 = bIsIE && (iMajor==5) && (iMinor==0);
+var bIsIE4 = bIsIE && (iMajor==4);
+var BrowserString = """";
+if(bIsIE5)
+{
+BrowserString=""You are viewing this Report with IE 5. We recommend IE 5.5.""
+DownloadSection.style.display='block';
+}
+else if (bIsIE4)
+{
+BrowserString=""You are viewing this Report with IE 4. We recommend IE 5.5.""
+DownloadSection.style.display='block';
+}
+DownloadSection.innerHTML=BrowserString;
+}
+function checkHelp()
+{
+if(window.dialogArguments!='Dialog')
+{
+WholeThing.style.display='block';
+}
+else
+{
+document.body.innerHTML=""[Help]"";
+}
+}
+-->
+</SCRIPT>
+<SCRIPT LANGUAGE=vbscript>
+<!--
+Sub SetScreen()
+  Dim hgt
+  if SetPage Then
+	hgt = Nav.Style.Height
+	hgt = Left(hgt, Len(hgt) - 2)
+	hgt = Document.body.offsetHeight - hgt - 20
+	Holder.Style.Height = hgt
+	Call ChangePage(1)
+	Call checkHelp
+  End If
+End Sub
+Sub Print()
+  On Error Resume Next
+  Call document.body.insertAdjacentHTML(""beforeEnd"", ""<object id='idWBPrint' width=0 height=0 classid='clsid:8856F961-340A-11D0-A96B-00C04FD705A2'></object>"")
+  Call document.All(""idWBPrint"").ExecWB(6, 1)
+  idWBPrint.outerHTML = """"
+End Sub
+-->
+</SCRIPT>"
+  103						"<BODY leftmargin=0 bottommargin=0 rightmargin=0 topmargin=0 style='BACKGROUND-COLOR: #FFFFFF;' SCROLL=NO onload='SetDownload()'>  <DIV Style='position: absolute; Left: 0px; Top: 0%; Width: 100%; Height: 10%; BACKGROUND-COLOR: #FF6600;'>  <TABLE WIDTH=100% HEIGHT=100%>  <TR>  <TD WIDTH=10%></TD>  <TD Style='FONT-WEIGHT: bold; FONT-SIZE: 12pt; COLOR: #ffffff'>[Application Name]</TD>  </TR>  </TABLE>  </DIV>  <DIV ID=HelpSection Style='position: absolute; Left: 10%; Top: 11%; Width: 80%; Height: 70%; BACKGROUND-COLOR: #ffffff; FONT-SIZE: 8pt; '>  <BR>  To Print your report you should change some Internet Explorer settings first to make the report as readable as possible<BR>  <BR>  1. Turn on the printing of background colours and graphics.<BR>  2. Change the Page Settings as detailed below.<BR> <UL> Orientation: [ORIENTATION]<BR> Top Margin: [TOP]<BR> Bottom Margin: [BOTTOM]<BR> Left Margin: [LEFT]<BR> Right Margin: [RIGHT]<BR></UL> </DIV>  <DIV ID=DownloadSection Style='display: display; position: absolute; Left: 0px; Top: 80%; Width: 100%; Height: 10%; BACKGROUND-COLOR: #ffffff; FONT-WEIGHT: bold; FONT-SIZE: 10pt; text-align: center;'>  </DIV>  <DIV Style='position: absolute; Left: 0px; Top: 90%; Width: 100%; Height: 10%; BACKGROUND-COLOR: #FF6600; '>  <TABLE WIDTH=100% HEIGHT=100%>  <TR>  <TD WIDTH=10%></TD>  <TD valign=middle Style='FONT-WEIGHT: bold; FONT-SIZE: 10pt; COLOR: #ffffff'>[Contact Details]</TD>  </TR>  </TABLE>  </DIV>  </BODY>  </HTML>"
+  104						"<DIV ID='Nav' style='display: visible;
+HEIGHT=20px; BORDER-BOTTOM: #000000 thin solid; BORDER-LEFT: #000000 thin solid; BORDER-RIGHT: #000000 thin solid; BORDER-TOP: #000000 thin solid; '>
+<TABLE Width=100%>
+<TR>
+<TD id='First' WIDTH=80px ALIGN=middle CLASS='DOWN' onmouseover=""First.className='UP'"" onmouseout=""First.className='DOWN'""  onclick='ChangePage(1)' >First Page</TD>
+<TD id='Back' WIDTH=120px ALIGN=middle CLASS='DOWN' onmouseover=""Back.className='UP'"" onmouseout=""Back.className='DOWN'""  onclick='ChangePage(2)' >Previous Page</TD>
+<TD id='Forward' WIDTH=80px ALIGN=middle CLASS='DOWN' onmouseover=""Forward.className='UP'"" onmouseout=""Forward.className='DOWN'""  onclick='ChangePage(3)' >Next Page</TD>
+<TD id='Last' WIDTH=80px ALIGN=middle CLASS='DOWN' onmouseover=""Last.className='UP'"" onmouseout=""Last.className='DOWN'""  onclick='ChangePage(4)' >Last Page</TD>
+<TD id='Go' WIDTH=40px ALIGN=middle CLASS='DOWN' onmouseover=""Go.className='UP'"" onmouseout=""Go.className='DOWN'"" onclick='PrintPages()'>Print</TD>
+<TD id='Help' WIDTH=20px ALIGN=middle CLASS='DOWN' onmouseover=""Help.className='UP'"" onmouseout=""Help.className='DOWN'"" onclick='ShowHelp()'>?</TD>
+<TD id='Info' ALIGN=right CLASS='NOACTION' ></TD>
+</TR>
+</TABLE>
+</DIV>"
+END
+
+#endif    // English (U.K.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,1 @@
+xdel *.err;*.msg;*.t;*.log;*.scc;*.tmp;*.bak;*.oca;*.obj;*.rip /s /d

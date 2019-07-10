@@ -1,0 +1,4 @@
+[STATICDATA]
+Contact=For help, please contact abatec on (020) 7438 3669
+Version=1.1.76
+ApplicationName=AutoDoc

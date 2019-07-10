@@ -1,0 +1,110 @@
+<!-- edited with XML Spy v4.2 U (http://www.xmlspy.com) by Bali Balraj (Andersen) -->
+<xsd:schema targetNamespace="xsd_importer_spec" xmlns="xsd_importer_spec" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xsd:element name="importspec" type="importspecType"/>
+	<xsd:complexType name="importspecType">
+		<xsd:sequence>
+			<xsd:element name="dsn" type="xsd:string"/>
+			<xsd:element name="tables" type="tableType"  maxOccurs="1"/>
+			<xsd:element name="columns" type="columnsType"/>
+			<xsd:element name="delimiter" type="delimiterType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="rows" type="rowsType" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="header" type="headerType" minOccurs="0"  maxOccurs="1"/>
+			<xsd:element name="dateconversion" type="dateconversionType" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="columnsType">
+		<xsd:sequence>
+			<xsd:element name="column" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="name" use="required"/>
+					<xsd:attribute name="datatype" type="importerdataType"/>
+					<xsd:attribute name="skip"/>
+					<xsd:attribute name="order"/>
+					<xsd:attribute name="width"/>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="tableType">
+		<xsd:sequence>
+			<xsd:element name="target_db_name" type="xsd:string" default="abatecImporter" nillable="false"/>
+			<xsd:element name="error_log" type="xsd:string" default="error_log" nillable="false"/>
+			<xsd:element name="audit_log" type="xsd:string" default="audit_log" nillable="false"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="rowsType">
+		<xsd:attribute name="count" type="xsd:positiveInteger"/>
+		<xsd:attribute name="header" type="xsd:boolean"/>
+		<xsd:attribute name="footer" type="xsd:boolean"/>
+		<xsd:attribute name="hashtotal" type="xsd:boolean"/>
+	</xsd:complexType>
+	<xsd:complexType name="headerType">
+		<xsd:sequence>
+			<xsd:element name="column" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="name" use="required"/>
+					<xsd:attribute name="description" use="required"/>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="dateconversionType">
+		<xsd:sequence>
+			<xsd:element name="datefrom" type="datefromType" maxOccurs="1"  />
+			<xsd:element name="dateto" type="datetoType" maxOccurs="1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!--  Declare importer data types here -->
+	<xsd:simpleType name="importerdataType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Binary"/>
+			<xsd:enumeration value="Boolean"/>
+			<xsd:enumeration value="String"/>
+			<xsd:enumeration value="Currency"/>
+			<xsd:enumeration value="Date-Time"/>
+			<xsd:enumeration value="Date"/>
+			<xsd:enumeration value="Time"/>
+			<xsd:enumeration value="Time stamp"/>
+			<xsd:enumeration value="Decimal"/>
+			<xsd:enumeration value="Double"/>
+			<xsd:enumeration value="Empty"/>
+			<xsd:enumeration value="GUID"/>
+			<xsd:enumeration value="Numeric"/>
+			<xsd:enumeration value="Single"/>
+			<xsd:enumeration value="Small integer"/>
+			<xsd:enumeration value="Tiny integer"/>
+			<xsd:enumeration value="Big integer"/>
+			<xsd:enumeration value="Integer"/>
+			<xsd:enumeration value="Variant"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="delimiterType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value=","/>
+			<xsd:enumeration value=";"/>
+			<xsd:enumeration value="Variant"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="datefromType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="ddmmyyyy"/>
+			<xsd:enumeration value="ddmmyy"/>
+			<xsd:enumeration value="yyyymmdd"/>
+			<xsd:enumeration value="yymmdd"/>
+			<xsd:enumeration value="dd/mm/yyyy"/>
+			<xsd:enumeration value="yyyy/mm/dd"/>
+			<xsd:enumeration value="mm/dd/yyyy"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="datetoType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="dd/mm/yyyy"/>
+			<xsd:enumeration value="yyyy/mm/dd"/>
+			<xsd:enumeration value="mm/dd/yyyy"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+
+
+</xsd:schema>

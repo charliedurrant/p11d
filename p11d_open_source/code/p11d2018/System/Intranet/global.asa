@@ -1,0 +1,11 @@
+<SCRIPT RUNAT=Server LANGUAGE=JScript>
+
+function Session_OnStart()
+{
+  Session ( "username" ) = "";
+  Session ( "password" ) = "";
+  Session ( "loginattempts" ) = 0;
+}
+
+</SCRIPT>
+

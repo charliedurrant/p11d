@@ -1,0 +1,7 @@
+tcsWhere = 0, 0, 0, 0, C, 0, 0, 738, 414, C
+whereCondition = 22, 22, 386, 359, 
+Const = 0, 0, 0, 0, C
+whereClause = 44, 58, 711, 407, Z
+lows = 0, 0, 0, 0, C
+SQLParse = 44, 44, 783, 515, C
+Stack = 22, 22, 761, 493, C

@@ -1,0 +1,67 @@
+0. A function exists which returns a recordset containing the values of specified Active Directory fields for a specified user. If user cannot be authenticated, recordset is nothing
+
+
+1. Call the function with the username and password of the built-in user, returning the path within the Active Directory of the target user.
+
+
+2. If recordset returned, call the function again with the username and password of the target user. If recordset returned, user is authenticated.
+
+
+
+Dim sFieldList As String
+Dim sAuthUsername As String, sAuthPassword As String
+Dim sUsername As String, sPassword As String
+Dim sServer As String, sServer2 As String
+Dim rs As Recordset
+
+sUsername="mpsharpe"
+sPassword="password"
+
+sLDAPprefix = "LDAP://"
+sServer = "uklondc004.uk.deloitte.com"
+sServer2 = "DC=uk,DC=deloitte,DC=com"
+sAuthUsername = "CN=Options Test,CN=Users,DC=uk,DC=deloitte,DC=com"
+sAuthPassword = "0pt10n5t3sT"
+
+sFieldList = "adsPath"
+
+' Retrieve path of user's entry within Active Directory
+Set rs = UserProperties(sUsername, sFieldList, sAuthUsername, sAuthPassword, sLDAPprefix, sServer, sServer2)
+
+If (rs Is Nothing) Then
+  ' Authentication Failed
+Else
+  ' Now authenticate user
+  sUserPath=Replace(rs.Fields("adsPath").Value, sLDAPprefix & sServer & "/", "", 1, -1, vbTextCompare)
+  sFieldList = "employeeID"
+
+  Set rs = UserProperties(sUsername, sFieldList, sUsername, sPassword, sLDAPprefix, sServer, sServer2)
+  If (rs Is Nothing) Then
+    ' Authentication Failed
+  Else
+    ' Authentication Succeeded
+  Endif
+EndIf
+
+
+Function UserProperties(ByVal sUsername As String, ByVal sFieldList As String, ByVal sAuthUsername As String, ByVal sAuthPassword As String, ByVal sLDAPprefix As String, ByVal sServer As String, ByVal sServer2 As String) As Recordset
+  Dim con As Connection
+  Dim cmd As Command
+  Dim sLDAPsql As String
+
+  Set con = New Connection
+  con.Provider = "ADsDSOObject"
+  con.Properties("User ID") = sAuthUsername
+  con.Properties("Password") = sAuthPassword
+  con.Properties("Encrypt Password") = False
+  Call con.Open("ADs Provider")
+
+  sLDAPsql = "<" & sLDAPprefix & sServer & "/" & sServer2 & ">;(&(objectCategory=person)(objectclass=user)(|(userPrincipalName=" + sUsername + ")(samAccountName=" + sUsername + "))); " & sFieldList & ";" & "subtree"
+
+  Set cmd = New Command
+  Set cmd.ActiveConnection = con
+  cmd.CommandText = sLDAPSQL
+
+  Set UserProperties = cmd.Execute()
+
+End Function

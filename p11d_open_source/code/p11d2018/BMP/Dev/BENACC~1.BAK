@@ -1,0 +1,1782 @@
+VERSION 5.00
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.2#0"; "COMCTL32.OCX"
+Object = "{4582CA9E-1A45-11D2-8D2F-00C04FA9DD6F}#1.0#0"; "TCSVTEXT.OCX"
+Begin VB.Form F_BenAccom 
+   BackColor       =   &H00C0C0C0&
+   Caption         =   "Accommodation"
+   ClientHeight    =   5685
+   ClientLeft      =   585
+   ClientTop       =   1785
+   ClientWidth     =   8325
+   ControlBox      =   0   'False
+   BeginProperty Font 
+      Name            =   "MS Sans Serif"
+      Size            =   8.25
+      Charset         =   0
+      Weight          =   700
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
+   ForeColor       =   &H80000008&
+   KeyPreview      =   -1  'True
+   LinkTopic       =   "Form3"
+   MDIChild        =   -1  'True
+   PaletteMode     =   1  'UseZOrder
+   ScaleHeight     =   5685
+   ScaleWidth      =   8325
+   Visible         =   0   'False
+   WindowState     =   2  'Maximized
+   Begin VB.Frame fmeInput 
+      BackColor       =   &H8000000A&
+      ForeColor       =   &H00800000&
+      Height          =   3100
+      Index           =   0
+      Left            =   0
+      TabIndex        =   47
+      Tag             =   "free,font"
+      Top             =   2640
+      Width           =   8300
+      Begin VB.Frame fmeApportion 
+         Caption         =   "Note: Only annualised values require apportionment."
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H8000000D&
+         Height          =   1155
+         Left            =   4275
+         TabIndex        =   55
+         Tag             =   "free,font"
+         Top             =   1845
+         Width           =   3900
+         Begin TCSValidationText.ValText TxtBx 
+            Height          =   315
+            Index           =   4
+            Left            =   2235
+            TabIndex        =   11
+            Tag             =   "free,font"
+            Top             =   675
+            Width           =   1065
+            _ExtentX        =   1879
+            _ExtentY        =   556
+            ForeColor       =   128
+            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Text            =   ""
+            TypeOfData      =   2
+            Maximum         =   "5/4/1998"
+            Minimum         =   "6/4/1998"
+         End
+         Begin TCSValidationText.ValText TxtBx 
+            Height          =   315
+            Index           =   1
+            Left            =   2235
+            TabIndex        =   10
+            Tag             =   "free,font"
+            Top             =   270
+            Width           =   1065
+            _ExtentX        =   1879
+            _ExtentY        =   556
+            ForeColor       =   128
+            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Text            =   ""
+            TypeOfData      =   2
+            Maximum         =   "5/4/1998"
+            Minimum         =   "6/4/1998"
+         End
+         Begin VB.Label Lab 
+            AutoSize        =   -1  'True
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Available From"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H00800000&
+            Height          =   195
+            Index           =   3
+            Left            =   270
+            TabIndex        =   57
+            Tag             =   "free,font"
+            Top             =   315
+            Width           =   1035
+         End
+         Begin VB.Label Lab 
+            AutoSize        =   -1  'True
+            BackColor       =   &H80000005&
+            BackStyle       =   0  'Transparent
+            Caption         =   "Available To"
+            BeginProperty Font 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H00800000&
+            Height          =   195
+            Index           =   10
+            Left            =   270
+            TabIndex        =   56
+            Tag             =   "free,font"
+            Top             =   720
+            Width           =   885
+         End
+      End
+      Begin VB.CheckBox ChkBx 
+         Alignment       =   1  'Right Justify
+         Caption         =   "Is the accommodation job-related?"
+         DataField       =   "JobRelated"
+         DataSource      =   "DB"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   285
+         Index           =   1
+         Left            =   4365
+         TabIndex        =   8
+         Tag             =   "free,font"
+         Top             =   855
+         Width           =   3120
+      End
+      Begin VB.CheckBox ChkBx 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00C0C0C0&
+         Caption         =   "Is the accommodation owned by the Employer?"
+         DataField       =   "ErOwn"
+         DataSource      =   "DB"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   375
+         Index           =   0
+         Left            =   105
+         TabIndex        =   3
+         Tag             =   "free,font"
+         Top             =   810
+         Width           =   4110
+      End
+      Begin VB.CheckBox ChkBx 
+         Alignment       =   1  'Right Justify
+         Caption         =   "Is the above figure rent?"
+         DataField       =   "IsRent"
+         DataSource      =   "DB"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   285
+         Index           =   4
+         Left            =   120
+         TabIndex        =   6
+         Tag             =   "free,font"
+         Top             =   2295
+         Width           =   4065
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   20
+         Left            =   3150
+         TabIndex        =   7
+         Tag             =   "free,font"
+         Top             =   2640
+         Width           =   1065
+         _ExtentX        =   1323
+         _ExtentY        =   476
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "0"
+         TXTAlign        =   2
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   19
+         Left            =   6435
+         TabIndex        =   9
+         Tag             =   "free,font"
+         Top             =   1185
+         Width           =   1065
+         _ExtentX        =   1323
+         _ExtentY        =   476
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "0"
+         Maximum         =   "100"
+         Minimum         =   "0"
+         TXTAlign        =   2
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   15
+         Left            =   3150
+         TabIndex        =   5
+         Tag             =   "free,font"
+         Top             =   1950
+         Width           =   1065
+         _ExtentX        =   1879
+         _ExtentY        =   556
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "0"
+         TXTAlign        =   2
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   8
+         Left            =   3915
+         TabIndex        =   4
+         Tag             =   "free,font"
+         Top             =   1260
+         Width           =   285
+         _ExtentX        =   503
+         _ExtentY        =   556
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "0"
+         TXTAlign        =   2
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   2
+         Left            =   810
+         TabIndex        =   2
+         Tag             =   "free,font"
+         Top             =   450
+         Width           =   7005
+         _ExtentX        =   12356
+         _ExtentY        =   556
+         ForeColor       =   128
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   ""
+         TypeOfData      =   3
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Business Use (percentage)"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   32
+         Left            =   4410
+         TabIndex        =   54
+         Tag             =   "free,font"
+         Top             =   1215
+         Width           =   1995
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Consideration for use"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   31
+         Left            =   135
+         TabIndex        =   53
+         Tag             =   "free,font"
+         Top             =   2655
+         Width           =   2115
+      End
+      Begin VB.Label Lab 
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Higher of rent paid by employer or Annual Value of the property"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   405
+         Index           =   25
+         Left            =   135
+         TabIndex        =   52
+         Tag             =   "free,font"
+         Top             =   1890
+         Width           =   2655
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Address"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   5
+         Left            =   105
+         TabIndex        =   51
+         Tag             =   "free,font"
+         Top             =   450
+         Width           =   810
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Basic Charge"
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   21
+         Left            =   90
+         TabIndex        =   50
+         Tag             =   "free,font"
+         Top             =   1620
+         Width           =   2295
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Details of the accommodation"
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   0
+         Left            =   90
+         TabIndex        =   49
+         Tag             =   "free,font"
+         Top             =   180
+         Width           =   3615
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Number of other employees sharing this residence"
+         DataSource      =   "DB"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   15
+         Left            =   135
+         TabIndex        =   48
+         Tag             =   "free,font"
+         Top             =   1260
+         Width           =   3510
+      End
+   End
+   Begin VB.Frame fmeInput 
+      Height          =   3100
+      Index           =   1
+      Left            =   0
+      TabIndex        =   37
+      Top             =   2640
+      Visible         =   0   'False
+      Width           =   8300
+      Begin VB.CheckBox ChkBx 
+         Alignment       =   1  'Right Justify
+         BackColor       =   &H00C0C0C0&
+         Caption         =   "Does the accommodation meet the Six Year rule?"
+         DataField       =   "SixYear"
+         DataSource      =   "DB"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   285
+         Index           =   2
+         Left            =   3195
+         TabIndex        =   18
+         Tag             =   "free,font"
+         Top             =   1080
+         Width           =   4290
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   18
+         Left            =   1680
+         TabIndex        =   17
+         Tag             =   "free,font"
+         Top             =   2340
+         Width           =   1065
+         _ExtentX        =   1323
+         _ExtentY        =   476
+         ForeColor       =   128
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   ""
+         TypeOfData      =   2
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   11
+         Left            =   1710
+         TabIndex        =   15
+         Tag             =   "free,font"
+         Top             =   1530
+         Width           =   1065
+         _ExtentX        =   1323
+         _ExtentY        =   476
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "0"
+         TXTAlign        =   2
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   9
+         Left            =   1680
+         TabIndex        =   14
+         Tag             =   "free,font"
+         Top             =   1110
+         Width           =   1065
+         _ExtentX        =   1323
+         _ExtentY        =   476
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "0"
+         TXTAlign        =   2
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   17
+         Left            =   6750
+         TabIndex        =   20
+         Tag             =   "free,font"
+         Top             =   2220
+         Width           =   1065
+         _ExtentX        =   1323
+         _ExtentY        =   476
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "0"
+         TXTAlign        =   2
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   14
+         Left            =   1680
+         TabIndex        =   16
+         Tag             =   "free,font"
+         Top             =   1920
+         Width           =   1065
+         _ExtentX        =   1323
+         _ExtentY        =   476
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "0"
+         TXTAlign        =   2
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   13
+         Left            =   6750
+         TabIndex        =   19
+         Tag             =   "free,font"
+         Top             =   1800
+         Width           =   1065
+         _ExtentX        =   1323
+         _ExtentY        =   476
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "0"
+         TXTAlign        =   2
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   3
+         Left            =   1680
+         TabIndex        =   13
+         Tag             =   "free,font"
+         Top             =   690
+         Width           =   1065
+         _ExtentX        =   1323
+         _ExtentY        =   476
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "0"
+         TXTAlign        =   2
+      End
+      Begin VB.Label Lab 
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Improvements between FIRSTOCC and TAX_YR"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   435
+         Index           =   28
+         Left            =   3330
+         TabIndex        =   46
+         Tag             =   "free,font"
+         Top             =   2220
+         Width           =   3315
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Date First Occupied"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   29
+         Left            =   150
+         TabIndex        =   45
+         Tag             =   "free,font"
+         Top             =   2370
+         Width           =   1410
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Market Value when first occupied"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   23
+         Left            =   3360
+         TabIndex        =   44
+         Tag             =   "free,font"
+         Top             =   1830
+         Width           =   2370
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Payment for tenancy"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   24
+         Left            =   150
+         TabIndex        =   43
+         Tag             =   "free,font"
+         Top             =   1950
+         Width           =   1455
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Improvements"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   14
+         Left            =   150
+         TabIndex        =   42
+         Tag             =   "free,font"
+         Top             =   1140
+         Width           =   990
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "If so:"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   18
+         Left            =   3210
+         TabIndex        =   41
+         Tag             =   "free,font"
+         Top             =   1500
+         Width           =   345
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Accomodation first occupied after 31 March 1983"
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   7
+         Left            =   3180
+         TabIndex        =   40
+         Tag             =   "free,font"
+         Top             =   630
+         Width           =   4215
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Purchase cost"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   8
+         Left            =   150
+         TabIndex        =   39
+         Tag             =   "free,font"
+         Top             =   750
+         Width           =   1020
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Capital contribution"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   19
+         Left            =   150
+         TabIndex        =   38
+         Tag             =   "free,font"
+         Top             =   1560
+         Width           =   1350
+      End
+   End
+   Begin VB.Frame fmeInput 
+      Height          =   3100
+      Index           =   2
+      Left            =   20
+      TabIndex        =   28
+      Tag             =   "free,font"
+      Top             =   2565
+      Visible         =   0   'False
+      Width           =   8300
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   12
+         Left            =   6840
+         TabIndex        =   26
+         Tag             =   "free,font"
+         Top             =   1770
+         Width           =   1065
+         _ExtentX        =   1323
+         _ExtentY        =   476
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "0"
+         TXTAlign        =   2
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   10
+         Left            =   6840
+         TabIndex        =   25
+         Tag             =   "free,font"
+         Top             =   1410
+         Width           =   1065
+         _ExtentX        =   1323
+         _ExtentY        =   476
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "0"
+         TXTAlign        =   2
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   0
+         Left            =   6840
+         TabIndex        =   22
+         Tag             =   "free,font"
+         Top             =   330
+         Width           =   1065
+         _ExtentX        =   1323
+         _ExtentY        =   476
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "0"
+         TXTAlign        =   2
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   16
+         Left            =   6840
+         TabIndex        =   27
+         Tag             =   "free,font"
+         Top             =   2130
+         Width           =   1065
+         _ExtentX        =   1323
+         _ExtentY        =   476
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "0"
+         TXTAlign        =   2
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   6
+         Left            =   6840
+         TabIndex        =   24
+         Tag             =   "free,font"
+         Top             =   1080
+         Width           =   1065
+         _ExtentX        =   1323
+         _ExtentY        =   476
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "0"
+         TXTAlign        =   2
+      End
+      Begin TCSValidationText.ValText TxtBx 
+         Height          =   315
+         Index           =   5
+         Left            =   6840
+         TabIndex        =   23
+         Tag             =   "free,font"
+         Top             =   720
+         Width           =   1065
+         _ExtentX        =   1323
+         _ExtentY        =   476
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Text            =   "0"
+         TXTAlign        =   2
+      End
+      Begin VB.Label Lab 
+         BackColor       =   &H00C0C0C0&
+         Caption         =   "Note: Any assets provided as part of the accommodation should be entered under category M"
+         ForeColor       =   &H00800000&
+         Height          =   375
+         Index           =   30
+         Left            =   135
+         TabIndex        =   36
+         Tag             =   "free,font"
+         Top             =   2430
+         Width           =   6495
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Other, ancillary expenses not covered in a) or b) above"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   22
+         Left            =   120
+         TabIndex        =   35
+         Tag             =   "free,font"
+         Top             =   1800
+         Width           =   3870
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Employee expenses reimbursed under a) and b) above, but not already included "
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   12
+         Left            =   120
+         TabIndex        =   34
+         Tag             =   "free,font"
+         Top             =   1080
+         Width           =   5670
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "a) Heating, Lighting, Cleaning"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   4
+         Left            =   210
+         TabIndex        =   33
+         Tag             =   "free,font"
+         Top             =   465
+         Width           =   2085
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "If the job qualifies as 'job-related', s164(4), the employee's net emoluments"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   27
+         Left            =   135
+         TabIndex        =   32
+         Tag             =   "free,font"
+         Top             =   2160
+         Width           =   5190
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Extra expenses incurred by the Employer connected with the Accommodation (actual values)"
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   1
+         Left            =   105
+         TabIndex        =   31
+         Tag             =   "free,font"
+         Top             =   120
+         Width           =   6555
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "b) Repairs, maintenance, decoration"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   9
+         Left            =   210
+         TabIndex        =   30
+         Tag             =   "free,font"
+         Top             =   780
+         Width           =   2565
+      End
+      Begin VB.Label Lab 
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Costs made good by employee of employer's expenses under a) or b) above"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   17
+         Left            =   105
+         TabIndex        =   29
+         Tag             =   "free,font"
+         Top             =   1440
+         Width           =   5325
+      End
+   End
+   Begin VB.CommandButton cmdTab 
+      Caption         =   "&Expensive Accom."
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   300
+      Index           =   1
+      Left            =   5040
+      TabIndex        =   12
+      Tag             =   "free,font"
+      Top             =   2250
+      Width           =   1590
+   End
+   Begin VB.CommandButton cmdTab 
+      Caption         =   "E&xtra Expenses"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   300
+      Index           =   2
+      Left            =   6660
+      TabIndex        =   21
+      Tag             =   "free,font"
+      Top             =   2250
+      Width           =   1590
+   End
+   Begin VB.CommandButton cmdTab 
+      Caption         =   "&Details"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   300
+      Index           =   0
+      Left            =   3420
+      TabIndex        =   1
+      Tag             =   "free,font"
+      Top             =   2250
+      Width           =   1590
+   End
+   Begin ComctlLib.ListView LB 
+      Height          =   2085
+      Left            =   45
+      TabIndex        =   0
+      Tag             =   "free,font"
+      Top             =   45
+      Width           =   8145
+      _ExtentX        =   14367
+      _ExtentY        =   3678
+      View            =   3
+      LabelEdit       =   1
+      Sorted          =   -1  'True
+      LabelWrap       =   0   'False
+      HideSelection   =   0   'False
+      _Version        =   327682
+      ForeColor       =   -2147483640
+      BackColor       =   -2147483643
+      BorderStyle     =   1
+      Appearance      =   1
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      NumItems        =   3
+      BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Accomodation Reference"
+         Object.Width           =   2540
+      EndProperty
+      BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         Alignment       =   1
+         SubItemIndex    =   1
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Benefit"
+         Object.Width           =   2540
+      EndProperty
+      BeginProperty ColumnHeader(3) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         Alignment       =   1
+         SubItemIndex    =   2
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "P/Y Value"
+         Object.Width           =   2540
+      EndProperty
+   End
+End
+Attribute VB_Name = "F_BenAccom"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Option Explicit
+Implements IBenefitForm2
+Implements IFrmGeneral
+
+Public benefit As IBenefitClass
+Private m_bentype As benClass
+Private m_InvalidVt As ValText
+
+Private mclsResize As New clsFormResize
+Private Const L_DES_HEIGHT = 6090
+Private Const L_DES_WIDTH = 8445
+Private ml_CurrentTab As Long 'used to store the current tab
+
+Private Sub ChkBx_Click(Index As Integer)
+  Call IFrmGeneral_CheckChanged(ChkBx(Index), True)
+End Sub
+
+Private Sub ChkBx_LostFocus(Index As Integer)
+  Call IFrmGeneral_CheckChanged(ChkBx(Index), True)
+End Sub
+
+Private Sub Form_Load()
+  If Not (mclsResize.InitResize(Me, L_DES_HEIGHT, L_DES_WIDTH, DESIGN, , , MDIMain)) Then
+    Err.Raise ERR_Application
+  End If
+  Call cmdTab_Click(0)
+End Sub
+
+Private Sub Form_Resize()
+  LockWindowUpdate (MDIMain.hWnd)
+  mclsResize.Resize
+  Call ColumnWidths(LB, 50, 25, 20)
+  LockWindowUpdate (0)
+End Sub
+Private Function SixYearAccomodationToScreen(b As Boolean) As Boolean
+
+On Error GoTo SixYearAccomodationToScreen_ERR
+
+  Call xSet("SixYearAccomodationToScreen")
+  
+  TxtBx(13).Enabled = b
+  TxtBx(17).Enabled = b
+
+  SixYearAccomodationToScreen = True
+  
+SixYearAccomodationToScreen_END:
+  Call xReturn("SixYearAccomodationToScreen")
+  Exit Function
+SixYearAccomodationToScreen_ERR:
+  SixYearAccomodationToScreen = False
+  Call ErrorMessage(ERR_ERROR, Err, "SixYearAccomodationToScreen", "Six Year Accomodation To Screen", "Unable to set the controls for the six yeay accomodation check.")
+  Resume SixYearAccomodationToScreen_END
+
+End Function
+
+
+
+
+
+'Private Sub IBenefitForm_ClearFields()
+'  On Error GoTo ClearFields_Err
+'  Call xSet("ClearFields")
+'  With Me
+'    .TB_Data(0).Text = ""
+'    .TB_Data(1).Text = ""
+'    .TB_Data(2).Text = ""
+'    .TB_Data(3).Text = ""
+'    .TB_Data(4).Text = ""
+'    .TB_Data(5).Text = ""
+'    .TB_Data(6).Text = ""
+'    .TB_Data(7).Text = ""
+'    .TB_Data(8).Text = ""
+'    '.TB_Data(9).Text = ""
+'    .Op_Data(0).Value = vbUnchecked
+'    .Op_Data(1).Value = vbUnchecked
+'    .Op_Data(2).Value = vbUnchecked
+'    .Op_Data(3).Value = vbUnchecked
+'    '.Op_Data(4).value  = vbUnchecked
+'    .Op_Data(5).Value = vbUnchecked
+'    .CB_BusMiles.Text = S_UNDER2499
+'    .lblAccessories = ""
+'  End With
+'ClearFields_End:
+'  Call xReturn("ClearFields")
+'  Exit Sub
+'ClearFields_Err:
+'  Call ErrorMessage(ERR_ERROR, Err, "ClearFields", "ERR_UNDEFINED", "Undefined error.")
+'  Resume ClearFields_End
+'End Sub
+
+
+Private Sub cmdTab_Click(Index As Integer)
+  Dim I As Long
+  
+  For I = 0 To 2
+    If I = Index Then
+      cmdTab(I).Enabled = False
+      fmeInput(I).Visible = True
+    Else
+      cmdTab(I).Enabled = True
+      fmeInput(I).Visible = False
+    End If
+  Next I
+  If Not benefit Is Nothing Then
+    If cmdTab(1).Enabled = True Then cmdTab(1).Enabled = benefit.GetItem(accom_ErOwn)
+  End If
+End Sub
+
+
+Private Sub IBenefitForm2_AddBenefit()
+  Dim benAccom As clsBenAccom
+  Dim ben As IBenefitClass
+  Dim lst As ListItem
+  Dim I As Long
+  Dim ibf As IBenefitForm2
+  
+On Error GoTo AddBenefit_Err
+
+  Call xSet("AddBenefit")
+  
+  Set benAccom = New clsBenAccom
+  Set ben = benAccom
+  
+  With ben
+    Set .Parent = CurrentEmployee
+  
+    Call .SetItem(accom_employeereference, CurrentEmployee.PersonelNo)
+    Call .SetItem(accom_item, "Please enter address")
+    Call .SetItem(accom_rent, 0)
+    Call .SetItem(accom_business, 0)
+    Call .SetItem(accom_Unavailable, 0)
+    Call .SetItem(accom_RelevantDays, 0)
+    Call .SetItem(accom_consideration, 0)
+    Call .SetItem(accom_Price, 0)
+    Call .SetItem(accom_Improv, 0)
+    Call .SetItem(accom_CapContrib, 0)
+    Call .SetItem(accom_Tenancy, 0)
+    Call .SetItem(accom_MVFirstOcc, 0)
+    Call .SetItem(accom_RecentImprov, 0)
+    Call .SetItem(accom_Utilities, 0)
+    Call .SetItem(accom_Repairs, 0)
+    Call .SetItem(accom_Assets, 0)
+    Call .SetItem(accom_Reimbursements, 0)
+    Call .SetItem(accom_MadeGood, 0)
+    Call .SetItem(accom_NetEmoluments, 0)
+    Call .SetItem(accom_AvailDays, 0)
+    Call .SetItem(accom_CoP, 0)
+    Call .SetItem(accom_Ancillary, 0)
+    Call .SetItem(accom_nemployees, 0)
+      
+    Call .SetItem(accom_Availablefrom, rates.GetItem(taxyearstart))
+    Call .SetItem(accom_Availableto, rates.GetItem(taxyearend))
+    Call .SetItem(accom_FirstOcc, rates.GetItem(accomFirstOccupiedDef))
+    
+    .ReadFromDB = True
+    
+    I = CurrentEmployee.benefits.Add(ben)
+    Set lst = LB.ListItems.Add(, , .Name)
+    Set ibf = Me
+  End With
+  
+  Call ibf.UpdateBenefitListViewItem(lst, ben, I, True)
+  ben.Dirty = True
+  
+  'place to the screen
+  Call ibf.BenefitToScreen(I)
+  
+ 
+AddBenefit_End:
+  Set lst = Nothing
+  Set ibf = Nothing
+  Set ben = Nothing
+  Call xReturn("AddBenefit")
+  Exit Sub
+AddBenefit_Err:
+  Call ErrorMessage(ERR_ERROR, Err, "AddBenefit", "ERR_ADDBENEFIT", "Error in AddBenefit function, called from the form " & Me.Name & ".")
+  Resume AddBenefit_End
+  Resume
+End Sub
+
+Private Property Let IBenefitForm2_benefit(NewValue As IBenefitClass)
+  Set benefit = NewValue
+End Property
+
+Private Property Get IBenefitForm2_benefit() As IBenefitClass
+  Set IBenefitForm2_benefit = benefit
+End Property
+
+Private Function IBenefitForm2_BenefitFormState(ByVal fState As BENEFIT_FORM_STATE) As Boolean
+
+On Error GoTo BenefitFormState_err
+
+  Call xSet("IBenefitForm2_EnableBenefitForm")
+  
+  If (fState = FORM_ENABLED) Or (fState = FORM_CDB) Then
+    If fState = FORM_ENABLED Then
+      fmeInput(0).Enabled = True
+      fmeInput(1).Enabled = True
+      fmeInput(2).Enabled = True
+      'cmdTab(0).Enabled = True
+      'cmdTab(1).Enabled = True
+      'cmdTab(2).Enabled = True
+    Else
+      ECASE ("Car CBD?") 'CAD
+    End If
+    'If Not LB.Enabled Then
+    '  cmdTab(0).value = True
+    LB.Enabled = True
+    'End If
+    Call MDIMain.SetDelete
+  ElseIf fState = FORM_DISABLED Then
+    Set benefit = Nothing
+    fmeInput(0).Enabled = False
+    fmeInput(1).Enabled = False
+    fmeInput(2).Enabled = False
+    'cmdTab(0).Enabled = False
+    'cmdTab(1).Enabled = False
+    'cmdTab(2).Enabled = False
+    LB.Enabled = False 'new
+    
+    Call MDIMain.ClearDelete
+    Call MDIMain.ClearConfirmUndo
+  End If
+  
+  IBenefitForm2_BenefitFormState = True
+    
+BenefitFormState_end:
+  Call xReturn("BenefitFormState")
+  Exit Function
+  
+BenefitFormState_err:
+  IBenefitForm2_BenefitFormState = False
+  Call ErrorMessage(ERR_ERROR, Err, "BenefitFormState", "ERR_UNDEFINED", "Undefined error.")
+  Resume BenefitFormState_end
+End Function
+
+Private Function IBenefitForm2_BenefitsToListView() As Long
+  IBenefitForm2_BenefitsToListView = BenefitsToListView(Me)
+End Function
+
+Private Function IBenefitForm2_BenefitToScreen(Optional ByVal BenefitIndex As Long = -1&, Optional ByVal UpdateBenefit As Boolean = True) As IBenefitClass
+  Dim lst As ListItem
+  Dim ben As IBenefitClass, tmpben As IBenefitClass
+  Dim ibf As IBenefitForm2
+  Dim I As Long
+  
+On Error GoTo BenefitToScreen_Err
+  Call xSet("BenefitToScreen")
+  
+  Set ibf = Me
+  If UpdateBenefit Then Call UpdateBenefitFromTags
+  If BenefitIndex <> -1 Then
+    Set ben = CurrentEmployee.benefits(BenefitIndex)
+    If ben.BenefitClass <> m_bentype Then Call Err.Raise(ERR_INVALIDBENTYPE, "BenefitToScreen", "Benefit type invalid.")
+  
+    Set IBenefitForm2_BenefitToScreen = ben
+    Set benefit = ben
+    
+    TxtBx(0).Text = ben.GetItem(accom_Utilities)
+    TxtBx(1).Text = ben.GetItem(accom_Availablefrom)
+    TxtBx(2).Text = ben.GetItem(accom_item)
+    TxtBx(3).Text = ben.GetItem(accom_Price)
+    TxtBx(4).Text = ben.GetItem(accom_Availableto)
+    TxtBx(5).Text = ben.GetItem(accom_Repairs)
+    TxtBx(6).Text = ben.GetItem(accom_Reimbursements)
+    TxtBx(8).Text = ben.GetItem(accom_nemployees)
+    TxtBx(9).Text = ben.GetItem(accom_Improv)
+    TxtBx(11).Text = ben.GetItem(accom_CapContrib)
+    TxtBx(14).Text = ben.GetItem(accom_Tenancy)
+    TxtBx(18).Text = ben.GetItem(accom_FirstOcc)
+    Lab(28).Caption = "Improvements between " & ben.GetItem(accom_FirstOcc) & " and " & rates.GetItem(taxyearstart)
+    TxtBx(13).Text = ben.GetItem(accom_MVFirstOcc)
+    TxtBx(17).Text = ben.GetItem(accom_RecentImprov)
+    TxtBx(10).Text = ben.GetItem(accom_MadeGood)
+    TxtBx(12).Text = ben.GetItem(accom_Ancillary)
+    TxtBx(16).Text = ben.GetItem(accom_NetEmoluments)
+    TxtBx(15).Text = ben.GetItem(accom_rent)
+    TxtBx(19).Text = ben.GetItem(accom_business)
+    TxtBx(20).Text = ben.GetItem(accom_consideration)
+    
+    ChkBx(0).value = IIf(ben.GetItem(accom_ErOwn), vbChecked, vbUnchecked)
+    ChkBx(1).value = IIf(ben.GetItem(accom_JobRelated), vbChecked, vbUnchecked)
+    ChkBx(2).value = IIf(ben.GetItem(accom_SixYear), vbChecked, vbUnchecked)
+    Call SixYearAccomodationToScreen(ben.GetItem(accom_SixYear))
+    '.ChkBx(3).Value = IIf(ben.GetItem(accom_), vbChecked, vbUnchecked)
+    ChkBx(4).value = IIf(ben.GetItem(accom_isrent), vbChecked, vbUnchecked)
+    fmeApportion.Enabled = Not ben.GetItem(accom_isrent)
+  Else
+    TxtBx(0).Text = ""
+    TxtBx(1).Text = ""
+    TxtBx(2).Text = ""
+    TxtBx(3).Text = ""
+    TxtBx(4).Text = ""
+    TxtBx(5).Text = ""
+    TxtBx(6).Text = ""
+    TxtBx(8).Text = ""
+    TxtBx(9).Text = ""
+    TxtBx(11).Text = ""
+    TxtBx(14).Text = ""
+    TxtBx(18).Text = ""
+    Lab(28).Caption = ""
+    TxtBx(13).Text = ""
+    TxtBx(17).Text = ""
+    TxtBx(10).Text = ""
+    TxtBx(12).Text = ""
+    TxtBx(16).Text = ""
+    TxtBx(15).Text = ""
+    TxtBx(19).Text = ""
+    TxtBx(20).Text = ""
+    
+    ChkBx(0).value = vbUnchecked
+    ChkBx(1).value = vbUnchecked
+    ChkBx(2).value = vbUnchecked
+    '.ChkBx(3).Value = IIf(ben.GetItem(accom_), vbChecked, vbUnchecked)
+    ChkBx(4).value = vbUnchecked
+  End If
+  
+  Call SetBenefitFormState(ibf, ben)
+  
+BenefitToScreen_End:
+  Set tmpben = Nothing
+  Set ibf = Nothing
+  Set lst = Nothing
+  Set ben = Nothing
+  Call xReturn("BenefitToScreen")
+  Exit Function
+BenefitToScreen_Err:
+  
+  Call ErrorMessage(ERR_ERROR, Err, "BenefitToScreen", "ERR_BenefitToScreen", "Error loading the car details onto the form.")
+  Resume BenefitToScreen_End
+  Resume
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+End Function
+
+Private Property Let IBenefitForm2_bentype(ByVal NewValue As benClass)
+  m_bentype = NewValue
+End Property
+
+Private Property Get IBenefitForm2_bentype() As benClass
+  IBenefitForm2_bentype = m_bentype
+End Property
+
+Private Property Get IBenefitForm2_lv() As ComctlLib.IListView
+  Set IBenefitForm2_lv = LB
+End Property
+
+Private Function IBenefitForm2_RemoveBenefit(ByVal BenefitIndex As Long) As Boolean
+  IBenefitForm2_RemoveBenefit = RemoveBenefit(Me, CurrentEmployee.benefits(BenefitIndex), BenefitIndex)
+End Function
+
+Private Function IBenefitForm2_UpdateBenefitListViewItem(li As ComctlLib.IListItem, benefit As IBenefitClass, Optional ByVal BenefitIndex As Long = 0&, Optional ByVal SelectItem As Boolean = False) As Boolean
+  IBenefitForm2_UpdateBenefitListViewItem = UpdateBenefitListViewItem(li, benefit, BenefitIndex, SelectItem)
+End Function
+
+Private Function IFrmGeneral_CheckChanged(C As Control, ByVal UpdateCurrentListItem As Boolean) As Boolean
+  Dim lst As ListItem
+  Dim I As Long
+  Dim bDirty As Boolean
+  
+On Error GoTo CheckChanged_Err
+
+  Call xSet("CheckChanged")
+  
+  If CurrentEmployee Is Nothing Then GoTo CheckChanged_End
+  If benefit Is Nothing Then GoTo CheckChanged_End
+  
+  With C
+    Select Case .Name
+      Case "TxtBx"
+        Select Case .Index
+          Case 0
+            bDirty = CheckTextInput(.Text, benefit, accom_Utilities)
+          Case 1
+            bDirty = CheckTextInput(.Text, benefit, accom_Availablefrom)
+          Case 2
+            bDirty = CheckTextInput(.Text, benefit, accom_item)
+          Case 3
+            bDirty = CheckTextInput(.Text, benefit, accom_Price)
+          Case 4
+            bDirty = CheckTextInput(.Text, benefit, accom_Availableto)
+          Case 5
+            bDirty = CheckTextInput(.Text, benefit, accom_Repairs)
+          Case 6
+            bDirty = CheckTextInput(.Text, benefit, accom_Reimbursements)
+          Case 8
+            bDirty = CheckTextInput(.Text, benefit, accom_nemployees)
+          Case 9
+            bDirty = CheckTextInput(.Text, benefit, accom_Improv)
+          Case 10
+            bDirty = CheckTextInput(.Text, benefit, accom_MadeGood)
+          Case 11
+            bDirty = CheckTextInput(.Text, benefit, accom_CapContrib)
+          Case 12
+            bDirty = CheckTextInput(.Text, benefit, accom_Ancillary)
+          Case 13
+            bDirty = CheckTextInput(.Text, benefit, accom_MVFirstOcc)
+          Case 14
+            bDirty = CheckTextInput(.Text, benefit, accom_Tenancy)
+          Case 15
+            bDirty = CheckTextInput(.Text, benefit, accom_rent)
+          Case 16
+            bDirty = CheckTextInput(.Text, benefit, accom_NetEmoluments)
+          Case 17
+            bDirty = CheckTextInput(.Text, benefit, accom_RecentImprov)
+          Case 18
+            bDirty = CheckTextInput(.Text, benefit, accom_FirstOcc)
+            If bDirty Then Lab(28).Caption = "Improvements between " & benefit.GetItem(accom_FirstOcc) & " and " & rates.GetItem(taxyearstart)
+          Case 19
+            bDirty = CheckTextInput(.Text, benefit, accom_business)
+          Case 20
+            bDirty = CheckTextInput(.Text, benefit, accom_consideration)
+          Case Else
+            ECASE "Unknown control"
+            GoTo CheckChanged_End
+        End Select
+      Case "ChkBx"
+        Select Case .Index
+          Case 0
+            bDirty = CheckCheckBoxInput(.value, benefit, accom_ErOwn)
+            cmdTab(1).Enabled = benefit.GetItem(accom_ErOwn)
+          Case 1
+            bDirty = CheckCheckBoxInput(.value, benefit, accom_JobRelated)
+          Case 2
+            bDirty = CheckCheckBoxInput(.value, benefit, accom_SixYear)
+            Call SixYearAccomodationToScreen(benefit.GetItem(accom_SixYear))
+          Case 3
+          
+          Case 4
+            bDirty = CheckCheckBoxInput(.value, benefit, accom_isrent)
+            If bDirty Then
+              fmeApportion.Enabled = Not benefit.GetItem(accom_isrent)
+            End If
+          Case 5
+          
+          Case Else
+            ECASE "Unknown control"
+            GoTo CheckChanged_End
+        End Select
+      Case Else
+        ECASE "Unknown control"
+    End Select
+  End With
+  IFrmGeneral_CheckChanged = AfterCheckChanged(C, Me, bDirty, UpdateCurrentListItem)
+    
+CheckChanged_End:
+  Call xReturn("CheckChanged")
+  Exit Function
+
+CheckChanged_Err:
+  Call ErrorMessage(ERR_ERROR, Err, "CheckChanged", "ERR_CHECKCHANGED", "This function has failed for the form " & Me.Name & ".")
+  Resume CheckChanged_End
+End Function
+Private Function EnableDates(b As Boolean) As Boolean
+  
+    fmeApportion.Enabled = b
+    
+End Function
+Private Property Get IFrmGeneral_InvalidVT() As TCSValidationText.ValText
+  Set IFrmGeneral_InvalidVT = m_InvalidVt
+End Property
+
+Private Property Set IFrmGeneral_InvalidVT(NewValue As TCSValidationText.ValText)
+  Set m_InvalidVt = NewValue
+End Property
+
+Private Sub LB_ItemClick(ByVal Item As ComctlLib.ListItem)
+  Call SetLastListItemSelected(Item)
+  If Not (LB.SelectedItem Is Nothing) Then
+    Call IBenefitForm2_BenefitToScreen(Item.Tag)
+  End If
+End Sub
+
+Private Sub LB_ColumnClick(ByVal ColumnHeader As ComctlLib.ColumnHeader)
+  LB.SortKey = ColumnHeader.Index - 1
+  LB.SelectedItem.EnsureVisible
+End Sub
+
+Private Sub TxtBx_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+  TxtBx(Index).Tag = SetChanged
+End Sub
+
+Private Sub TxtBx_LostFocus(Index As Integer)
+  Call IFrmGeneral_CheckChanged(TxtBx(Index), True)
+End Sub

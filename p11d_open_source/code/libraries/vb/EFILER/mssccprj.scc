@@ -1,0 +1,5 @@
+SCC = This is a Source Code Control file
+
+[atc2efiler.vbp]
+SCC_Aux_Path =\\uk.deloitte.com\ukdfsroot\Tax\TMC\Projects\Sourcesafe\libraries,
+SCC_Project_Name ="$/VB/Release/efiler", VLZAAAAA

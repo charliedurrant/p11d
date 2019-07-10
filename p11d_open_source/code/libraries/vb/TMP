@@ -1,0 +1,63 @@
+File LOWS.BAS:
+Private Declare Function SetBkColor Lib "gdi32" (ByVal hdc As Long, ByVal crColor As Long) As Long
+Private Declare Function SetBkMode Lib "gdi32" (ByVal hdc As Long, ByVal nBkMode As Long) As Long
+File PARIAL.CLS:
+Attribute VB_PredeclaredId = False
+File PARIAL6.CLS:
+Attribute VB_PredeclaredId = False
+File PARPAGE.CLS:
+Attribute VB_PredeclaredId = False
+File PARSEBB.CLS:
+Attribute VB_PredeclaredId = False
+File PARSEBW.CLS:
+Attribute VB_PredeclaredId = False
+File PARSEX.CLS:
+Attribute VB_PredeclaredId = False
+File PARSEY.CLS:
+Attribute VB_PredeclaredId = False
+File PBOFF.CLS:
+Attribute VB_PredeclaredId = False
+File PBON.CLS:
+Attribute VB_PredeclaredId = False
+File PBOX.CLS:
+Attribute VB_PredeclaredId = False
+File PCENT.CLS:
+Attribute VB_PredeclaredId = False
+File PCOMMA.CLS:
+Attribute VB_PredeclaredId = False
+File PDATE.CLS:
+Attribute VB_PredeclaredId = False
+File PDUMMY.CLS:
+Attribute VB_PredeclaredId = False
+File PMINVAL.CLS:
+Attribute VB_PredeclaredId = False
+File PNPAGE.CLS:
+Attribute VB_PredeclaredId = False
+File PPOP.CLS:
+Attribute VB_PredeclaredId = False
+File PPUSH.CLS:
+Attribute VB_PredeclaredId = False
+File PREVIEW.FRM:
+Attribute VB_PredeclaredId = True
+File PRIGHT.CLS:
+Attribute VB_PredeclaredId = False
+File PSEXP.CLS:
+Attribute VB_PredeclaredId = False
+File PSKIPC.CLS:
+Attribute VB_PredeclaredId = False
+File PSLEQ.CLS:
+Attribute VB_PredeclaredId = False
+File PSPF.CLS:
+Attribute VB_PredeclaredId = False
+File PSPH.CLS:
+Attribute VB_PredeclaredId = False
+File PSRF.CLS:
+Attribute VB_PredeclaredId = False
+File PSRH.CLS:
+Attribute VB_PredeclaredId = False
+File PSTATX.CLS:
+Attribute VB_PredeclaredId = False
+File REPORTER.CLS:
+Attribute VB_PredeclaredId = False
+File RPSETT.CLS:
+Attribute VB_PredeclaredId = False

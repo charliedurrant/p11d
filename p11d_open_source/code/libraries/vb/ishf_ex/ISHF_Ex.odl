@@ -1,0 +1,25 @@
+// all of the definitions have not been tested and may
+// need some correction. as well param & rtn vals may
+// need to be tweeked to suit your needs. btm
+
+//=================================================================
+[
+    uuid(B96BCBE1-F886-11d0-9C63-A06801C10627),
+    helpstring("IShellFolder Extended Type Library v1.2"),
+    version(1.2) 
+]
+//=================================================================
+
+library IShellFolderEx_TLB
+{
+    importlib("stdole2.tlb");
+
+    #include "Wintypes.odl"
+    #include "ISHTypes.odl"
+    #include "IUnknown.odl" 
+    #include "IMalloc.odl"
+    #include "IEnumIDL.odl"
+    #include "ICtxMenu.odl"
+    #include "ISHView.odl"   // v 1.1, rev 2
+    #include "ISHFoldr.odl"
+}

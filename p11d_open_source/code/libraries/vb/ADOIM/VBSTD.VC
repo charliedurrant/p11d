@@ -1,0 +1,31 @@
+VB5 Standard Routine Installation
+
+main()
+{
+  mkdir("C:\VB5");
+  mkdir("c:\VB5\LIBRARY");
+  vb_path = getregstring("HKEY_LOCAL_MACHINE\Software\Microsoft\Visual Basic\5.0","InstallDir");
+  vb_path = longtoshortfilename( vb_path );
+  if ( strlen( vb_path ) )
+  {
+    vb_template = vb_path+"\Template";
+    mkdir( vb_template );
+    mkdir( vb_template+"\projects" );
+    remove( vb_template+"\projects\*.err");
+    remove( vb_template+"\projects\*.log");
+    remove( vb_template+"\projects\*.t");
+    remove( vb_template+"\projects\*.msg");
+    remove( vb_path+"\*.oca");
+    updateexclude("R:\vb5\library\template\*.*", vb_template+"\projects\*.*","*.vbw;*.exe;*.msg;*.t;*.log;*.err");
+
+    mkdir( vb_path+"\tcsaddin" );
+    update("R:\vb5\library\addin\*.dll", vb_path+"\tcsaddin\*.DLL");
+    execwait("c:\windows\system\regsvr32.exe /s /c "+vb_path+"\tcsaddin\CLOSEALL.DLL" );
+    execwait("c:\windows\system\regsvr32.exe /s /c "+vb_path+"\tcsaddin\ADDPROC.DLL" );
+    ini_open("C:\windows\vbaddin.ini");
+      ini_update("[Add-Ins32]","CloseAll.Connect=1");
+      ini_update("[Add-Ins32]","AddProc.Connect=1");
+    ini_commit();
+  }
+}
+ 

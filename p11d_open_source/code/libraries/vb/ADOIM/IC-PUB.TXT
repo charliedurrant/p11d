@@ -1,0 +1,67 @@
+
+---------- import.cls
+Public Enum IMPORT_UPDATE_TYPE
+Public Enum IMPORT_TYPE
+Public Enum IMPORTFIELD_KEY
+Public Enum IMPORT_CONSTRAINT
+Public Enum IMPORTFIELD_ACTION
+Public Property Get TakeFieldNamesFromLine() As Long
+Public Property Let TakeFieldNamesFromLine(NewValue As Long)
+Public Property Get AttemptedLines() As Long
+Public Property Let AttempedLineProcessed(NewValue As Long)
+Public Property Get UpdatedRecordCount() As Long
+Public Property Let UpdatedRecordCount(NewValue As Long)
+Public Property Get AddedRecordCount() As Long
+Public Property Let AddedRecordCount(NewValue As Long)
+Public Property Get LinesOK() As Long
+Public Property Let LinesOK(NewValue As Long)
+Public Property Get ProcessingLinesInError() As Long
+Public Property Get DefaultString() As Variant
+Public Property Let DefaultString(ByVal NewValue As Variant)
+Public Property Get DefaultDate() As Variant
+Public Property Let DefaultDate(ByVal NewValue As Variant)
+Public Property Get DefaultNumeric() As Variant
+Public Property Let DefaultNumeric(ByVal NewValue As Variant)
+Public Property Get DefaultFloat() As Variant
+Public Property Let DefaultFloat(ByVal NewValue As Variant)
+Public Property Get DefaultBoolean() As Variant
+Public Property Let DefaultBoolean(ByVal NewValue As Variant)
+Public Property Set Audit(NewObj As IAudit)
+Public Property Get Audit() As IAudit
+Public Property Get Delimiter() As String
+Public Property Let Delimiter(ByVal NewValue As String)
+Public Property Get EscapeChar() As String
+Public Property Let EscapeChar(ByVal NewValue As String)
+Public Property Let RightTrimFields(ByVal NewValue As Boolean)
+Public Property Get RightTrimFields() As Boolean
+Public Property Get ErrorFilter() As IErrorFilter
+Public Property Set ErrorFilter(NewValue As IErrorFilter)
+Public Property Get WorkSpace() As WorkSpace
+Public Property Set WorkSpace(NewValue As WorkSpace)
+Public Property Get RDOConnection() As RDOConnection
+Public Property Set RDOConnection(NewValue As RDOConnection)
+Public Property Get Header() As String
+Public Property Get Footer() As String
+Public Property Get HeaderCount() As Long
+Public Property Let HeaderCount(ByVal NewCount As Long)
+Public Property Get FooterCount() As Long
+Public Property Let FooterCount(ByVal NewCount As Long)
+Public Property Get DebugHeaderFooter() As Boolean
+Public Property Let DebugHeaderFooter(ByVal bNewValue As Boolean)
+Public Function NewColumn() As ImportSpec
+Public Function AddColumn(ispec As ImportSpec) As Boolean
+Public Property Get ImportType() As IMPORT_TYPE
+Public Property Let ImportType(ByVal NewValue As IMPORT_TYPE)
+Public Property Get UpdateType() As IMPORT_UPDATE_TYPE
+Public Property Let UpdateType(ByVal NewValue As IMPORT_UPDATE_TYPE)
+Public Property Let AbortImport(ByVal NewValue As Boolean)
+Public Property Get AbortImport() As Boolean
+Public Function ParseField(FieldSpec As String) As PARSESTATUS
+Public Function InitImport(ImportFile As String, Optional ByVal ImportType As IMPORT_TYPE = [_IMPORT_UNDEFINED], Optional CFGFilename As String = "", Optional ByVal UpdateType As IMPORT_UPDATE_TYPE = NO_UPDATES, Optional ParsePreProcess As IParsePreProcess) As Boolean
+Public Property Get ImportWizard() As ImportWizard
+Public Property Set ImportWizard(NewValue As ImportWizard)
+Public Function ImportFile(rs As Recordset, Optional PBarObj As Object = Nothing) As Long
+Public Function ImportLines(Values() As Variant, ByVal LinesToImport As Long) As Long
+Public Function ImportFileRDO(rsRDO As rdoResultset, Optional PBarObj As Object = Nothing) As Long
+Public Function CheckImportColumns(Preview As Boolean, RaiseError As Boolean) As Boolean
+Public Sub KillImporter()

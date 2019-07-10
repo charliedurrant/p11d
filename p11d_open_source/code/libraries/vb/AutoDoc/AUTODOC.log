@@ -1,0 +1,21 @@
+Line 33: Class TCSPROG.TCSProgressBar of control prgStartup was not a loaded control class.
+Line 39: The property name _cx in prgStartup is invalid.
+Line 40: The property name _cy in prgStartup is invalid.
+Line 50: The property name Min in prgStartup is invalid.
+Line 51: The property name Max in prgStartup is invalid.
+Line 52: The property name Value in prgStartup is invalid.
+Line 53: The property name BarBackColor in prgStartup is invalid.
+Line 54: The property name BarForeColor in prgStartup is invalid.
+Line 56: The property name Style in prgStartup is invalid.
+Line 57: The property name CaptionColor in prgStartup is invalid.
+Line 58: The property name CaptionInvertColor in prgStartup is invalid.
+Line 60: The property name FadeFromColor in prgStartup is invalid.
+Line 61: The property name FadeToColor in prgStartup is invalid.
+Line 62: The property name Caption in prgStartup is invalid.
+Line 63: The property name InnerCircle in prgStartup is invalid.
+Line 64: The property name Percentage in prgStartup is invalid.
+Line 65: The property name Skew in prgStartup is invalid.
+Line 66: The property name PictureOffsetTop in prgStartup is invalid.
+Line 67: The property name PictureOffsetLeft in prgStartup is invalid.
+Line 69: The property name Increment in prgStartup is invalid.
+Line 70: The property name TextAlignment in prgStartup is invalid.

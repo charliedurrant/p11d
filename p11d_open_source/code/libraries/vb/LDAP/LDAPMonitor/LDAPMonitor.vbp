@@ -1,0 +1,37 @@
+Type=Exe
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\WINNT\System32\StdOle2.Tlb#OLE Automation
+Reference=*\G{C0B3195B-66C3-11D4-98F8-00D0B717E8E8}#1.0#0#..\..\..\..\WINNT\SYSTEM32\tcsldap.dll#TCS LDAP helper for AA LDAP authentication (uses ADSI)
+Reference=*\G{00F2FF95-33B2-11D3-8C63-0008C75A1F7A}#2.1#0#..\..\..\..\WINNT\SYSTEM32\tcscore.dll#TCS Core DLL Library
+Reference=*\G{BCCA50E3-0401-11D3-8BE0-00508B2FF337}#1.1#0#..\..\..\..\WINNT\System32\TCSBASE.OLB#TCS Base Class (interface definitions only)
+Form=frmLDAPMon.frm
+Class=Check; Check.cls
+Startup="frmLDAPMon"
+ExeName32="LDAPMonitor.exe"
+Command32=""
+Name="LDAPMonitor"
+HelpContextID="0"
+CompatibleMode="0"
+MajorVer=1
+MinorVer=0
+RevisionVer=0
+AutoIncrementVer=0
+ServerSupportFiles=0
+VersionCompanyName="Arthur Andersen"
+CompilationType=0
+OptimizationType=0
+FavorPentiumPro(tm)=0
+CodeViewDebugInfo=0
+NoAliasing=0
+BoundsCheck=0
+OverflowCheck=0
+FlPointCheck=0
+FDIVCheck=0
+UnroundedFP=0
+StartMode=0
+Unattended=0
+Retained=0
+ThreadPerObject=0
+MaxNumberOfThreads=1
+
+[MS Transaction Server]
+AutoRefresh=1

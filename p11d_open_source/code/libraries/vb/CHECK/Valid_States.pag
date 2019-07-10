@@ -1,0 +1,78 @@
+VERSION 5.00
+Begin VB.PropertyPage Valid_States 
+   Caption         =   "Multi State Check properties"
+   ClientHeight    =   2640
+   ClientLeft      =   0
+   ClientTop       =   0
+   ClientWidth     =   4710
+   PaletteMode     =   0  'Halftone
+   ScaleHeight     =   2640
+   ScaleWidth      =   4710
+   Begin VB.ListBox lstStates 
+      Height          =   1860
+      ItemData        =   "Valid_States.pgx":0000
+      Left            =   75
+      List            =   "Valid_States.pgx":0002
+      Style           =   1  'Checkbox
+      TabIndex        =   1
+      Top             =   450
+      Width           =   2670
+   End
+   Begin VB.Label lblValidStates 
+      Caption         =   "Please choose Valid States:"
+      Height          =   240
+      Left            =   90
+      TabIndex        =   0
+      Top             =   120
+      Width           =   2700
+   End
+End
+Attribute VB_Name = "Valid_States"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = True
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = True
+Option Explicit
+
+Private Sub lstStates_ItemCheck(Item As Integer)
+  Changed = True
+End Sub
+
+Private Sub PropertyPage_Initialize()
+  'fill list box
+  Call lstStates.AddItem("Empty")
+  lstStates.ItemData(lstStates.ListCount - 1) = CHECK_EMPTY
+  Call lstStates.AddItem("Tick")
+  lstStates.ItemData(lstStates.ListCount - 1) = CHECK_TICK
+  Call lstStates.AddItem("Cross")
+  lstStates.ItemData(lstStates.ListCount - 1) = CHECK_CROSS
+  Call lstStates.AddItem("Question")
+  lstStates.ItemData(lstStates.ListCount - 1) = CHECK_QUESTION
+End Sub
+
+Private Sub PropertyPage_ApplyChanges()
+  Dim i As Long, vs As Long
+  'calc valid state
+  vs = 0
+  For i = 0 To lstStates.ListCount - 1
+    If lstStates.Selected(i) Then
+      vs = (vs Or lstStates.ItemData(i))
+    End If
+  Next
+  SelectedControls(0).ValidStates = vs
+ 
+End Sub
+
+Private Sub PropertyPage_SelectionChanged()
+  Dim i As Long, vs As Long
+  'read valid state
+  
+  vs = SelectedControls(0).ValidStates
+  For i = 0 To lstStates.ListCount - 1
+    If (lstStates.ItemData(i) And vs) > 0 Then
+      lstStates.Selected(i) = True
+    End If
+  Next
+End Sub
+
+

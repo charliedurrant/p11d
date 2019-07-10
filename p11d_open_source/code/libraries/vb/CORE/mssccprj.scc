@@ -1,0 +1,5 @@
+SCC = This is a Source Code Control file
+
+[atc2core.vbp]
+SCC_Aux_Path = "\\uk.deloitte.com\ukdfsroot\tax\abatec\Projects\Sourcesafe\libraries"
+SCC_Project_Name = "$/VB/Release/CORE", CCWAAAAA

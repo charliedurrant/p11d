@@ -1,0 +1,4 @@
+Line 25: Class atc2valtext.ValText of control txtAmountPerInstallment was not a loaded control class.
+Line 86: Class atc2valtext.ValText of control txtDateFirstInstallment was not a loaded control class.
+Line 127: Class atc2valtext.ValText of control txtDayOfMonthOrInterval was not a loaded control class.
+Line 151: Class atc2valtext.ValText of control txtDateOfLastInstallment was not a loaded control class.

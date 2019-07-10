@@ -1,0 +1,5 @@
+[STATICDATA]
+Version=4.0.63
+ApplicationName=P11D2018
+Contact=For help, please contact Thomson Reuters on 0800 1577 802
+StatusReady=Ready

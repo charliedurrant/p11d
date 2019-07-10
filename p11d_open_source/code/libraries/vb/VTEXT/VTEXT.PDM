@@ -1,0 +1,72 @@
+[Root]
+Most Recent Package=tcsvtext
+
+
+[Package|tcsvtext|Root]
+SubWizProgID=PDWizard.DepPkgSubWiz
+BuildFolder=C:\VB6\LIBRARY\VTEXT
+Controls Design-Time Support=No
+
+[Package|tcsvtext|Configure DAO ISAMs]
+Applicable=No
+
+[Package|tcsvtext|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|tcsvtext|Files Found]
+
+[Package|tcsvtext|Files Released]
+
+[Package|tcsvtext|Missing Dependency Information]
+C:\WINNT\system32\TCSALIGN.OCX=
+
+[Package|tcsvtext|Out-of-Date Dependency Information]
+
+[Package|tcsvtext|Files Added]
+C:\WINNT\System32\MsStkPrp.dll=This file is needed for usercontrol design-time support.
+
+[Package|tcsvtext|Files Removed]
+c:\winnt\system32\msstkprp.dll=
+
+[Package|tcsvtext|Files In Project]
+C:\VB6\LIBRARY\VTEXT\TCSVTEXT.OCX=Yes
+C:\WINNT\system32\MSVBVM60.DLL=Yes
+C:\WINNT\system32\OLEAUT32.DLL=Yes
+C:\WINNT\system32\OLEPRO32.DLL=Yes
+C:\WINNT\system32\ASYCFILT.DLL=Yes
+C:\WINNT\system32\STDOLE2.TLB=Yes
+D:\VStudio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINNT\system32\TCSALIGN.OCX=Yes
+C:\WINNT\system32\MSSTKPRP.DLL=No
+
+[Package|tcsvtext|Configure Registry Files]
+Applicable=
+
+[Package|tcsvtext|Configure Remote Servers]
+Applicable=
+
+[Package|tcsvtext|Install Locations]
+C:\VB6\LIBRARY\VTEXT\TCSVTEXT.OCX=$(AppPath)
+C:\WINNT\system32\MSVBVM60.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\STDOLE2.TLB=$(WinSysPathSysFile)
+D:\VStudio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\TCSALIGN.OCX=$(WinSysPath)
+
+[Package|tcsvtext|Configure Shared Files]
+Applicable=
+
+[Package|tcsvtext|DepFile]
+DepCabFile=tcsvtext.CAB
+DepCabRun=tcsvtext.INF
+
+[Package|tcsvtext|Package]
+PackageFolder=C:\VB6\LIBRARY\VTEXT
+ProjectFolder=C:\VB6\LIBRARY\VTEXT
+ServerSideCab=
+File1=C:\VB6\LIBRARY\VTEXT\tcsvtext.DEP
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz

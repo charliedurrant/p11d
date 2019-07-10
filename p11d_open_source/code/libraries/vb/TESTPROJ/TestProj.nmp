@@ -1,0 +1,11 @@
+[NuMega Checkers Project]
+Version=1
+ImageCount=1
+[Image 0]
+Path=C:\VB6\library\TESTPROJ\TestProj.exe
+Executable=
+WorkingPath=C:\VB6\library\TESTPROJ\
+Arguments=
+SearchPaths=.;..;
+ProjectType=0
+ClassPath=

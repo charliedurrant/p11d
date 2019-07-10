@@ -1,0 +1,16 @@
+TBOFixes = 0, 0, 0, 0, C
+IndividualFixes = 0, 0, 0, 0, C
+Constant = 0, 0, 0, 0, C
+Functions = 44, 58, 689, 432, Z
+dbChangeDetails = 0, 0, 0, 0, C
+dbSync = 0, 0, 0, 0, C
+fldChangeDetails = 0, 0, 0, 0, C
+Notify = 0, 0, 0, 0, C
+Check = 0, 0, 0, 0, C
+sync = 0, 0, 0, 0, C
+syncFilter = 0, 0, 0, 0, C
+TblChangeDetails = 0, 0, 0, 0, C
+postSyncFixes = 0, 0, 0, 0, C
+EstablishTemplate = 66, 87, 778, 461, 
+TBONewFixes = 22, 29, 667, 403, 
+SetVersions = 0, 0, 0, 0, C

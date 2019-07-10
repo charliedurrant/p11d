@@ -1,0 +1,11 @@
+DAConnection = 0, 0, 0, 0, C
+DADatabase = 0, 0, 0, 0, C
+DAFuncs = 0, 0, 0, 0, C
+DARecordset = 0, 0, 0, 0, C
+Calc = 0, 0, 0, 0, C
+Query = 22, 22, 694, 493, Z
+Const = 0, 0, 0, 0, C
+DAStatusBar = 0, 0, 0, 0, C
+BatchItem = 0, 0, 0, 0, C
+ParsedQueryRS = 0, 0, 0, 0, C
+ParsedQueriesRS = 0, 0, 0, 0, C

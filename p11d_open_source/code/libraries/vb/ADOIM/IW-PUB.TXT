@@ -1,0 +1,61 @@
+
+---------- impwiz.cls
+Public Enum IMPORT_GOTOFORM
+Public Enum DOIMPORT_FLAGS
+Public m_DefaultStatics As Collection
+Public ImpParent As ImportClass
+Public CurrentDest As DestRecordSet
+Public GotoForm As IMPORT_GOTOFORM
+Public Sub AddFileExtension(DisplayName As String, FileExtension As String, Optional DefaultChoice As Boolean = False, Optional ClearExisting As Boolean = False)
+Public Sub KillWizard()
+Public Property Get TitlePrefix() As String
+Public Property Let TitlePrefix(ByVal NewValue As String)
+Public Property Let AllowChangeUpdateType(Value As Boolean)
+Public Property Get AllowChangeUpdateType() As Boolean
+Public Property Get AllowMoveColumns()
+Public Property Get PostProcessingLinesInError()
+Public Property Get SourcePath() As String
+Public Property Let SourcePath(ByVal NewValue As String)
+Public Property Get SpecPath() As String
+Public Property Let SpecPath(ByVal NewValue As String)
+Public Property Get PreviewLines() As Long
+Public Property Let PreviewLines(ByVal NewValue As Long)
+Public Property Get NumLines() As Long
+Public Property Let NumLines(ByVal NewValue As Long)
+Public Property Get NoReviewSpec() As Boolean
+Public Property Let NoReviewSpec(ByVal NewValue As Boolean)
+Public Property Get AutoOpenSourceFile() As Boolean
+Public Property Let AutoOpenSourceFile(ByVal NewValue As Boolean)
+Public Property Get ShowSimpleLinkView() As Boolean
+Public Property Let ShowSimpleLinkView(ByVal NewValue As Boolean)
+Public Property Get AllowMultipleImports() As Boolean
+Public Property Let AllowMultipleImports(ByVal NewValue As Boolean)
+Public Property Get Imported() As Boolean
+Public Property Get ImportAnother() As Boolean
+Public Property Let ImportAnother(ByVal NewValue As Boolean)
+Public Property Get DefaultStatics() As Collection
+Public Property Set DefaultStatics(ByVal NewValue As Collection)
+Public Property Get DestPreviewRecLimit() As Long
+Public Property Let DestPreviewRecLimit(ByVal NewValue As Long)
+Public Property Get SourceFile() As String
+Public Property Let SourceFile(ByVal NewValue As String)
+Public Property Get SpecFile() As String
+Public Property Let SpecFile(ByVal NewValue As String)
+Public Function RemoveSQL(Name As String) As Boolean
+Public Function RemoveRS(Name As String) As Boolean
+Public Function AddRS(rsAdd As Recordset, ByVal Name As String, Optional ByVal Tag As Variant, Optional ByVal HelpText As String, Optional ByVal UpdateType As IMPORT_UPDATE_TYPE = NO_UPDATES, Optional ByVal ProcessImport As IProcessImport, Optional ByVal DisplayName As String) As Boolean
+Public Function AddSQL(ByVal SQLString As String, ByVal dB As Database, ByVal Name As String, Optional ByVal Tag As Variant, Optional ByVal HelpText As String, Optional ByVal UpdateType As IMPORT_UPDATE_TYPE = NO_UPDATES, Optional ByVal ProcessImport As IProcessImport, Optional ByVal DisplayName As String) As Boolean
+Public Sub StartWizard()
+Public Sub OpenSourceFile(frmSrcObj As Object)
+Public Function ProcessDrag() As Boolean
+Public Function DestFieldItem(FieldName As String) As Long
+Public Function NumSourceFields() As Long
+Public Function AddDefaultStaticLink(ByVal Name As String, ByVal FieldName As String, ByVal DataType As DATABASE_FIELD_TYPES, ByVal Value As Variant, Optional GridFieldName As String = "") As Boolean
+Public Function AddStaticLink(ByVal Name As String, ByVal FieldName As String, ByVal DataType As DATABASE_FIELD_TYPES, ByVal Value As Variant, Optional GridFieldName As String = "", Optional ByVal Hide As Boolean = False) As Boolean
+Public Function AddDefaultStatic(ByVal Name As String, ByVal DataType As DATABASE_FIELD_TYPES, Value As Variant, Optional ByVal FieldName As String) As Boolean
+Public Function HideField(Name As String, FieldName As String) As Boolean
+Public Function AddDefaultCopiedField(ByVal Name As String, ByVal CopyFieldName As String, Optional ByVal FieldName As String = "", Optional ByVal DestField As String = "", Optional ByVal Hide As Boolean = False) As Boolean
+Public Function AddConstraint(ByVal Name As String, ByVal FieldName As String, DataType As DATABASE_FIELD_TYPES, ByVal ImportConstraint As IMPORT_CONSTRAINT, ByVal Value As Variant) As Boolean
+Public Function AddLockUpdate(ByVal Name As String, ByVal LockUpdate As IMPORT_UPDATE_TYPE) As Boolean
+Public Function AddRequiredField(ByVal Name As String, ByVal FieldName As String, Optional ByVal PrimaryKey As Boolean = False) As Boolean
+Public Function AddDefaultValue(ByVal Name As String, ByVal FieldName As String, ByVal DataType As DATABASE_FIELD_TYPES, Value As Variant, Optional NonNullValue As Variant) As Boolean

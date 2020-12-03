@@ -1,0 +1,262 @@
+================= Logging started at 11/19/2002 02:16:23 PM ==================
+Created release folders
+Directory table successfully built
+Component table successfully built
+Loading File table
+Building File table
+File table successfully built
+Class table successfully built
+Extension table successfully built
+ODBCDataSource table successfully built
+ODBCDriver table successfully built
+ActionText table successfully built
+AdminExecuteSequence table successfully built
+Condition table successfully built
+AdminUISequence table successfully built
+AdvtExecuteSequence table successfully built
+AdvtUISequence table successfully built
+AppId table successfully built
+AppSearch table successfully built
+Property table successfully built
+Binary table successfully built
+BindImage table successfully built
+CompLocator table successfully built
+Complus table successfully built
+ControlCondition table successfully built
+ControlEvent table successfully built
+CreateFolder table successfully built
+CustomAction table successfully built
+DrLocator table successfully built
+DuplicateFile table successfully built
+Environment table successfully built
+EventMapping table successfully built
+Font table successfully built
+IniFile table successfully built
+IniLocator table successfully built
+InstallExecuteSequence table successfully built
+InstallUISequence table successfully built
+IsolatedComponent table successfully built
+LockPermissions table successfully built
+MIME table successfully built
+ModuleAdminExecuteSequence table successfully built
+ModuleAdminUISequence table successfully built
+ModuleAdvtExecuteSequence table successfully built
+ModuleAdvtUISequence table successfully built
+ModuleComponents table successfully built
+ModuleConfiguration table successfully built
+ModuleDependency table successfully built
+ModuleExclusion table successfully built
+ModuleIgnoreTable table successfully built
+ModuleSubstitution table successfully built
+ModuleInstallExecuteSequence table successfully built
+ModuleInstallUISequence table successfully built
+ModuleSignature table successfully built
+MoveFile table successfully built
+MsiAssembly table successfully built
+MsiAssemblyName table successfully built
+ODBCAttribute table successfully built
+ODBCSourceAttribute table successfully built
+ODBCTranslator table successfully built
+ProgId table successfully built
+PublishComponent table successfully built
+Registry table successfully built
+RegLocator table successfully built
+RemoveFile table successfully built
+RemoveIniFile table successfully built
+RemoveRegistry table successfully built
+ReserveCost table successfully built
+SelfReg table successfully built
+ServiceControl table successfully built
+ServiceInstall table successfully built
+Shortcut table successfully built
+Signature table successfully built
+TextStyle table successfully built
+TypeLib table successfully built
+UIText table successfully built
+Verb table successfully built
+_Validation table successfully built
+Searching project for extract-at-build components...
+Extracting COM data from 33 component(s)
+New ProgId atecnotes.NotesDB.1 dynamically acquired for component ATECNOTES.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSAUTOCTRL.AutoGridCtrl_DAO dynamically acquired for component TCSACTRL.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSAUTOCTRL.AutoGridCtrl_RDO dynamically acquired for component TCSACTRL.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSADODB.TCSADOHelper dynamically acquired for component TCSADODB.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSADOIM.IAudit dynamically acquired for component TCSADOIM.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSADOIM.IImportForm dynamically acquired for component TCSADOIM.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSADOIM.ImportClass dynamically acquired for component TCSADOIM.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSADOIM.IProcessImport dynamically acquired for component TCSADOIM.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSADORS.AutoClass dynamically acquired for component TCSADORS.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSTextAlign.TXTAlign dynamically acquired for component TCSALIGN.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSALLOC.PreAllocate dynamically acquired for component TCSALLOC.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSBackGround.TCSBG dynamically acquired for component TCSBG.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSBackGround.TCSBG.1 dynamically acquired for component TCSBG.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSCCORELib.CCore dynamically acquired for component TCSCCORE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSCCORELib.CCore.1 dynamically acquired for component TCSCCORE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSCCORELib.QString dynamically acquired for component TCSCCORE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSCCORELib.TCSFileread dynamically acquired for component TCSCCORE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSCCORELib.TCSFileread.1 dynamically acquired for component TCSCCORE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSMultiCheck.tcsCheck dynamically acquired for component TCSCHECK.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSDB.DBClass dynamically acquired for component TCSDB.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSDMenu.DMenu dynamically acquired for component TCSDMENU.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSGRID.AutoGridCtrl_ADO dynamically acquired for component TCSGRID.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSHOOK.HOOK dynamically acquired for component TCSHOOK.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSMAIL.Mail dynamically acquired for component TCSMAIL.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSMAIL.MailAttachments dynamically acquired for component TCSMAIL.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSPARSE.IParseItem dynamically acquired for component TCSPARSE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSPARSE.IParseSettings dynamically acquired for component TCSPARSE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSPARSE.Parser dynamically acquired for component TCSPARSE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSPROG.TCSProgressBar dynamically acquired for component TCSPROG.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSPROG.TCSProgressBar.1 dynamically acquired for component TCSPROG.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId tcsQBE.QBEGrid dynamically acquired for component TCSQBE.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSREP.ParseEscape dynamically acquired for component TCSREP.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSREP.Reporter dynamically acquired for component TCSREP.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSREPW.ReportWizard dynamically acquired for component TCSREPW.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSRFILE.DMenuRecentFileList dynamically acquired for component TCSRFILE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSRFILE.RecentFileList dynamically acquired for component TCSRFILE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSSIZE.clsFormResize dynamically acquired for component TCSSIZE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSSPLIT.SPLIT dynamically acquired for component TCSSPLIT.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSStat.TCSStatus dynamically acquired for component TCSSTAT.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TBOFix.TBOFixes dynamically acquired for component TCSTBOFX.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TBOFix.TBONewFixes dynamically acquired for component TCSTBOFX.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSTOOL.Tool dynamically acquired for component TCSTOOL.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId tcsTwist.Twist dynamically acquired for component TCSTWIST.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSUBGRD.UBGRD dynamically acquired for component TCSUBGRD.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSValidationText.ValText dynamically acquired for component TCSVTEXT.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId tcsWhereControl.tcsWhere dynamically acquired for component TCSWHERE.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSAUTO.AutoClass dynamically acquired for component Tcsauto.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSCORE.BitmapMover dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSCORE.CoreClass dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSCORE.FieldDetails dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSCORE.IAutoAuditRecordADO dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSCORE.LocaleInfo dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSCORE.ObjectHash dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSCORE.ObjectList dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSCORE.StringList dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New ProgId TCSSQL.SQLDebug dynamically acquired for component Tcssql.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {FF8BC468-55D7-4E14-AFA6-127B853AA514} dynamically acquired for component ATECNOTES.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {E0E881F2-AA6D-11D4-994B-00D0B717E8E8} dynamically acquired for component TCSACTRL.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {E0E881F5-AA6D-11D4-994B-00D0B717E8E8} dynamically acquired for component TCSACTRL.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {478408AB-2FF1-11D4-98BB-00D0B717E8E8} dynamically acquired for component TCSADODB.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {8DD46F92-2015-11D4-98A6-00D0B717E8E8} dynamically acquired for component TCSADOIM.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {8DD46F94-2015-11D4-98A6-00D0B717E8E8} dynamically acquired for component TCSADOIM.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {8DD46F9D-2015-11D4-98A6-00D0B717E8E8} dynamically acquired for component TCSADOIM.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {8DD46FDA-2015-11D4-98A6-00D0B717E8E8} dynamically acquired for component TCSADOIM.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {6596CE9A-C1FD-4C76-AEF5-9ADBBFF71648} dynamically acquired for component TCSADORS.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {AF87A464-E607-11D2-8DF9-00C04FA4C3DC} dynamically acquired for component TCSALIGN.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {E4D30F0F-D95C-11D3-8D4A-0008C75A1F7A} dynamically acquired for component TCSALLOC.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {F57AE0B4-EDDE-11D2-ABC9-0008C7253D97} dynamically acquired for component TCSBG.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {08BEE22F-4E2F-4873-A40D-70163D235176} dynamically acquired for component TCSCCORE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {121584F9-0406-11D3-8BE0-00508B2FF337} dynamically acquired for component TCSCCORE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {893D7A44-07C2-11D3-8BE9-00508B2FF337} dynamically acquired for component TCSCCORE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {1FD3BBAA-80C2-11D3-8CDF-0008C75A1F7A} dynamically acquired for component TCSCHECK.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {1FD3BBAE-80C2-11D3-8CDF-0008C75A1F7A} dynamically acquired for component TCSCHECK.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {DD65BB09-2FFB-11D3-8C5D-0008C75A1F7A} dynamically acquired for component TCSDB.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {6397EEC2-131A-4AA6-BFCF-639909EFF702} dynamically acquired for component TCSDMENU.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {BC3D39AB-2015-11D4-98A6-00D0B717E8E8} dynamically acquired for component TCSGRID.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {942001B5-F779-11D2-8BC3-00508B2FF337} dynamically acquired for component TCSHOOK.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {291ED229-2E58-11D3-8C56-0008C75A1F7A} dynamically acquired for component TCSMAIL.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {291ED22E-2E58-11D3-8C56-0008C75A1F7A} dynamically acquired for component TCSMAIL.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {1E15D033-097A-11D3-8BEE-00508B2FF337} dynamically acquired for component TCSPARSE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {1E15D035-097A-11D3-8BEE-00508B2FF337} dynamically acquired for component TCSPARSE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {1E15D038-097A-11D3-8BEE-00508B2FF337} dynamically acquired for component TCSPARSE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {AF27A9C3-A3F4-11D2-8DB7-00C04FA9DD6F} dynamically acquired for component TCSPROG.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {58C4E389-3CC2-11D2-8D54-00C04FA9DD6F} dynamically acquired for component TCSQBE.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {01C6F138-E93D-11D3-B917-00D0B717E8E8} dynamically acquired for component TCSREP.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {99215913-4E96-11D4-98E0-00D0B717E8E8} dynamically acquired for component TCSREP.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {C1FA05ED-41D7-11D4-98D1-00D0B717E8E8} dynamically acquired for component TCSREPW.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {43C582FE-DD57-4AF9-BCE2-58C34152EA98} dynamically acquired for component TCSRFILE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {811A51FE-ED3E-47EF-A077-29E8F7FD5B7A} dynamically acquired for component TCSRFILE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {1F28C907-27FA-11D3-8C2F-00508B2FF337} dynamically acquired for component TCSSIZE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {F8D6DCDA-30A3-11D3-8C5F-0008C75A1F7A} dynamically acquired for component TCSSPLIT.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {B8D6B513-FFD9-11D3-987E-00D0B717E8E8} dynamically acquired for component TCSSTAT.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {5CF4E3F3-597E-4289-9AC4-FB2B1BE84139} dynamically acquired for component TCSTBOFX.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {7BC34A59-9DC6-4644-BF22-C29EB529C297} dynamically acquired for component TCSTBOFX.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {79342E61-9945-11D4-9938-00D0B717E8E8} dynamically acquired for component TCSTOOL.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {FF5DC6C9-ADC5-4031-A48B-88D8287CCE73} dynamically acquired for component TCSTWIST.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {0456E6D6-B8A8-4372-9C82-5EB014A89772} dynamically acquired for component TCSUBGRD.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {7F9DE7CC-E608-11D2-8DF9-00C04FA4C3DC} dynamically acquired for component TCSVTEXT.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {C639F414-2A8B-11D3-8C4D-0008C75A1F7A} dynamically acquired for component TCSWHERE.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {8CA87A06-41D1-11D4-98D1-00D0B717E8E8} dynamically acquired for component Tcsauto.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {00F2FF97-33B2-11D3-8C63-0008C75A1F7A} dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {00F2FFC4-33B2-11D3-8C63-0008C75A1F7A} dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {00F2FFC6-33B2-11D3-8C63-0008C75A1F7A} dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {00F2FFD3-33B2-11D3-8C63-0008C75A1F7A} dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {0175C461-1A9C-11D4-98A2-00D0B717E8E8} dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {6942B86C-4B9C-11D3-8C92-0008C75A1F7A} dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {77F62143-4EA4-11D4-98E0-00D0B717E8E8} dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {C0D8A2DF-F9BC-11D3-B936-00D0B717E8E8} dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Class {DDF7D86A-5BCF-11D4-98ED-00D0B717E8E8} dynamically acquired for component Tcssql.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {62A95C80-87D4-4DDD-A991-2B38B76E81A7} dynamically acquired for component ATECNOTES.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {E0E881F0-AA6D-11D4-994B-00D0B717E8E8} dynamically acquired for component TCSACTRL.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {478408A9-2FF1-11D4-98BB-00D0B717E8E8} dynamically acquired for component TCSADODB.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {8DD46F8E-2015-11D4-98A6-00D0B717E8E8} dynamically acquired for component TCSADOIM.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {ED26A274-E6AD-4724-8B99-EB1CAA61DBD1} dynamically acquired for component TCSADORS.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {AF87A462-E607-11D2-8DF9-00C04FA4C3DC} dynamically acquired for component TCSALIGN.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {E4D30F0D-D95C-11D3-8D4A-0008C75A1F7A} dynamically acquired for component TCSALLOC.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {E956DE10-ECCB-11D2-ABC6-0008C7253D97} dynamically acquired for component TCSBG.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {121584E7-0406-11D3-8BE0-00508B2FF337} dynamically acquired for component TCSCCORE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {1FD3BBA8-80C2-11D3-8CDF-0008C75A1F7A} dynamically acquired for component TCSCHECK.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {DD65BB07-2FFB-11D3-8C5D-0008C75A1F7A} dynamically acquired for component TCSDB.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {1D1592FB-0B73-47F2-8C50-91F8BA684E07} dynamically acquired for component TCSDMENU.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {BC3D39A9-2015-11D4-98A6-00D0B717E8E8} dynamically acquired for component TCSGRID.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {942001B3-F779-11D2-8BC3-00508B2FF337} dynamically acquired for component TCSHOOK.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {291ED224-2E58-11D3-8C56-0008C75A1F7A} dynamically acquired for component TCSMAIL.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {1E15D031-097A-11D3-8BEE-00508B2FF337} dynamically acquired for component TCSPARSE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {AF27A9B5-A3F4-11D2-8DB7-00C04FA9DD6F} dynamically acquired for component TCSPROG.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {58C4E38B-3CC2-11D2-8D54-00C04FA9DD6F} dynamically acquired for component TCSQBE.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {01C6F136-E93D-11D3-B917-00D0B717E8E8} dynamically acquired for component TCSREP.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {C1FA05DB-41D7-11D4-98D1-00D0B717E8E8} dynamically acquired for component TCSREPW.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {A8D5662E-767E-4AA5-93EE-3681285471A3} dynamically acquired for component TCSRFILE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {1F28C8FE-27FA-11D3-8C2F-00508B2FF337} dynamically acquired for component TCSSIZE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {F8D6DCD3-30A3-11D3-8C5F-0008C75A1F7A} dynamically acquired for component TCSSPLIT.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {B8D6B50A-FFD9-11D3-987E-00D0B717E8E8} dynamically acquired for component TCSSTAT.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {9DA11892-973E-4341-AD40-B2F787F7FBC6} dynamically acquired for component TCSTBOFX.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {79342E54-9945-11D4-9938-00D0B717E8E8} dynamically acquired for component TCSTOOL.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {74BDA41F-D8A2-4C1E-B469-04313BE8B411} dynamically acquired for component TCSTWIST.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {887E6E16-470F-408A-AB18-71D3F8E38C5D} dynamically acquired for component TCSUBGRD.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {7F9DE7CA-E608-11D2-8DF9-00C04FA4C3DC} dynamically acquired for component TCSVTEXT.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {C639F412-2A8B-11D3-8C4D-0008C75A1F7A} dynamically acquired for component TCSWHERE.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {8CA879EE-41D1-11D4-98D1-00D0B717E8E8} dynamically acquired for component Tcsauto.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {00F2FF95-33B2-11D3-8C63-0008C75A1F7A} dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New TypeLib {DDF7D868-5BCF-11D4-98ED-00D0B717E8E8} dynamically acquired for component Tcssql.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (6) dynamically acquired for component ATECNOTES.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (22) dynamically acquired for component TCSACTRL.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (4) dynamically acquired for component TCSADODB.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (64) dynamically acquired for component TCSADOIM.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (28) dynamically acquired for component TCSADORS.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (11) dynamically acquired for component TCSALIGN.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (4) dynamically acquired for component TCSALLOC.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (8) dynamically acquired for component TCSBG.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (8) dynamically acquired for component TCSCCORE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (12) dynamically acquired for component TCSCHECK.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (4) dynamically acquired for component TCSDB.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (27) dynamically acquired for component TCSDMENU.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (11) dynamically acquired for component TCSGRID.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (11) dynamically acquired for component TCSHOOK.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (24) dynamically acquired for component TCSMAIL.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (12) dynamically acquired for component TCSPARSE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (8) dynamically acquired for component TCSPROG.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (11) dynamically acquired for component TCSQBE.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (8) dynamically acquired for component TCSREP.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (52) dynamically acquired for component TCSREPW.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (16) dynamically acquired for component TCSRFILE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (4) dynamically acquired for component TCSSIZE.DLL.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (11) dynamically acquired for component TCSSPLIT.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (19) dynamically acquired for component TCSSTAT.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (8) dynamically acquired for component TCSTBOFX.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (11) dynamically acquired for component TCSTOOL.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (75) dynamically acquired for component TCSTWIST.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (11) dynamically acquired for component TCSUBGRD.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (11) dynamically acquired for component TCSVTEXT.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (11) dynamically acquired for component TCSWHERE.OCX.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (28) dynamically acquired for component Tcsauto.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (48) dynamically acquired for component Tcscore.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+New Registry Entries (4) dynamically acquired for component Tcssql.dll.632755B5_88C7_4367_B7ED_F66C61B8EB2B
+Resolving strings...
+Language English (United States) built
+Building CAB files...
+MergeModule.CABinet built
+Files built
+Media table successfully built
+Release\Release build completed with 0 errors, 0 warnings
+================= Logging stopped at 11/19/2002 02:17:03 PM ==================

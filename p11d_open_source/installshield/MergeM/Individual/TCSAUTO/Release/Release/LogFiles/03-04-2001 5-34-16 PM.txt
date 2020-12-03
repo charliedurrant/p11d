@@ -1,0 +1,30 @@
+=================Logging started at 03/04/2001 5:34:16 PM ==================
+Binary table successfully built
+CustomAction table successfully built
+ModuleComponents table successfully built
+ModuleSignature table successfully built
+Registry table successfully built
+Building Component table
+Component table successfully built
+IniFile table successfully built
+Shortcut table successfully built
+Class And AppId table successfully built
+ProgId table successfully built
+TypeLib table successfully built
+Extension, Verb And MIME table successfully built
+PublishComponent table successfully built
+Directory table successfully built
+ServiceInstall table successfully built
+ServiceControl table successfully built
+ODBCDriver And ODBCAttribute table successfully built
+ODBCDataSource And ODBCSourceAttribute table successfully built
+ODBCTranslator table successfully built
+TextStyle table successfully built
+ActionText table successfully built
+UIText table successfully built
+Icon table successfully built
+InstallShield table successfully built
+Language English (United States) built
+Files processed
+Cabs
+SummaryStream table successfully built

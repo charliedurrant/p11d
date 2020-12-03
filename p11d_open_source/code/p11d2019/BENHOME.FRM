@@ -1,0 +1,670 @@
+VERSION 5.00
+Begin Form F_BenHome 
+   BackColor       =   &H00C0C0C0&
+BorderStyle  =  1
+   Caption         =   "Home benefits"
+   ClientLeft      =   2430
+   ClientTop       =   2550
+   ControlBox      =   0   'False
+   Height          =   5955
+   KeyPreview      =   -1  'True
+   Left            =   2370
+   LinkTopic       =   "Form3"
+   MaxButton       =   0   'False
+   MDIChild        =   -1  'True
+   MinButton       =   0   'False
+   ScaleHeight     =   5550
+   ScaleWidth      =   8640
+   Top             =   2205
+   Visible         =   0   'False
+ClientHeight  =  6090
+ClientWidth  =  8445
+   Width           =   8760
+Begin Label Lab
+Index  =  15
+         AutoSize        =   3  'AutoSize Child To Panel
+         BevelOuter      =   0  'None
+         BorderWidth     =   5
+         FontBold        =   0   'False
+         FontItalic      =   0   'False
+         FontName        =   "MS Sans Serif"
+         FontSize        =   8.25
+         FontStrikethru  =   0   'False
+         FontUnderline   =   0   'False
+         ForeColor       =   &H00FF0000&
+         Height          =   345
+         Left            =   120
+         RoundedCorners  =   0   'False
+TabIndex  =  4
+         Top             =   5040
+BorderStyle  =  1
+         Width           =   7965
+      End
+Begin ListBox LstBx
+Index  =  0
+            Prop110         =   BENHOME.FRX:0000
+            AllowAdditions  =   0   'False
+            AllowDeletions  =   0   'False
+            AllowUpdates    =   0   'False
+            BackColor       =   &H00FFFFFF&
+            Caption         =   "ListBox1"
+            CaptionType     =   3  'No Caption
+            ColHeadingAlignment=   2  'Center
+            DataSource      =   "DB"
+            DividerType     =   0  'None
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            ForeColor       =   &H00800000&
+            Height          =   1275
+            RowHeight       =   150
+            RowLabels       =   0   'False
+            ScrollBars      =   2  'Vertical
+            SelectionTypeCol=   1  'Single
+            SelectionTypeRow=   1  'Single
+TabIndex  =  19
+            VariableColWidth=   0   'False
+Top  =   540
+Left  =   120
+            Width           =   7905
+         End
+Begin Label Lab
+Index  =  0
+         Alignment       =   1  'Left Justify - MIDDLE
+         BevelOuter      =   0  'None
+         BorderWidth     =   5
+         Caption         =   "  H(B) - Home Loans"
+         FontBold        =   0   'False
+         FontItalic      =   0   'False
+         FontName        =   "MS Sans Serif"
+         FontSize        =   12
+         FontStrikethru  =   0   'False
+         FontUnderline   =   0   'False
+         ForeColor       =   &H00800000&
+         Height          =   315
+         Left            =   120
+         RoundedCorners  =   0   'False
+TabIndex  =  8
+         Top             =   60
+BorderStyle  =  1
+         Width           =   7845
+      End
+      Begin Frame P_NoBenefits 
+         BorderWidth     =   1
+         ForeColor       =   &H00FF0000&
+         Height          =   3075
+         Left            =   120
+         RoundedCorners  =   0   'False
+TabIndex  =  30
+         Top             =   1980
+         Width           =   7950
+Begin ComboBox CboBx
+Index  =  0
+            Prop110         =   BENHOME.FRX:0163
+            AllowInput      =   0   'False
+            BackColor       =   &H00FFFFFF&
+            BevelWidth      =   1
+            ColHeadingLines =   0
+            DataField       =   "Curr"
+            DataSource      =   "DB"
+            DataSourceList  =   "DB_Currency"
+            DividerStyle    =   0  'None
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            ForeColor       =   &H00000080&
+            Height          =   330
+            Left            =   2820
+            RowHeight       =   150
+TabIndex  =  3
+            Tag             =   "[TYPE=TEXT]"
+            Top             =   1050
+            Width           =   1485
+         End
+         Begin CommandButton B_Balance 
+            BevelWidth      =   1
+            Caption         =   "&Loan balance Sheet... ->"
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            ForeColor       =   &H00000080&
+            Height          =   405
+            Left            =   5160
+            Outline         =   0   'False
+            RoundedCorners  =   0   'False
+TabIndex  =  27
+            Top             =   2520
+            Width           =   2685
+         End
+Begin TextBox TxtBx
+Index  =  0
+               BackColor       =   &H00FFFFFF&
+BorderStyle  =  1
+               DataField       =   "Item"
+               DataSource      =   "DB"
+               FontBold        =   0   'False
+               FontItalic      =   0   'False
+               FontName        =   "MS Sans Serif"
+               FontSize        =   8.25
+               FontStrikethru  =   0   'False
+               FontUnderline   =   0   'False
+               ForeColor       =   &H00000080&
+               Height          =   285
+TabIndex  =  16
+               Tag             =   "[DATA]"
+               ThreeDOutsideHighlightColor=   &H00FFFFFF&
+               ThreeDTextHighlightColor=   &H00FFFFFF&
+Top  =   90
+Left  =   1530
+               Width           =   2715
+            End
+Begin CheckBox ChkBx
+Index  =  1
+            BackColor       =   &H00C0C0C0&
+            BooleanPicture  =   2  '3D Check Box
+            BooleanStyle    =   2  'Bitmap only
+            BorderGrayAreaColor=   &H00C0C0C0&
+            BorderWidth     =   1
+            DataField       =   "NormalOnly"
+            FontBold        =   -1  'True
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            Height          =   285
+            Left            =   7470
+            OnFocusInvert3D =   -1  'True
+            OnFocusShadow   =   -1  'True
+TabIndex  =  29
+            Tag             =   "[DATA], [OPBOX]"
+            ThreeDOutsideHighlightColor=   &H00FFFFFF&
+            ThreeDTextHighlightColor=   &H00FFFFFF&
+            Top             =   1320
+            Visible         =   0   'False
+            Width           =   285
+         End
+Begin CheckBox ChkBx
+Index  =  2
+            BackColor       =   &H00C0C0C0&
+            BooleanPicture  =   2  '3D Check Box
+            BooleanStyle    =   2  'Bitmap only
+            BorderGrayAreaColor=   &H00C0C0C0&
+            BorderWidth     =   1
+            DataField       =   "MIRAS"
+            DataSource      =   "DB"
+            FontBold        =   -1  'True
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            Height          =   285
+            Left            =   7440
+            OnFocusInvert3D =   -1  'True
+            OnFocusShadow   =   -1  'True
+TabIndex  =  17
+            Tag             =   "[DATA], [OPBOX]"
+            ThreeDOutsideHighlightColor=   &H00FFFFFF&
+            ThreeDTextHighlightColor=   &H00FFFFFF&
+            Top             =   2160
+            Width           =   285
+         End
+Begin CheckBox ChkBx
+Index  =  3
+            BackColor       =   &H00C0C0C0&
+            BooleanPicture  =   2  '3D Check Box
+            BooleanStyle    =   2  'Bitmap only
+            BorderGrayAreaColor=   &H00C0C0C0&
+            BorderWidth     =   1
+            DataField       =   "Relocation"
+            DataSource      =   "DB"
+            FontBold        =   -1  'True
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            Height          =   285
+            Left            =   3690
+            OnFocusInvert3D =   -1  'True
+            OnFocusShadow   =   -1  'True
+TabIndex  =  25
+            Tag             =   "[DATA], [OPBOX]"
+            ThreeDOutsideHighlightColor=   &H00FFFFFF&
+            ThreeDTextHighlightColor=   &H00FFFFFF&
+            Top             =   2280
+            Width           =   285
+         End
+Begin CheckBox ChkBx
+Index  =  0
+            BackColor       =   &H00C0C0C0&
+            BooleanPicture  =   2  '3D Check Box
+            BooleanStyle    =   2  'Bitmap only
+            BorderGrayAreaColor=   &H00C0C0C0&
+            BorderWidth     =   1
+            DataField       =   "DailyOnly"
+            DataSource      =   "DB"
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            Height          =   285
+            Left            =   7470
+            OnFocusInvert3D =   -1  'True
+            OnFocusShadow   =   -1  'True
+TabIndex  =  6
+            Tag             =   "[DATA], [OPBOX]"
+            ThreeDOutsideHighlightColor=   &H00FFFFFF&
+            ThreeDTextHighlightColor=   &H00FFFFFF&
+            Top             =   1080
+            Width           =   285
+         End
+Begin TextBox TxtBx
+Index  =  3
+BorderStyle  =  1
+               DataField       =   "Default"
+               DataSource      =   "DB"
+               FontBold        =   0   'False
+               FontItalic      =   0   'False
+               FontName        =   "MS Sans Serif"
+               FontSize        =   8.25
+               FontStrikethru  =   0   'False
+               FontUnderline   =   0   'False
+               ForeColor       =   &H00000080&
+               Height          =   285
+               MaxValue        =   "2147483647"
+               MinValue        =   "-2147483647"
+TabIndex  =  23
+               Text            =   "0"
+               ThreeDOutsideHighlightColor=   &H00FFFFFF&
+               ThreeDTextHighlightColor=   &H00FFFFFF&
+Top  =   1440
+Left  =   3300
+               Width           =   945
+            End
+Begin TextBox TxtBx
+Index  =  5
+BorderStyle  =  1
+               DataField       =   "Interest"
+               DataSource      =   "DB"
+               FontBold        =   0   'False
+               FontItalic      =   0   'False
+               FontName        =   "MS Sans Serif"
+               FontSize        =   8.25
+               FontStrikethru  =   0   'False
+               FontUnderline   =   0   'False
+               ForeColor       =   &H00000080&
+               Height          =   285
+               MaxValue        =   "2147483647"
+               MinValue        =   "-2147483647"
+TabIndex  =  13
+               Text            =   "0"
+               ThreeDOutsideHighlightColor=   &H00FFFFFF&
+               ThreeDTextHighlightColor=   &H00FFFFFF&
+Top  =   1800
+Left  =   3300
+               Width           =   945
+            End
+Begin TextBox TxtBx
+Index  =  6
+BorderStyle  =  1
+               DataField       =   "Waived"
+               DataSource      =   "DB"
+               FontBold        =   0   'False
+               FontItalic      =   0   'False
+               FontName        =   "MS Sans Serif"
+               FontSize        =   8.25
+               FontStrikethru  =   0   'False
+               FontUnderline   =   0   'False
+               ForeColor       =   &H00000080&
+               Height          =   285
+               MaxValue        =   "2147483647"
+               MinValue        =   "-2147483647"
+TabIndex  =  21
+               Text            =   "0"
+               ThreeDOutsideHighlightColor=   &H00FFFFFF&
+               ThreeDTextHighlightColor=   &H00FFFFFF&
+Top  =   2640
+Left  =   3300
+               Width           =   945
+            End
+Begin TextBox TxtBx
+Index  =  1
+               BackColor       =   &H00FFFFFF&
+BorderStyle  =  1
+               DataField       =   "Lender"
+               DataSource      =   "DB"
+               FontBold        =   0   'False
+               FontItalic      =   0   'False
+               FontName        =   "MS Sans Serif"
+               FontSize        =   8.25
+               FontStrikethru  =   0   'False
+               FontUnderline   =   0   'False
+               ForeColor       =   &H00000080&
+               Height          =   285
+TabIndex  =  12
+               Tag             =   "[DATA]"
+               ThreeDOutsideHighlightColor=   &H00FFFFFF&
+               ThreeDTextHighlightColor=   &H00FFFFFF&
+Top  =   480
+Left  =   1530
+               Width           =   2715
+            End
+Begin TextBox TxtBx
+Index  =  2
+               BackColor       =   &H00FFFFFF&
+BorderStyle  =  1
+               DataField       =   "ACNum"
+               DataSource      =   "DB"
+               FontBold        =   0   'False
+               FontItalic      =   0   'False
+               FontName        =   "MS Sans Serif"
+               FontSize        =   8.25
+               FontStrikethru  =   0   'False
+               FontUnderline   =   0   'False
+               ForeColor       =   &H00000080&
+               Height          =   285
+TabIndex  =  20
+               Tag             =   "[DATA]"
+               ThreeDOutsideHighlightColor=   &H00FFFFFF&
+               ThreeDTextHighlightColor=   &H00FFFFFF&
+Top  =   510
+Left  =   5970
+               Width           =   1695
+            End
+Begin TextBox TxtBx
+Index  =  4
+               BackColor       =   &H00FFFFFF&
+BorderStyle  =  1
+               ButtonMax       =   30
+               ButtonStyle     =   1  'Spin
+               DataField       =   "NumBorrowers"
+               DataSource      =   "DB"
+               FontBold        =   0   'False
+               FontItalic      =   0   'False
+               FontName        =   "MS Sans Serif"
+               FontSize        =   8.25
+               FontStrikethru  =   0   'False
+               FontUnderline   =   0   'False
+               ForeColor       =   &H00000080&
+               Height          =   285
+               MaxValue        =   "360"
+               MinValue        =   "0"
+TabIndex  =  9
+               Tag             =   "[DATA]"
+               Text            =   "0"
+               ThreeDOutsideHighlightColor=   &H00FFFFFF&
+               ThreeDTextHighlightColor=   &H00FFFFFF&
+Top  =   1680
+Left  =   7110
+               Width           =   555
+            End
+Begin Label Lab
+Index  =  1
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Item"
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            ForeColor       =   &H00800000&
+            Height          =   192
+            Left            =   120
+TabIndex  =  31
+            Top             =   156
+            Width           =   1260
+         End
+Begin Label Lab
+Index  =  8
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "If this is a joint loan:"
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            ForeColor       =   &H00800000&
+            Height          =   195
+            Left            =   4560
+TabIndex  =  22
+            Tag             =   "MOBILE, [Label]"
+            Top             =   1560
+            Width           =   2220
+         End
+Begin Label Lab
+Index  =  6
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Use normal calculation method only?"
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            ForeColor       =   &H00800000&
+            Height          =   195
+            Left            =   4560
+TabIndex  =  26
+            Tag             =   "MOBILE, [Label]"
+            Top             =   1320
+            Visible         =   0   'False
+            Width           =   2895
+         End
+Begin Label Lab
+Index  =  12
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Was the loan part of a relocation package?"
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            ForeColor       =   &H00800000&
+            Height          =   195
+            Left            =   90
+TabIndex  =  5
+            Tag             =   "MOBILE, [Label]"
+            Top             =   2280
+            Width           =   3510
+         End
+Begin Label Lab
+Index  =  4
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Use daily calculation method only?"
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            ForeColor       =   &H00800000&
+            Height          =   195
+            Left            =   4560
+TabIndex  =  14
+            Tag             =   "MOBILE, [Label]"
+            Top             =   1080
+            Width           =   2805
+         End
+Begin Label Lab
+Index  =  11
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Is this with MIRAS?"
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            ForeColor       =   &H00800000&
+            Height          =   195
+            Left            =   4920
+TabIndex  =  28
+            Tag             =   "MOBILE, [Label]"
+            Top             =   2160
+            Width           =   2055
+         End
+Begin Label Lab
+Index  =  5
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Currency of Loan"
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            ForeColor       =   &H00800000&
+            Height          =   195
+            Left            =   120
+TabIndex  =  18
+            Tag             =   "MOBILE, [Label]"
+            Top             =   1080
+            Width           =   2535
+         End
+Begin Label Lab
+Index  =  13
+            BackStyle       =   0  'Transparent
+            Caption         =   "How much of the home loan was waived / written off during the year?"
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            ForeColor       =   &H00800000&
+            Height          =   435
+            Left            =   90
+TabIndex  =  11
+            Top             =   2640
+            Width           =   2760
+         End
+Begin Label Lab
+Index  =  2
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Name of Lender"
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            ForeColor       =   &H00800000&
+            Height          =   192
+            Left            =   120
+TabIndex  =  24
+            Top             =   540
+            Width           =   1380
+         End
+Begin Label Lab
+Index  =  9
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "How many borrowers?"
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            ForeColor       =   &H00800000&
+            Height          =   195
+            Left            =   4920
+TabIndex  =  10
+            Tag             =   "MOBILE, [Label]"
+            Top             =   1800
+            Width           =   2175
+         End
+Begin Label Lab
+Index  =  3
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Loan a/c Number"
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            ForeColor       =   &H00800000&
+            Height          =   192
+            Left            =   4536
+TabIndex  =  15
+            Tag             =   "MOBILE, [Label]"
+            Top             =   576
+            Width           =   1380
+         End
+Begin Label Lab
+Index  =  7
+            BackStyle       =   0  'Transparent
+            Caption         =   "Default amount of the home loan eligible for tax relief at 15%"
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            ForeColor       =   &H00800000&
+            Height          =   375
+            Left            =   90
+TabIndex  =  7
+            Tag             =   "MOBILE, [Label]"
+            Top             =   1440
+            Width           =   2955
+         End
+Begin Label Lab
+Index  =  10
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Interest paid by employee during the year"
+            FontBold        =   0   'False
+            FontItalic      =   0   'False
+            FontName        =   "MS Sans Serif"
+            FontSize        =   8.25
+            FontStrikethru  =   0   'False
+            FontUnderline   =   0   'False
+            ForeColor       =   &H00800000&
+            Height          =   195
+            Left            =   90
+TabIndex  =  32
+            Tag             =   "MOBILE, [Label]"
+            Top             =   1920
+            Width           =   3150
+         End
+      End
+Begin Label Lab
+Index  =  14
+         Alignment       =   2  'Center
+         BackStyle       =   0  'Transparent
+         Caption         =   "There are no H(B) benefits for this employee.  To create one, click the '+' button on the toolbar above."
+         ForeColor       =   &H00800000&
+         Height          =   525
+         Left            =   1590
+TabIndex  =  2
+         Top             =   2940
+         Width           =   4785
+      End
+End

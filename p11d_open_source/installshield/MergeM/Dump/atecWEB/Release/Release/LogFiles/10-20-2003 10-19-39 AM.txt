@@ -1,0 +1,194 @@
+================= Logging started at 10/20/2003 10:19:39 AM ==================
+Created release folders
+Directory table successfully built
+Component table successfully built
+Loading File table
+Building File table
+File table successfully built
+Building MsiFileHash table
+MsiFileHash table successfully built
+Class table successfully built
+Extension table successfully built
+ODBCDataSource table successfully built
+ODBCDriver table successfully built
+ActionText table successfully built
+AdminExecuteSequence table successfully built
+Condition table successfully built
+AdminUISequence table successfully built
+AdvtExecuteSequence table successfully built
+AdvtUISequence table successfully built
+AppId table successfully built
+AppSearch table successfully built
+Property table successfully built
+Binary table successfully built
+BindImage table successfully built
+CompLocator table successfully built
+Complus table successfully built
+ControlCondition table successfully built
+ControlEvent table successfully built
+CreateFolder table successfully built
+CustomAction table successfully built
+DrLocator table successfully built
+DuplicateFile table successfully built
+Environment table successfully built
+EventMapping table successfully built
+Font table successfully built
+IniFile table successfully built
+IniLocator table successfully built
+InstallExecuteSequence table successfully built
+InstallUISequence table successfully built
+IsolatedComponent table successfully built
+ISSelfReg table successfully built
+LockPermissions table successfully built
+MIME table successfully built
+ModuleAdminExecuteSequence table successfully built
+ModuleAdminUISequence table successfully built
+ModuleAdvtExecuteSequence table successfully built
+ModuleAdvtUISequence table successfully built
+ModuleComponents table successfully built
+ModuleConfiguration table successfully built
+ModuleDependency table successfully built
+ModuleExclusion table successfully built
+ModuleIgnoreTable table successfully built
+ModuleSubstitution table successfully built
+ModuleInstallExecuteSequence table successfully built
+ModuleInstallUISequence table successfully built
+ModuleSignature table successfully built
+MoveFile table successfully built
+MsiAssembly table successfully built
+MsiAssemblyName table successfully built
+ODBCAttribute table successfully built
+ODBCSourceAttribute table successfully built
+ODBCTranslator table successfully built
+ProgId table successfully built
+PublishComponent table successfully built
+Registry table successfully built
+RegLocator table successfully built
+RemoveFile table successfully built
+RemoveIniFile table successfully built
+RemoveRegistry table successfully built
+ReserveCost table successfully built
+SelfReg table successfully built
+ServiceControl table successfully built
+ServiceInstall table successfully built
+Shortcut table successfully built
+Signature table successfully built
+TextStyle table successfully built
+TypeLib table successfully built
+UIText table successfully built
+Verb table successfully built
+_Validation table successfully built
+Searching project for extract-at-build components...
+Extracting COM data from 9 component(s)
+New ProgId abatecImporter.Import dynamically acquired for component abatecImporter.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId Abatecrt.Encode dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId Abatecrt.Encode.1 dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId Abatecrt.FileRead dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId Abatecrt.FileRead.1 dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId Abatecrt.QString dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId Abatecrt.QString.1 dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId Abatecrt.SysFunctions dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId Abatecrt.SysFunctions.1 dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId Abatecrt.SysStrings dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId Abatecrt.SysStrings.1 dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId Abatecrt.VersionQuery dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId Abatecrt.VersionQuery.1 dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecAuth.LDAPHelper2 dynamically acquired for component atecAuth.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecdb.ADOHelper dynamically acquired for component atecdb.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbrt.AppEx dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbrt.DataConversion dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbrt.DBHelper dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbrt.ErrHelper dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbrt.FileHelper dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbrt.IndexList dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbrt.iniFileCache dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbrt.ObjectHash dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbrt.ObjectList dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbrt.StringHelper dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbrt.StringList dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbrt.SystemHelper dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbwl.AttributeMarkup dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbwl.GlobalMultiUse dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbwl.MultiPartForm dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbwl.PageMarkup dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbwl.RequestParameters dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbwl.WebErrors dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbwl.XMLNavigator dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbwl.XMLTreeview dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecvbwl.XMLTreeviewUnordered dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId atecwebrep.WebReport dynamically acquired for component atecwebrep.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId WebApplication.Attribute dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId WebApplication.Attribute.1 dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId WebApplication.Page dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId WebApplication.Page.1 dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId WebApplication.PageCache dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId WebApplication.PageCache.1 dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId WebApplication.Tag dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId WebApplication.Tag.1 dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId WebApplication.WebGlobals dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId WebApplication.WebGlobals.1 dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId WebApplication.WebSession dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New ProgId WebApplication.WebSession.1 dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {CD647C2A-8566-45F0-BE06-6CD32C36B0D0} dynamically acquired for component abatecImporter.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {08BEE22F-4E2F-4873-A40D-70163D235176} dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {25E58C09-86CF-4DAE-BCCC-632936A7E58D} dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {3034951E-4392-41D7-A5F9-BD8455F5F504} dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {5E86C878-5569-4F0F-A03A-D2172338A39E} dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {AB25A3DC-A597-452D-98EA-3F19A693A7E2} dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {D2B518C9-117C-4DBF-8BE1-2A12D687CE75} dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {3E9D03E8-AB52-43D2-8E9C-B74ACA6D92B9} dynamically acquired for component atecAuth.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {55FB9321-F150-483C-9B84-CF322F154DB4} dynamically acquired for component atecdb.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {363A47B2-356C-4DA6-B2CB-2F3615D4A27F} dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {37EE6DB3-FF63-482A-8A74-EB34863FE5E6} dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {5004D84F-E010-4323-881E-58AC0AB74998} dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {6AECD2AB-2CA4-4BC5-8561-8B0A5D599617} dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {80E508D3-DB5C-4428-879F-11C293A1930E} dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {8853889F-E29B-414A-BBDB-17D2A15FC490} dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {971FE50A-81D7-4799-BAD7-78ACC24F6616} dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {BF85E499-DA50-4D11-95BF-C68A69A304BC} dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {C95AF303-E01C-4238-8FB1-037DA93E1E07} dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {D89B4D49-0D9D-4E69-B6A9-A5DD02ECD696} dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {F9929D80-368D-4D9B-B75B-2D778519AAF0} dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {FBC16648-997D-4684-9DFE-89B9467DE887} dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {19AE284C-C58B-4CBA-BEB9-CFDC7141D746} dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {24623003-E1B1-4CA0-9285-094E1B407E02} dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {5B920E2E-9144-4368-9B3F-018928867893} dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {6FC2C36D-8B9C-40AE-AE05-BC872008081F} dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {9D5A814B-E09E-4F47-AB3F-EA994D51F8F9} dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {B2FD5B0E-63B5-4CAF-8C81-0FFF727FD403} dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {B6B7B8D0-B7BA-4811-AF10-2FF6E095B8F4} dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {D51F3666-7B9F-41E6-950B-539A2E73535E} dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {FCAAA065-5942-4550-803F-25FD255F0095} dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {417A124F-85C2-430D-9882-97A62D48EBA0} dynamically acquired for component atecwebrep.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {051CA3E2-EDCB-4049-8A4D-7E2EA90F52E7} dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {0929EF1C-D649-4284-A893-BA2C2922F3FD} dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {0CC643C6-48CE-4561-BEAF-37FC5D6E9192} dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {1920A329-1833-47D9-96D0-99298FAE4C7A} dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {30F3B673-E4C8-4597-8487-B74AFE258E76} dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Class {F23CED08-2398-4043-B41C-C5AE24BB77E4} dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New TypeLib {BCCA50E3-0401-11D3-8BE0-00508B2FF337} dynamically acquired for component TCSBASE.OLB.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New TypeLib {58587E18-C825-44B1-A1FC-25CCD967F327} dynamically acquired for component abatecImporter.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New TypeLib {B6B9A1B6-3F1C-4A1F-B008-CE10912A53AC} dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New TypeLib {0801B0AE-AF30-48F0-95AA-96FD23432E5C} dynamically acquired for component atecAuth.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New TypeLib {11DCC30F-C672-4A71-A6B1-2A23128C335F} dynamically acquired for component atecdb.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New TypeLib {877E219A-9920-44A4-8664-8D3373F66386} dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New TypeLib {C9591148-9334-4E6A-8B29-78184C81D7E3} dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New TypeLib {8079816B-7A04-4CD8-A25C-E90EC87D3D55} dynamically acquired for component atecwebrep.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New TypeLib {055F2E0C-4F82-48AC-946A-308ABB788107} dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Registry Entries (50) dynamically acquired for component TCSBASE.OLB.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Registry Entries (4) dynamically acquired for component abatecImporter.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Registry Entries (12) dynamically acquired for component abatecrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Registry Entries (20) dynamically acquired for component atecAuth.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Registry Entries (4) dynamically acquired for component atecdb.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Registry Entries (48) dynamically acquired for component atecvbrt.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Registry Entries (60) dynamically acquired for component atecvbwl.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Registry Entries (4) dynamically acquired for component atecwebrep.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+New Registry Entries (12) dynamically acquired for component webapplication.dll.8558FFEF_42E2_4231_BBAC_E0836AFAA11B
+Resolving strings...
+Language English (United States) built
+Building CAB files...
+MergeModule.CABinet built
+Files built
+Media table successfully built
+Release\Release build completed with 0 errors, 0 warnings
+================= Logging stopped at 10/20/2003 10:20:10 AM ==================

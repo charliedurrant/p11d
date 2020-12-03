@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GovTalkMessage xmlns="http://www.govtalk.gov.uk/CM/envelope">
+	<EnvelopeVersion>2.0</EnvelopeVersion>
+	<Header>
+		<MessageDetails>
+			<Class>IR-PAYE-EXB</Class>
+			<Qualifier>request</Qualifier>
+			<Function>submit</Function>
+			<CorrelationID/>
+			<Transformation>XML</Transformation>
+			<GatewayTest>1</GatewayTest>
+			<GatewayTimestamp/>
+		</MessageDetails>
+		<SenderDetails>
+			<IDAuthentication>
+				<SenderID>ISV635</SenderID>
+				<Authentication>
+					<Method>clear</Method>
+					<Role>principal</Role>
+					<Value>testing1</Value>
+				</Authentication>
+			</IDAuthentication>
+		</SenderDetails>
+	</Header>
+	<GovTalkDetails>
+		<Keys>
+			<Key Type="TaxOfficeNumber">635</Key>
+			<Key Type="TaxOfficeReference">A635</Key>
+		</Keys>
+		<TargetDetails>
+			<Organisation>IR</Organisation>
+		</TargetDetails>
+		<ChannelRouting>
+			<Channel>
+				<URI>6001</URI>
+				<Product>your product name</Product>
+				<Version>version no. of product</Version>
+			</Channel>
+		</ChannelRouting>
+	</GovTalkDetails>
+	<Body>
+		<IRenvelope xmlns="http://www.govtalk.gov.uk/taxation/EXB/16-17/2">
+			<IRheader>
+				<Keys>
+					<Key Type="TaxOfficeNumber">635</Key>
+					<Key Type="TaxOfficeReference">A635</Key>
+				</Keys>
+				<PeriodEnd>2017-04-05</PeriodEnd>
+				<Principal>
+					<Contact>
+						<Name>
+							<Ttl>Mr</Ttl>
+							<Fore>Sds</Fore>
+							<Sur>Team</Sur>
+						</Name>
+					</Contact>
+				</Principal>
+				<DefaultCurrency>GBP</DefaultCurrency>
+				<Sender>Employer</Sender>
+			</IRheader>
+			<ExpensesAndBenefits>
+				<Employer>
+					<Name>SCRIBE AND CO</Name>
+				</Employer>
+				<Declarations>
+					<P11Dincluded>are due</P11Dincluded>
+				</Declarations>
+				<P11Db>
+					<Class1AcontributionsDue NICsRate="13.80">
+						<TotalBenefit>29148.00</TotalBenefit>
+						<NICpayable>4022.42</NICpayable>
+					</Class1AcontributionsDue>
+				</P11Db>
+				<P11DrecordCount>0</P11DrecordCount>
+				<P46CarRecordCount>0</P46CarRecordCount>
+			</ExpensesAndBenefits>
+		</IRenvelope>
+	</Body>
+</GovTalkMessage>

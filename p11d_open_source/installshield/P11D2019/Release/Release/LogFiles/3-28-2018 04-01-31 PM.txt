@@ -1,0 +1,27 @@
+================= Logging started at 3/28/2018 04:01:31 PM ==================
+Created release folders
+InstallShield Script Compiler
+Version 11.50.0.42618
+Copyright 1997-2005 Macrovision Europe Ltd. and/or Macrovision Corporation. All Rights Reserved.
+
+Compiling...
+setup.rul
+Linking...
+Setup.inx - 0 error(s), 0 warning(s)
+AdminExecuteSequence table successfully built
+AdminUISequence table successfully built
+AdvtExecuteSequence table successfully built
+AdvtUISequence table successfully built
+InstallExecuteSequence table successfully built
+InstallUISequence table successfully built
+Directory table successfully built
+Feature table successfully built
+FeatureComponents table successfully built
+Component table successfully built
+Loading File table
+Building File table
+ISDEV : error -32000: Build canceled by the user
+Release\Release - 1 error(s), 0 warning(s)
+================= Logging stopped at 3/28/2018 04:01:38 PM ==================
+Log file has been created: <file:C:\Ishield\P11D2017\Release\Release\LogFiles\3-28-2018 04-01-31 PM.txt>
+

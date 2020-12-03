@@ -1,0 +1,808 @@
+export prototype EnableFeatures(STRING, BYREF STRING);  
+export prototype CheckDefaultSerialNo(BYREF STRING, STRING, STRING);  
+export prototype DefaultFeatureSettings();
+export prototype SetDefaultOptions();
+export prototype OptionDescriptions(BYREF STRING);
+         
+         
+#define szProductFamily "ABACUS"
+
+                            
+function CheckDefaultSerialNo(svReturnLine, szNum, szPrefix)
+	STRING szStr, szStr2, szStr3, szOpts, svPackages, svParams, szTimeOutDays;
+	NUMBER nReturn, nCount, nTimeOutDays;
+begin                                     
+
+	svReturnLine="";
+
+	nReturn=StrSub(szStr, szNum, 0, 10);
+	
+	//if szStr!="MALCS81271" && szStr!=szPrefix then
+	if szStr!="SAGEX45544" && szStr!=szPrefix then
+		return ERROR_SUCCESS;
+	endif;          
+	
+	szOpts="";         
+	svPackages="";
+	svParams="";
+	
+	nCount=0;
+	while (nCount<10)
+		nReturn=StrSub(szStr2, szNum, 10+nCount, 1);
+		nReturn=ConvertHexToBinary(szStr2,szStr3);
+		if nReturn!=ERROR_SUCCESS then
+			return ERROR_SUCCESS;
+		endif;
+		szOpts=szOpts+szStr3;
+		nCount=nCount+1;
+	endwhile;
+	
+	//if szStr="MALCS81271" then
+	if szStr="ABATEC5544" then
+		svReturnLine="Andersen - Internal use only";		
+	endif;
+
+	if szStr=szPrefix then		
+		//svReturnLine="Arthur Andersen - Internal use only";		
+		nReturn = SetDialogTitle(DLG_ASK_TEXT, "Licensee Details Required");
+		nReturn=AskText("Please enter the licensee of this product:", "", svReturnLine);
+	endif;
+
+	if IsBitSet(szOpts,0)=1 then
+		svPackages=svPackages+";"+"Sys";
+	endif;
+	
+	if IsBitSet(szOpts,1)=1 then
+		svPackages=svPackages+";"+"FULL";
+	endif;
+	
+	if IsBitSet(szOpts,2)=1 then
+		svPackages=svPackages+";"+"CT";
+	endif;
+	
+	if IsBitSet(szOpts,3)=1 then
+		svPackages=svPackages+";"+"CTPlus";
+	endif;
+	
+	if IsBitSet(szOpts,4)=1 then
+		svPackages=svPackages+";"+"CTLite";
+	endif;
+	
+	if IsBitSet(szOpts,5)=1 then
+		svPackages=svPackages+";"+"CTAll";
+	endif;
+	
+	if IsBitSet(szOpts,6)=1 then
+		svPackages=svPackages+";"+"PBC1999";
+	endif;
+	
+	if IsBitSet(szOpts,7)=1 then
+		svPackages=svPackages+";"+"PBC2000";
+	endif;                
+	
+	if IsBitSet(szOpts,8)=1 then
+		svPackages=svPackages+";"+"PBC2001";
+	endif;
+	
+	if IsBitSet(szOpts,9)=1 then
+		svPackages=svPackages+";"+"PBCAll";
+	endif;
+	
+	if IsBitSet(szOpts,10)=1 then
+		svPackages=svPackages+";"+"PBCGAll";
+	endif;
+	
+	if IsBitSet(szOpts,11)=1 then
+		svPackages=svPackages+";"+"IT";
+	endif;
+	
+	if IsBitSet(szOpts,12)=1 then
+		svPackages=svPackages+";"+"AIF";
+	endif;
+
+	if IsBitSet(szOpts,13)=1 then
+		svPackages=svPackages+";"+"AIFextra";
+	endif;
+	
+	if IsBitSet(szOpts,14)=1 then
+		svPackages=svPackages+";"+"Life";
+	endif;
+	
+	if IsBitSet(szOpts,15)=1 then
+		svPackages=svPackages+";"+"Irish";
+	endif;
+	
+	if IsBitSet(szOpts,16)=1 then
+		svPackages=svPackages+";"+"PBCIrish2001";
+	endif;
+	
+	if IsBitSet(szOpts,17)=1 then
+		svPackages=svPackages+";"+"PS";
+	endif;
+	
+	if IsBitSet(szOpts,18)=1 then
+		svPackages=svPackages+";"+"CG";
+	endif;
+	
+	if IsBitSet(szOpts,19)=1 then
+		svPackages=svPackages+";"+"PT";
+	endif;
+	
+	if IsBitSet(szOpts,20)=1 then
+		svPackages=svPackages+";"+"Dutch";
+	endif;
+	
+	if IsBitSet(szOpts,21)=1 then
+		svPackages=svPackages+";"+"PRT";
+	endif;
+	
+	if IsBitSet(szOpts,22)=1 then
+		svPackages=svPackages+";"+"PRTRoy";
+	endif;
+	
+	if IsBitSet(szOpts,23)=1 then
+		svPackages=svPackages+";"+"TR";
+	endif;
+	
+	if IsBitSet(szOpts,24)=1 then
+		svPackages=svPackages+";"+"TI";
+	endif;
+	
+	if IsBitSet(szOpts,25)=1 then
+		svPackages=svPackages+";"+"PN";
+	endif;
+	
+	if IsBitSet(szOpts,26)=1 then
+		svPackages=svPackages+";"+"HK";
+	endif;
+	
+		
+	if IsBitSet(szOpts,28)=1 then
+		svParams=svParams+";"+"EVAL=1";
+	endif;
+	
+	if IsBitSet(szOpts,29)=1 then
+		// Cortax
+		svParams=svParams+";"+"CORTAX=1;CORTAX_VERSION=0";
+	endif;
+	
+	if IsBitSet(szOpts,30)=1 then
+		// Abacus Organiser
+		svParams=svParams+";"+"CORTAX=1;CORTAX_VERSION=1";
+	endif;
+	
+	if IsBitSet(szOpts,31)=1 then
+		svParams=svParams+";"+"ALLOW_FINAL_PAGES=1";
+	endif;
+	
+	if IsBitSet(szOpts,32)=1 then
+		// PRT - Data Access
+		svParams=svParams+";"+"DATAACCESS=1;DA_VERSION=1";
+	endif;
+	
+	if IsBitSet(szOpts,33)=1 then
+		// Abacus +
+		svParams=svParams+";"+"DATAACCESS=1;DA_VERSION=2";
+	endif;               
+	
+	nTimeOutDays=0;
+	
+	if IsBitSet(szOpts,34)=1 then
+		nTimeOutDays=nTimeOutDays+31;
+	endif;
+	
+	if IsBitSet(szOpts,35)=1 then
+		nTimeOutDays=nTimeOutDays+62;
+	endif;
+	
+	if IsBitSet(szOpts,36)=1 then
+		nTimeOutDays=nTimeOutDays+124;
+	endif;
+	
+	if nTimeOutDays>0 then
+		nReturn=NumToStr(szTimeOutDays, nTimeOutDays);
+		svParams=svParams+";"+"USERTIMEOUT="+szTimeOutDays;
+	endif;
+	
+	if IsBitSet(szOpts,37)=1 then
+		svParams=svParams+";"+"PROTECTSYSFORMULAE=1";
+	endif;
+	
+	if IsBitSet(szOpts,38)=1 then
+		svParams=svParams+";"+"TAXSOFTBUILDNEWYEAR=1";
+	endif;
+
+	if IsBitSet(szOpts,39)=1 then
+		svParams=svParams+";"+"ALLOWDIRECTORYLINK=1";
+	endif;
+
+	
+	if StrLengthChars(svPackages)>0 then
+		nReturn=StrSub(szStr, svPackages, 1, StrLengthChars(svPackages)-1);
+		svPackages=szStr;
+	endif;
+	
+	if StrLengthChars(svParams)>0 then
+		nReturn=StrSub(szStr, svParams, 1, StrLengthChars(svParams)-1);
+		svParams=szStr;
+	endif;
+	
+	svReturnLine=svPackages+","+svReturnLine+","+svParams;
+    
+	return ERROR_SUCCESS;
+
+end;
+
+
+function DefaultFeatureSettings()
+    NUMBER nReturn;
+begin
+	nReturn = ExcFeature("AIF");
+	nReturn = ExcFeature("AIF_Extra");
+	nReturn = ExcFeature("CG");
+	nReturn = ExcFeature("CT");
+	nReturn = ExcFeature("CT_ABPLUS");
+	nReturn = ExcFeature("CT_FORMS");
+	nReturn = ExcFeature("CT_FORMSNA");
+	nReturn = ExcFeature("CT_OLD");
+	nReturn = ExcFeature("CT_1996POSTN");
+	nReturn = ExcFeature("CT_1996");
+	nReturn = ExcFeature("CT_1996CTFORM");
+	nReturn = ExcFeature("CT_1997");
+	nReturn = ExcFeature("CT_1997CTFORM");
+	nReturn = ExcFeature("CT_1998");
+	nReturn = ExcFeature("CT_1998CTFORM");
+	nReturn = ExcFeature("CT_1999");
+	nReturn = ExcFeature("CT_1999CTFORM");
+	nReturn = ExcFeature("CT_2000");
+	nReturn = ExcFeature("CT_2000CTFORM");
+	nReturn = ExcFeature("CT_2001");
+	nReturn = ExcFeature("CT_2002");
+	nReturn = ExcFeature("DUTCH");
+	nReturn = ExcFeature("GR");
+	nReturn = ExcFeature("GR_OLD");
+	nReturn = ExcFeature("GR_1996");
+	nReturn = ExcFeature("GR_1997");
+	nReturn = ExcFeature("GR_1998");
+	nReturn = ExcFeature("GR_1999");
+	nReturn = ExcFeature("GR_2000");
+	nReturn = ExcFeature("GR_2001");
+	nReturn = ExcFeature("GR_2002");
+	nReturn = ExcFeature("HK");
+	nReturn = ExcFeature("HK_OLD");
+	nReturn = ExcFeature("IRISH");
+	nReturn = ExcFeature("IRISH_OLD");
+	nReturn = ExcFeature("IRISH_2000pre");
+	nReturn = ExcFeature("IRISH_2001");
+	nReturn = ExcFeature("IT");
+	nReturn = ExcFeature("LIFE");
+	nReturn = ExcFeature("PN");
+	nReturn = ExcFeature("PRTROY");
+	nReturn = ExcFeature("PS");
+	nReturn = ExcFeature("PS_2000");
+	nReturn = ExcFeature("PS_2001");
+	nReturn = ExcFeature("PT");
+	nReturn = ExcFeature("PT_OLD");
+	nReturn = ExcFeature("ROY");
+	nReturn = ExcFeature("SA");
+	nReturn = ExcFeature("SA_1999");
+	nReturn = ExcFeature("SA_2000");
+	nReturn = ExcFeature("SA_2001");
+	nReturn = ExcFeature("TI");
+	nReturn = ExcFeature("TR");
+	nReturn = ExcFeature("PN");
+	nReturn = ExcFeature("HK");
+
+	return ERROR_SUCCESS;    	
+end;
+
+ 
+function EnableFeatures(szProduct, szDescription)
+    NUMBER nvLineNumber, nReturn, nBuff;
+begin             
+	
+	szDescription="";			   
+				   				   
+    switch (szProduct)
+    	
+    	case "Sys":
+        	szDescription="System Only";
+
+    	case "FULL":
+        	szDescription="Complete";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("GR");
+			nReturn = IncFeature("CT_FORMS");
+			nReturn = IncFeature("CT_FORMSNA");
+			nReturn = IncFeature("CT_1996POSTN");
+			nReturn = IncFeature("CT_1996");
+			nReturn = IncFeature("CT_1996CTFORM");
+			nReturn = IncFeature("GR_1996");
+			nReturn = IncFeature("CT_1997");
+			nReturn = IncFeature("CT_1997CTFORM");
+			nReturn = IncFeature("GR_1997");
+			nReturn = IncFeature("CT_1998");
+			nReturn = IncFeature("CT_1998CTFORM");
+			nReturn = IncFeature("GR_1998");
+			nReturn = IncFeature("CT_1999");
+			nReturn = IncFeature("CT_1999CTFORM");
+			nReturn = IncFeature("GR_1999");
+			nReturn = IncFeature("CT_2000");
+			nReturn = IncFeature("CT_2000CTFORM");
+			nReturn = IncFeature("GR_2000");
+			nReturn = IncFeature("CT_2001");
+			nReturn = IncFeature("GR_2001");
+			nReturn = IncFeature("CT_2002");
+			nReturn = IncFeature("GR_2002");
+			nReturn = IncFeature("CT_ABPLUS");
+			nReturn = IncFeature("CT_OLD");
+			nReturn = IncFeature("IT");
+			nReturn = IncFeature("AIF");
+			nReturn = IncFeature("AIF_EXTRA");
+			nReturn = IncFeature("LIFE");
+			nReturn = IncFeature("IRISH");
+			nReturn = IncFeature("IRISH_OLD");
+			nReturn = IncFeature("IRISH_2000PRE");
+			nReturn = IncFeature("IRISH_2001");
+			nReturn = IncFeature("PS");
+			nReturn = IncFeature("PS_2000");
+			nReturn = IncFeature("PS_2001");
+			nReturn = IncFeature("SA");
+			nReturn = IncFeature("SA_1999");
+			nReturn = IncFeature("SA_2000");
+			nReturn = IncFeature("SA_2001");
+			nReturn = IncFeature("CG");
+			nReturn = IncFeature("PT");
+			nReturn = IncFeature("PT_OLD");
+			nReturn = IncFeature("PRTROY");
+			nReturn = IncFeature("ROY");
+			nReturn = IncFeature("DUTCH");
+			nReturn = IncFeature("TR");
+			nReturn = IncFeature("TI");
+    	
+        case "CT":
+        	szDescription="Corporation Tax";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("GR");
+			nReturn = IncFeature("CT_FORMS");
+			nReturn = IncFeature("CT_FORMSNA");
+			nReturn = IncFeature("CT_1996POSTN");
+			nReturn = IncFeature("CT_1996");
+			nReturn = IncFeature("CT_1996CTFORM");
+			nReturn = IncFeature("GR_1996");
+			nReturn = IncFeature("CT_1997");
+			nReturn = IncFeature("CT_1997CTFORM");
+			nReturn = IncFeature("GR_1997");
+			nReturn = IncFeature("CT_1998");
+			nReturn = IncFeature("CT_1998CTFORM");
+			nReturn = IncFeature("GR_1998");
+			nReturn = IncFeature("CT_1999");
+			nReturn = IncFeature("CT_1999CTFORM");
+			nReturn = IncFeature("GR_1999");
+			nReturn = IncFeature("CT_2000");
+			nReturn = IncFeature("CT_2000CTFORM");
+			nReturn = IncFeature("GR_2000");
+			nReturn = IncFeature("CT_2001");
+			nReturn = IncFeature("GR_2001");
+			nReturn = IncFeature("CT_2002");
+			nReturn = IncFeature("GR_2002");
+    	
+        case "CTReturn":
+        	szDescription="Corporation Tax (Return only)";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("CT_FORMS");
+			nReturn = IncFeature("CT_FORMSNA");
+			nReturn = IncFeature("CT_1996POSTN");
+			nReturn = IncFeature("CT_1996CTFORM");
+			nReturn = IncFeature("CT_1997CTFORM");
+			nReturn = IncFeature("CT_1998CTFORM");
+			nReturn = IncFeature("CT_1999CTFORM");
+			nReturn = IncFeature("CT_2000CTFORM");
+	    	
+        case "CTPlus":
+        	szDescription="Corporation Tax (with Abacus+ support)";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("GR");
+			nReturn = IncFeature("CT_FORMS");
+			nReturn = IncFeature("CT_FORMSNA");
+			nReturn = IncFeature("CT_1996POSTN");
+			nReturn = IncFeature("CT_1996");
+			nReturn = IncFeature("CT_1996CTFORM");
+			nReturn = IncFeature("GR_1996");
+			nReturn = IncFeature("CT_1997");
+			nReturn = IncFeature("CT_1997CTFORM");
+			nReturn = IncFeature("GR_1997");
+			nReturn = IncFeature("CT_1998");
+			nReturn = IncFeature("CT_1998CTFORM");
+			nReturn = IncFeature("GR_1998");
+			nReturn = IncFeature("CT_1999");
+			nReturn = IncFeature("CT_1999CTFORM");
+			nReturn = IncFeature("GR_1999");
+			nReturn = IncFeature("CT_2000");
+			nReturn = IncFeature("CT_2000CTFORM");
+			nReturn = IncFeature("GR_2000");
+			nReturn = IncFeature("CT_2001");
+			nReturn = IncFeature("GR_2001");
+			nReturn = IncFeature("CT_2002");
+			nReturn = IncFeature("GR_2002");
+			nReturn = IncFeature("CT_ABPLUS");
+	    	
+        case "CTLite": 
+        	szDescription="Corporation Tax Lite";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("CT_FORMS");
+			nReturn = IncFeature("CT_FORMSNA");
+			nReturn = IncFeature("CT_1996POSTN");
+			nReturn = IncFeature("CT_1996");
+			nReturn = IncFeature("CT_1996CTFORM");
+			nReturn = IncFeature("CT_1997");
+			nReturn = IncFeature("CT_1997CTFORM");
+			nReturn = IncFeature("CT_1998");
+			nReturn = IncFeature("CT_1998CTFORM");
+			nReturn = IncFeature("CT_1999");
+			nReturn = IncFeature("CT_1999CTFORM");
+			nReturn = IncFeature("CT_2000");
+			nReturn = IncFeature("CT_2000CTFORM");
+			nReturn = IncFeature("CT_2001");
+			nReturn = IncFeature("CT_2002");
+			nReturn=SetOption("LITE=1");
+
+        case "CTAll": 
+        	szDescription="Corporation Tax Complete";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("GR");
+			nReturn = IncFeature("CT_FORMS");
+			nReturn = IncFeature("CT_FORMSNA");
+			nReturn = IncFeature("CT_1996POSTN");
+			nReturn = IncFeature("CT_1996");
+			nReturn = IncFeature("CT_1996CTFORM");
+			nReturn = IncFeature("GR_1996");
+			nReturn = IncFeature("CT_1997");
+			nReturn = IncFeature("CT_1997CTFORM");
+			nReturn = IncFeature("GR_1997");
+			nReturn = IncFeature("CT_1998");
+			nReturn = IncFeature("CT_1998CTFORM");
+			nReturn = IncFeature("GR_1998");
+			nReturn = IncFeature("CT_1999");
+			nReturn = IncFeature("CT_1999CTFORM");
+			nReturn = IncFeature("GR_1999");
+			nReturn = IncFeature("CT_2000");
+			nReturn = IncFeature("CT_2000CTFORM");
+			nReturn = IncFeature("GR_2000");
+			nReturn = IncFeature("CT_2001");
+			nReturn = IncFeature("GR_2001");
+			nReturn = IncFeature("CT_2002");
+			nReturn = IncFeature("GR_2002");
+			nReturn = IncFeature("CT_OLD");
+
+        //case "PBC1998": 
+        //	szDescription="PBC Corporation Tax 1998";
+		//	nReturn = IncFeature("CT");
+		//	nReturn = IncFeature("CT_1998");
+		//	nReturn=SetOption("PBC=1");
+
+        case "PBC1999": 
+        	szDescription="PBC Corporation Tax 1999";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("CT_1999");
+			nReturn=SetOption("PBC=1");
+
+        case "PBC2000": 
+        	szDescription="PBC Corporation Tax 2000";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("CT_2000");
+			nReturn=SetOption("PBC=1");
+
+        case "PBC2001": 
+        	szDescription="PBC Corporation Tax 2001";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("CT_2001");
+			nReturn=SetOption("PBC=1");
+
+        case "PBC2002": 
+        	szDescription="PBC Corporation Tax 2002";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("CT_2002");
+			nReturn=SetOption("PBC=1");
+
+        case "PBCAll": 
+        	szDescription="PBC Corporation Tax Complete";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("CT_1997");
+			nReturn = IncFeature("CT_1997CTFORM");
+			nReturn = IncFeature("CT_1998");
+			nReturn = IncFeature("CT_1999");
+			nReturn = IncFeature("CT_2000");
+			nReturn = IncFeature("CT_2001");
+			nReturn = IncFeature("CT_2002");
+			nReturn=SetOption("PBC=1");
+
+        case "PBCGAll": 
+        	szDescription="PBC Group Corporation Tax Complete";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("CT_FORMSNA");
+			nReturn = IncFeature("GR");
+			nReturn = IncFeature("CT_1999");
+			nReturn = IncFeature("CT_1999CTFORM");
+			nReturn = IncFeature("GR_1999");
+			nReturn = IncFeature("CT_2000");
+			nReturn = IncFeature("CT_2000CTFORM");
+			nReturn = IncFeature("GR_2000");
+			nReturn = IncFeature("CT_2001");
+			nReturn = IncFeature("GR_2001");
+			nReturn = IncFeature("CT_2002");
+			nReturn = IncFeature("GR_2002");
+			nReturn=SetOption("PBC=1");
+         
+        case "IT": 
+        	szDescription="Investment Trust";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("CT_FORMS");
+			nReturn = IncFeature("CT_FORMSNA");
+			nReturn = IncFeature("IT");
+
+        case "AIF": 
+        	szDescription="Authorised Investment Fund";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("CT_FORMS");
+			nReturn = IncFeature("CT_FORMSNA");
+			nReturn = IncFeature("AIF");
+
+        case "AIFextra": 
+        	szDescription="Authorised Investment Fund ()";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("CT_FORMS");
+			nReturn = IncFeature("CT_FORMSNA");
+			nReturn = IncFeature("AIF");
+			nReturn = IncFeature("AIF_EXTRA");
+
+        case "Life":
+        	szDescription="Life";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("CT_FORMS");
+			nReturn = IncFeature("CT_FORMSNA");
+			nReturn = IncFeature("LIFE");
+			// 19 Apr 02:
+            // Life also needs to include Group
+			nReturn = IncFeature("GR");
+			nReturn = IncFeature("GR_1996");
+			nReturn = IncFeature("GR_1997");
+			nReturn = IncFeature("GR_1998");
+			nReturn = IncFeature("GR_1999");
+			nReturn = IncFeature("GR_2000");
+			nReturn = IncFeature("GR_2001");
+			nReturn = IncFeature("GR_2002");
+
+        case "Irish": 
+        	szDescription="Irish Corporation Tax";
+			nReturn = IncFeature("IRISH");
+			nReturn = IncFeature("IRISH_OLD");
+			nReturn = IncFeature("IRISH_2000PRE");
+			nReturn = IncFeature("IRISH_2001");
+
+        case "PBCIrish2001": 
+        	szDescription="PBC Irish Corporation Tax 2001";
+			nReturn = IncFeature("IRISH");
+			nReturn = IncFeature("IRISH_2001");
+			nReturn=SetOption("PBC=1");
+
+        case "PS": 
+        	szDescription="Partnership Abacus";
+			nReturn = IncFeature("PS");
+			nReturn = IncFeature("PS_2000");
+			nReturn = IncFeature("PS_2001");
+			nReturn = IncFeature("SA");
+			nReturn = IncFeature("SA_1999");
+			nReturn = IncFeature("SA_2000");
+			nReturn = IncFeature("SA_2001");
+
+        case "CG": 
+        	szDescription="Partnership Gains";
+			nReturn = IncFeature("CG");
+			nReturn = IncFeature("SA_2000");
+			nReturn = IncFeature("SA_2001");
+			nReturn = IncFeature("PS_2000");
+			nReturn = IncFeature("PS_2001");
+
+        case "PT": 
+        	szDescription="Personal Tax";
+			nReturn = IncFeature("PT");
+			nReturn = IncFeature("SA");
+			nReturn = IncFeature("SA_1999");
+			nReturn = IncFeature("SA_2000");
+			nReturn = IncFeature("SA_2001");
+
+        case "Dutch": 
+        	szDescription="Dutch Corporation Tax";
+			nReturn = IncFeature("CT");
+			nReturn = IncFeature("DUTCH");
+
+        case "PRT": 
+        	szDescription="PRT";
+			nReturn = IncFeature("PRTROY");
+
+        case "PRTRoy": 
+        	szDescription="PRT and Royalty";
+			nReturn = IncFeature("PRTROY");
+			nReturn = IncFeature("ROY");
+
+        //case "PRTRoyAuto": 
+        //	szDescription="PRT and Royalty (Automatic Upload)";
+		//	nReturn = IncFeature("PRTROY");
+		//	nReturn = IncFeature("ROY");
+
+        case "TR": 
+        	szDescription="Trust";
+			nReturn = IncFeature("TR");
+			nReturn = IncFeature("SA");
+			nReturn = IncFeature("SA_1999");
+			nReturn = IncFeature("SA_2000");
+			nReturn = IncFeature("SA_2001");
+
+        case "TI": 
+        	szDescription="Tax Investigations";
+			nReturn = IncFeature("TI");
+
+        case "PN": 
+        	szDescription="Pension Fund";
+			nReturn = IncFeature("PN");
+			nReturn = IncFeature("SA_1999");
+
+        case "HK": 
+        	szDescription="Hong Kong Corporation Tax";
+			nReturn = IncFeature("HK");
+
+        default:
+    endswitch;
+	
+	return ERROR_SUCCESS;    	
+	
+end;
+                
+
+function SetDefaultOptions()         
+	NUMBER nReturn;
+begin            
+	
+	nReturn=SetOption("SHORTCUT_FOLDER=Sage");	
+	nReturn=SetOption("SHORTCUT_DESCRIPTION=Sage Software");	
+	
+	nReturn=SetOption("OWNER=Sage");
+	nReturn=SetOption("AUTHOR=Sage on (08700) 116000.");
+	nReturn=SetOption("LICENCE=");
+	nReturn=SetOption("SUPPORT=Sage on (08700) 116000.");
+	nReturn=SetOption("LOCAL_CONTACT=Sage on (08700) 116000.");
+	//nReturn=SetOption("SUBJECT_TO=- SUBJECT TO CLIENT APPROVAL");
+	//nReturn=SetOption("CURRENCYDISPLAY=Default");
+	nReturn=SetOption("ALLOW_FINAL_PAGES=0");
+	//nReturn=SetOption("NAME_ON_FINAL=1");
+	nReturn=SetOption("CORTAX=0");
+	nReturn=SetOption("CORTAX_VERSION=0");
+	//nReturn=SetOption("DRAFT_MARKING=INK STAMP");
+	nReturn=SetOption("DATAACCESS=0");
+	nReturn=SetOption("DA_VERSION=0");
+	nReturn=SetOption("USERTIMEOUT=0");
+	
+	nReturn=SetOption("EVAL=0");
+	nReturn=SetOption("PBC=0");
+	nReturn=SetOption("LITE=0");
+	nReturn=SetOption("PROTECTSYSFORMULAE=0");
+	nReturn=SetOption("TAXSOFTBUILDNEWYEAR=0");
+	nReturn=SetOption("ALLOWDIRECTORYLINK=0");
+	nReturn=SetOption("ALLOWQUERYPRINT=1");
+	
+	return ERROR_SUCCESS;
+end;
+
+
+function OptionDescriptions(szDesc)
+	STRING szSep, szValue, szName;
+	NUMBER nReturn;
+begin
+	szSep=": ";
+	szDesc="";
+	                    
+	szName="OWNER";
+	nReturn=GetOption(szName, szValue);
+	//szDesc=szDesc+szName+szSep+szValue+"\n";
+	szDesc=szDesc+"Owner"+szSep+szValue+"\n";
+	                    
+	szName="AUTHOR";
+	nReturn=GetOption(szName, szValue);
+	//szDesc=szDesc+szName+szSep+szValue+"\n";
+	szDesc=szDesc+"Author"+szSep+szValue+"\n";
+	                    
+	szName="LICENCE";
+	nReturn=GetOption(szName, szValue);
+	//szDesc=szDesc+szName+szSep+szValue+"\n";
+	szDesc=szDesc+"Licence Text"+szSep+szValue+"\n";
+	                    
+	szName="SUPPORT";
+	nReturn=GetOption(szName, szValue);
+	//szDesc=szDesc+szName+szSep+szValue+"\n";
+	szDesc=szDesc+"Support Contact"+szSep+szValue+"\n";
+	                    
+	szName="LOCAL_CONTACT";
+	nReturn=GetOption(szName, szValue);
+	//szDesc=szDesc+szName+szSep+szValue+"\n";
+	szDesc=szDesc+"Local Contact"+szSep+szValue+"\n";
+	                    
+	//szName="SUBJECT_TO";
+	//nReturn=GetOption(szName, szValue);
+	////szDesc=szDesc+szName+szSep+szValue+"\n";
+	//szDesc=szDesc+"'Subject To' Text"+szSep+szValue+"\n";
+	                    
+	//szName="CURRENCYDISPLAY";
+	//nReturn=GetOption(szName, szValue);
+	////szDesc=szDesc+szName+szSep+szValue+"\n";
+	//szDesc=szDesc+"Currency Display Format"+szSep+szValue+"\n";
+	                    
+	szName="ALLOW_FINAL_PAGES";
+	nReturn=GetOption(szName, szValue);
+	szDesc=szDesc+"Allow Final Pages"+szSep+szValue+"\n";
+	                    
+	//szName="NAME_ON_FINAL";
+	//nReturn=GetOption(szName, szValue);
+	////szDesc=szDesc+szName+szSep+szValue+"\n";
+	//szDesc=szDesc+"Include Name on Final Printouts"+szSep+szValue+"\n";
+	                    
+	szName="CORTAX";
+	nReturn=GetOption(szName, szValue);
+	//szDesc=szDesc+szName+szSep+szValue+"    ";
+	szDesc=szDesc+"Cortax"+szSep+szValue+"    ";
+	                    
+	szName="CORTAX_VERSION";
+	nReturn=GetOption(szName, szValue);
+	//szDesc=szDesc+"("+szName+szSep+szValue+")"+"\n";
+	szDesc=szDesc+"("+"Version"+szSep+szValue+")"+"\n";
+	                    
+	//szName="DRAFT_MARKING";
+	//nReturn=GetOption(szName, szValue);
+	////szDesc=szDesc+szName+szSep+szValue+"\n";
+	//szDesc=szDesc+"Draft Marking"+szSep+szValue+"\n";
+	                    
+	szName="DATAACCESS";
+	nReturn=GetOption(szName, szValue);
+	//szDesc=szDesc+szName+szSep+szValue+"    ";
+	szDesc=szDesc+"Data Access"+szSep+szValue+"    ";
+	                    
+	szName="DA_VERSION";
+	nReturn=GetOption(szName, szValue);
+	//szDesc=szDesc+"("+szName+szSep+szValue+")"+"\n";
+	szDesc=szDesc+"("+"Version"+szSep+szValue+")"+"\n";
+	                    
+	szName="USERTIMEOUT";
+	nReturn=GetOption(szName, szValue);
+	//szDesc=szDesc+szName+szSep+szValue+"\n";
+	szDesc=szDesc+"Software Time Out (Days)"+szSep+szValue+"\n";
+	                    
+	szName="EVAL";
+	nReturn=GetOption(szName, szValue);
+	szDesc=szDesc+"Evaluation"+szSep+szValue+"    ";
+	                    
+	szName="PBC";
+	nReturn=GetOption(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"    ";
+	                    
+	szName="LITE";
+	nReturn=GetOption(szName, szValue);
+	szDesc=szDesc+"Lite"+szSep+szValue+"\n";
+	                    
+	szName="PROTECTSYSFORMULAE";
+	nReturn=GetOption(szName, szValue);
+	szDesc=szDesc+"Protect System Formulae"+szSep+szValue+"\n";
+	                    
+	szName="TAXSOFTBUILDNEWYEAR";
+	nReturn=GetOption(szName, szValue);
+	szDesc=szDesc+"Taxsoft Build New Year"+szSep+szValue+"\n";
+	                    
+	szName="ALLOWDIRECTORYLINK";
+	nReturn=GetOption(szName, szValue);
+	szDesc=szDesc+"Group members directory link"+szSep+szValue+"\n";
+	                    
+	szName="ALLOWQUERYPRINT";
+	nReturn=GetOption(szName, szValue);
+	szDesc=szDesc+"Allow Final Print if Queries"+szSep+szValue+"\n";
+	                    
+	return ERROR_SUCCESS;
+end;               

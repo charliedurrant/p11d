@@ -1,0 +1,72 @@
+================= Logging started at 7/2/2015 02:04:12 PM ==================
+Created release folders
+InstallShield Script Compiler
+Version 11.50.0.42618
+Copyright 1997-2005 Macrovision Europe Ltd. and/or Macrovision Corporation. All Rights Reserved.
+
+Compiling...
+setup.rul
+Linking...
+Setup.inx - 0 error(s), 0 warning(s)
+AdminExecuteSequence table successfully built
+AdminUISequence table successfully built
+AdvtExecuteSequence table successfully built
+AdvtUISequence table successfully built
+InstallExecuteSequence table successfully built
+InstallUISequence table successfully built
+Directory table successfully built
+Feature table successfully built
+FeatureComponents table successfully built
+Component table successfully built
+Loading File table
+Building File table
+Merging modules...
+Merging ATC2ALIGN: J:\Projects\Ishield\MSM\ATC2ALIGN.msm
+Merging ATC2CORE: J:\Projects\Ishield\MSM\ATC2CORE.msm
+Merging atc2hook: J:\Projects\Ishield\MSM\ATC2HOOK.msm
+Merging ATC2MAIL: J:\Projects\Ishield\MSM\ATC2MAIL.msm
+Merging atc2parse: J:\Projects\Ishield\MSM\ATC2PARSE.msm
+Merging atc2QBE: J:\Projects\Ishield\MSM\ATC2QBE.msm
+Merging atc2rep: J:\Projects\Ishield\MSM\ATC2REP.msm
+Merging atc2vtext: J:\Projects\Ishield\MSM\ATC2VTEXT.msm
+Merging atc3GRIDADO: J:\Projects\Ishield\MSM\ATC3GRIDADO.msm
+Merging atc3GRIDDAO: J:\Projects\Ishield\MSM\ATC3GRIDDAO.msm
+Merging (Amyuni) ONESOURCE PDF Converter: J:\Projects\Ishield\MSM\Amyuni.msm
+Merging Microsoft Component Category Manager Library: J:\Projects\Ishield\MSM\COMCAT.MSM
+Merging Microsoft Common Controls 3 ActiveX Control DLL: J:\Projects\Ishield\MSM\COMCT332.MSM
+Merging Windows Common Controls ActiveX Control DLL: J:\Projects\Ishield\MSM\COMCTL32.MSM
+Merging CMDialog ActiveX Control DLL: J:\Projects\Ishield\MSM\COMDLG32.MSM
+Merging DBList: J:\Projects\Ishield\MSM\DBLIST32.MSM
+Merging DCOM95: J:\Projects\Ishield\MSM\DCOM95.msm
+Merging IDSMail OLE Server: J:\Projects\Ishield\MSM\IDSMAI32.msm
+Merging ISHF_Ex: J:\Projects\Ishield\MSM\ISHF_Ex.msm
+Merging Jet 4.0: J:\Projects\Ishield\MSM\jet40.msm
+Merging MDAC 2.6SP1 : J:\Projects\Ishield\MSM\MDAC2.6SP1.msm
+Merging MDAC 2.6 SP2 (English): J:\Projects\Ishield\MSM\MDAC26.Msm
+Merging Microsoft ADO Data Control: J:\Projects\Ishield\MSM\MSADODC.MSM
+Merging Microsoft Data Binding Collection Object DLL: J:\Projects\Ishield\MSM\MSBIND.MSM
+Merging Microsoft Common Controls 2 ActiveX Control DLL: J:\Projects\Ishield\MSM\MSCOMCT2.MSM
+Merging Windows Common Controls ActiveX Control DLL: J:\Projects\Ishield\MSM\MSCOMCTL.MSM
+Merging MSFlexGrid: J:\Projects\Ishield\MSM\MSFLXGRD.MSM
+Merging MSMAPI Controls: J:\Projects\Ishield\MSM\MSMAPI32.MSM
+Merging MSMask: J:\Projects\Ishield\MSM\MSMASK32.MSM
+Merging MSRDC20: J:\Projects\Ishield\MSM\MSRDC20.MSM
+Merging MSRDO20 rdoEngine control: J:\Projects\Ishield\MSM\MSRDO20.MSM
+Merging MSSCRIPT: J:\Projects\Ishield\MSM\MSSCRIPT.Msm
+Merging Microsoft Standard Data Formating Object DLL: J:\Projects\Ishield\MSM\MSSTDFMT.MSM
+Merging Microsoft Stock Property Page: J:\Projects\Ishield\MSM\MSSTKPRP.MSM
+Merging Visual Basic Virtual Machine: J:\Projects\Ishield\MSM\MSVBVM60.MSM
+Merging Microsoft (R) C Runtime Library: J:\Projects\Ishield\MSM\MSVCRT.MSM
+Merging MSXML 3.0: J:\Projects\Ishield\MSM\msxml3.msm
+Merging Microsoft OLE 2.40  for Windows NT(TM) and Windows 95(TM) Operating Systems: J:\Projects\Ishield\MSM\OLEAUT32.MSM
+Merging Outlook Redemption: J:\Projects\Ishield\MSM\OutlookRedemption.msm
+Merging RichText ActiveX Control Merge Module: J:\Projects\Ishield\MSM\RICHTEXT.MSM
+Merging SCRRUN: J:\Projects\Ishield\MSM\SCRRUN.Msm
+Merging TABCTL32 OLE Control DLL: J:\Projects\Ishield\MSM\TABCTL32.MSM
+Merging abatec standard libraries base (interface definitions only): J:\Projects\Ishield\MSM\TCSBASE.msm
+Merging abatec core library: J:\Projects\Ishield\MSM\TCSCCORE.msm
+Merging TCS Progress Bar: J:\Projects\Ishield\MSM\TCSPROG.msm
+Merging TDBG6: J:\Projects\Ishield\MSM\TDBG6.Msm
+Merging IDS OLE Test Server: J:\Projects\Ishield\MSM\TESTOL32.msm
+Merging VB5DB: J:\Projects\Ishield\MSM\VB5DB.Msm
+Merging abatec standard library runtime: J:\Projec

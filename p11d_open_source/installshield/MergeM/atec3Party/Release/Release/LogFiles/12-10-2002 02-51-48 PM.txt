@@ -1,0 +1,145 @@
+================= Logging started at 12/10/2002 02:51:48 PM ==================
+Created release folders
+Directory table successfully built
+Component table successfully built
+Loading File table
+Building File table
+File table successfully built
+Class table successfully built
+Extension table successfully built
+ODBCDataSource table successfully built
+ODBCDriver table successfully built
+ActionText table successfully built
+AdminExecuteSequence table successfully built
+Condition table successfully built
+AdminUISequence table successfully built
+AdvtExecuteSequence table successfully built
+AdvtUISequence table successfully built
+AppId table successfully built
+AppSearch table successfully built
+Property table successfully built
+Binary table successfully built
+BindImage table successfully built
+CompLocator table successfully built
+Complus table successfully built
+ControlCondition table successfully built
+ControlEvent table successfully built
+CreateFolder table successfully built
+CustomAction table successfully built
+DrLocator table successfully built
+DuplicateFile table successfully built
+Environment table successfully built
+EventMapping table successfully built
+Font table successfully built
+IniFile table successfully built
+IniLocator table successfully built
+InstallExecuteSequence table successfully built
+InstallUISequence table successfully built
+IsolatedComponent table successfully built
+LockPermissions table successfully built
+MIME table successfully built
+ModuleAdminExecuteSequence table successfully built
+ModuleAdminUISequence table successfully built
+ModuleAdvtExecuteSequence table successfully built
+ModuleAdvtUISequence table successfully built
+ModuleComponents table successfully built
+ModuleConfiguration table successfully built
+ModuleDependency table successfully built
+ModuleExclusion table successfully built
+ModuleIgnoreTable table successfully built
+ModuleSubstitution table successfully built
+ModuleInstallExecuteSequence table successfully built
+ModuleInstallUISequence table successfully built
+ModuleSignature table successfully built
+MoveFile table successfully built
+MsiAssembly table successfully built
+MsiAssemblyName table successfully built
+ODBCAttribute table successfully built
+ODBCSourceAttribute table successfully built
+ODBCTranslator table successfully built
+ProgId table successfully built
+PublishComponent table successfully built
+Registry table successfully built
+RegLocator table successfully built
+RemoveFile table successfully built
+RemoveIniFile table successfully built
+RemoveRegistry table successfully built
+ReserveCost table successfully built
+SelfReg table successfully built
+ServiceControl table successfully built
+ServiceInstall table successfully built
+Shortcut table successfully built
+Signature table successfully built
+TextStyle table successfully built
+TypeLib table successfully built
+UIText table successfully built
+Verb table successfully built
+_Validation table successfully built
+Searching project for extract-at-build components...
+Extracting COM data from 5 component(s)
+New ProgId MSScriptControl.ScriptControl dynamically acquired for component MSSCRIPT.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New ProgId MSScriptControl.ScriptControl.1 dynamically acquired for component MSSCRIPT.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New ProgId ScriptControl dynamically acquired for component MSSCRIPT.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New ProgId TrueDBGrid60.Style dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New ProgId TrueDBGrid60.TDBDropDown dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New ProgId TrueDBGrid60.TDBGrid dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New ProgId TrueDBGrid60.ValueItem dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New ProgId TrueOleDBGrid60.Style dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New ProgId TrueOleDBGrid60.TDBDropDown dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New ProgId TrueOleDBGrid60.TDBGrid dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New ProgId TrueOleDBGrid60.ValueItem dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New ProgId VBS dynamically acquired for component VBSCRIPT.DLL.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New ProgId VBS Author dynamically acquired for component VBSCRIPT.DLL.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New ProgId VBScript dynamically acquired for component VBSCRIPT.DLL.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New ProgId VBScript Author dynamically acquired for component VBSCRIPT.DLL.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New ProgId VBScript.Encode dynamically acquired for component VBSCRIPT.DLL.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New ProgId VBScript.RegExp dynamically acquired for component VBSCRIPT.DLL.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {C5598E60-B307-11D1-B27D-006008C3FBFB} dynamically acquired for component DISPEX.DLL.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {0E59F1D5-1FBE-11D0-8FF2-00A0D10038BC} dynamically acquired for component MSSCRIPT.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {00028CD1-0000-0000-0000-000000000046} dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {00028CDC-0000-0000-0000-000000000046} dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {00028CDD-0000-0000-0000-000000000046} dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {00028CE7-0000-0000-0000-000000000046} dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {00028CEB-0000-0000-0000-000000000046} dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {00028CEC-0000-0000-0000-000000000046} dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {00028CED-0000-0000-0000-000000000046} dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {00028CEE-0000-0000-0000-000000000046} dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {00028CEF-0000-0000-0000-000000000046} dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {00028CF4-0000-0000-0000-000000000046} dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {00028CF6-0000-0000-0000-000000000046} dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {00028CFC-0000-0000-0000-000000000046} dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {00028CFF-0000-0000-0000-000000000046} dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {0D6234D0-DBA2-11D1-B5DF-0060976089D0} dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {0D6234D3-DBA2-11D1-B5DF-0060976089D0} dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {0D6234D4-DBA2-11D1-B5DF-0060976089D0} dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {0D6234DE-DBA2-11D1-B5DF-0060976089D0} dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {0D6234E2-DBA2-11D1-B5DF-0060976089D0} dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {0D6234E3-DBA2-11D1-B5DF-0060976089D0} dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {0D6234E4-DBA2-11D1-B5DF-0060976089D0} dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {0D6234E5-DBA2-11D1-B5DF-0060976089D0} dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {0D6234E6-DBA2-11D1-B5DF-0060976089D0} dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {0D6234E7-DBA2-11D1-B5DF-0060976089D0} dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {0D6234E9-DBA2-11D1-B5DF-0060976089D0} dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {0D6234EF-DBA2-11D1-B5DF-0060976089D0} dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {0D623537-DBA2-11D1-B5DF-0060976089D0} dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {3F4DACA4-160D-11D2-A8E9-00104B365C9F} dynamically acquired for component VBSCRIPT.DLL.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {B54F3741-5B07-11CF-A4B0-00AA004A55E8} dynamically acquired for component VBSCRIPT.DLL.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {B54F3742-5B07-11CF-A4B0-00AA004A55E8} dynamically acquired for component VBSCRIPT.DLL.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Class {B54F3743-5B07-11CF-A4B0-00AA004A55E8} dynamically acquired for component VBSCRIPT.DLL.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New TypeLib {0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC} dynamically acquired for component MSSCRIPT.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New TypeLib {00028CDA-0000-0000-0000-000000000046} dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New TypeLib {0D6234D1-DBA2-11D1-B5DF-0060976089D0} dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New TypeLib {3F4DACA7-160D-11D2-A8E9-00104B365C9F} dynamically acquired for component VBSCRIPT.DLL.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Registry Entries (16) dynamically acquired for component DISPEX.DLL.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Registry Entries (12) dynamically acquired for component MSSCRIPT.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Registry Entries (41) dynamically acquired for component TDBG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Registry Entries (41) dynamically acquired for component TODG6.OCX.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+New Registry Entries (24) dynamically acquired for component VBSCRIPT.DLL.C30FA1D4_D34C_49E1_AC9F_A63D62FD3059
+Resolving strings...
+Language English (United States) built
+Building CAB files...
+MergeModule.CABinet built
+Files built
+Media table successfully built
+Release\Release build completed with 0 errors, 0 warnings
+================= Logging stopped at 12/10/2002 02:52:11 PM ==================

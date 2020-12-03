@@ -1,0 +1,9 @@
+@ECHO.
+@MAP O:
+@ECHO.
+@REM NET USE O: /DELETE
+MAP r O:=\\LONFS3000\Vol1\AA\Apps\Tax\Setups
+@ECHO.
+@MAP O:
+@ECHO.
+@PAUSE

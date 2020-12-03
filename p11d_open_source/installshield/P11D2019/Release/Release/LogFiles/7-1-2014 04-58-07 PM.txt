@@ -1,0 +1,57 @@
+================= Logging started at 7/1/2014 04:58:07 PM ==================
+Created release folders
+InstallShield Script Compiler
+Version 11.50.0.42618
+Copyright 1997-2005 Macrovision Europe Ltd. and/or Macrovision Corporation. All Rights Reserved.
+
+Compiling...
+setup.rul
+Linking...
+Setup.inx - 0 error(s), 0 warning(s)
+AdminExecuteSequence table successfully built
+AdminUISequence table successfully built
+AdvtExecuteSequence table successfully built
+AdvtUISequence table successfully built
+InstallExecuteSequence table successfully built
+InstallUISequence table successfully built
+Directory table successfully built
+Feature table successfully built
+FeatureComponents table successfully built
+Component table successfully built
+Loading File table
+Building File table
+Merging modules...
+Merging ATC2ALIGN: J:\Projects\ishield\MSM\ATC2ALIGN.msm
+Merging ATC2CORE: J:\Projects\ishield\MSM\ATC2CORE.msm
+Merging atc2hook: J:\Projects\ishield\MSM\ATC2HOOK.msm
+Merging ATC2MAIL: J:\Projects\ishield\MSM\ATC2MAIL.msm
+Merging atc2parse: J:\Projects\ishield\MSM\ATC2PARSE.msm
+Merging atc2QBE: J:\Projects\ishield\MSM\ATC2QBE.msm
+Merging atc2rep: J:\Projects\ishield\MSM\ATC2REP.msm
+Merging atc2vtext: J:\Projects\ishield\MSM\ATC2VTEXT.msm
+Merging atc3GRIDADO: J:\Projects\ishield\MSM\ATC3GRIDADO.msm
+Merging atc3GRIDDAO: J:\Projects\ishield\MSM\ATC3GRIDDAO.msm
+Merging ONESOURCE PDF Converter: J:\Projects\ishield\MSM\Amyuni.msm
+Merging Microsoft Component Category Manager Library: J:\Projects\ishield\MSM\COMCAT.MSM
+Merging Microsoft Common Controls 3 ActiveX Control DLL: J:\Projects\ishield\MSM\COMCT332.MSM
+Merging Windows Common Controls ActiveX Control DLL: J:\Projects\ishield\MSM\COMCTL32.MSM
+Merging CMDialog ActiveX Control DLL: J:\Projects\ishield\MSM\COMDLG32.MSM
+Merging DBList: J:\Projects\ishield\MSM\DBLIST32.MSM
+ISDEV : error -7017: The Object/MergeModule "J:\Projects\ishield\MSM\DCOM95.msm" is not installed on the local system.  To download it, go to the Redistributables view, right click on any item and select "Download required Merge Modules."
+Merging IDSMail OLE Server: J:\Projects\ishield\MSM\IDSMAI32.msm
+Merging ISHF_Ex: J:\Projects\ishield\MSM\ISHF_Ex.msm
+ISDEV : error -7017: The Object/MergeModule "J:\Projects\ishield\MSM\jet40.msm" is not installed on the local system.  To download it, go to the Redistributables view, right click on any item and select "Download required Merge Modules."
+Merging MDAC 2.6SP1 : J:\Projects\ishield\MSM\MDAC2.6SP1.msm
+ISDEV : error -7017: The Object/MergeModule "J:\Projects\ishield\MSM\MDAC26.Msm" is not installed on the local system.  To download it, go to the Redistributables view, right click on any item and select "Download required Merge Modules."
+Merging Microsoft ADO Data Control: J:\Projects\ishield\MSM\MSADODC.MSM
+Merging Microsoft Data Binding Collection Object DLL: J:\Projects\ishield\MSM\MSBIND.MSM
+Merging Microsoft Common Controls 2 ActiveX Control DLL: J:\Projects\ishield\MSM\MSCOMCT2.MSM
+Merging Windows Common Controls ActiveX Control DLL: J:\Projects\ishield\MSM\MSCOMCTL.MSM
+Merging MSFlexGrid: J:\Projects\ishield\MSM\MSFLXGRD.MSM
+Merging MSMAPI Controls: J:\Projects\ishield\MSM\MSMAPI32.MSM
+Merging MSMask: J:\Projects\ishield\MSM\MSMASK32.MSM
+ISDEV : error -32000: Build canceled by the user
+Release\Release - 4 error(s), 0 warning(s)
+================= Logging stopped at 7/1/2014 04:58:58 PM ==================
+Log file has been created: <file:J:\Projects\Ishield\P11D2014\Release\Release\LogFiles\7-1-2014 04-58-07 PM.txt>
+

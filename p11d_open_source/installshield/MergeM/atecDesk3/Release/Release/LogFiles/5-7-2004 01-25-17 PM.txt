@@ -1,0 +1,280 @@
+================= Logging started at 5/7/2004 01:25:17 PM ==================
+Created release folders
+Directory table successfully built
+Component table successfully built
+Loading File table
+Building File table
+File table successfully built
+Class table successfully built
+Extension table successfully built
+ODBCDataSource table successfully built
+ODBCDriver table successfully built
+ActionText table successfully built
+AdminExecuteSequence table successfully built
+Condition table successfully built
+AdminUISequence table successfully built
+AdvtExecuteSequence table successfully built
+AdvtUISequence table successfully built
+AppId table successfully built
+AppSearch table successfully built
+Property table successfully built
+Binary table successfully built
+BindImage table successfully built
+CompLocator table successfully built
+Complus table successfully built
+ControlCondition table successfully built
+ControlEvent table successfully built
+CreateFolder table successfully built
+CustomAction table successfully built
+DrLocator table successfully built
+DuplicateFile table successfully built
+Environment table successfully built
+EventMapping table successfully built
+Font table successfully built
+IniFile table successfully built
+IniLocator table successfully built
+InstallExecuteSequence table successfully built
+InstallUISequence table successfully built
+IsolatedComponent table successfully built
+LockPermissions table successfully built
+MIME table successfully built
+ModuleAdminExecuteSequence table successfully built
+ModuleAdminUISequence table successfully built
+ModuleAdvtExecuteSequence table successfully built
+ModuleAdvtUISequence table successfully built
+ModuleComponents table successfully built
+ModuleConfiguration table successfully built
+ModuleDependency table successfully built
+ModuleExclusion table successfully built
+ModuleIgnoreTable table successfully built
+ModuleSubstitution table successfully built
+ModuleInstallExecuteSequence table successfully built
+ModuleInstallUISequence table successfully built
+ModuleSignature table successfully built
+MoveFile table successfully built
+MsiAssembly table successfully built
+MsiAssemblyName table successfully built
+ODBCAttribute table successfully built
+ODBCSourceAttribute table successfully built
+ODBCTranslator table successfully built
+ProgId table successfully built
+PublishComponent table successfully built
+Registry table successfully built
+RegLocator table successfully built
+RemoveFile table successfully built
+RemoveIniFile table successfully built
+RemoveRegistry table successfully built
+ReserveCost table successfully built
+SelfReg table successfully built
+ServiceControl table successfully built
+ServiceInstall table successfully built
+Shortcut table successfully built
+Signature table successfully built
+TextStyle table successfully built
+TypeLib table successfully built
+UIText table successfully built
+Verb table successfully built
+_Validation table successfully built
+Searching project for extract-at-build components...
+Extracting COM data from 35 component(s)
+New ProgId atecnotes.NotesDB.1 dynamically acquired for component ATECNOTES.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId TCSBackGround.TCSBG dynamically acquired for component TCSBG.OCX.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId TCSBackGround.TCSBG.1 dynamically acquired for component TCSBG.OCX.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId TCSCCORELib.CCore dynamically acquired for component TCSCCORE.DLL.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId TCSCCORELib.CCore.1 dynamically acquired for component TCSCCORE.DLL.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId TCSCCORELib.QString dynamically acquired for component TCSCCORE.DLL.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId TCSCCORELib.TCSFileread dynamically acquired for component TCSCCORE.DLL.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId TCSCCORELib.TCSFileread.1 dynamically acquired for component TCSCCORE.DLL.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId TCSPROG.TCSProgressBar dynamically acquired for component TCSPROG.OCX.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId TCSPROG.TCSProgressBar.1 dynamically acquired for component TCSPROG.OCX.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2ADODB.TCSADOHelper dynamically acquired for component atc2adodb.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2ADOIM.IAudit dynamically acquired for component atc2adoim.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2ADOIM.IImportForm dynamically acquired for component atc2adoim.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2ADOIM.ImportClass dynamically acquired for component atc2adoim.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2ADOIM.IProcessImport dynamically acquired for component atc2adoim.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2TextAlign.TXTAlign dynamically acquired for component atc2align.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2MultiCheck.tcsCheck dynamically acquired for component atc2check.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId ATC2CORE.BitmapMover dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId ATC2CORE.CoreClass dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId ATC2CORE.FieldDetails dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId ATC2CORE.IAutoAuditRecordADO dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId ATC2CORE.LocaleInfo dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId ATC2CORE.ObjectHash dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId ATC2CORE.ObjectList dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId ATC2CORE.StringList dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2DA.BatchItem dynamically acquired for component atc2da.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2DA.DAConnection dynamically acquired for component atc2da.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2db.DBClass dynamically acquired for component atc2db.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2dmenu.DMenu dynamically acquired for component atc2dmenu.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2efiler.Efiler dynamically acquired for component atc2efiler.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2hook.HOOK dynamically acquired for component atc2hook.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2imp.IAudit dynamically acquired for component atc2imp.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2imp.IImportForm dynamically acquired for component atc2imp.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2imp.ImportClass dynamically acquired for component atc2imp.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2imp.IProcessImport dynamically acquired for component atc2imp.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId ATC2MAIL.Mail dynamically acquired for component atc2mail.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2parse.IParseItem dynamically acquired for component atc2parse.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2parse.IParseSettings dynamically acquired for component atc2parse.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2parse.Parser dynamically acquired for component atc2parse.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2QBE.QBEGrid dynamically acquired for component atc2qbe.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2rep.ParseEscape dynamically acquired for component atc2rep.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2rep.Reporter dynamically acquired for component atc2rep.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2rfile.DMenuRecentFileList dynamically acquired for component atc2rfile.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2rfile.RecentFileList dynamically acquired for component atc2rfile.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2size.clsFormResize dynamically acquired for component atc2size.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2split.SPLIT dynamically acquired for component atc2split.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2SSTCK.SSTCK dynamically acquired for component atc2sstck.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2stat.TCSStatus dynamically acquired for component atc2stat.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId TBOFix.TBOFixes dynamically acquired for component atc2tbofx.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId TBOFix.TBONewFixes dynamically acquired for component atc2tbofx.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2tool.Tool dynamically acquired for component atc2tool.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2valtext.ValText dynamically acquired for component atc2vtext.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc2WhereControl.tcsWhere dynamically acquired for component atc2where.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc3alloc.PreAllocate dynamically acquired for component atc3alloc.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc3GRID_ADO.AutoClass dynamically acquired for component atc3gridado.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc3GRID_ADO.AutoGridCtrl_ADO dynamically acquired for component atc3gridado.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc3GRID_DAO.AutoClass dynamically acquired for component atc3griddao.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc3GRID_DAO.AutoGridCtrl_DAO dynamically acquired for component atc3griddao.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc3GRID_DAO.AutoGridCtrl_RDO dynamically acquired for component atc3griddao.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc3repw.ReportWizard dynamically acquired for component atc3repw.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc3SQADO.SQLDebugADO dynamically acquired for component atc3sqado.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc3sql.SQLDebug dynamically acquired for component atc3sql.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New ProgId atc3ubgrd.UBGRD dynamically acquired for component atc3ubgrd.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {FF8BC468-55D7-4E14-AFA6-127B853AA514} dynamically acquired for component ATECNOTES.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {F57AE0B4-EDDE-11D2-ABC9-0008C7253D97} dynamically acquired for component TCSBG.OCX.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {08BEE22F-4E2F-4873-A40D-70163D235176} dynamically acquired for component TCSCCORE.DLL.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {121584F9-0406-11D3-8BE0-00508B2FF337} dynamically acquired for component TCSCCORE.DLL.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {893D7A44-07C2-11D3-8BE9-00508B2FF337} dynamically acquired for component TCSCCORE.DLL.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {AF27A9C3-A3F4-11D2-8DB7-00C04FA9DD6F} dynamically acquired for component TCSPROG.OCX.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {39F15B09-BF42-4EE4-9A29-12A1FAD96522} dynamically acquired for component atc2adodb.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {2D386476-C03F-4D49-9E7A-868DAFE68632} dynamically acquired for component atc2adoim.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {8BAAB6CB-077A-40A8-B39A-F0B0FF1D709B} dynamically acquired for component atc2adoim.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {A6C866BE-FD7F-4ED2-814A-5A07912689B1} dynamically acquired for component atc2adoim.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {E8C2EAAF-4B35-455C-901C-D372D6B13B60} dynamically acquired for component atc2adoim.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {ED43C20E-9F83-41CA-B5C5-80E80CD1BD41} dynamically acquired for component atc2align.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {304A3372-E179-40E4-8202-0423ED76C4B3} dynamically acquired for component atc2check.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {B86FDED4-EDF8-4A04-BA6F-3C921CF96558} dynamically acquired for component atc2check.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {007FFA03-4079-4C76-838E-B46E0203CDB9} dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {12C3A4CD-C7AE-4ED8-B574-EA6DC72B9A86} dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {140F8BA2-978F-4C84-8A9C-46F7934278AB} dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {380E08CC-E9B6-46C1-97C7-2AA53D408F53} dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {598E6BE5-40B1-48E8-948B-33C9007F8404} dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {72B6A632-A30B-431D-8517-41D638F9EB9B} dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {D290F9E4-0F1B-43F6-A89B-DE5778249954} dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {EE060312-EECF-411F-B138-3862ADE61349} dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {1B0198FB-FF3D-46C0-953A-3CF61FBEE6D6} dynamically acquired for component atc2da.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {316FC840-D804-44B8-9BE0-3562277BA309} dynamically acquired for component atc2da.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {099D95B4-B9C4-4380-8E82-52665AE62181} dynamically acquired for component atc2db.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {88981763-9103-4FA0-836E-9FA5F17B3354} dynamically acquired for component atc2dmenu.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {F2EAC4F0-CAED-44D2-BEC5-F499FAC86214} dynamically acquired for component atc2efiler.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {94174637-EE7B-4579-BBF3-D3DA53994F53} dynamically acquired for component atc2hook.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {09B33CD2-5A8A-4E71-844D-B1A1F65B32D9} dynamically acquired for component atc2imp.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {607F5133-BD32-40B9-95B0-FEE947D1CD0B} dynamically acquired for component atc2imp.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {B3079A40-0B73-4597-BBDB-FEFAD57C5B0D} dynamically acquired for component atc2imp.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {C34AF5AB-95F1-4D17-B843-B11B096DB72A} dynamically acquired for component atc2imp.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {5CA5EE5D-14AF-4FB0-9FF6-9D9F5DE2BBC2} dynamically acquired for component atc2mail.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {4F7BD3ED-2422-453A-A9A7-A5600EB8031C} dynamically acquired for component atc2parse.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {545E771D-2427-44AD-8E29-CB21EA733FF3} dynamically acquired for component atc2parse.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {7F63833E-EEF2-4603-A2F8-D06E1920A685} dynamically acquired for component atc2parse.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {54561C37-7461-4D72-AD52-98691F7FDFB0} dynamically acquired for component atc2qbe.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {A086930E-CE73-42C3-B73B-753FFCCCE125} dynamically acquired for component atc2rep.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {A42BCF8C-7F37-4DE4-AFB3-C7A6FDEEDB49} dynamically acquired for component atc2rep.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {07FF397D-C3C4-4264-AB1D-E669AFDFB34C} dynamically acquired for component atc2rfile.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {B70B3A3B-5015-498D-B6F3-E27DB6D0AC6F} dynamically acquired for component atc2rfile.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {2B27AA63-BEBD-46AC-80F4-A32F62B6298F} dynamically acquired for component atc2size.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {DBA7C59C-045D-4FBA-B846-60E0EEA019C3} dynamically acquired for component atc2split.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {785CAA10-6E2D-4D5E-BD45-9F6AB5893361} dynamically acquired for component atc2sstck.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {3B6C4EBC-23AA-423C-AD04-164640BF4349} dynamically acquired for component atc2stat.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {3250DD82-F18F-4BB3-8A3C-B0B13B00B8FF} dynamically acquired for component atc2tbofx.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {A02A345F-B9CE-40FE-9EB2-E69FFF785055} dynamically acquired for component atc2tbofx.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {E0279F9A-1A58-4D61-B759-DD8C646C1042} dynamically acquired for component atc2tool.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {4E43B382-8E2F-48DE-A239-0E94FFF66C6D} dynamically acquired for component atc2vtext.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {310364B3-C43E-4DC2-A726-CBCDAE215895} dynamically acquired for component atc2where.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {DBFDEFCC-A5ED-435D-86A2-D011D7527612} dynamically acquired for component atc3alloc.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {55A64186-FDE9-4524-86DB-0D4D2B480CD4} dynamically acquired for component atc3gridado.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {86D57BCD-B848-4EFB-BA26-77AB0DF89ACB} dynamically acquired for component atc3gridado.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {77603881-F08A-4B25-9C8F-5D6825F4B834} dynamically acquired for component atc3griddao.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {9D70F0A1-CF70-4E9B-8C11-827518366E49} dynamically acquired for component atc3griddao.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {D982B0ED-AB82-4808-84EB-CE48B447E241} dynamically acquired for component atc3griddao.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {8D16C12F-C101-4650-9EC1-253693FC2FB0} dynamically acquired for component atc3repw.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {805A2E7B-CA6E-4FE3-B6C2-B570C65F7FD9} dynamically acquired for component atc3sqado.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {8FFE2EEA-1688-47F7-8BB9-628D25786BEB} dynamically acquired for component atc3sql.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Class {A8A5EA3D-BA6F-4C5A-95DF-6F033E653195} dynamically acquired for component atc3ubgrd.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {62A95C80-87D4-4DDD-A991-2B38B76E81A7} dynamically acquired for component ATECNOTES.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {E956DE10-ECCB-11D2-ABC6-0008C7253D97} dynamically acquired for component TCSBG.OCX.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {121584E7-0406-11D3-8BE0-00508B2FF337} dynamically acquired for component TCSCCORE.DLL.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {AF27A9B5-A3F4-11D2-8DB7-00C04FA9DD6F} dynamically acquired for component TCSPROG.OCX.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {67C28A39-899E-4FFF-A4AA-60AA0D4EE3FD} dynamically acquired for component atc2adodb.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {3D9E8679-A5AD-40D7-A550-D91F3DC9E552} dynamically acquired for component atc2adoim.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {C8A8E78F-1AF8-4AD9-A6D0-E3456B7DA96B} dynamically acquired for component atc2align.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {FB60EEEE-2484-47ED-95CD-3C5122467F4A} dynamically acquired for component atc2check.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {DE49E9DA-EBF1-4388-9FF3-0BECDB7EEC51} dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {261D6866-BEBD-4BC0-AB5D-7444F010A9A1} dynamically acquired for component atc2da.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {74EA4B01-4A0D-4A2A-920A-C61AA06F4ACA} dynamically acquired for component atc2db.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {D08C90A4-2337-4BE1-8137-EB1A093571A4} dynamically acquired for component atc2dmenu.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {577E869F-E6BD-47BA-9829-584618B07997} dynamically acquired for component atc2efiler.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {89056D22-ECDA-4A64-B90B-25EBB3AE8DB8} dynamically acquired for component atc2hook.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {5DD99796-386F-4B23-AB73-7C0451ECE163} dynamically acquired for component atc2imp.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {4DA5BC6B-3839-4A4D-BB37-214AA9EB2445} dynamically acquired for component atc2mail.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {113FE629-DB14-461A-ACBB-1F8D27764549} dynamically acquired for component atc2parse.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {5725D6E7-E490-4440-A4B0-2B60A8B971AA} dynamically acquired for component atc2qbe.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {41D6D177-504D-4FD5-B775-8937BE983681} dynamically acquired for component atc2rep.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {A5BA244A-3301-4DA0-9344-EE59D5C41A37} dynamically acquired for component atc2rfile.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {BF0C5CC3-C353-4DB9-A11A-57F991D1DC08} dynamically acquired for component atc2size.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {D7D47D2E-20A1-45D1-B08B-3A509726296E} dynamically acquired for component atc2split.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {D6142EAA-23FA-4433-A070-E0B92D9B9A11} dynamically acquired for component atc2sstck.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {770120E1-171A-436F-A3E0-4D51C1DCE486} dynamically acquired for component atc2stat.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {652489E1-7B9D-4D7E-91EC-78D69ED1ED45} dynamically acquired for component atc2tbofx.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {A76148B7-AE70-4C69-9C42-9A9FA2854B7A} dynamically acquired for component atc2tool.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {8D988532-0F0C-460C-B00E-7B5637E97680} dynamically acquired for component atc2vtext.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {4518DFDD-9DDA-441E-9A68-B4E15D3AC619} dynamically acquired for component atc2where.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {AF5BDBFE-60B7-4932-8DE6-BC0CACCA388B} dynamically acquired for component atc3alloc.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {29FBC4F2-EB78-49B6-B44C-B151CF1047D7} dynamically acquired for component atc3gridado.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {4E0264F8-DBA6-449A-8A7D-CB15B1D00B0F} dynamically acquired for component atc3griddao.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {4D68EBB8-AAE4-4F19-896C-735A99D68734} dynamically acquired for component atc3repw.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {B607FD3C-45DD-4F79-9BC6-AC45226E4503} dynamically acquired for component atc3sqado.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {1B578217-7AD6-468B-ADF7-917317856229} dynamically acquired for component atc3sql.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New TypeLib {E297AE83-F913-4A8C-873C-EDEAC00CB9AC} dynamically acquired for component atc3ubgrd.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (5) dynamically acquired for component ATECNOTES.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (8) dynamically acquired for component TCSBG.OCX.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (8) dynamically acquired for component TCSCCORE.DLL.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (8) dynamically acquired for component TCSPROG.OCX.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (4) dynamically acquired for component atc2adodb.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (64) dynamically acquired for component atc2adoim.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (11) dynamically acquired for component atc2align.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (12) dynamically acquired for component atc2check.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (48) dynamically acquired for component atc2core.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (40) dynamically acquired for component atc2da.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (4) dynamically acquired for component atc2db.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (27) dynamically acquired for component atc2dmenu.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (4) dynamically acquired for component atc2efiler.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (11) dynamically acquired for component atc2hook.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (64) dynamically acquired for component atc2imp.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (4) dynamically acquired for component atc2mail.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (12) dynamically acquired for component atc2parse.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (11) dynamically acquired for component atc2qbe.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (8) dynamically acquired for component atc2rep.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (16) dynamically acquired for component atc2rfile.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (4) dynamically acquired for component atc2size.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (11) dynamically acquired for component atc2split.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (11) dynamically acquired for component atc2sstck.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (19) dynamically acquired for component atc2stat.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (8) dynamically acquired for component atc2tbofx.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (11) dynamically acquired for component atc2tool.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (11) dynamically acquired for component atc2vtext.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (11) dynamically acquired for component atc2where.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (4) dynamically acquired for component atc3alloc.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (39) dynamically acquired for component atc3gridado.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (50) dynamically acquired for component atc3griddao.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (52) dynamically acquired for component atc3repw.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (4) dynamically acquired for component atc3sqado.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (4) dynamically acquired for component atc3sql.dll.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+New Registry Entries (11) dynamically acquired for component atc3ubgrd.ocx.0A545936_FFB8_4B8A_9886_2BFB54FEF566
+Resolving strings...
+Language English (United States) built
+Building CAB files...
+MergeModule.CABinet built
+Files built
+Media table successfully built
+Release\Release build completed with 0 errors, 0 warnings
+================= Logging stopped at 5/7/2004 01:25:53 PM ==================

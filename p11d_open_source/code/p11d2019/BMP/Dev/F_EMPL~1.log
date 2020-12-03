@@ -1,0 +1,15 @@
+Line 28: Class MSComctlLib.ListView of control lb was not a loaded control class.
+Line 35: The property name _ExtentX in lb is invalid.
+Line 36: The property name _ExtentY in lb is invalid.
+Line 37: The property name View in lb is invalid.
+Line 38: The property name LabelEdit in lb is invalid.
+Line 39: The property name Sorted in lb is invalid.
+Line 40: The property name LabelWrap in lb is invalid.
+Line 41: The property name HideSelection in lb is invalid.
+Line 42: The property name FullRowSelect in lb is invalid.
+Line 43: The property name _Version in lb is invalid.
+Line 57: The property name NumItems in lb is invalid.
+Line 61: The property name ColumnHeader(1) in lb is invalid.
+Line 66: The property name ColumnHeader(2) in lb is invalid.
+Line 71: The property name ColumnHeader(3) in lb is invalid.
+Line 76: The property name ColumnHeader(4) in lb is invalid.

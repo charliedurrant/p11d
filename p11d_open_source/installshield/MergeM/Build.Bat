@@ -1,0 +1,41 @@
+@ECHO OFF
+
+SET MMDir=I:\IShield\MergeM
+
+IF EXIST BuildRep.Txt DEL BuildRep.Txt
+
+ECHO.
+ECHO Building Merge Modules
+ECHO   from: %MMDir%
+ECHO.
+
+CALL Build2 TCSBASE %MMDir%
+CALL Build2 TCSCCORE %MMDir%
+CALL Build2 TCSCORE %MMDir%
+CALL Build2 TCSDB %MMDir%
+CALL Build2 TCSPARSE %MMDir%
+CALL Build2 TCSREP %MMDir%
+CALL Build2 TCSPROG %MMDir%
+CALL Build2 TCSIMP %MMDir%
+CALL Build2 TCSHOOK %MMDir%
+CALL Build2 TCSQBE %MMDir%
+CALL Build2 TCSSIZE %MMDir%
+CALL Build2 TCSACTRL %MMDir%
+CALL Build2 TCSAUTO %MMDir%
+CALL Build2 TCSSTAT %MMDir%
+CALL Build2 TCSTWIST %MMDir%
+CALL Build2 TCSSPLIT %MMDir%
+CALL Build2 TCSBG %MMDir%
+CALL Build2 TCSRFILE %MMDir%
+CALL Build2 TCSWHERE %MMDir%
+CALL Build2 TCSALLOC %MMDir%
+CALL Build2 TCSCHECK %MMDir%
+CALL Build2 TCSREPW %MMDir%
+CALL Build2 TCSSQL %MMDir%
+CALL Build2 TCSTOOL %MMDir%
+
+REM FIND /I "build completed" BuildRep.Txt
+
+ECHO.
+ECHO (Full build report written to BuildRep.Txt)
+ECHO.

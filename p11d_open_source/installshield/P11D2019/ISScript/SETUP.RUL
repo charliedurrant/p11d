@@ -1,0 +1,843 @@
+#include "isrt.h"
+#include "iswi.h"         
+
+export prototype DispVariable(HWND); 
+export prototype SetConfigOptions(HWND); 
+export prototype VerifySerialNo(HWND);  
+export prototype IncFeature(STRING);  
+export prototype ExcFeature(STRING);  
+export prototype CannotChange(HWND);
+export prototype ConvertHexToBinary(STRING, BYREF STRING);
+export prototype IsBitSet(STRING, NUMBER);
+export prototype SetOption(STRING);
+export prototype GetOption(STRING, BYREF STRING);
+export prototype SetProperty(STRING, STRING);
+export prototype GetProperty(STRING, BYREF STRING);
+export prototype MsgBox(NUMBER, STRING, STRING);
+export prototype CheckHomeDir(HWND);
+export prototype CheckTrackerDB(HWND);
+export prototype SetALLUSERS(HWND);
+export prototype RunExeInstalls(HWND);
+export prototype RunExeInstallToSystemFolder(HWND, STRING, STRING, STRING, STRING);
+export prototype CheckIEversion(HWND);  
+
+export prototype SetInstallProperties(HWND);
+export prototype SetInstallPropertiesRepair(HWND);
+export prototype CheckLocalInstallation(HWND);
+export prototype ReadInstallProperties(HWND);
+export prototype RunInstalledApplication(HWND); 
+export prototype SetReinstallProps(HWND);
+export prototype RemoveRegistryKeys(HWND);
+
+HWND ghMSI;
+STRING gSOURCEDIR;      
+
+// Added SReeves 23/01/03 
+ 
+function DispVariable(hMSI)
+	STRING szKey, szName, szWkgDir, szDataDir, szProduct, szInstalled, sz_IsMaintenance, szNO_WORKINGDIR, sz_IsSetupTypeMin;
+	NUMBER nReturn, nType, nvSize, nBuff;    
+begin
+ 
+    ghMSI=hMSI;      
+
+    nReturn=MsiGetProperty(hMSI, "IDB_DATASOURCE", szInstalled, nBuff);  
+    nReturn=MsiGetProperty(hMSI, "IDB_USER", sz_IsMaintenance, nBuff); 
+    nReturn=MsiGetProperty(hMSI, "IDB_PASSWORD", szNO_WORKINGDIR, nBuff);              
+       
+    nReturn = MsgBox(WARNING, szInstalled, "DATASOURCE"); 
+    nReturn = MsgBox(WARNING, sz_IsMaintenance, "USER");   
+   	nReturn = MsgBox(WARNING, szNO_WORKINGDIR, "PASSWORD");   
+    
+end;  
+
+// end SReeves 23/01/03  
+
+  
+function SetConfigOptions(hMSI)
+	STRING szKey, szName, szWkgDir, szDataDir, szProduct, szINC_SHELL;
+	NUMBER nReturn, nType, nvSize, nBuff;    
+begin
+ 
+    ghMSI=hMSI;      
+
+    nReturn=RegDBSetDefaultRoot (HKEY_LOCAL_MACHINE);
+
+    nType=REGDB_STRING;
+        
+    szKey="SOFTWARE\\Thomson Reuters\\P11D2019";
+
+	// SReeves 19/12/02 / 06/01/03      
+     
+end;
+
+// SReeves 06/12/02
+
+function RunInstalledApplication(hMSI)     
+begin 
+	LaunchAppAndWait(INSTALLDIR ^ "P11D2019.exe", "", WAIT);
+end;
+
+// End SReeves
+
+// SReeves 29/11/02        
+            
+function VerifySerialNo(hMSI)   
+    STRING szFileName, szSearchStr, svReturnLine, svReturnLine2, szMsg, szLicensee, szProducts, szProduct, szOptions, szOption, szSerialDir, svResult, szProductDesc, szProductDescriptions, szOptionDescriptions, szEncodedSerial, svEncodedLine, szAbatecUser, svTCSpass, szValue, szValue2, szALLUSERS, szUILevel, szProductCode, szReinstallMode;
+    NUMBER nvLineNumber, nReturn, nReturn2, nBuff, nValue, nValue2, nFindMsgFileFailed, nNoMsgFile;
+    LIST listID, PackagesList, OptionsList;
+begin                      
+     
+    nBuff = 255;   
+	nReturn = MsiGetProperty(hMSI, "ISX_SERIALNUM", szSearchStr, nBuff); 
+	//nReturn = MsiGetProperty(hMSI, "INC_SHELL", nINC_SHELL, nBuff);            
+ 	                                                          
+	//StrReplace(szSearchStr, "-","",0)
+	//StrReplace(szSearchStr, " ","",0) 	                                                           	                                                          
+ 	nBuff = 255;   	
+ 	nReturn = MsiGetProperty(hMSI, "UILevel", szUILevel, nBuff); 	
+    
+    if szSearchStr="abatec5544p11d2019xx" then
+    	szSearchStr="P11DD847B378T4373419";
+    	nReturn = MsiSetProperty(hMSI, "ISX_SERIALNUM", szSearchStr);
+   	endif;
+                                      
+    if szSearchStr="abatec5544p11d2019ie" then
+    	szSearchStr="4687263T4S6P84662L19";
+    	nReturn = MsiSetProperty(hMSI, "ISX_SERIALNUM", szSearchStr);
+   	endif;
+                                     
+    if szSearchStr="ABATEC5544P11D2019SH" then
+    	szSearchStr="P11DD8S4678V37746619";
+    	nReturn = MsiSetProperty(hMSI, "ISX_SERIALNUM", szSearchStr);
+   	endif;
+
+                                     
+    if szSearchStr="ABATEC5544P11D2019UD" then
+    	szSearchStr="P11DD8U36V3774662019";
+    	nReturn = MsiSetProperty(hMSI, "ISX_SERIALNUM", szSearchStr);
+   	endif;
+
+
+    if szSearchStr="ABATEC5544P11D2019DE" then
+    	szSearchStr="P11DD366O659V3774619";
+    	nReturn = MsiSetProperty(hMSI, "ISX_SERIALNUM", szSearchStr);
+   	endif;
+
+    switch (szSearchStr) 
+    	case "P11DD847B378T4373419": nReturn = MsiSetProperty(hMSI, "INC_INTRANET", "0");
+    	case "4687263T4S6P84662L19": nReturn = MsiSetProperty(hMSI, "INC_INTRANET", "1");       	
+    	case "P11DD8S4678V37746619": nReturn = MsiSetProperty(hMSI, "INC_INTRANET", "0");       	
+    	case "P11DD8U36V3774662019": nReturn = MsiSetProperty(hMSI, "INC_INTRANET", "0");       	
+    	case "P11DD366O659V3774619": nReturn = MsiSetProperty(hMSI, "INC_INTRANET", "1");       	
+    	default					   : nReturn = MsgBox(WARNING, "Invalid Serial Number", "The serial number supplied is not valid.");
+  	endswitch; 
+ 
+    if szSearchStr="P11DD847B378T4373419" || szSearchStr="4687263T4S6P84662L19" || szSearchStr="P11DD8S4678V37746619"|| szSearchStr="P11DD8U36V3774662019"|| szSearchStr="P11DD366O659V3774619" then
+  		nReturn = MsiSetProperty(hMSI, "SERIALNUMVALRETURN", "1");
+    else
+  		nReturn = MsiSetProperty(hMSI, "SERIALNUMVALRETURN", "0");
+  		// if uilevel=2
+  		if szUILevel="2" then 
+  			return ERROR_FUNCTION_FAILED;   
+  		endif;
+    endif;
+  	
+    return ERROR_SUCCESS;
+   
+end;              
+              
+// end SReeves           
+    
+function IncFeature(szFeature)
+	NUMBER nReturn;   
+begin             
+	nReturn = MsiSetProperty(ghMSI, "INC_"+szFeature, "1");    
+    return ERROR_SUCCESS;
+end;
+
+
+function ExcFeature(szFeature)
+	NUMBER nReturn;   
+begin             
+	nReturn = MsiSetProperty(ghMSI, "INC_"+szFeature, "0");    
+    return ERROR_SUCCESS;
+end;
+	
+
+function CannotChange(hMSI)
+	NUMBER nReturn;
+begin
+    
+    ghMSI=hMSI;      
+
+	nReturn=MsgBox(SEVERE, "Change not available", "The option to change the installed features is not available.");
+	return ERROR_SUCCESS;
+end;                     
+
+
+function ConvertHexToBinary(szHex, svBin)
+begin
+
+    switch (szHex)
+        case "0": svBin = "0000";
+        case "1": svBin = "0001";
+        case "2": svBin = "0010";
+        case "3": svBin = "0011";
+        case "4": svBin = "0100";
+        case "5": svBin = "0101";
+        case "6": svBin = "0110";
+        case "7": svBin = "0111";
+        case "8": svBin = "1000";
+        case "9": svBin = "1001";
+        case "A": svBin = "1010";
+        case "B": svBin = "1011";
+        case "C": svBin = "1100";
+        case "D": svBin = "1101";
+        case "E": svBin = "1110";
+        case "F": svBin = "1111";
+        default:  svBin = "";
+    endswitch;
+
+	if svBin="" then
+		return ERROR_FUNCTION_FAILED;
+	endif;
+	
+	return ERROR_SUCCESS;
+end;     
+           
+
+function IsBitSet(szBin, nBit)
+	STRING szStr;
+	NUMBER nReturn;
+begin
+	nReturn=StrSub(szStr,szBin,nBit,1);
+	if szStr="1" then
+		return 1;
+	endif;
+	return 0;
+end;                                          
+
+
+function SetOption(szOption)            
+	STRING szName, szValue;
+	NUMBER nReturn, nReturn2, nReturn3;
+begin                      
+
+	nReturn=StrFind(szOption, "=");
+	nReturn2=StrSub(szName,szOption,0,nReturn);
+	nReturn3=StrSub(szValue,szOption,nReturn+1,StrLengthChars(szOption)-nReturn);
+
+	nReturn=SetProperty("SETTING_"+szName, szValue);
+	
+	return ERROR_SUCCESS;
+
+end;
+
+                                           
+function SetProperty(szProperty, szValue)
+begin
+	return MsiSetProperty(ghMSI, szProperty, szValue);    
+end;
+
+                                           
+function GetProperty(szProperty, szValue)
+	NUMBER nBuff;
+begin            
+	nBuff=255;
+	return MsiGetProperty(ghMSI, szProperty, szValue, nBuff);    
+end;
+
+                                           
+function GetOption(szProperty, szValue)
+begin            
+	return GetProperty("SETTING_"+szProperty, szValue);    
+end;
+       
+
+function MsgBox(nType, szTitle, szMsg)
+	NUMBER nTitleType, nReturn;
+begin    
+
+    //if (MODE = SILENTMODE) then
+    //	return ERROR_SUCCESS;
+    //endif;
+
+	switch (nType)
+		case INFORMATION: nTitleType=DLG_MSG_INFORMATION;
+		case WARNING: nTitleType=DLG_MSG_WARNING;
+		case SEVERE: nTitleType=DLG_MSG_SEVERE; 
+		//case default: nTitleType=DLG_MSG_SEVERE; 
+	endswitch;
+
+	nReturn = SetDialogTitle (nTitleType, szTitle);
+	MessageBox(szMsg, nType);
+	return ERROR_SUCCESS;
+end;
+
+
+/*
+function InstallAbSystem(HWND)
+	STRING szProgram, szTargetDir;
+	NUMBER nReturn, nBuff;
+begin
+
+	MessageBox("InstallAbSystem", INFORMATION);
+
+    nBuff = 255;    
+    nReturn = MsiGetProperty(ghMSI, "SOURCEDIR", szTargetDir, nBuff );
+    
+    szProgram = szTargetDir+"\AbSystem\Abacus System.msi";
+    
+    //nReturn = LaunchAppAndWait (szProgram, "", WAIT);
+
+	//LaunchAppAndWait (szProgram, szCmdLine, lWait);
+
+	return ERROR_SUCCESS;
+end;                     
+*/
+
+
+function SetInstallProperties(hMSI)
+	STRING szUpgradeCode, szSep, szValue, szValue2, szName, szDesc, szDesc2, szPathName;
+	NUMBER nReturn, nValue;
+begin                    
+
+	//2014 
+	szUpgradeCode="{8D089490-4D36-4EDF-B1F9-408BD27014CC}";
+	//2015
+	szUpgradeCode="{202CBE37-4D31-4D0F-8341-D4024274CB9C}";
+	//2016
+	szUpgradeCode="{1FCA9F7B-A0DB-417E-AD39-B598835106C9}";
+	//2017
+	szUpgradeCode="{E41BA15E-1863-4690-AB80-3D881612FB6F}";
+	//2018
+	szUpgradeCode="{D5FA3A52-296E-41E4-88D0-A8F4D0E7BDEC}";
+	//2019
+	szUpgradeCode="{5407E5C6-B2F5-4777-8472-C61D7BC3D563}";
+	
+
+    ghMSI=hMSI;      
+
+	szSep=": ";
+	szDesc="";
+	                    
+	szName="ProductName";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	szName="ProductVersion";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	szName="ProductCode";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	szName="PackageCode";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	szName="UpgradeCode";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+" (Actual)\n";
+
+	szValue2="Correct";
+	if (szValue != szUpgradeCode) then
+		szValue2="INVALID";
+	endif;
+
+	szDesc=szDesc+szName+szSep+szUpgradeCode+" (Expected) - "+szValue2+"\n";
+	
+	//szDesc=szDesc+"UpgradeCode Correct"+szSep+szValue2+"\n";
+	                    
+	szName="SOURCEDIR";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+"Source directory"+szSep+szValue+"\n";
+                                                                      
+	nReturn=GetProperty("SOURCEDIR", szValue);
+	nReturn=GetProperty("ProductName", szValue2);
+	szPathName=szValue+"\\"+szValue2+".msi";
+	szDesc2="";
+	nReturn=GetFileInfo(szPathName, FILE_SIZE, nValue, szValue);
+	nReturn=NumToStr(szValue, nValue);
+	szDesc2=szDesc2+szValue+" bytes";
+	nReturn=GetFileInfo(szPathName, FILE_DATE, nValue, szValue);
+	szDesc2=szDesc2+", "+szValue;
+	nReturn=GetFileInfo(szPathName, FILE_TIME, nValue, szValue);
+	szDesc2=szDesc2+" @ "+szValue;
+	szDesc=szDesc+szValue2+".msi"+szSep+szDesc2+"\n";
+	nReturn=SetProperty("MSIFILE_DETAILS", szDesc2);
+
+	//nReturn=GetProperty("SOURCEDIR", szValue);
+    //nReturn = FindFile (szValue, "Setup.Msg", szValue2);
+    //szDesc2="None";
+    //if (nReturn = 0 && szValue2 = "Setup.Msg") then
+		//szPathName=szValue+"Setup.Msg";
+		//szDesc2="";
+		//nReturn=GetFileInfo(szPathName, FILE_SIZE, nValue, szValue);
+		//nReturn=NumToStr(szValue, nValue);
+		//szDesc2=szDesc2+szValue+" bytes";
+		//nReturn=GetFileInfo(szPathName, FILE_DATE, nValue, szValue);
+		//szDesc2=szDesc2+", "+szValue;
+		//nReturn=GetFileInfo(szPathName, FILE_TIME, nValue, szValue);
+		//szDesc2=szDesc2+" @ "+szValue;
+    //endif;
+	//szDesc=szDesc+"Setup.Msg"+szSep+szDesc2+"\n";
+	//nReturn=SetProperty("SETUPMSGFILE_DETAILS", szDesc2);
+	                    
+	szName="LogonUser";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+", "; //"\n";
+	                    
+	szName="AdminUser";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	szName="REINSTALLMODE";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	szName="ALLUSERS";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+", "; //"\n";
+	                    
+	szName="Privileged";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	//szName="EXE_COMPONENT";
+	//nReturn=GetProperty(szName, szValue);
+	//szDesc=szDesc+"ExeComponent"+szSep+szValue+"\n";
+	                    
+	//szName="SystemProductVersion";
+	//nReturn=GetProperty(szName, szValue);
+	//szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	//szName="HOME_DIR";
+	//nReturn=GetProperty(szName, szValue);
+	//szDesc=szDesc+"Home Directory"+szSep+szValue+"\n";
+
+	szName="IE_VERSION_VALID";
+	nReturn=GetProperty(szName, szValue);
+	szValue2="(OK)";
+	if (szValue != "1") then
+		szValue2="(LOW)";
+	endif;
+	szName="IE_VERSION";
+	nReturn=GetProperty(szName, szValue);
+	//szDesc=szDesc+"IE Version"+szSep+szValue+"  "+szValue2;
+	                    
+	szName="INSTALLDIR";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	
+	szName="WORKINGDIR";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";  
+	
+	szName="PRODUCTS_TO_UPGRADE";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+
+    
+	nReturn=SetProperty("INSTALL_PROPERTIES", szDesc);
+	                    
+	return ERROR_SUCCESS;
+end;               
+
+
+function SetInstallPropertiesRepair(hMSI)
+	STRING szSep, szValue, szName, szDesc;
+	NUMBER nReturn, nValue;
+begin                    
+
+    ghMSI=hMSI;      
+
+	szSep=": ";
+	szDesc="";
+	                    
+	szName="ProductName";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	szName="ProductVersion";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	szName="ProductCode";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	szName="PackageCode";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	szName="UpgradeCode";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	szName="LogonUser";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	szName="AdminUser";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	szName="REINSTALLMODE";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	szName="ALLUSERS";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	szName="Privileged";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+	                    
+	szName="SystemProductVersion";
+	nReturn=GetProperty(szName, szValue);
+	szDesc=szDesc+szName+szSep+szValue+"\n";
+    
+	nReturn=SetProperty("INSTALL_PROPERTIES_REPAIR", szDesc);
+	                    	                    
+	return ERROR_SUCCESS;
+end;               
+
+                                           
+function CheckHomeDir(hMSI)
+	STRING szValue;
+	NUMBER nReturn, nLength;
+begin            
+
+    ghMSI=hMSI;      
+
+	nReturn=GetProperty("SOURCEDIR", gSOURCEDIR);
+
+	nReturn=GetProperty("HOME_DIR", szValue);
+	
+	nLength=StrLength(szValue);
+    
+    if (nReturn=0 && nLength>0) then
+    	return ERROR_SUCCESS;
+    else
+		nReturn=MsgBox(SEVERE, "No Pack /Home Directory", "No Abacus pack / home directory was specified. Abacus System cannot be installed.");
+    	return ERROR_FUNCTION_FAILED;
+    endif;
+
+end;
+
+
+function SetALLUSERS(hMSI)
+	STRING szINSTALLDIR, svDisk, szALLUSERS, szPrivileged;
+	NUMBER nReturn, nvDriveType;
+begin
+
+	// Action can go in the Execute sequence 
+	// at least as early as immediately after:
+	//	MigrateFeatureStates (icon will appear in Add/Remove programs)
+
+    ghMSI=hMSI;      
+
+	nReturn=GetProperty("INSTALLDIR", szINSTALLDIR);
+
+	nReturn=GetProperty("ALLUSERS", szALLUSERS);
+	
+	nReturn=GetProperty("Privileged", szPrivileged);
+
+	nReturn=ParsePath(svDisk, szINSTALLDIR, DISK);
+	//nReturn=GetDisk(szINSTALLDIR, svDisk);
+	
+	//szALLUSERS="";
+	
+	if nReturn=0 && szALLUSERS!="1" && szALLUSERS!="2" && szPrivileged="1" then
+		if szALLUSERS="1" then
+			szALLUSERS="2";
+		endif;
+		nReturn=GetSystemInfo(DRIVE, nvDriveType, svDisk);
+	    if nReturn=0 then
+			if nvDriveType=IS_FIXED then
+				szALLUSERS="1";
+			endif;
+		endif;
+	endif;
+	
+	if szALLUSERS="1" || szALLUSERS="2" then
+		nReturn=SetProperty("ALLUSERS", szALLUSERS);
+	endif;
+    
+	return ERROR_SUCCESS;
+end;                     
+
+
+function RunExeInstallToSystemFolder(hMSI, szExePath, szCmdLine, szCheckFileName, szCheckVersion)
+	STRING szVersionInfoExisting;
+	NUMBER nReturn, nBuff;
+begin
+
+	//MsgBox(INFORMATION, "RunExeInstallToSystemFolder", szExePath);
+
+    nReturn=VerGetFileVersion (szCheckFileName, szVersionInfoExisting);
+
+    nReturn=VerCompare (szVersionInfoExisting, szCheckVersion, VERSION);
+
+    //if nReturn=LESS_THAN then
+    if nReturn!=EQUALS && nReturn!=GREATER_THAN && szVersionInfoExisting!=szCheckVersion then
+		//MsgBox(INFORMATION, "Existing < Install", szVersionInfoExisting);
+
+		//nReturn=MsgBox(INFORMATION, "RunExeInstallToSystemFolder", szExePath+" "+szCmdLine);
+    	
+    	//Existing < Install so install
+		nReturn=LaunchAppAndWait (szExePath, szCmdLine, WAIT);
+    endif;
+
+	return ERROR_SUCCESS;
+end;
+
+
+function RunExeInstalls(hMSI)
+	STRING szSystemFolder, szINSTALLDIR, szProgram, szCmdLine, szVersionInfoExisting, szVersionInfoInstall, szFileName, szCheckFileName, szCheckVersion, szExePath, szNoExeInstalls, szValue;
+	NUMBER nReturn, nBuff, nValue;
+begin
+
+	// Action must go after InstallFinalize in the Execute sequence,
+	// otherwise file(s) will not be available.
+	//
+	// Condition should be 'Not Installed' so that action
+	// does not execute on repair or uninstall.
+
+	nBuff=255;
+	nReturn=MsiGetProperty(hMSI, "NO_EXE_INSTALLS", szNoExeInstalls, nBuff);
+	if szNoExeInstalls="1" then
+		return ERROR_SUCCESS;
+	endif;
+    
+	nBuff=255;
+	//nReturn=MsiGetProperty(hMSI, "INSTALLDIR", szINSTALLDIR, nBuff);
+	nReturn=MsiGetProperty(hMSI, "SOURCEDIR", szINSTALLDIR, nBuff);
+	szINSTALLDIR=gSOURCEDIR;
+	szINSTALLDIR=szINSTALLDIR+"Exe\\";
+
+	nBuff=255;
+	nReturn=MsiGetProperty(hMSI, "SystemFolder", szSystemFolder, nBuff);
+
+
+	szFileName="hhupd13.exe";
+	szExePath=szINSTALLDIR+szFileName;
+	nReturn=GetFileInfo(szExePath, FILE_SIZE, nValue, szValue);
+	szCmdLine="";    
+	szCmdLine="/Q:A";    
+    szCheckFileName=szSystemFolder+"hhctrl.ocx";
+    szCheckVersion="4.74.8793.0";
+
+	RunExeInstallToSystemFolder(hMSI, szExePath, szCmdLine, szCheckFileName, szCheckVersion);
+
+
+	return ERROR_SUCCESS;
+end;
+
+
+function CheckIEversion(hMSI)   
+
+	STRING szKey, szName, svValue, svValueEx, svMajorVer, svMinorVer, svBuildNum;
+	NUMBER nReturn, nvType, nvSize, nvVerCompare, nvDotPos1, nvDotPos2, nvDotPos3, nvMajorVer, nvMinorVer, nvBuildNum;
+	BOOL bvVerOK;
+
+begin             
+
+    ghMSI=hMSI;      
+
+	nReturn=SetProperty("IE_VERSION", "");
+	nReturn=SetProperty("IE_VERSION_VALID", "0");
+    
+    bvVerOK=FALSE;
+    
+	RegDBSetDefaultRoot ( HKEY_LOCAL_MACHINE );
+	
+	//szKey = "htmlfile\\shell\\open\\command";
+	szKey = "Software\\Microsoft\\Internet Explorer";
+	
+	szName="Version";
+	
+  	if (RegDBGetKeyValueEx ( szKey , szName , nvType , svValue , nvSize )<0) then 
+		return ERROR_SUCCESS;
+  	endif;                 
+
+	nReturn=SetProperty("IE_VERSION", svValue);
+  	            
+  	nvDotPos1=StrFind(svValue, ".");
+  	StrSub(svValueEx, svValue, nvDotPos1+1, StrLength(svValue)-nvDotPos1-1);
+  	nvDotPos2=StrFind(svValueEx, ".")+nvDotPos1+1;           
+  	StrSub(svValueEx, svValue, nvDotPos2+1, StrLength(svValue)-nvDotPos2-1);
+  	nvDotPos3=StrFind(svValueEx+'.', ".")+nvDotPos2+1;           
+
+  	if (nvDotPos1<0 || nvDotPos2<=nvDotPos1 || nvDotPos3<=nvDotPos2) then 
+		return ERROR_SUCCESS;
+  	else 
+  	
+	  	//nvVerCompare=VerCompare (svValue, "4.71.1008", VERSION);
+  	  	StrSub(svMajorVer, svValue, 0, nvDotPos1);
+  	  	StrSub(svMinorVer, svValue, nvDotPos1+1, nvDotPos2-nvDotPos1);
+  	  	StrSub(svBuildNum, svValue, nvDotPos2+1, nvDotPos3-nvDotPos2);
+  	  	
+  	  	StrToNum(nvMajorVer, svMajorVer);
+  	  	StrToNum(nvMinorVer, svMinorVer);
+  	  	StrToNum(nvBuildNum, svBuildNum);
+  	  	
+  	  	if (nvMajorVer>4) then bvVerOK=TRUE; endif;  	  	
+  	  	if (nvMajorVer=4 && nvMinorVer>71) then bvVerOK=TRUE; endif;
+  	  	if (nvMajorVer=4 && nvMinorVer=71 && nvBuildNum>=1008) then bvVerOK=TRUE; endif;
+  	  	
+    	//if (bvVerOK=TRUE) then
+    	//	MessageBox("You have Internet Explorer version "+svValue, INFORMATION); 
+    	//endif;
+
+    	if (bvVerOK=FALSE) then
+			return ERROR_SUCCESS;
+    	endif;
+    		
+  	endif; 
+    
+    if (bvVerOK!=FALSE) then 
+		nReturn=SetProperty("IE_VERSION_VALID", "1");
+    endif;
+
+	return ERROR_SUCCESS;
+    
+end;
+
+                                           
+function CheckTrackerDB(hMSI)
+	STRING szTrackerDir, szTrackerDBname, svResult;
+	NUMBER nReturn;
+begin            
+
+    ghMSI=hMSI;      
+
+	nReturn=GetProperty("TRACKER_DIR", szTrackerDir);
+	nReturn=GetProperty("TRACKER_DBNAME", szTrackerDBname);
+
+	nReturn=FindFile(szTrackerDir, szTrackerDBname, svResult);
+	    
+    if (nReturn=0) then
+		nReturn=SetProperty("INC_TRACKERDB", "0");
+    else                  
+		nReturn=SetProperty("INC_TRACKERDB", "1");
+		nReturn=MsgBox(INFORMATION, "Tracker", "There is no tracker database within the specified directory. A new Tracker database will be installed.");
+    endif;
+
+    return ERROR_SUCCESS;
+
+end;   
+
+
+function CheckLocalInstallation(hMSI)
+	STRING szINSTALLDIR, svDisk, szProductName;
+	NUMBER nReturn, nvDriveType;
+begin
+
+    ghMSI=hMSI;      
+
+	nReturn=GetProperty("INSTALLDIR", szINSTALLDIR);
+	
+	nReturn=ParsePath(svDisk, szINSTALLDIR, DISK);
+
+	nReturn=GetSystemInfo(DRIVE, nvDriveType, svDisk);
+
+	if nvDriveType=IS_FIXED then
+		nReturn=SetProperty("INSTALLDIR_LOCAL", "1");
+	else
+		nReturn=GetProperty("ProductName", szProductName);
+		nReturn=MsgBox(INFORMATION, "Invalid Destination Folder", szProductName+" can only be installed locally (i.e. to your hard drive).\n\nPlease choose a local destination folder.");
+		nReturn=SetProperty("INSTALLDIR_LOCAL", "0");
+    endif;
+    
+	return ERROR_SUCCESS;
+end;          
+  
+// SReeves 041202 
+                                           
+function ReadInstallProperties(hMSI)
+	STRING szKey, szName, szWkgDir, szDataDir, szProduct, szINC_SHELL;
+	NUMBER nReturn, nType, nvSize, nBuff;
+begin            
+
+    ghMSI=hMSI;      
+
+    nReturn=RegDBSetDefaultRoot (HKEY_LOCAL_MACHINE);
+
+    nType=REGDB_STRING;
+        
+    szKey="SOFTWARE\\Thomson Reuters\\P11D2019";
+             
+	nReturn=RegDBGetKeyValueEx(szKey, "LICENSEE", nType, szName, nvSize);
+	if nReturn=0 then
+		nReturn=MsiSetProperty(hMSI, "LICENSEE", szName);			
+	endif;
+  
+	/*
+	nReturn=RegDBGetKeyValueEx(szKey, "ISX_SERIALNUM", nType, szName, nvSize);
+	if nReturn=0 then
+		nReturn=MsiSetProperty(hMSI, "ISX_SERIALNUM", szName);		
+	endif;
+	*/
+
+	nReturn=RegDBGetKeyValueEx(szKey, "INSTALLDIR", nType, szName, nvSize);
+	if nReturn=0 then
+		nReturn=MsiSetProperty(hMSI, "INSTALLDIR", szName);		
+	endif;
+
+	nReturn=RegDBGetKeyValueEx(szKey, "WORKINGDIR", nType, szWkgDir, nvSize);
+	if nReturn=0 then
+		nReturn=MsiSetProperty(hMSI, "WORKINGDIR", szWkgDir);		
+	endif;
+
+	if szWkgDir=="" then
+		nBuff=255;
+		nReturn=MsiGetProperty(hMSI, "CommonAppDataFolder", szDataDir, nBuff);
+		nReturn=MsiGetProperty(hMSI, "ProductName", szProduct, nBuff);
+		//szWkgDir=szDataDir ^ szProduct;
+		szWkgDir=szDataDir ^ "P11D";
+		nReturn=MsiSetProperty(hMSI, "WORKINGDIR", szWkgDir);		
+	endif;
+
+	//CommonAppDataFolder
+
+    return ERROR_SUCCESS;
+end;
+
+// end SReeves
+
+
+function SetReinstallProps(hMSI)
+	STRING szValue;
+	NUMBER nReturn, nBuff;
+begin
+	// Place after DoNotUpgrade, with Not Installed condition 
+	nBuff=255;
+	nReturn=MsiGetProperty(hMSI, "REINSTALLMODE", szValue, nBuff);
+
+	if (szValue="") then
+		nReturn=MsiSetProperty(hMSI, "REINSTALLMODE", "emus");
+	endif;
+end;
+
+
+function RemoveRegistryKeys(hMSI)
+	STRING szKey, szProductName;
+	NUMBER nReturn, nBuff, nRootKey;
+begin
+	szProductName="P11D2019";
+	//nBuff=255;
+	//nReturn=MsiGetProperty(hMSI, "ProductName", szProductName, nBuff);
+
+    nRootKey = HKEY_LOCAL_MACHINE;
+    szKey="Software\\Thomson Reuters\\P11D2019_Exe\\"+szProductName+".msi";
+    nReturn=RegDBSetDefaultRoot(nRootKey);
+    if (nReturn = 0) then        
+    	nReturn=RegDBDeleteKey(szKey);
+    endif;
+
+end;

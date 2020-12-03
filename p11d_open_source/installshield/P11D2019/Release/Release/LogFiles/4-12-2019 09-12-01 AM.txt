@@ -1,0 +1,218 @@
+================= Logging started at 4/12/2019 09:12:01 AM ==================
+Created release folders
+InstallShield Script Compiler
+Version 11.50.0.42618
+Copyright 1997-2005 Macrovision Europe Ltd. and/or Macrovision Corporation. All Rights Reserved.
+
+Compiling...
+setup.rul
+Linking...
+Setup.inx - 0 error(s), 0 warning(s)
+AdminExecuteSequence table successfully built
+AdminUISequence table successfully built
+AdvtExecuteSequence table successfully built
+AdvtUISequence table successfully built
+InstallExecuteSequence table successfully built
+InstallUISequence table successfully built
+Directory table successfully built
+Feature table successfully built
+FeatureComponents table successfully built
+Component table successfully built
+Loading File table
+Building File table
+Merging modules...
+Merging ATC2ALIGN: c:\Projects\Ishield\MSM\ATC2ALIGN.msm
+Merging ATC2CORE: c:\Projects\Ishield\MSM\ATC2CORE.msm
+Merging atc2hook: c:\Projects\Ishield\MSM\ATC2HOOK.msm
+Merging ATC2MAIL: c:\Projects\Ishield\MSM\ATC2MAIL.msm
+Merging atc2parse: c:\Projects\Ishield\MSM\ATC2PARSE.msm
+Merging atc2QBE: c:\Projects\Ishield\MSM\ATC2QBE.msm
+Merging atc2rep: c:\Projects\Ishield\MSM\ATC2REP.msm
+Merging atc2vtext: c:\Projects\Ishield\MSM\ATC2VTEXT.msm
+Merging atc3GRIDADO: c:\Projects\Ishield\MSM\ATC3GRIDADO.msm
+Merging atc3GRIDDAO: c:\Projects\Ishield\MSM\ATC3GRIDDAO.msm
+Merging (Amyuni) ONESOURCE PDF Converter: c:\Projects\Ishield\MSM\Amyuni.msm
+Merging Microsoft Component Category Manager Library: c:\Projects\Ishield\MSM\COMCAT.MSM
+Merging Microsoft Common Controls 3 ActiveX Control DLL: c:\Projects\Ishield\MSM\COMCT332.MSM
+Merging Windows Common Controls ActiveX Control DLL: c:\Projects\Ishield\MSM\COMCTL32.MSM
+Merging CMDialog ActiveX Control DLL: c:\Projects\Ishield\MSM\COMDLG32.MSM
+Merging DBList: c:\Projects\Ishield\MSM\DBLIST32.MSM
+Merging DCOM95: c:\Projects\Ishield\MSM\DCOM95.msm
+Merging IDSMail OLE Server: c:\Projects\Ishield\MSM\IDSMAI32.msm
+Merging ISHF_Ex: c:\Projects\Ishield\MSM\ISHF_Ex.msm
+Merging Jet 4.0: c:\Projects\Ishield\MSM\jet40.msm
+Merging MDAC 2.6SP1 : c:\Projects\Ishield\MSM\MDAC2.6SP1.msm
+Merging MDAC 2.6 SP2 (English): c:\Projects\Ishield\MSM\MDAC26.Msm
+Merging Microsoft ADO Data Control: c:\Projects\Ishield\MSM\MSADODC.MSM
+Merging Microsoft Data Binding Collection Object DLL: c:\Projects\Ishield\MSM\MSBIND.MSM
+Merging Microsoft Common Controls 2 ActiveX Control DLL: c:\Projects\Ishield\MSM\MSCOMCT2.MSM
+Merging Windows Common Controls ActiveX Control DLL: c:\Projects\Ishield\MSM\MSCOMCTL.MSM
+Merging MSFlexGrid: c:\Projects\Ishield\MSM\MSFLXGRD.MSM
+Merging MSMAPI Controls: c:\Projects\Ishield\MSM\MSMAPI32.MSM
+Merging MSMask: c:\Projects\Ishield\MSM\MSMASK32.MSM
+Merging MSRDC20: c:\Projects\Ishield\MSM\MSRDC20.MSM
+Merging MSRDO20 rdoEngine control: c:\Projects\Ishield\MSM\MSRDO20.MSM
+Merging MSSCRIPT: c:\Projects\Ishield\MSM\MSSCRIPT.Msm
+Merging Microsoft Standard Data Formating Object DLL: c:\Projects\Ishield\MSM\MSSTDFMT.MSM
+Merging Microsoft Stock Property Page: c:\Projects\Ishield\MSM\MSSTKPRP.MSM
+Merging Visual Basic Virtual Machine: c:\Projects\Ishield\MSM\MSVBVM60.MSM
+Merging Microsoft (R) C Runtime Library: c:\Projects\Ishield\MSM\MSVCRT.MSM
+Merging MSXML 3.0: c:\Projects\Ishield\MSM\msxml3.msm
+Merging Microsoft OLE 2.40  for Windows NT(TM) and Windows 95(TM) Operating Systems: c:\Projects\Ishield\MSM\OLEAUT32.MSM
+Merging Outlook Redemption: c:\Projects\Ishield\MSM\OutlookRedemption.msm
+Merging RichText ActiveX Control Merge Module: c:\Projects\Ishield\MSM\RICHTEXT.MSM
+Merging SCRRUN: c:\Projects\Ishield\MSM\SCRRUN.Msm
+Merging TABCTL32 OLE Control DLL: c:\Projects\Ishield\MSM\TABCTL32.MSM
+Merging abatec standard libraries base (interface definitions only): c:\Projects\Ishield\MSM\TCSBASE.msm
+Merging abatec core library: c:\Projects\Ishield\MSM\TCSCCORE.msm
+Merging TCS Progress Bar: c:\Projects\Ishield\MSM\TCSPROG.msm
+Merging TDBG6: c:\Projects\Ishield\MSM\TDBG6.Msm
+Merging IDS OLE Test Server: c:\Projects\Ishield\MSM\TESTOL32.msm
+Merging VB5DB: c:\Projects\Ishield\MSM\VB5DB.Msm
+Merging abatec standard library runtime: c:\Projects\Ishield\MSM\abatecrt.msm
+Merging atc2ADODB: c:\Projects\Ishield\MSM\atc2ADODB.msm
+Merging atc2db: c:\Projects\Ishield\MSM\ATC2DB.msm
+Merging atc2dmenu: c:\Projects\Ishield\MSM\atc2dmenu.msm
+Merging atc2efiler: c:\Projects\Ishield\MSM\atc2efiler.msm
+Merging atc2imp: c:\Projects\Ishield\MSM\atc2imp.msm
+Merging atc2size: c:\Projects\Ishield\MSM\atc2size.msm
+Merging atc2split: c:\Projects\Ishield\MSM\atc2split.msm
+Merging atc2stat: c:\Projects\Ishield\MSM\ATC2STAT.msm
+Merging atc2vbrt: c:\Projects\Ishield\MSM\atc2vbrt.msm
+Merging atc2vbwl: c:\Projects\Ishield\MSM\atc2vbwl.msm
+Merging atc3FolderBrowser: c:\Projects\Ishield\MSM\atc3FolderBrowser.msm
+Merging atc3alloc: c:\Projects\Ishield\MSM\atc3alloc.msm
+Merging atc3repw: c:\Projects\Ishield\MSM\atc3repw.msm
+Merging atc3sql: c:\Projects\Ishield\MSM\atc3sql.msm
+Merging atc3ubgrd: c:\Projects\Ishield\MSM\atc3ubgrd.msm
+Merging atec2db: c:\Projects\Ishield\MSM\atec2db.msm
+Merging atecIDSMail: c:\Projects\Ishield\MSM\atecIDSMail.msm
+Merging dssock32: c:\Projects\Ishield\MSM\dssock32.msm
+Merging dzip32: c:\Projects\Ishield\MSM\dzip32.msm
+Merging dzocx32: c:\Projects\Ishield\MSM\dzocx32.msm
+Merging gapi32: c:\Projects\Ishield\MSM\gapi32.msm
+Merging idsnotes: c:\Projects\Ishield\MSM\idsnotes.msm
+Merging maildi32: c:\Projects\Ishield\MSM\maildi32.msm
+Merging mfcans32: c:\Projects\Ishield\MSM\mfcans32.msm
+Merging msvcrt20: c:\Projects\Ishield\MSM\msvcrt20.msm
+Merging oc30: c:\Projects\Ishield\MSM\oc30.msm
+Merging Apex True DBGrid Data Bound Grid Library: c:\Projects\Ishield\MSM\todg6.msm
+Merging vbamap32: c:\Projects\Ishield\MSM\vbamap32.msm
+Merging abatec WebApplication ASP Helper Component: c:\Projects\Ishield\MSM\webapplication.msm
+File table successfully built
+Building MsiFileHash table
+MsiFileHash table successfully built
+Class table successfully built
+Extension table successfully built
+ODBCDataSource table successfully built
+ODBCDriver table successfully built
+ActionText table successfully built
+Condition table successfully built
+AppId table successfully built
+AppSearch table successfully built
+Property table successfully built
+BBControl table successfully built
+Billboard table successfully built
+Binary table successfully built
+BindImage table successfully built
+CCPSearch table successfully built
+CompLocator table successfully built
+Complus table successfully built
+ControlCondition table successfully built
+ControlEvent table successfully built
+CreateFolder table successfully built
+CustomAction table successfully built
+DrLocator table successfully built
+DuplicateFile table successfully built
+Environment table successfully built
+Error table successfully built
+EventMapping table successfully built
+FileSFPCatalog table successfully built
+Font table successfully built
+IniFile table successfully built
+IniLocator table successfully built
+IsolatedComponent table successfully built
+ISSelfReg table successfully built
+Verb table successfully built
+LaunchCondition table successfully built
+LockPermissions table successfully built
+MIME table successfully built
+MoveFile table successfully built
+MsiAssembly table successfully built
+MsiAssemblyName table successfully built
+MsiDigitalCertificate table successfully built
+MsiDigitalSignature table successfully built
+ODBCAttribute table successfully built
+ODBCSourceAttribute table successfully built
+ODBCTranslator table successfully built
+PatchPackage table successfully built
+ProgId table successfully built
+PublishComponent table successfully built
+Registry table successfully built
+RegLocator table successfully built
+RemoveFile table successfully built
+RemoveIniFile table successfully built
+RemoveRegistry table successfully built
+ReserveCost table successfully built
+SelfReg table successfully built
+ServiceControl table successfully built
+ServiceInstall table successfully built
+SFPCatalog table successfully built
+Shortcut table successfully built
+Signature table successfully built
+TextStyle table successfully built
+TypeLib table successfully built
+UIText table successfully built
+Upgrade table successfully built
+_Validation table successfully built
+Searching project for extract-at-build components...
+Validating Custom Action sequencing
+Dialog AdminChangeFolder for language English (United States) built
+Dialog AdminNetworkLocation for language English (United States) built
+Dialog AdminWelcome for language English (United States) built
+Dialog CancelSetup for language English (United States) built
+Dialog ConfigOptions for language English (United States) built
+Dialog CustomSetup for language English (United States) built
+Dialog CustomSetupTips for language English (United States) built
+Dialog CustomerInformation for language English (United States) built
+Dialog DestinationFolder for language English (United States) built
+Dialog DiskSpaceRequirements for language English (United States) built
+Dialog FilesInUse for language English (United States) built
+Dialog InstallChangeFolder for language English (United States) built
+Dialog InstallProperties for language English (United States) built
+Dialog InstallWelcome for language English (United States) built
+Dialog LicenseAgreement for language English (United States) built
+Dialog MaintenanceType for language English (United States) built
+Dialog MaintenanceWelcome for language English (United States) built
+Dialog OutOfSpace for language English (United States) built
+Dialog PatchWelcome for language English (United States) built
+Dialog ReadyToInstall for language English (United States) built
+Dialog ReadyToRemove for language English (United States) built
+Dialog RepairProperties for language English (United States) built
+Dialog SQLBrowse for language English (United States) built
+Dialog SQLLogin for language English (United States) built
+Dialog SerialNoRequest for language English (United States) built
+Dialog SetupCompleteError for language English (United States) built
+Dialog SetupCompleteSuccess for language English (United States) built
+Dialog SetupError for language English (United States) built
+Dialog SetupInitialization for language English (United States) built
+Dialog SetupInterrupted for language English (United States) built
+Dialog SetupProgress for language English (United States) built
+Dialog SetupResume for language English (United States) built
+Dialog SetupType for language English (United States) built
+Dialog SplashBitmap for language English (United States) built
+Dialog WorkingChangeFolder for language English (United States) built
+Dialog WorkingFolder for language English (United States) built
+Resolving strings...
+Language English (United States) built
+Building CAB files...
+Data1.cab built
+Files built
+Media table successfully built
+Performing Upgrading and Patching Validation
+Setup.exe created
+Automatic update notification disabled
+Release\Release - 0 error(s), 0 warning(s)
+================= Logging stopped at 4/12/2019 09:12:29 AM ==================
+Log file has been created: <file:C:\projects\Ishield\P11D2018\Release\Release\LogFiles\4-12-2019 09-12-01 AM.txt>
+

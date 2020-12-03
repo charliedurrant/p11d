@@ -1,5 +1,0 @@
-This file is from 17/18
-Copy, change the name to end in the year so the app loads it
-Edit the queries, change the updates to add the correct years and also
-change the where clauses. 
-Note this was 2017 and the current sql statement update to 19-20

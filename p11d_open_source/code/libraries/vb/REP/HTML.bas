@@ -13,9 +13,7 @@ Public Sub ConstructHTMLHeader(ByVal ReportTitle As String)
   ReportControl.HTML.ReportPages = 0
   mReportTitle = ReportTitle
   Call SetHelpPage
-  Call ReportControl.HTML.HTMLString.Append("<!DOCTYPE html>")
-  Call ReportControl.HTML.HTMLString.Append(vbCrLf)
-  Call ReportControl.HTML.HTMLString.Append("<HTML lang=en>")
+  Call ReportControl.HTML.HTMLString.Append("<HTML>")
   Call ReportControl.HTML.HTMLString.Append(vbCrLf)
   Call ReportControl.HTML.HTMLString.Append(vbTab)
   Call ReportControl.HTML.HTMLString.Append("<HEAD>")
@@ -68,24 +66,16 @@ Public Sub ConstructHTMLFooter()
   
   If ReportControl.HTML.OpenDiv Then
     If (ReportControl.rTarget = EXPORT_HTML_IE) Or (ReportControl.rTarget = EXPORT_HTML_INTEXP5) Then  'km
-      'cad reporter
       Call ReportControl.HTML.HTMLString.Append("'></DIV>")
     Else
       Call ReportControl.HTML.HTMLString.Append("'></LAYER>")
     End If
   End If
   Call ReportControl.HTML.HTMLString.Append(vbTab)
-  
-  'cad reporter
-  If (ReportControl.rTarget = EXPORT_HTML_IE) Then  'km
+  If (ReportControl.rTarget = EXPORT_HTML_IE) Or (ReportControl.rTarget = EXPORT_HTML_INTEXP5) Then 'km
     Call ReportControl.HTML.HTMLString.Append("</DIV>")
     Call ReportControl.HTML.HTMLString.Append("</DIV>")
   End If
-  'If (ReportControl.rTarget = EXPORT_HTML_IE) Or (ReportControl.rTarget = EXPORT_HTML_INTEXP5) Then 'km
-  '
-  '  Call ReportControl.HTML.HTMLString.Append("</DIV>")
-  '  Call ReportControl.HTML.HTMLString.Append("</DIV>")
-  'End If
   Call ReportControl.HTML.HTMLString.Append("</BODY>")
   Call ReportControl.HTML.HTMLString.Append(vbCrLf)
   Call ReportControl.HTML.HTMLString.Append("</HTML>")
@@ -261,15 +251,6 @@ Public Sub CloseDiv()
     ReportControl.HTML.YSetHTML = False
     ReportControl.HTML.CloseDiv = False
     ReportControl.HTML.Position = False
-    'cad reporter
-    If (InStr(1, ReportControl.HTML.HTMLString.bstr, "Durrant Mr Charles A") > 0) Then
-      Dim i As Long
-      i = 10
-    End If
-    
-    
-    
-    
     If (ReportControl.rTarget = EXPORT_HTML_IE) Or (ReportControl.rTarget = EXPORT_HTML_INTEXP5) Then 'km
       Call ReportControl.HTML.HTMLString.Append("</DIV>")
     Else
@@ -287,9 +268,7 @@ Public Sub SetNewHTMLPage()
   Call CloseDiv
   If (ReportControl.rTarget = EXPORT_HTML_IE) Or (ReportControl.rTarget = EXPORT_HTML_INTEXP5) Then 'km
     If Not (ReportControl.rTarget = EXPORT_HTML_INTEXP5) Then ReportControl.HTML.CurrentY = NAV_HEADER  'km
-    If (ReportControl.rTarget = EXPORT_HTML_IE) Then
-      Call ReportControl.HTML.HTMLString.Append("</DIV>")
-    End If
+    Call ReportControl.HTML.HTMLString.Append("</DIV>")
   Else
     ReportControl.HTML.CurrentY = ReportControl.HTML.CurrentY + (3 * ReportControl.fStyle.FontHeight)
   End If
@@ -445,7 +424,7 @@ Public Sub HTMLBox(Text As String, BColor As String, FColor As String, Height As
         Call ReportControl.HTML.HTMLString.Append("px; ")
         Call ReportControl.HTML.HTMLString.Append(""">")
       End If
-      Call ReportControl.HTML.HTMLString.Append("&nbsp;")
+      Call ReportControl.HTML.HTMLString.Append("&nbsp")
       Call ReportControl.HTML.HTMLString.Append(vbCrLf)
       If Not FillBox Then
         Call ReportControl.HTML.HTMLString.Append("</SPAN>")
@@ -497,7 +476,7 @@ Public Sub SetScriptBlock()
   Dim TempString As String
     
   On Error GoTo SetScriptBlock_err
-  If (ReportControl.rTarget = EXPORT_HTML_IE) Then   'km
+  If (ReportControl.rTarget = EXPORT_HTML_IE) Or (ReportControl.rTarget = EXPORT_HTML_INTEXP5) Then 'km
     Script = LoadResString(102)
     pos = InStr(1, Script, "[Help]", vbTextCompare)
     TempString = Left$(Script, pos - 1)
@@ -505,10 +484,9 @@ Public Sub SetScriptBlock()
     TempString = TempString & Mid$(Script, pos + 6, Len(Script) - pos)
     Call ReportControl.HTML.HTMLString.Append(TempString)
   Else
-    'cad reporter, removed
-    'ReportControl.HTML.HTMLString.Append "<SCRIPT>function Resize(){ if ( isnavigator461() ) { window.location.href=window.location.href; }}"
-    'ReportControl.HTML.HTMLString.Append "function isnavigator461() { var an = navigator.appName; var ver = 0; if (an == ""Netscape"") { ver = parseFloat(navigator.appVersion); return (ver >= 4.61);  } return false; }"
-    'ReportControl.HTML.HTMLString.Append "</SCRIPT>"
+    ReportControl.HTML.HTMLString.Append "<SCRIPT>function Resize(){ if ( isnavigator461() ) { window.location.href=window.location.href; }}"
+    ReportControl.HTML.HTMLString.Append "function isnavigator461() { var an = navigator.appName; var ver = 0; if (an == ""Netscape"") { ver = parseFloat(navigator.appVersion); return (ver >= 4.61);  } return false; }"
+    ReportControl.HTML.HTMLString.Append "</SCRIPT>"
   End If
   Exit Sub
   
@@ -552,7 +530,7 @@ Public Sub SetHTMLSpaces(ByRef Text As String)
   If Spaces > 0 Then
     Wid = GetTextWidth(" ")
     For pos = 1 To Spaces
-      tmp = tmp & "&nbsp;"
+      tmp = tmp & "&nbsp "
       'ReportControl.HTML.CurrentX = ReportControl.HTML.CurrentX + Wid
     Next pos
     If pos < Len(Text) Then

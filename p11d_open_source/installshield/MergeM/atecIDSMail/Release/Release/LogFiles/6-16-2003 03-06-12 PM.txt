@@ -1,5 +1,0 @@
-================= Logging started at 6/16/2003 03:06:12 PM ==================
-	** Error: -5044: Cannot delete directory I:\Ishield\MergeM\atecIDSMail\Release\Release.Bak
-	** Fatal Error: -5051: Could not remove the read-only attribute from the file "I:\Ishield\MergeM\atecIDSMail\Release\Release\DiskImages\DISK1\atecIDSMail.msm"
-Release\Release build completed with 2 errors, 0 warnings
-================= Logging stopped at 6/16/2003 03:06:13 PM ==================

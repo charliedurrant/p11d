@@ -1,1 +1,0 @@
-PATH=%PATH%;C:\PROGRA~1\COMMON~1\InstallShield

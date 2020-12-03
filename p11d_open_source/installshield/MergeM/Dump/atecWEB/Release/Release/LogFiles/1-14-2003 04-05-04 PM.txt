@@ -1,5 +1,0 @@
-================= Logging started at 1/14/2003 04:05:04 PM ==================
-	** Error: -5044: Cannot delete directory I:\Ishield\MergeM\atecWEB\Release\Release.Bak
-	** Fatal Error: -5051: Could not remove the read-only attribute from the file "I:\Ishield\MergeM\atecWEB\Release\Release\DiskImages\DISK1\atecWEB.msm"
-Release\Release build completed with 3 errors, 0 warnings
-================= Logging stopped at 1/14/2003 04:05:05 PM ==================

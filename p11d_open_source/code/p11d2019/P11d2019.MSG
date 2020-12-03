@@ -1,5 +1,0 @@
-[STATICDATA]
-ApplicationName=P11D2019
-Contact=For help, please contact xxx at ndurrant@deloitte.co.uk           
-StatusReady=Ready
-Version=4.0.66

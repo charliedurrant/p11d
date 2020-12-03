@@ -1,1 +1,0 @@
-cscript Version\compile.wsh

@@ -1,4 +1,0 @@
-Public Const S_SERIAL_NUMBER_STANDARD = "P11DD847B378T4373417" 'Full functionality, all reports, emails etc.  Used for year-end (main) release.
-Public Const S_SERIAL_NUMBER_INTRANET = "46872 63T4S 6P846 62L17" 'As above with intranet publishing
-Public Const S_SERIAL_NUMBER_SHORT = "P11DD8S4678V37746617" 'Reduced functionality (no printing (except P46, no employye letter etc.).  Used for b/f (minor) release.
-Public Const S_SERIAL_NUMBER_DEMO = "P11DD366O659V3774617" 'Full functionality available for both releases

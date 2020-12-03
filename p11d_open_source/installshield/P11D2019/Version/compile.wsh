@@ -1,6 +1,0 @@
-[ScriptFile]
-Path=Version\compile.js
-[Options]
-Timeout=90000
-DisplayLogo=0
-BatchMode=0

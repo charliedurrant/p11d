@@ -55,7 +55,7 @@ Public Enum QUERY_NAMES
   FIX_SHARES_REMOVE
   FIX_UPDATE_GUID
   FIX_BRING_CAR_FUEL_AVAIL_TO_THIS_YEAR
-      
+  FIX_ADD_ELETRIC_RANGE_MILES
   UPDATE_LAST_APPLICATION
 'MP DB  UPDATE_CDB_LINKS
   UPDATE_NAME_PARTS_TO_NULL
@@ -499,6 +499,8 @@ Public Function Queries(QueryID As QUERY_NAMES, ParamArray P()) As String
       Queries = "UPDATE T_BenOther set UDBCode = 'O' where UDBCode ='N'"
     Case FIX_N_OTHER_2004
       Queries = "UPDATE T_BenOther set Class = 'N Other Expense' where Class ='O Other Expense'"
+    Case FIX_ADD_ELETRIC_RANGE_MILES
+      Queries = "UPDATE T_BenCar set " & S_FIELD_CAR_ELECTRIC_RANGE_MILES & " = 0 Where IsNull(" & S_FIELD_CAR_ELECTRIC_RANGE_MILES & ")"
     Case Else
       Call ECASE("Queries - query " & CStr(QueryID) & "not found")
   End Select

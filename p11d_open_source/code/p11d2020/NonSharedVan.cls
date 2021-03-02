@@ -93,8 +93,11 @@ Private Function IBenefitClass_CalculateBody() As Variant
 
   ben.value(nsvan_Value_Non_OPRA) = ben.value(nsvan_Value)
   
-  If (ben.value(nsvan_fuel_available_db)) And (Not ben.value(nsvan_is_electric_db)) Then
+  If (ben.value(nsvan_fuel_available_db)) Then
     ben.value(nsvan_fuel_value) = p11d32.Rates.value(vanRate) * dDateFactor 'cad 2010
+    If (ben.value(nsvan_is_electric_db)) Then
+      ben.value(nsvan_fuel_value) = ben.value(nsvan_fuel_value) * p11d32.Rates.value(vanElectricMultiplier)
+    End If
   Else
     ben.value(nsvan_fuel_value) = 0
   End If

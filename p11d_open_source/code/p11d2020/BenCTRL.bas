@@ -204,6 +204,8 @@ Public Function LastFixLevel(lYear As Long) As Long
       LastFixLevel = 114
     Case 19
       LastFixLevel = 115
+    Case 20
+      LastFixLevel = 116
     Case Else
       Call ECASE("Invalid year in LastFixLevel.")
   End Select
@@ -635,7 +637,7 @@ On Error GoTo PassWordWrite_ERR
   
   Set ben = ey
   ben.value(employer_PassWord_db) = sNewPassWord
-  Call ben.writeDB
+  Call ben.WriteDB
   PassWordWrite = True
 PassWordWrite_END:
   Call xReturn("PassWordWrite")
@@ -1615,12 +1617,12 @@ Public Function OPRAWriteDB(ben As IBenefitClass, rs As Recordset, Optional iITE
 End Function
 
 
-Private Function OPRAReadWriteDB(ByVal writeDB As Boolean, ByVal ben As IBenefitClass, ByVal rs As Recordset, Optional ByVal iITEM_OPRA_AMOUNT_FOREGONE As Integer = ITEM_OPRA_AMOUNT_FOREGONE, Optional ByVal fieldNameAddition As String = "")
+Private Function OPRAReadWriteDB(ByVal WriteDB As Boolean, ByVal ben As IBenefitClass, ByVal rs As Recordset, Optional ByVal iITEM_OPRA_AMOUNT_FOREGONE As Integer = ITEM_OPRA_AMOUNT_FOREGONE, Optional ByVal fieldNameAddition As String = "")
   Dim sFieldNameFull As String
   
   sFieldNameFull = S_DB_FIELD_OPRA_AMOUNT_FOREGONE & fieldNameAddition
   
-  If (writeDB) Then
+  If (WriteDB) Then
     If (p11d32.BringForward.Yes) Then
       rs.Fields(sFieldNameFull) = 0
     Else

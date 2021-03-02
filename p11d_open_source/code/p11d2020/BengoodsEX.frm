@@ -273,7 +273,7 @@ Private Sub fmeAssets_DragDrop(Source As Control, X As Single, Y As Single)
 End Sub
 
 Private Sub ChkBx_Click()
-  Call IFrmGeneral_CheckChanged(ChkBx)
+  Call IFrmGeneral_CheckChanged(chkbx)
 End Sub
 
 Private Sub Form_Load()
@@ -285,7 +285,7 @@ Private Sub Form_Load()
 End Sub
 Private Sub Form_Resize()
   mclsResize.Resize
-  Call ColumnWidths(lb, 50, 25)
+  Call ColumnWidths(LB, 50, 25)
 End Sub
 Private Sub IBenefitForm2_AddBenefit()
   Dim ben As IBenefitClass
@@ -334,22 +334,22 @@ Private Function IBenefitForm2_BenefitFormState(ByVal fState As BENEFIT_FORM_STA
 End Function
 
 Private Function IBenefitForm2_BenefitOff() As Boolean
-  TxtBx(0).text = ""
-  TxtBx(1).text = ""
-  TxtBx(2).text = ""
-  TxtBx(3).text = ""
-  TxtBx(4).text = ""
+  TxtBx(0).Text = ""
+  TxtBx(1).Text = ""
+  TxtBx(2).Text = ""
+  TxtBx(3).Text = ""
+  TxtBx(4).Text = ""
 End Function
 
 Private Function IBenefitForm2_BenefitOn() As Boolean
   With benefit
-    TxtBx(0).text = .value(ServicesProvided_item_db)
-    TxtBx(1).text = .value(ServicesProvided_MarketValue_db)
-    TxtBx(2).text = .value(ServicesProvided_Marginal_db)
-    TxtBx(3).text = .value(ServicesProvided_MadeGood_db)
-    TxtBx(4).text = .value(ServicesProvided_OPRA_Ammount_Foregone_db)
+    TxtBx(0).Text = .value(ServicesProvided_item_db)
+    TxtBx(1).Text = .value(ServicesProvided_MarketValue_db)
+    TxtBx(2).Text = .value(ServicesProvided_Marginal_db)
+    TxtBx(3).Text = .value(ServicesProvided_MadeGood_db)
+    TxtBx(4).Text = .value(ServicesProvided_OPRA_Ammount_Foregone_db)
     
-    ChkBx.value = BoolToChkBox(.value(ITEM_MADEGOOD_IS_TAXDEDUCTED))
+    chkbx.value = BoolToChkBox(.value(ITEM_MADEGOOD_IS_TAXDEDUCTED))
   End With
 End Function
 
@@ -377,7 +377,7 @@ End Property
 'End Property
 
 Private Property Get IBenefitForm2_lv() As MSComctlLib.IListView
-  Set IBenefitForm2_lv = lb
+  Set IBenefitForm2_lv = LB
 End Property
 
 Private Function IBenefitForm2_RemoveBenefit(ByVal BenefitIndex As Long) As Boolean
@@ -413,15 +413,15 @@ On Error GoTo CheckChanged_Err
       Case "TxtBx"
         Select Case .Index
           Case 0
-            bDirty = CheckTextInput(.text, benefit, ServicesProvided_item_db)
+            bDirty = CheckTextInput(.Text, benefit, ServicesProvided_item_db)
           Case 1
-            bDirty = CheckTextInput(.text, benefit, ServicesProvided_MarketValue_db)
+            bDirty = CheckTextInput(.Text, benefit, ServicesProvided_MarketValue_db)
           Case 2
-            bDirty = CheckTextInput(.text, benefit, ServicesProvided_Marginal_db)
+            bDirty = CheckTextInput(.Text, benefit, ServicesProvided_Marginal_db)
           Case 3
-            bDirty = CheckTextInput(.text, benefit, ServicesProvided_MadeGood_db)
+            bDirty = CheckTextInput(.Text, benefit, ServicesProvided_MadeGood_db)
           Case 4
-            bDirty = CheckTextInput(.text, benefit, ServicesProvided_OPRA_Ammount_Foregone_db)
+            bDirty = CheckTextInput(.Text, benefit, ServicesProvided_OPRA_Ammount_Foregone_db)
           Case Else
             ECASE "Unknown control index"
         End Select
@@ -457,13 +457,13 @@ End Property
 
 Private Sub LB_ItemClick(ByVal Item As MSComctlLib.ListItem)
   Call SetLastListItemSelected(Item)
-  If Not (lb.SelectedItem Is Nothing) Then
+  If Not (LB.SelectedItem Is Nothing) Then
     IBenefitForm2_BenefitToScreen (Item.Tag)
   End If
 End Sub
 
 Private Sub lb_ColumnClick(ByVal ColumnHeader As MSComctlLib.ColumnHeader)
-  Call SetSortOrder(lb, ColumnHeader)
+  Call SetSortOrder(LB, ColumnHeader)
 End Sub
 
 Private Sub LB_KeyDown(KeyCode As Integer, Shift As Integer)

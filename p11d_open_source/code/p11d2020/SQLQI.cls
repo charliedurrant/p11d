@@ -235,7 +235,11 @@ Private Function QueriesEx(ByVal QueryID As QUERY_NAMES_IMP, params() As Variant
                       ", T_BenCar.FuelAvailTo AS [" & S_FIELD_CAR_FUEL_WITHDRAWN_DATE & "]" & _
                       ", T_BenCar.FuelReinstated AS [Fuel reinstated?]" & _
                       ", T_BenCar.HasFuelUnavail AS [" & S_COMPANY_CAR_DAYS_UNAVAILABLE_FUEL_DESCRIPTION & "]" & _
-                      OPRAAmountForegoneField("T_BenCar") & OPRAAmountForegoneField("T_BenCar", "OPRAAmountForegoneFuel", " (fuel)") & " From T_BenCar"
+                      OPRAAmountForegoneField("T_BenCar") & OPRAAmountForegoneField("T_BenCar", "OPRAAmountForegoneFuel", " (fuel)")
+                      
+            QueriesEx = QueriesEx & _
+                      ", T_BenCar." & S_FIELD_CAR_ELECTRIC_RANGE_MILES & " AS [" & S_COMPANY_CAR_ELECTFRIC_RANGE_MILES_DESCRIPTION & "]" & _
+                      " From T_BenCar"
                       
       End If
     

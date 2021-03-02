@@ -224,6 +224,7 @@ Private Sub AddImportCompanyCars(ByVal bMatchOnAvailableFrom As Boolean, ByVal s
     Call .AddRequiredField(sName, "Make", True) 'so
     
     Call .AddDefaultStaticLink(sName, "Number of users", TYPE_LONG, 1)
+    
     Call .AddConstraint(sName, "Number of users", TYPE_DATE, CONSTRAINT_MIN, 1)
     Call AddStandardDateFields(sName, dTaxYearStart, dTaxYearEnd)
     

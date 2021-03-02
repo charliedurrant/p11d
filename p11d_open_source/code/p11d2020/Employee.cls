@@ -389,7 +389,7 @@ On Error GoTo IterateBenefits_ERR
           If ben.Dirty Then
             lDirtyBenefits = lDirtyBenefits + 1
             If ben.InvalidFields = 0 Or IsBenefitACollection(ben) Then
-              lBenefitsWritten = lBenefitsWritten + Abs(ben.writeDB)
+              lBenefitsWritten = lBenefitsWritten + Abs(ben.WriteDB)
             End If
           End If
           
@@ -1757,7 +1757,7 @@ Private Function WriteBenefitsSub(ben As IBenefitClass) As Boolean
   If p11d32.BringForward.Yes Then
     If p11d32.BringForward.HMITSChosen And (2 ^ p11d32.Rates.BenClassTo(ben.BenefitClass, BCT_HMIT_SECTION)) Then
       If ben.CanBringForward Then
-        WriteBenefitsSub = ben.writeDB()
+        WriteBenefitsSub = ben.WriteDB()
       Else
         WriteBenefitsSub = True
       End If
@@ -1765,7 +1765,7 @@ Private Function WriteBenefitsSub(ben As IBenefitClass) As Boolean
       WriteBenefitsSub = True
     End If
   Else
-    WriteBenefitsSub = ben.writeDB()
+    WriteBenefitsSub = ben.WriteDB()
   End If
   
 WriteBenefitsSub_END:

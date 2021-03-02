@@ -3044,7 +3044,7 @@ Private Function NameSpaceByYear() As String 'open the xsd and extract the names
   
   
     'Charles,
-    'Thanks for sending in your 2013-14 P11D/P11D(b) recognition xml. This will be reviewed over the next day or two and a full response issued on completion.
+    'Thanks for sending in your 2013-14 P11D/P11D(b) recognition xml. This will be reviewed over nialthe next day or two and a full response issued on completion.
     'With regards to the P46(Car) final quarter submission; you are using an incorrect namespace. For submissions up until the 5th of April 2014,
     'you should still be using http://www.govtalk.gov.uk/taxation/EXB/12-13/1. The namespace of http://www.govtalk.gov.uk/taxation/EXB/13-14/1 does not
     'take effect (in the "live" service)

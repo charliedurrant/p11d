@@ -18,7 +18,6 @@ Option Explicit
 Option Base 0
 Implements IBenefitClass
 
-
 Public Enum CarItems
   
   car_Registration_db = ITEM_DESC 'bf
@@ -114,7 +113,8 @@ Public Enum CarItems
   car_Replacement_db
   car_Replaced_db
   car_Second_db
-  
+  car_ElectricRangeMiles_db
+  car_ElectricRangeMiles_Required
 'AM Car_Diesel To be removed for main 2002 release
 'MP DB ToDo remove car_Diesel? chk its use in MagneticMedia.SectionF
   car_privatefuel_db 'bf
@@ -162,8 +162,6 @@ Public Enum CarItems
 End Enum
 
 Public mileage As ObjectList
-
-
 Private m_ReadFromDB As Boolean
 Private m_sbookmark As String
 Private m_dirty As Boolean
@@ -191,9 +189,9 @@ Private Function AdjustPercentage(dPercentageBase As Double, dPercentageAdjustme
   
   AdjustPercentage = dPercentageBase + dPercentageAdjustment
 End Function
-
-
-
+Private Function UseWLTPCo2Rates(ByVal ben As IBenefitClass) As Boolean
+  UseWLTPCo2Rates = (ben.value(car_Registrationdate_db) >= D_CAR_USE_ELECTRIC_RANGE_MILES)
+End Function
 Private Function IBenefitClass_CalculateBody() As Variant
   'no calcualate only when required as p46 flags depend on then current dates
   Dim benFueld As IBenefitClass
@@ -219,6 +217,11 @@ Call xSet("CompanyCar_Calculate")
   ' ******************************** CAR CALC START ***********************************************
   'the calculation divides into 2 clear areas that get a percentage to apply to the value of the car
   '1: cars registered pre 01/01/1998
+  
+  If (ben.value(car_p46FuelType_db) = CCFT_HYBRID) And UseWLTPCo2Rates(ben) Then
+      ben.value(car_ElectricRangeMiles_Required) = True
+  End If
+  
   If ben.value(car_Registrationdate_db) < p11d32.Rates.value(carNOCO2CUTOFFDATE) Then
     'this is purely based on the CC of the car, even if an official CO2 figure existed, special cases for electricity
     If (ben.value(car_p46FuelType_db) = CCFT_ELECTRIC) Then
@@ -238,7 +241,7 @@ Call xSet("CompanyCar_Calculate")
   '2: cars registered post and including 01/01/1998
     'first get the base percentage
     If (ben.value(car_p46FuelType_db) = CCFT_ELECTRIC) Then
-      dPercentageOfValue = ReadyReckonerPercentage()
+      dPercentageOfValue = CO2Percentage(ben)
       'dPercentageOfValue = 0#  'CAD 2010 was 0.15
     Else
       'if no approved C02 then use section 12.26
@@ -253,7 +256,7 @@ Call xSet("CompanyCar_Calculate")
           dPercentageOfValue = 0.37
         End If
       Else
-        dPercentageOfValue = ReadyReckonerPercentage()
+        dPercentageOfValue = CO2Percentage(ben)
       End If
     End If
     ben.value(car_unrestrictedPercentage) = dPercentageOfValue
@@ -264,26 +267,18 @@ Call xSet("CompanyCar_Calculate")
       Case CCFT_PETROL, CCFT_BIFUEL_CONVERSION_OTHER_NOT_WITHIN_TYPE_B, CCFT_HYBRID, CCFT_E85_BIO_ENTHANOL_AND_PETROL, CCFT_BIFUEL_WITH_CO2_FOR_GAS, CCFT_GAS_ONLY, CCFT_RDE2_DIESEL
         'nothing
       Case CCFT_DIESEL, CCFT_EUROIVDIESEL
-        If (ReadyReckonerCO2IntegerYear(ben) = 0) Then
-          ben.value(car_supplement) = 0
-        Else
-          ben.value(car_supplement) = p11d32.Rates.value(CarDIESELSUPPLEMENT)
-        End If
-        
-        
+        ben.value(car_supplement) = p11d32.Rates.value(CarDIESELSUPPLEMENT)
       Case CCFT_ELECTRIC
-        ben.value(car_supplement) = 0#  'CAD 2010 was  '-1 * p11d32.Rates.value(CarELECTRICDISCOUNT)'
+        ben.value(car_supplement) = 0#
       Case Else
         Call Err.Raise(ERR_CAR_CO2, "Calculate", "Unknown fuel type")
     End Select
 
-    ben.value(car_FuelDontUseAmountForegone) = ben.value(car_p46CarbonDioxide_db) <= 75
-    
-    
+    ben.value(car_FuelDontUseAmountForegone) = CO2CalcValue(ben) <= 75
+      
   End If
 
   dPercentageOfValue = dPercentageOfValue + ben.value(car_supplement)
-
   dPercentageOfValue = Max(0, Min(dPercentageOfValue, p11d32.Rates.value(carBENPERCENTMAX)))
 
   ben.value(car_percentage) = dPercentageOfValue
@@ -544,7 +539,7 @@ Private Function IBenefitClass_PrintWkBody(rep As Reporter) As Boolean
   If ben.value(car_p46NoApprovedCO2Figure_db) Then
     Call WKOut(rep, WK_ITEM_TEXT, "No approved CO2 figure: " & S_WK_NORMAL_BOLD_FONT & ben.value(car_p46NoApprovedCO2Figure_db))
   Else
-    Call WKOut(rep, WK_ITEM_TEXT, "CO2 emissions figure: " & S_WK_NORMAL_BOLD_FONT & ben.value(car_p46CarbonDioxide_db) & S_WK_NORMAL_FONT & " g/km")
+    Call WKOut(rep, WK_ITEM_TEXT, "CO2 emissions figure: " & S_WK_NORMAL_BOLD_FONT & CO2CalcValue(ben) & S_WK_NORMAL_FONT & " g/km")
   End If
   
   Call WKOut(rep, WK_ITEM_TEXT, "Date of registration: " & S_WK_NORMAL_BOLD_FONT & ben.value(car_Registrationdate_db))
@@ -789,6 +784,9 @@ Private Sub IBenefitClass_SetBenItemsInformation()
     .BenDataLinkDataType(bc, car_Replacement_db) = TYPE_BOOL
     .BenDataLinkDataType(bc, car_Replaced_db) = TYPE_BOOL
     .BenDataLinkDataType(bc, car_Second_db) = TYPE_BOOL
+    .BenDataLinkDataType(bc, car_ElectricRangeMiles_db) = TYPE_LONG
+    .BenDataLinkDataType(bc, car_ElectricRangeMiles_Required) = TYPE_BOOL
+    
     .BenDataLinkDataType(bc, car_privatefuel_db) = TYPE_BOOL
 'AM To be removed    .BenDataLinkDataType(bc, car_Diesel) = TYPE_BOOL
     .BenDataLinkDataType(bc, car_requiredmakegood_db) = TYPE_BOOL
@@ -869,6 +867,7 @@ Private Sub IBenefitClass_SetBenItemsInformation()
     'km only display "Diesel?" in 2000 version as the "Is car Diesel?" chkbx is not used in 2001
 '    If p11d32.AppYear = 2000 Then .BenDataLinkUDMDescription(bc, car_Diesel) = "Diesel?"
     .BenDataLinkUDMDescription(bc, car_Second_db) = "Second car?"
+    .BenDataLinkUDMDescription(bc, car_ElectricRangeMiles_db) = S_COMPANY_CAR_ELECTFRIC_RANGE_MILES_DESCRIPTION
     .BenDataLinkUDMDescription(bc, car_Replaced_db) = "Replaced?"
     .BenDataLinkUDMDescription(bc, car_Replacement_db) = "Replacement?"
     
@@ -977,6 +976,7 @@ Private Sub IBenefitClass_SetCalcDefaults()
   ben.value(car_OPRAModifiedCashEquivalent) = 0
   ben.value(car_OPRAProvisionalSum) = 0
   ben.value(car_OPRACapitalContributionsTimeCarPercentage) = 0
+  ben.value(car_ElectricRangeMiles_Required) = False
   
   
   
@@ -990,276 +990,186 @@ Private Sub IBenefitClass_Kill()
   Set m_Parent = Nothing
 End Sub
 
-Private Function ReadyReckonerCO2IntegerYear(ByVal ben As IBenefitClass) As Long
-  Dim d As Double
-  Dim iCO2 As Long
-  'we are just runding up to the nearest valuye
 
+
+Private Function CO2Percentage(ByVal ben As IBenefitClass) As Double
+  Const MAX_CO2 As Long = 170
   
-  If (ben.value(car_p46FuelType_db) = CCFT_ELECTRIC) Then
-    iCO2 = 0
-  Else
-    d = ben.value(car_p46CarbonDioxide_db)
-    Select Case d
-      Case 0
-        iCO2 = 0
-      Case Is <= 50
-        iCO2 = 50
-      Case Is <= 75
-        iCO2 = 75
-      Case Is <= 94
-        iCO2 = 94
-      Case Else
-        d = d / 5
-        iCO2 = Int(d) * 5
+  Dim Rate As Long
+  Dim fuelType As COMPANY_CAR_FUEL_TYPE
+  Dim co2 As Long
+  Dim rateDouble As Double
+  Dim electricRangeMiles As Long
+  
+  fuelType = ben.value(car_p46FuelType_db)
+  electricRangeMiles = ben.value(car_ElectricRangeMiles_db)
+  co2 = CO2CalcValue(ben)
+  
+  'NEDC rates
+  co2 = Min(co2, MAX_CO2)
+  If (co2 >= 51 <= MAX_CO2) Then
+    Select Case co2
+      Case Is >= 170
+        Rate = 37
+      Case Is >= 165
+        Rate = 37
+      Case Is >= 160
+        Rate = 37
+      Case Is >= 155
+        Rate = 36
+      Case Is >= 150
+        Rate = 35
+      Case Is >= 145
+        Rate = 34
+      Case Is >= 140
+        Rate = 33
+      Case Is >= 135
+        Rate = 32
+      Case Is >= 130
+        Rate = 31
+      Case Is >= 125
+        Rate = 30
+      Case Is >= 120
+        Rate = 29
+      Case Is >= 115
+        Rate = 28
+      Case Is >= 110
+        Rate = 27
+      Case Is >= 105
+        Rate = 26
+      Case Is >= 100
+        Rate = 25
+      Case Is >= 95
+        Rate = 24
+      Case Is >= 90
+        Rate = 23
+      Case Is >= 85
+        Rate = 22
+      Case Is >= 80
+        Rate = 21
+      Case Is >= 75
+        Rate = 20
+      Case Is >= 70
+        Rate = 19
+      Case Is >= 65
+        Rate = 18
+      Case Is >= 60
+        Rate = 17
+      Case Is >= 55
+        Rate = 16
+      Case Is >= 51
+        Rate = 15
+      Case Is < 51
+        Select Case fuelType
+          Case CCFT_ELECTRIC
+            Rate = 0
+          Case CCFT_HYBRID
+            Select Case (electricRangeMiles)
+              Case Is >= 130
+                Rate = 2
+              Case Is >= 70
+                Rate = 5
+              Case Is >= 40
+                Rate = 8
+              Case Is >= 30
+                Rate = 12
+              Case Is < 30
+                Rate = 14
+            End Select
+          Case Else
+           'rate unknown, this is not hybid or electric vehicles < 51 assume 14
+            Rate = 14
+        End Select
     End Select
   End If
   
-  ReadyReckonerCO2IntegerYear = iCO2
-
-End Function
-
-Private Function ReadyReckonerCO2Integer(ByVal ben As IBenefitClass, ByRef iBase As Long, ByVal bForVAT As Boolean) As Long
-  Dim iCO2 As Long
-  Dim d As Double, d1 As Double
-
-  
-  iBase = 0
-
-  'CAD 2010 removed if function
-  'If (ben.value(car_p46CarbonDioxide_db) <= p11d32.Rates.value(CarCO2QUALIFYINGLEVEL)) Then  '2008 onwards
-  '  iBase = p11d32.Rates.value(CarCO2QUALIFYINGLEVEL)
-  '  ReadyReckonerCO2Integer = iBase
-  '  Exit Function
-  'Else
-    
-    d = ben.value(car_p46CarbonDioxide_db)
-    If p11d32.AppYear >= 2010 Then
-      If d > 0 Then
-        If d <= L_CAR_ULTRA_LOW_CO2 And (Not bForVAT) Then
-          iCO2 = L_CAR_ULTRA_LOW_CO2
-        ElseIf (d <= p11d32.Rates.value(CarCO2QUALIFYINGLEVEL)) Then
-          iCO2 = p11d32.Rates.value(CarCO2QUALIFYINGLEVEL)
-        Else
-          d = d / 5
-          iCO2 = Int(d) * 5
-        End If
-      Else
-        iCO2 = 0
-      End If
-      
-    Else
-      d = d / 5
-      iCO2 = Int(d) * 5
-      
-    End If
-    
-    
-    iBase = 0
-    If (p11d32.AppYear = 2003) Then
-      iBase = 155
-    ElseIf (p11d32.AppYear = 2004) Then
-      iBase = 145
-    ElseIf (p11d32.AppYear = 2005) Or (p11d32.AppYear = 2006) Or (p11d32.AppYear = 2007) Then
-      iBase = 140
-    ElseIf p11d32.AppYear = 2008 Then
-      iBase = 135
-    ElseIf p11d32.AppYear = 2009 Then
-      If bForVAT Then
-        iBase = 120
-      Else
-        iBase = 135
-      End If
-    ElseIf p11d32.AppYear = 2010 Then 'cad 2010 - check, reduced to 130 but what about VAT
-      'If bForVAT Then
-      '  iBase = 120
-      'Else
-        iBase = 130
-      'End If
-    ElseIf p11d32.AppYear = 2011 Then
-      iBase = 125
-    ElseIf p11d32.AppYear = 2012 Then
-      iBase = 95
-    ElseIf p11d32.AppYear = 2013 Then
-      iBase = 90
-    ElseIf p11d32.AppYear = 2014 Then
-      iBase = 90
-    
-    Else
-      Call Err.Raise(ERR_CAR_CO2, "ReadyReckonerPercentage", "Invalid year")
-    End If
-  
-  'End If
-
-  
-  If iCO2 = 0 Then 'lowest value is considered to be the base value
-    iCO2 = iBase
-  ElseIf iCO2 < iBase Then
-    If ben.value(car_p46CarbonDioxide_db) > 120 Then
-      iCO2 = iBase
-    End If
-
-    If (p11d32.AppYear >= 2010) And (Not bForVAT) Then 'cad 2010, 75 figure introduced?
-      If (iCO2 <= L_CAR_ULTRA_LOW_CO2) Then
-        iBase = L_CAR_ULTRA_LOW_CO2
-      ElseIf iCO2 <= p11d32.Rates.value(CarCO2QUALIFYINGLEVEL) Then
-        iBase = p11d32.Rates.value(CarCO2QUALIFYINGLEVEL)
-      End If
-    Else
-      If iCO2 <= p11d32.Rates.value(CarCO2QUALIFYINGLEVEL) Then
-        iBase = p11d32.Rates.value(CarCO2QUALIFYINGLEVEL)
-        
-      End If
-      
+  'adjust to WLTP rates
+  If (UseWLTPCo2Rates(ben)) Then
+    If (fuelType <> CCFT_ELECTRIC) And co2 Then
+      Select Case co2
+        Case Is >= 170
+        Case Is >= 165
+          Rate = Rate - 1
+        Case Else
+          Rate = Rate - 2
+      End Select
     End If
   End If
   
-  ReadyReckonerCO2Integer = iCO2
-
-End Function
-Private Function ReadyReckonerCO2IntegerFuelYear(ByVal ben As IBenefitClass) As Long
-  Dim iCO2 As Long
-
-  If (ben.value(car_p46NoApprovedCO2Figure_db)) Then
-    If (ben.value(car_P46HighCC)) Then
-      iCO2 = 225
-    ElseIf ben.value(car_P46MediumCC) Then
-      iCO2 = 175
-    ElseIf ben.value(car_P46LowCC) Then
-      iCO2 = 140
-    Else 'must be 0 then we must consider as wankel engine, eg ben.value(car_P46NoCC) = true
-      iCO2 = 225
-    End If
-  Else
-    iCO2 = ReadyReckonerCO2IntegerYear(ben)
-  End If
   
-
-  ReadyReckonerCO2IntegerFuelYear = iCO2
-
-
+  rateDouble = CDbl(Rate) / CDbl(100)
+  CO2Percentage = rateDouble
 End Function
 
-
-Private Function ReadyReckonerCO2IntegerFuel(ByVal ben As IBenefitClass, ByVal bForVAT As Boolean) As Long
-  Dim iCO2 As Long, iBase As Long
-  
-  iCO2 = ReadyReckonerCO2Integer(ben, iBase, bForVAT)
-  If (iCO2 < iBase) Then iCO2 = iBase
-
-
-  If (ben.value(car_p46NoApprovedCO2Figure_db)) Then
-    If (ben.value(car_P46HighCC)) Then
-      iCO2 = 240
-    ElseIf ben.value(car_P46MediumCC) Then
-      iCO2 = 175
-    ElseIf ben.value(car_P46LowCC) Then
-      iCO2 = 140
-    Else 'must be 0 then we must consider as wankel engine, eg ben.value(car_P46NoCC) = true
-      iCO2 = 240
-    End If
-  End If
-  
-  ReadyReckonerCO2IntegerFuel = iCO2
-
-End Function
-
-
-Private Function ReadyReckonerPercentage() As Double
-  'includes support for 12.25 notes 2
-  Dim ben As IBenefitClass
-  Dim d As Double
-  Dim iCO2 As Long
-
-On Error GoTo err_err
-
-  Set ben = Me
-  
-  iCO2 = ReadyReckonerCO2IntegerYear(ben)
-  Select Case iCO2
-    Case 0
-      d = 0.16
-    Case 50
-      d = 0.16
-    Case 75
-      d = 0.19
-    Case 94
-      d = 0.22
-    Case Else
-      d = 0.22 + (Int(((iCO2 - 90) / 5))) / 100#
-  End Select
-  d = Min(d, p11d32.Rates.value(carBENPERCENTMAX))
-  
-  
-  ReadyReckonerPercentage = d
-err_end:
-  Exit Function
-err_err:
-  Call Err.Raise(Err.Number, ErrorSource(Err, "ReadyreckonerPercentage"), Err.Description)
-  Resume
-End Function
 Private Function IBenefitClass_Calculate() As Variant
   IBenefitClass_Calculate = CalculateHelper(Me)
 End Function
+
+Private Function CO2CalcValue(ben As IBenefitClass) As Long
+  If (ben.value(car_p46FuelType_db) = COMPANY_CAR_FUEL_TYPE.CCFT_ELECTRIC) Then
+    CO2CalcValue = 0
+  Else
+    CO2CalcValue = ben.value(car_p46CarbonDioxide_db)
+  End If
+End Function
+
+
 Private Function FuelVATAnnualScaleCharge(ben As IBenefitClass)
   Dim iCO2 As Long, iFuelVATScaleAnnual As Long
   Dim bNoCO2Type As Boolean
   
-
-  iCO2 = ReadyReckonerCO2IntegerFuelYear(ben)
+  iCO2 = CO2CalcValue(ben)
   
   Select Case iCO2
-    Case Is <= 120 'p11d32.Rates.value(CarCO2QUALIFYINGLEVEL)
-      iFuelVATScaleAnnual = 562
-    Case 125
-      iFuelVATScaleAnnual = 842
-    Case 130
-      iFuelVATScaleAnnual = 900
-    Case 135
-      iFuelVATScaleAnnual = 954
-    Case 140
-      iFuelVATScaleAnnual = 1013
-    Case 145
-      iFuelVATScaleAnnual = 1067
-    Case 150
-      iFuelVATScaleAnnual = 1125
-    Case 155
-      iFuelVATScaleAnnual = 1179
-    Case 160
-      iFuelVATScaleAnnual = 1238
-    Case 165
-      iFuelVATScaleAnnual = 1292
-    Case 170
-      iFuelVATScaleAnnual = 1350
-    Case 175
-      iFuelVATScaleAnnual = 1404
-    Case 180
-      iFuelVATScaleAnnual = 1463
-    Case 185
-      iFuelVATScaleAnnual = 1517
-    Case 190
-      iFuelVATScaleAnnual = 1575
-    Case 195
-      iFuelVATScaleAnnual = 1630
-    Case 200
-      iFuelVATScaleAnnual = 1688
-    Case 205
-      iFuelVATScaleAnnual = 1742
-    Case 210
-      iFuelVATScaleAnnual = 1801
-    Case 215
-      iFuelVATScaleAnnual = 1855
-    Case 220
-      iFuelVATScaleAnnual = 1913
     Case Is >= 225
-      iFuelVATScaleAnnual = 1967
+      iFuelVATScaleAnnual = 2033
+    Case Is >= 220
+      iFuelVATScaleAnnual = 1977
+    Case Is >= 215
+      iFuelVATScaleAnnual = 1917
+    Case Is >= 210
+      iFuelVATScaleAnnual = 1861
+    Case Is >= 205
+      iFuelVATScaleAnnual = 1801
+    Case Is >= 205
+      iFuelVATScaleAnnual = 1745
+    Case Is >= 200
+      iFuelVATScaleAnnual = 1745
+    Case Is >= 195
+      iFuelVATScaleAnnual = 1684
+    Case Is >= 190
+      iFuelVATScaleAnnual = 1628
+    Case Is >= 185
+      iFuelVATScaleAnnual = 1568
+    Case Is >= 180
+      iFuelVATScaleAnnual = 1512
+    Case Is >= 175
+      iFuelVATScaleAnnual = 1452
+    Case Is >= 170
+      iFuelVATScaleAnnual = 1396
+    Case Is >= 165
+      iFuelVATScaleAnnual = 1335
+    Case Is >= 160
+      iFuelVATScaleAnnual = 1279
+    Case Is >= 155
+      iFuelVATScaleAnnual = 1219
+    Case Is >= 150
+      iFuelVATScaleAnnual = 1163
+    Case Is >= 145
+      iFuelVATScaleAnnual = 1103
+    Case Is >= 140
+      iFuelVATScaleAnnual = 1047
+    Case Is >= 135
+      iFuelVATScaleAnnual = 986
+    Case Is >= 130
+      iFuelVATScaleAnnual = 930
+    Case Is >= 125
+      iFuelVATScaleAnnual = 870
+    Case Is <= 120
+      iFuelVATScaleAnnual = 581
     Case Else
       Call Err.Raise(ERR_INVALIDID, "FuelVATAnnualScaleCharge", "Invalid CO2 value" & iCO2)
   End Select
-
-
-
-
 
   FuelVATAnnualScaleCharge = iFuelVATScaleAnnual
 End Function
@@ -1391,7 +1301,7 @@ Private Sub CalculateFuelBen(ByVal BenRate As Double)
     vatRates(3).Rate = 0.175
     
     vatRates(4).From = #1/4/2011#
-    vatRates(4).To = #12/31/2020#
+    vatRates(4).To = #12/31/2050#
     vatRates(4).Rate = 0.2
     
     
@@ -1533,6 +1443,7 @@ Private Function IBenefitClass_ReadDB() As Long
     ben.value(car_Replacement_db) = rs.Fields("Replacement").value
     ben.value(car_Replaced_db) = rs.Fields("Replaced").value
     ben.value(car_Second_db) = rs.Fields("SecondCar").value
+    ben.value(car_ElectricRangeMiles_db) = IIf(IsNull(rs.Fields(S_FIELD_CAR_ELECTRIC_RANGE_MILES).value), 0, rs.Fields(S_FIELD_CAR_ELECTRIC_RANGE_MILES).value)
     ben.value(car_privatefuel_db) = rs.Fields("PvtFuel").value
     ben.value(car_requiredmakegood_db) = rs.Fields("MakeGood").value
     ben.value(car_actualmadegood_db) = rs.Fields("MadeGood").value
@@ -1651,7 +1562,7 @@ Private Function IBenefitClass_WriteDB() As Boolean
   rs.Fields("P46CarbonDioxide").value = ben.value(car_p46CarbonDioxide_db) 'so
   rs.Fields("P46NoApprovedCO2Figure").value = ben.value(car_p46NoApprovedCO2Figure_db) 'so
   'rs.Fields("FuelUnavail").value = ben.value(car_FuelUnavailableDays)
-
+  rs.Fields(S_FIELD_CAR_ELECTRIC_RANGE_MILES).value = ben.value(car_ElectricRangeMiles_db)
   
   Call StandardWriteData(ben, rs)
   

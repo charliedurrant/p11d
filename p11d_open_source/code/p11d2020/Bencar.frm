@@ -4,10 +4,10 @@ Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "atc2vtext.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form F_CompanyCar 
    Caption         =   " f"
-   ClientHeight    =   6045
+   ClientHeight    =   6540
    ClientLeft      =   1680
    ClientTop       =   3015
-   ClientWidth     =   8505
+   ClientWidth     =   8685
    ControlBox      =   0   'False
    BeginProperty Font 
       Name            =   "MS Sans Serif"
@@ -23,18 +23,18 @@ Begin VB.Form F_CompanyCar
    LinkTopic       =   "Form3"
    MDIChild        =   -1  'True
    PaletteMode     =   1  'UseZOrder
-   ScaleHeight     =   6045
-   ScaleWidth      =   8505
+   ScaleHeight     =   6540
+   ScaleWidth      =   8685
    Tag             =   "FREE,FONT"
    Begin TabDlg.SSTab tab 
-      Height          =   3450
-      Left            =   3825
+      Height          =   3885
+      Left            =   3960
       TabIndex        =   39
       Tag             =   "FREE,FONT"
-      Top             =   2430
-      Width           =   4470
-      _ExtentX        =   7885
-      _ExtentY        =   6085
+      Top             =   2280
+      Width           =   4455
+      _ExtentX        =   7858
+      _ExtentY        =   6853
       _Version        =   393216
       Style           =   1
       Tab             =   2
@@ -52,56 +52,41 @@ Begin VB.Form F_CompanyCar
       TabCaption(0)   =   "General"
       TabPicture(0)   =   "Bencar.frx":0000
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "L_Data(9)"
-      Tab(0).Control(0).Enabled=   0   'False
-      Tab(0).Control(1)=   "L_Data(8)"
-      Tab(0).Control(1).Enabled=   0   'False
-      Tab(0).Control(2)=   "L_Data(7)"
-      Tab(0).Control(2).Enabled=   0   'False
-      Tab(0).Control(3)=   "L_Data(19)"
-      Tab(0).Control(3).Enabled=   0   'False
-      Tab(0).Control(4)=   "Label4(16)"
-      Tab(0).Control(4).Enabled=   0   'False
-      Tab(0).Control(5)=   "lblAccessories"
-      Tab(0).Control(5).Enabled=   0   'False
-      Tab(0).Control(6)=   "Label2(2)"
-      Tab(0).Control(6).Enabled=   0   'False
+      Tab(0).Control(0)=   "B_Acc"
+      Tab(0).Control(1)=   "fraCO2"
+      Tab(0).Control(2)=   "TB_DATA(16)"
+      Tab(0).Control(3)=   "B_Make"
+      Tab(0).Control(4)=   "TB_DATA(8)"
+      Tab(0).Control(5)=   "TB_DATA(9)"
+      Tab(0).Control(6)=   "TB_DATA(7)"
       Tab(0).Control(7)=   "TB_DATA(13)"
-      Tab(0).Control(7).Enabled=   0   'False
-      Tab(0).Control(8)=   "TB_DATA(7)"
-      Tab(0).Control(8).Enabled=   0   'False
-      Tab(0).Control(9)=   "TB_DATA(9)"
-      Tab(0).Control(9).Enabled=   0   'False
-      Tab(0).Control(10)=   "TB_DATA(8)"
-      Tab(0).Control(10).Enabled=   0   'False
-      Tab(0).Control(11)=   "B_Make"
-      Tab(0).Control(11).Enabled=   0   'False
-      Tab(0).Control(12)=   "TB_DATA(16)"
-      Tab(0).Control(12).Enabled=   0   'False
-      Tab(0).Control(13)=   "fraCO2"
-      Tab(0).Control(13).Enabled=   0   'False
-      Tab(0).Control(14)=   "B_Acc"
-      Tab(0).Control(14).Enabled=   0   'False
+      Tab(0).Control(8)=   "Label2(2)"
+      Tab(0).Control(9)=   "lblAccessories"
+      Tab(0).Control(10)=   "Label4(16)"
+      Tab(0).Control(11)=   "L_Data(19)"
+      Tab(0).Control(12)=   "L_Data(7)"
+      Tab(0).Control(13)=   "L_Data(8)"
+      Tab(0).Control(14)=   "L_Data(9)"
       Tab(0).ControlCount=   15
       TabCaption(1)   =   "P46 Details"
       TabPicture(1)   =   "Bencar.frx":001C
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "L_Data(15)"
-      Tab(1).Control(1)=   "L_Data(14)"
-      Tab(1).Control(2)=   "L_Data(5)"
-      Tab(1).Control(3)=   "L_Data(11)"
-      Tab(1).Control(4)=   "L_Data(16)"
-      Tab(1).Control(5)=   "L_Data(17)"
-      Tab(1).Control(6)=   "L_Data(18)"
-      Tab(1).Control(7)=   "Label1"
-      Tab(1).Control(8)=   "Label2(1)"
-      Tab(1).Control(9)=   "Op_Data(3)"
-      Tab(1).Control(10)=   "CB_CARLIST"
-      Tab(1).Control(11)=   "Op_Data(2)"
-      Tab(1).Control(12)=   "Op_Data(5)"
-      Tab(1).Control(13)=   "Op_Data(1)"
-      Tab(1).Control(14)=   "CB_FuelType(0)"
-      Tab(1).Control(15)=   "Op_Data(6)"
+      Tab(1).Control(0)=   "Op_Data(6)"
+      Tab(1).Control(1)=   "CB_FuelType(0)"
+      Tab(1).Control(2)=   "Op_Data(1)"
+      Tab(1).Control(3)=   "Op_Data(5)"
+      Tab(1).Control(4)=   "Op_Data(2)"
+      Tab(1).Control(5)=   "CB_CARLIST"
+      Tab(1).Control(6)=   "Op_Data(3)"
+      Tab(1).Control(7)=   "Label2(1)"
+      Tab(1).Control(8)=   "Label1"
+      Tab(1).Control(9)=   "L_Data(18)"
+      Tab(1).Control(10)=   "L_Data(17)"
+      Tab(1).Control(11)=   "L_Data(16)"
+      Tab(1).Control(12)=   "L_Data(11)"
+      Tab(1).Control(13)=   "L_Data(5)"
+      Tab(1).Control(14)=   "L_Data(14)"
+      Tab(1).Control(15)=   "L_Data(15)"
       Tab(1).ControlCount=   16
       TabCaption(2)   =   "Fuel Benefit"
       TabPicture(2)   =   "Bencar.frx":0038
@@ -110,21 +95,25 @@ Begin VB.Form F_CompanyCar
       Tab(2).Control(0).Enabled=   0   'False
       Tab(2).Control(1)=   "Label2(3)"
       Tab(2).Control(1).Enabled=   0   'False
-      Tab(2).Control(2)=   "TB_DATA(14)"
+      Tab(2).Control(2)=   "L_Data(6)"
       Tab(2).Control(2).Enabled=   0   'False
-      Tab(2).Control(3)=   "Op_Data(8)"
+      Tab(2).Control(3)=   "TB_DATA(17)"
       Tab(2).Control(3).Enabled=   0   'False
-      Tab(2).Control(4)=   "Op_Data(9)"
+      Tab(2).Control(4)=   "TB_DATA(14)"
       Tab(2).Control(4).Enabled=   0   'False
-      Tab(2).Control(5)=   "Op_Data(10)"
+      Tab(2).Control(5)=   "Op_Data(8)"
       Tab(2).Control(5).Enabled=   0   'False
-      Tab(2).Control(6)=   "fraFuelBenefit"
+      Tab(2).Control(6)=   "Op_Data(9)"
       Tab(2).Control(6).Enabled=   0   'False
-      Tab(2).Control(7)=   "CB_FuelType(1)"
+      Tab(2).Control(7)=   "Op_Data(10)"
       Tab(2).Control(7).Enabled=   0   'False
-      Tab(2).Control(8)=   "Op_Data(12)"
+      Tab(2).Control(8)=   "fraFuelBenefit"
       Tab(2).Control(8).Enabled=   0   'False
-      Tab(2).ControlCount=   9
+      Tab(2).Control(9)=   "CB_FuelType(1)"
+      Tab(2).Control(9).Enabled=   0   'False
+      Tab(2).Control(10)=   "Op_Data(12)"
+      Tab(2).Control(10).Enabled=   0   'False
+      Tab(2).ControlCount=   11
       Begin VB.CheckBox Op_Data 
          Alignment       =   1  'Right Justify
          Caption         =   "Is the above an amount subjected to PAYE?"
@@ -143,7 +132,7 @@ Begin VB.Form F_CompanyCar
          Left            =   60
          TabIndex        =   56
          Tag             =   "free,font"
-         Top             =   1215
+         Top             =   950
          Width           =   4200
       End
       Begin VB.ComboBox CB_FuelType 
@@ -165,7 +154,7 @@ Begin VB.Form F_CompanyCar
          Style           =   2  'Dropdown List
          TabIndex        =   57
          Tag             =   "free,font"
-         Top             =   1440
+         Top             =   1200
          Width           =   2730
       End
       Begin VB.CommandButton B_Acc 
@@ -335,9 +324,9 @@ Begin VB.Form F_CompanyCar
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   1200
-         Left            =   120
+         Left            =   50
          TabIndex        =   59
-         Top             =   1770
+         Top             =   1750
          Width           =   4215
          Begin VB.CheckBox Op_Data 
             Alignment       =   1  'Right Justify
@@ -354,11 +343,11 @@ Begin VB.Form F_CompanyCar
             ForeColor       =   &H00800000&
             Height          =   195
             Index           =   0
-            Left            =   225
+            Left            =   200
             TabIndex        =   67
             Tag             =   "free,font"
-            Top             =   585
-            Width           =   3840
+            Top             =   540
+            Width           =   3900
          End
          Begin VB.CheckBox Op_Data 
             Alignment       =   1  'Right Justify
@@ -375,19 +364,19 @@ Begin VB.Form F_CompanyCar
             ForeColor       =   &H00800000&
             Height          =   195
             Index           =   7
-            Left            =   225
+            Left            =   200
             TabIndex        =   68
             Tag             =   "free,font"
-            Top             =   855
-            Width           =   3840
+            Top             =   805
+            Width           =   3900
          End
          Begin atc2valtext.ValText TB_DATA 
             Height          =   285
             Index           =   15
-            Left            =   3120
+            Left            =   3150
             TabIndex        =   66
             Tag             =   "FREE,FONT"
-            Top             =   270
+            Top             =   230
             Width           =   945
             _ExtentX        =   1667
             _ExtentY        =   503
@@ -426,10 +415,10 @@ Begin VB.Form F_CompanyCar
             ForeColor       =   &H00800000&
             Height          =   195
             Index           =   10
-            Left            =   240
+            Left            =   200
             TabIndex        =   60
             Tag             =   "FREE,FONT"
-            Top             =   270
+            Top             =   260
             Width           =   1935
          End
       End
@@ -495,7 +484,7 @@ Begin VB.Form F_CompanyCar
          Left            =   60
          TabIndex        =   55
          Tag             =   "free,font"
-         Top             =   945
+         Top             =   700
          Width           =   4200
       End
       Begin VB.CheckBox Op_Data 
@@ -516,7 +505,7 @@ Begin VB.Form F_CompanyCar
          Left            =   60
          TabIndex        =   54
          Tag             =   "free,font"
-         Top             =   675
+         Top             =   500
          Width           =   4200
       End
       Begin VB.CheckBox Op_Data 
@@ -537,7 +526,7 @@ Begin VB.Form F_CompanyCar
          Left            =   60
          TabIndex        =   53
          Tag             =   "free,font"
-         Top             =   375
+         Top             =   250
          Width           =   4200
       End
       Begin VB.CheckBox Op_Data 
@@ -821,10 +810,10 @@ Begin VB.Form F_CompanyCar
       Begin atc2valtext.ValText TB_DATA 
          Height          =   285
          Index           =   14
-         Left            =   3060
-         TabIndex        =   69
+         Left            =   3010
+         TabIndex        =   70
          Tag             =   "free,font"
-         Top             =   3060
+         Top             =   3000
          Width           =   1215
          _ExtentX        =   2143
          _ExtentY        =   503
@@ -845,6 +834,57 @@ Begin VB.Form F_CompanyCar
          AllowEmpty      =   0   'False
          TXTAlign        =   2
       End
+      Begin atc2valtext.ValText TB_DATA 
+         Height          =   285
+         Index           =   17
+         Left            =   3200
+         TabIndex        =   69
+         Tag             =   "FREE,FONT"
+         Top             =   1500
+         Width           =   1065
+         _ExtentX        =   0
+         _ExtentY        =   0
+         BackColor       =   255
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         MaxLength       =   6
+         MouseIcon       =   "Bencar.frx":0138
+         Text            =   "0"
+         Minimum         =   "1"
+         AllowEmpty      =   0   'False
+         TXTAlign        =   2
+      End
+      Begin VB.Label L_Data 
+         Appearance      =   0  'Flat
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BackStyle       =   0  'Transparent
+         Caption         =   "Electric range (miles)"
+         BeginProperty Font 
+            Name            =   "MS Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00800000&
+         Height          =   195
+         Index           =   6
+         Left            =   60
+         TabIndex        =   71
+         Tag             =   "FREE,FONT"
+         Top             =   1500
+         Width           =   1455
+      End
       Begin VB.Label Label2 
          Appearance      =   0  'Flat
          AutoSize        =   -1  'True
@@ -863,10 +903,10 @@ Begin VB.Form F_CompanyCar
          ForeColor       =   &H00800000&
          Height          =   195
          Index           =   3
-         Left            =   180
+         Left            =   60
          TabIndex        =   65
          Tag             =   "free,font"
-         Top             =   3060
+         Top             =   3000
          Width           =   1590
       End
       Begin VB.Label Label2 
@@ -887,7 +927,7 @@ Begin VB.Form F_CompanyCar
          ForeColor       =   &H00800000&
          Height          =   195
          Index           =   2
-         Left            =   -74910
+         Left            =   -74940
          TabIndex        =   64
          Tag             =   "free,font"
          Top             =   3060
@@ -945,10 +985,10 @@ Begin VB.Form F_CompanyCar
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   90
+         Left            =   60
          TabIndex        =   52
          Tag             =   "free,font"
-         Top             =   1485
+         Top             =   1200
          Width           =   1725
       End
       Begin VB.Label Label2 
@@ -1244,14 +1284,14 @@ Begin VB.Form F_CompanyCar
       End
    End
    Begin MSComctlLib.ListView LB 
-      Height          =   2175
+      Height          =   2085
       Left            =   90
-      TabIndex        =   70
+      TabIndex        =   72
       Tag             =   "free,font"
       Top             =   90
-      Width           =   8325
-      _ExtentX        =   14684
-      _ExtentY        =   3836
+      Width           =   8520
+      _ExtentX        =   15028
+      _ExtentY        =   3678
       View            =   3
       LabelEdit       =   1
       Sorted          =   -1  'True
@@ -1300,11 +1340,11 @@ Begin VB.Form F_CompanyCar
       EndProperty
    End
    Begin VB.Frame fmeInput 
-      Height          =   3735
-      Left            =   90
+      Height          =   4215
+      Left            =   120
       TabIndex        =   37
-      Top             =   2250
-      Width           =   8340
+      Top             =   2160
+      Width           =   8460
       Begin VB.CheckBox Op_Data 
          Alignment       =   1  'Right Justify
          Caption         =   "Is the above an amount subjected to PAYE?"
@@ -1339,9 +1379,9 @@ Begin VB.Form F_CompanyCar
          EndProperty
          ForeColor       =   &H00000080&
          Height          =   315
-         ItemData        =   "Bencar.frx":0138
+         ItemData        =   "Bencar.frx":0154
          Left            =   2520
-         List            =   "Bencar.frx":013A
+         List            =   "Bencar.frx":0156
          Style           =   2  'Dropdown List
          TabIndex        =   8
          Tag             =   "free,font"
@@ -1368,7 +1408,7 @@ Begin VB.Form F_CompanyCar
             Strikethrough   =   0   'False
          EndProperty
          MaxLength       =   7
-         MouseIcon       =   "Bencar.frx":013C
+         MouseIcon       =   "Bencar.frx":0158
          Text            =   "0"
          Minimum         =   "0"
          AllowEmpty      =   0   'False
@@ -1393,7 +1433,7 @@ Begin VB.Form F_CompanyCar
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         MouseIcon       =   "Bencar.frx":0158
+         MouseIcon       =   "Bencar.frx":0174
          Text            =   "6/4/2000"
          TypeOfData      =   2
          Maximum         =   "5/4/2001"
@@ -1419,7 +1459,7 @@ Begin VB.Form F_CompanyCar
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         MouseIcon       =   "Bencar.frx":0174
+         MouseIcon       =   "Bencar.frx":0190
          Text            =   "5/4/2001"
          TypeOfData      =   2
          Maximum         =   "5/4/2001"
@@ -1445,7 +1485,7 @@ Begin VB.Form F_CompanyCar
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         MouseIcon       =   "Bencar.frx":0190
+         MouseIcon       =   "Bencar.frx":01AC
          Text            =   "0"
          Maximum         =   "365"
          Minimum         =   "0"
@@ -1472,7 +1512,7 @@ Begin VB.Form F_CompanyCar
             Strikethrough   =   0   'False
          EndProperty
          MaxLength       =   6
-         MouseIcon       =   "Bencar.frx":01AC
+         MouseIcon       =   "Bencar.frx":01C8
          Text            =   "0"
          Minimum         =   "0"
          AllowEmpty      =   0   'False
@@ -1498,7 +1538,7 @@ Begin VB.Form F_CompanyCar
             Strikethrough   =   0   'False
          EndProperty
          MaxLength       =   6
-         MouseIcon       =   "Bencar.frx":01C8
+         MouseIcon       =   "Bencar.frx":01E4
          Text            =   "0"
          Minimum         =   "0"
          AllowEmpty      =   0   'False
@@ -1544,7 +1584,7 @@ Begin VB.Form F_CompanyCar
             Strikethrough   =   0   'False
          EndProperty
          MaxLength       =   30
-         MouseIcon       =   "Bencar.frx":01E4
+         MouseIcon       =   "Bencar.frx":0200
          Text            =   ""
          TypeOfData      =   3
          AllowEmpty      =   0   'False
@@ -1839,7 +1879,7 @@ End Sub
 
 Private Sub Form_Resize()
   mclsResize.Resize
-  Call ColumnWidths(lb, 20, 20, 20, 20, 20, 0, 0)
+  Call ColumnWidths(LB, 20, 20, 20, 20, 20, 0, 0)
 End Sub
 
 Private Sub B_Acc_Click()
@@ -1978,20 +2018,21 @@ Private Function IBenefitForm2_BenefitFormState(ByVal fState As BENEFIT_FORM_STA
 End Function
 
 Private Function IBenefitForm2_BenefitOff() As Boolean
-    TB_Data(0).text = ""
-    TB_Data(1).text = ""
-    TB_Data(2).text = ""
-    TB_Data(3).text = ""
-    TB_Data(4).text = ""
-    TB_Data(5).text = ""
-    TB_Data(6).text = ""
-    TB_Data(7).text = ""
-    TB_Data(8).text = ""
-    TB_Data(9).text = ""
-    TB_Data(11).text = ""
-    TB_Data(12).text = "" 'AM
-    TB_Data(15).text = ""
-    TB_Data(16).text = ""   'IK 10/04/2004
+    TB_Data(0).Text = ""
+    TB_Data(1).Text = ""
+    TB_Data(2).Text = ""
+    TB_Data(3).Text = ""
+    TB_Data(4).Text = ""
+    TB_Data(5).Text = ""
+    TB_Data(6).Text = ""
+    TB_Data(7).Text = ""
+    TB_Data(8).Text = ""
+    TB_Data(9).Text = ""
+    TB_Data(11).Text = ""
+    TB_Data(12).Text = "" 'AM
+    TB_Data(15).Text = ""
+    TB_Data(16).Text = ""   'IK 10/04/2004
+    TB_Data(17).Text = ""   'IK 10/04/2004
     
     Op_Data(1) = vbUnchecked
     Op_Data(2) = vbUnchecked
@@ -2009,13 +2050,12 @@ Private Function IBenefitForm2_BenefitOff() As Boolean
     
     CB_CARLIST.Clear
     lblAccessories = ""
-    TB_Data(13).text = ""
-    TB_Data(14).text = ""
+    TB_Data(13).Text = ""
+    TB_Data(14).Text = ""
     
   
     
 End Function
-
 Private Function IBenefitForm2_BenefitOn() As Boolean
   
 On Error GoTo BenefitOn_Err
@@ -2024,20 +2064,21 @@ On Error GoTo BenefitOn_Err
   
   
   With benefit
-    TB_Data(0).text = .value(car_Registration_db)
-    TB_Data(1).text = .value(car_ListPrice_db)
-    TB_Data(2).text = DateValReadToScreen(.value(Car_AvailableFrom_db))
-    TB_Data(3).text = DateValReadToScreen(.value(Car_AvailableTo_db))
-    TB_Data(4).text = .value(car_UnavailableDays_db)
-    TB_Data(5).text = .value(car_capitalcontribution_db)
-    TB_Data(6).text = .value(car_MadeGood_db)
-    TB_Data(7).text = .value(car_Make_db)
-    TB_Data(9).text = .value(car_Model_db)
-    TB_Data(8).text = DateValReadToScreen(.value(car_Registrationdate_db))
-    TB_Data(11).text = .value(car_enginesize_db)
-    TB_Data(12).text = .value(car_p46CarbonDioxide_db) 'AM
-    TB_Data(15).text = DateValReadToScreen(.value(Car_FuelAvailableTo_db))  'AM
-    TB_Data(16).text = .value(car_NumberOfUsers_db)
+    TB_Data(0).Text = .value(car_Registration_db)
+    TB_Data(1).Text = .value(car_ListPrice_db)
+    TB_Data(2).Text = DateValReadToScreen(.value(Car_AvailableFrom_db))
+    TB_Data(3).Text = DateValReadToScreen(.value(Car_AvailableTo_db))
+    TB_Data(4).Text = .value(car_UnavailableDays_db)
+    TB_Data(5).Text = .value(car_capitalcontribution_db)
+    TB_Data(6).Text = .value(car_MadeGood_db)
+    TB_Data(7).Text = .value(car_Make_db)
+    TB_Data(9).Text = .value(car_Model_db)
+    TB_Data(8).Text = DateValReadToScreen(.value(car_Registrationdate_db))
+    TB_Data(11).Text = .value(car_enginesize_db)
+    TB_Data(12).Text = .value(car_p46CarbonDioxide_db) 'AM
+    TB_Data(15).Text = DateValReadToScreen(.value(Car_FuelAvailableTo_db))  'AM
+    TB_Data(16).Text = .value(car_NumberOfUsers_db)
+    TB_Data(17).Text = .value(car_ElectricRangeMiles_db)
     
     Op_Data(1) = IIf(.value(car_Replaced_db), vbChecked, vbUnchecked)
     Op_Data(2) = IIf(.value(car_Second_db), vbChecked, vbUnchecked)
@@ -2060,11 +2101,12 @@ On Error GoTo BenefitOn_Err
     lblAccessories = .value(car_Accessories)
   
     Call CO2StuffChanged
+    
     Op_Data(11).Visible = True
      
-    TB_Data(13).text = .value(ITEM_OPRA_AMOUNT_FOREGONE)
-    TB_Data(14).text = .value(car_FuelOPRA_Ammount_Foregone_db)
-  
+    TB_Data(13).Text = .value(ITEM_OPRA_AMOUNT_FOREGONE)
+    TB_Data(14).Text = .value(car_FuelOPRA_Ammount_Foregone_db)
+    Call electricRangeMiles
   
   End With
 BenefitOn_End:
@@ -2091,7 +2133,7 @@ Private Property Get IBenefitForm2_benclass() As BEN_CLASS
   IBenefitForm2_benclass = BC_COMPANY_CARS_F
 End Property
 Private Property Get IBenefitForm2_lv() As MSComctlLib.IListView
-  Set IBenefitForm2_lv = lb
+  Set IBenefitForm2_lv = LB
 End Property
 Private Function IBenefitForm2_RemoveBenefit(ByVal BenefitIndex As Long) As Boolean
   Dim CC As CompanyCar
@@ -2119,8 +2161,8 @@ Private Function IBenefitForm2_UpdateBenefitListViewItem(li As MSComctlLib.IList
   If Not li Is Nothing And Not benefit Is Nothing Then
     If BenefitIndex > 0 Then li.Tag = BenefitIndex
     li.SmallIcon = benefit.ImageListKey
-    li.SubItems(LV_CAR_BENEFIT) = FormatWN(benefit.Calculate)
-    li.text = benefit.Name
+    li.SubItems(LV_CAR_SUBITEMS.LV_CAR_BENEFIT) = FormatWN(benefit.Calculate)
+    li.Text = benefit.Name
     li.SubItems(LV_CAR_AVAILABLE_FROM) = DateValReadToScreen(benefit.value(Car_AvailableFrom_db))
     li.SubItems(LV_CAR_AVAILABLE_TO) = DateValReadToScreen(benefit.value(Car_AvailableTo_db))
     li.SubItems(LV_CAR_FUEL_BENEFIT) = FormatWN(benefit.value(car_FuelBenefit))
@@ -2163,39 +2205,40 @@ Private Function IFrmGeneral_CheckChanged(c As Control) As Boolean
       Case "TB_DATA"
         Select Case .Index
           Case 0
-            bDirty = CheckTextInput(.text, benefit, car_Registration_db)
+            bDirty = CheckTextInput(.Text, benefit, car_Registration_db)
           Case 1
-            bDirty = CheckTextInput(.text, benefit, car_ListPrice_db)
+            bDirty = CheckTextInput(.Text, benefit, car_ListPrice_db)
           Case 2
-            bDirty = CheckTextInput(.text, benefit, Car_AvailableFrom_db)
+            bDirty = CheckTextInput(.Text, benefit, Car_AvailableFrom_db)
           Case 3
-            bDirty = CheckTextInput(.text, benefit, Car_AvailableTo_db)
+            bDirty = CheckTextInput(.Text, benefit, Car_AvailableTo_db)
           Case 4
-            bDirty = CheckTextInput(.text, benefit, car_UnavailableDays_db)
+            bDirty = CheckTextInput(.Text, benefit, car_UnavailableDays_db)
           Case 5
-            bDirty = CheckTextInput(.text, benefit, car_capitalcontribution_db)
+            bDirty = CheckTextInput(.Text, benefit, car_capitalcontribution_db)
           Case 6
-            bDirty = CheckTextInput(.text, benefit, car_MadeGood_db)
+            bDirty = CheckTextInput(.Text, benefit, car_MadeGood_db)
           Case 7
-            bDirty = CheckTextInput(.text, benefit, car_Make_db)
+            bDirty = CheckTextInput(.Text, benefit, car_Make_db)
           Case 8
-            bDirty = CheckTextInput(.text, benefit, car_Registrationdate_db)
+            bDirty = CheckTextInput(.Text, benefit, car_Registrationdate_db)
           Case 9
-            bDirty = CheckTextInput(.text, benefit, car_Model_db)
+            bDirty = CheckTextInput(.Text, benefit, car_Model_db)
           Case 11
-            bDirty = CheckTextInput(.text, benefit, car_enginesize_db)
+            bDirty = CheckTextInput(.Text, benefit, car_enginesize_db)
           Case 12
-            bDirty = CheckTextInput(.text, benefit, car_p46CarbonDioxide_db)
+            bDirty = CheckTextInput(.Text, benefit, car_p46CarbonDioxide_db)
           Case 13
-            bDirty = CheckTextInput(.text, benefit, ITEM_OPRA_AMOUNT_FOREGONE)
+            bDirty = CheckTextInput(.Text, benefit, ITEM_OPRA_AMOUNT_FOREGONE)
           Case 14
-            bDirty = CheckTextInput(.text, benefit, car_FuelOPRA_Ammount_Foregone_db)
+            bDirty = CheckTextInput(.Text, benefit, car_FuelOPRA_Ammount_Foregone_db)
                       
           Case 15
-            bDirty = CheckTextInput(.text, benefit, Car_FuelAvailableTo_db)
+            bDirty = CheckTextInput(.Text, benefit, Car_FuelAvailableTo_db)
           Case 16
-            bDirty = CheckTextInput(CStr(CLng(.text)), benefit, car_NumberOfUsers_db)
-          
+            bDirty = CheckTextInput(.Text, benefit, car_NumberOfUsers_db)
+          Case 17
+            bDirty = CheckTextInput(.Text, benefit, car_ElectricRangeMiles_db)
           Case Else
             ECASE "Unknown control"
             GoTo CheckChanged_End
@@ -2258,6 +2301,10 @@ Private Function IFrmGeneral_CheckChanged(c As Control) As Boolean
     End Select
   End With
   IFrmGeneral_CheckChanged = AfterCheckChanged(c, Me, bDirty)
+  If (bDirty) Then
+    Call electricRangeMiles
+  End If
+  
     
 CheckChanged_End:
   Set car = Nothing
@@ -2382,7 +2429,7 @@ On Error GoTo ReplacementCarVisible_ERR
       If Len(sCurrentReg) Then
         For l = 0 To CB_CARLIST.ListCount - 1
           If StrComp(sCurrentReg, CB_CARLIST.List(l)) = 0 Then
-              CB_CARLIST.text = sCurrentReg
+              CB_CARLIST.Text = sCurrentReg
               bFound = True
             Exit For
           End If
@@ -2405,7 +2452,7 @@ On Error GoTo ReplacementCarVisible_ERR
     End If
   Else
     CB_CARLIST.Visible = False
-    CB_CARLIST.text = ""
+    CB_CARLIST.Text = ""
     
     L_Data(14) = ""
     L_Data(15) = ""
@@ -2453,7 +2500,7 @@ Private Sub lb_ColumnClick(ByVal ColumnHeader As MSComctlLib.ColumnHeader)
    ' Case LV_CAR_AVAILABLE_TO + 1
    '   Set ColumnHeader = lb.ColumnHeaders(LV_CAR_AVAIALABELTO_SORT + 1)
   'End Select
-  Call SetSortOrder(lb, ColumnHeader)
+  Call SetSortOrder(LB, ColumnHeader)
 End Sub
 
 Private Sub LB_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -2517,6 +2564,18 @@ ReplacementCarsToList_Err:
   Resume ReplacementCarsToList_End
   Resume
 End Function
+
+Private Sub electricRangeMiles()
+  Dim b As Boolean
+  
+  b = benefit.value(car_p46FuelType_db) = COMPANY_CAR_FUEL_TYPE.CCFT_HYBRID
+  
+  TB_Data(17).Visible = b
+  L_Data(6).Visible = b
+  TB_Data(17).Validate = b
+  
+
+End Sub
 Private Sub CO2StuffChanged()
    Dim bCO2Required As Boolean
    Dim bNoOfficalCO2 As Boolean
@@ -2535,9 +2594,9 @@ Private Sub CO2StuffChanged()
    End Select
       
    If ccft = CCFT_ELECTRIC Then
-    Call EnableFrame(Me, fraFuelBenefit, False)
+     Call EnableFrame(Me, fraFuelBenefit, False)
    Else
-    Call EnableFrame(Me, fraFuelBenefit, benefit.value(car_privatefuel_db))
+     Call EnableFrame(Me, fraFuelBenefit, benefit.value(car_privatefuel_db))
    End If
    
    If (Not fraFuelBenefit.Enabled) Then 'WE ARE ELECTRIC
@@ -2545,39 +2604,47 @@ Private Sub CO2StuffChanged()
     'we must validate the date withdrawn if invalid
      If (TB_Data(15).FieldInvalid) Then 'fuel available to
        If (Not TB_Data(3).FieldInvalid) Then 'car available to
-         TB_Data(15).text = TB_Data(3).text
+         TB_Data(15).Text = TB_Data(3).Text
        Else
-         TB_Data(15).text = DateValReadToScreen(p11d32.Rates.value(TaxYearEnd)) 'SET BACK TO ITS ORIGINAL DEFAULT
+         TB_Data(15).Text = DateValReadToScreen(p11d32.Rates.value(TaxYearEnd)) 'SET BACK TO ITS ORIGINAL DEFAULT
        End If
      End If
      If (TB_Data(11).FieldInvalid) Then 'CC
-      TB_Data(11).text = "0"
+      TB_Data(11).Text = "0"
       Call IFrmGeneral_CheckChanged(TB_Data(11))
      End If
    End If
       
    Call EnableFrame(Me, fraCO2, bCO2Required)
       
-   If (bCO2Required) Then 'aslo means fuel benefit
-    CO2Level.Enabled = True
-    bNoOfficalCO2 = ChkBoxToBool(NoOfficalCO2)
-    If (bNoOfficalCO2) Then
-      CO2Level.Minimum = 0
-      CO2Level.text = 0
-    Else
-      CO2Level.Minimum = 1
-    End If
-    CO2Level.Enabled = Not bNoOfficalCO2
-    lblEmissions.Enabled = Not bNoOfficalCO2
-   Else
-     CO2Level.Minimum = 0
-     CO2Level.text = 0
-     TB_Data(11).text = 0 'Engine size is 0 if electric
-     Call IFrmGeneral_CheckChanged(TB_Data(11))
-
-     NoOfficalCO2.value = BoolToChkBox(True) 'make true so ready reconer is chosen in calc, this is consistant with bookelet 480
-   End If
+      
+   TB_Data(11).Enabled = NoOfficalCO2.Enabled = lblEmissions.Enabled = CO2Level.Enabled = bCO2Required
+   
+   TB_Data(11).Validate = CO2Level.Validate = bCO2Required
+    
+   
+'   If (bCO2Required) Then 'aslo means fuel benefit
+'
+'
+'    bNoOfficalCO2 = ChkBoxToBool(NoOfficalCO2)
+'    If (bNoOfficalCO2) Then
+'      CO2Level.Minimum = 0
+'      CO2Level.Text = 0
+'    Else
+'      CO2Level.Minimum = 1
+'    End If
+'    CO2Level.Enabled = Not bNoOfficalCO2
+'    lblEmissions.Enabled = Not bNoOfficalCO2
+'   Else
+'     CO2Level.Minimum = 0
+'     CO2Level.Text = 0
+'     TB_Data(11).Text = 0 'Engine size is 0 if electric
+'     Call IFrmGeneral_CheckChanged(TB_Data(11))
+'
+'     NoOfficalCO2.value = BoolToChkBox(True) 'make true so ready reconer is chosen in calc, this is consistant with bookelet 480
+'   End If
      
+   
 End Sub
 Private Property Get CO2Level() As ValText
   Set CO2Level = TB_Data(12)

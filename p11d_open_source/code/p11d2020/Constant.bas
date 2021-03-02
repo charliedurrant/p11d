@@ -4,6 +4,10 @@ Option Explicit
 
 Public Const S_FIELD_LOAN_CHEAP_TAXABLE As String = "Taxable Cheap Loan"
 Public Const S_FIELD_CAR_FUEL_WITHDRAWN_DATE As String = "Fuel withdrawn date"
+Public Const S_FIELD_CAR_ELECTRIC_RANGE_MILES As String = "ElectricRangeMiles"
+
+Public Const D_CAR_USE_ELECTRIC_RANGE_MILES As Date = #4/6/2020#
+
 Public Const S_FIELD_AVAILABLE_FROM As String = "Available from"
 Public Const S_FIELD_PERSONEL_NUMBER As String = "P_NUM"
 Public Const S_FIELD_CAR_REGISTRATION As String = "Reg"
@@ -211,7 +215,7 @@ Public Const S_MONTHLY As String = "Monthly"
 Public Const S_WEEKLY As String = "Weekly"
 
 Public Const S_COMPANY_CAR_DAYS_UNAVAILABLE_FUEL_DESCRIPTION As String = "Do the car's days unavailable also relate to fuel?"
-
+Public Const S_COMPANY_CAR_ELECTFRIC_RANGE_MILES_DESCRIPTION As String = "Electric range (miles)"
 Public Const S_COMPANY_CAR_CHECKS As String = "Company Car Checks"
 Public Const S_EMPLOYEE_CHECKS As String = "Employee Checks"
 Public Const S_ONLINE_CHECKS As String = "Online Submission Checks"

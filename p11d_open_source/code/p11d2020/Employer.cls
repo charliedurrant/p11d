@@ -876,6 +876,8 @@ Public Function RunFixesYearCheck(ByVal lFixNumber As Long) As Boolean
       RunFixesYearCheck = (sYear = "09")
     Case Is <= LastFixLevel(10)
       RunFixesYearCheck = (sYear = "10")
+    Case Is <= LastFixLevel(20)
+      RunFixesYearCheck = (sYear = "20")
   End Select
   
 RunFixesYearCheck_END:
@@ -1096,6 +1098,9 @@ Public Sub RunFixes(ByVal FixToRun As Long, ByVal UpDateOnly As Boolean)
       m_dbfile.Execute (sqlimp.Queries(UPDATE_COMPANY_CAR_FUEL_AVAILABLE_TO))
       m_dbfile.Execute (sql.Queries(FIX_BRING_CAR_FUEL_AVAIL_TO_THIS_YEAR))
     Case 103
+    Case 116
+      m_dbfile.Execute (sql.Queries(FIX_ADD_ELETRIC_RANGE_MILES))
+    
   End Select
     
   Set rs = Nothing

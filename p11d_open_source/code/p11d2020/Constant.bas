@@ -5,6 +5,8 @@ Option Explicit
 Public Const S_FIELD_LOAN_CHEAP_TAXABLE As String = "Taxable Cheap Loan"
 Public Const S_FIELD_CAR_FUEL_WITHDRAWN_DATE As String = "Fuel withdrawn date"
 Public Const S_FIELD_CAR_ELECTRIC_RANGE_MILES As String = "ElectricRangeMiles"
+Public Const D_INCLUDE_ZERO_EMISSION_MILEAGE_MIN As Long = 1
+Public Const D_INCLUDE_ZERO_EMISSION_MILEAGE_MAX As Long = 50
 
 Public Const D_CAR_USE_ELECTRIC_RANGE_MILES As Date = #4/6/2020#
 

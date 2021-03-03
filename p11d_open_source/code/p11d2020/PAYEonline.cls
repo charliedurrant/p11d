@@ -1055,6 +1055,15 @@ On Error GoTo ValidateP46Car_ERR
     Case POT_P11D
         'P11D Code here
         Set ben = car
+        
+        'registration date
+        If ben.value(car_Registrationdate_db) > p11d32.Rates.value(TaxYearEnd) Then 'WE ARE ASSUMING THEIR CLOCK IS RIGHT ??? cad
+          'IK NOTE TODO check message syntax
+           AtLeastOneError = True
+          Call Err.Raise(ERR_PAYE_DATE_OUTOFSYNC, "ValidateP46Car", "Registration date '" & ben.value(car_Registrationdate_db) & "' must be less than or equal to the tax year end")
+        End If
+        
+        
         'Check engine size or CO2
         If ben.value(car_enginesize_db) > 9999 Or ben.value(car_enginesize_db) < 0 Then
           Call Err.Raise(ERR_CAR_ENGINE_SIZE, "ValidateP46Car", "Engine Size '" & ben.value(car_enginesize_db) & "' invalid.")
@@ -2680,11 +2689,13 @@ Public Sub CreateXMLCar(XML_doc As DOMDocument60, node_cars As IXMLDOMNode, ben 
     Dim sFuelTypeLetterP46 As String
     Dim bP46Before98 As Boolean, bP46NoApproved  As Boolean, bP46CO2Emissions As Boolean
     Dim bP46PayeAnyIndicators1to4 As Boolean
+    Dim bIncludeCO2 As Boolean
     
     Dim top_node As IXMLDOMNode, head_node As IXMLDOMNode
     Dim node_submissionReplacedMultiple As IXMLDOMNode, node_submissionReplaced As IXMLDOMNode, node_submission As IXMLDOMNode
     Dim node_car As IXMLDOMNode, node_cardetails As IXMLDOMNode, node_submissionWithdrawn As IXMLDOMNode
     Dim node_fuel As IXMLDOMNode, node_money As IXMLDOMNode, node_co2 As IXMLDOMNode
+    
     'Set ben = Me
     sEngineSize = CStr(IIf(ben.value(car_enginesize_db) <> 0, ben.value(car_enginesize_db), 0))
     sMakeAndModel = TrimP46MakeAndModel(ben.value(car_Make_db) + " " + ben.value(car_Model_db))
@@ -2902,13 +2913,20 @@ Public Sub CreateXMLCar(XML_doc As DOMDocument60, node_cars As IXMLDOMNode, ben 
         
 
         'post 06/04/2016 and greater
-
+        
+        
+        
         If (p11d32.AppYear >= 2015) Then
           If (ben.value(car_Registrationdate_db) >= p11d32.Rates.value(carNOCO2CUTOFFDATE)) Then
             If ben.value(car_p46FuelType_db) = CCFT_ELECTRIC Then 'electric always write zero
               Call PAYEAddXMLChild(XML_doc, node_car, "", "CO2", "0")
             ElseIf Not ben.value(car_p46NoApprovedCO2Figure_db) Then 'approved CO2
+              
               Call PAYEAddXMLChild(XML_doc, node_car, "", "CO2", CStr(ben.value(car_p46CarbonDioxide_db)))
+              If ((ben.value(car_p46CarbonDioxide_db) >= D_INCLUDE_ZERO_EMISSION_MILEAGE_MIN) And (ben.value(car_p46CarbonDioxide_db) <= D_INCLUDE_ZERO_EMISSION_MILEAGE_MAX)) Then
+                Call PAYEAddXMLChild(XML_doc, node_car, "", "ZeroEmissionMileage", CStr(ben.value(car_ElectricRangeMiles_db)))
+              End If
+              
             Else
               Call PAYEAddXMLChild(XML_doc, node_car, "", "NoAppCO2Fig", PAYE_Yes)
             End If
@@ -2917,11 +2935,13 @@ Public Sub CreateXMLCar(XML_doc As DOMDocument60, node_cars As IXMLDOMNode, ben 
           End If
         Else
           If (ben.value(car_p46CarbonDioxide_db) > 0) And (ben.value(car_Registrationdate_db) >= p11d32.Rates.value(carNOCO2CUTOFFDATE)) And (ben.value(car_p46FuelType_db) <> CCFT_ELECTRIC) Then
+          
               Call PAYEAddXMLChild(XML_doc, node_car, "", "CO2", CStr(ben.value(car_p46CarbonDioxide_db)))
           Else
               Call PAYEAddXMLChild(XML_doc, node_car, "", "NoAppCO2Fig", PAYE_Yes)
           End If
         End If
+        
         'List Price
         Call PAYEAddXMLChild(XML_doc, node_car, "", "List", GetXMLAmount(ben.value(car_ListPrice_db)))
 

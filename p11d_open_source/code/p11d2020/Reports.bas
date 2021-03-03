@@ -891,37 +891,7 @@ Private Sub HMITPageHeader(rep As Reporter, ee As Employee)
   'notes to employer
   Call rep.Out(vbCrLf & "{PUSHY}")
   
-'
-'  Call rep.Out("{X=3}{YREL=165}{Arial=8,b}Note to employer" & vbCrLf & _
-'                 "{x=3}{Arial=7,n}Complete this return for a director, or an employee who earned at a rate of £8,500" & vbCrLf & _
-'                 "{x=3}a year or more during the year 6 April " & Format$(p11d32.Rates.value(TaxYearStart), "YYYY") & " to 5 April " & Format$(p11d32.Rates.value(TaxYearEnd), "YYYY") & ".  Do not include" & vbCrLf & _
-'                 "{x=3}expenses and benefits covered by a dispensation or PAYE settlement agreement." & vbCrLf & _
-'                 "{x=3}Read the P11D Guide and booklet 480, Chapters 24 and 25, before you complete the" & vbCrLf & _
-'                 "{x=3}form. You must give a copy of this information to the director or employee by" & vbCrLf & _
-'                 "{x=3}6 July " & Format$(p11d32.Rates.value(TaxYearEnd), "YYYY") & ". The term employee is used to cover both directors and employees" & vbCrLf & _
-'                 "{x=3}throughout the rest of this form. {Arial=7,b}Send the completed P11D and form P11D(b)" & vbCrLf & _
-'                 "{x=3}to HM Revenue & Customs by 6 July " & Format$(p11d32.Rates.value(TaxYearEnd), "YYYY") & ".")
-'
-'  'notes to employee
-'  Call rep.Out("{POP}")
-'
-'    Call rep.Out("{yrel=165}{FILLRGB=" & S_LIGHTGREY & "}" & _
-'               "{x=50}{BOX=47,8,F}{RESETCOLORS}" & _
-'               "{X=51}{YREL=5}{Arial=8,b}Note to employee" & vbCrLf & "{YREL=4}" & _
-'               "{Arial=7,n}{x=51}Your employer has filled in this form.  Keep it in a safe place as you may" & vbCrLf & _
-'               "{x=51}not be able to get a duplicate. You will need it for your tax records and" & vbCrLf & _
-'               "{x=51}to complete your " & p11d32.Rates.value(RelocationThisYear) & " Tax Return if you get one.  Your tax code" & vbCrLf & _
-'               "{x=51}may need to be adjusted to take account of the information given on" & vbCrLf & _
-'               "{x=51}this P11D. The box numbers on this P11D have the same numbering" & vbCrLf & _
-'               "{x=51}as the Employment Pages of the Tax Return, for example, 1.12." & vbCrLf & _
-'               "{x=51}Include the total figures in the corresponding box on the Tax Return, unless" & vbCrLf & _
-'               "{x=51}you think some other figure is more appropriate." & vbCrLf & vbCrLf)
-'
-  
-  '*********
-'  Call rep.Out("{X=50}{YREL=165}{Arial=8,b}Note to employer" & vbCrLf & _
-'                 "{x=50}{Arial=8,n}Complete this return for a director, or an employee who earned at a rate of £8,500" & vbCrLf & _
-'                 "{x=50}a year or more during the year to 5 April " & Format$(p11d32.Rates.value(TaxYearEnd), "YYYY") & ".")
+
                   
     Call rep.Out("{yrel=0}{x=3}{Arial=8,nb}{FORERGB=8224125}Make sure your entries are clear on both sides of the form.")
   'notes to emplyer
@@ -929,9 +899,9 @@ Private Sub HMITPageHeader(rep As Reporter, ee As Employee)
                "{x=48}{BOX=50,5.5,F}{RESETCOLORS}" & _
                "{X=49}{YREL=5}{Arial=9,nb}Note to employer" & vbCrLf & "{YREL=4}" & _
                "{Arial=8,n}{x=49}Fill in this return for a director or an employee for the year to 5 April " & Format$(p11d32.Rates.value(TaxYearEnd), "YYYY") & "." & vbCrLf & _
-               "{x=49}Send the form to your HMRC office by 6 July " & Format$(p11d32.Rates.value(TaxYearEnd), "YYYY") & ". Don't submit this form if " & vbCrLf & _
-               "{x=49}you're registered as payrolled with HMRC. Go to www.gov.uk/guidance/" & vbCrLf & _
-               "{x=49}paying-your-employees-expenses-and-benefits-through-your-payroll")
+               "{x=49}Send all your P11Ds and one P11D(b) to your HMRC office by 6 July " & Format$(p11d32.Rates.value(TaxYearEnd), "YYYY") & "." & vbCrLf & _
+               "{x=49}Don't include payrolled benefits on the P11D. See www.gov.uk/guidance" & vbCrLf & _
+               "{x=49}/paying-your-employees-expenses-and-benefits-through-your-payroll")
 
                 
                   
@@ -1100,22 +1070,22 @@ Private Function HMITSection(rep As Reporter, ee As Employee, HMITS As HMIT_SECT
       BenArr(1) = BC_VOUCHERS_AND_CREDITCARDS_C
       Call HMITSectionHeader(rep, HMITS, p11d32.Rates.BenClassTo(BC_VOUCHERS_AND_CREDITCARDS_C, BCT_FORM_CAPTION))
       Call HMITColHeaders(rep, "Gross amount", "or amount foregone", "Amount made good", "or from which tax deducted", "Cash equivalent", "or relevant amount")
-      Call HMITAssetsTransferredType(rep, ee, BenArr, "{x=8}Value of vouchers and payments made using credit cards or tokens" & vbCrLf & "{x=8}{Arial=6,ni} (for qualifying childcare vouchers see section M of the P11D Guide)", False)
+      Call HMITAssetsTransferredType(rep, ee, BenArr, "{x=8}Value of vouchers and payments made using credit cards or tokens" & vbCrLf & "{x=8}{Arial=6,ni} (for qualifying childcare vouchers read the P11D Guide)", False)
     Case HMIT_SECTIONS.HMIT_D
       ReDim BenArr(1 To 1)
       BenArr(1) = BC_LIVING_ACCOMMODATION_D
       Call HMITSectionHeader(rep, HMITS, "Living accommodation")
       Call HMITColHeaders(rep, "", "", "", "", "Cash equivalent", "or relevant amount")
-      Call HMITVanTypeNIC(rep, ee, BenArr, "{x=8}Cash equivalent or relevant amount of accommodation provided for the employee, or his/her family or household." & vbCrLf & "{x=8}Exceptions do not apply if using Operational Renumeration Arrangements" & "{Arial=6,ni} (See P11D Guide " & p11d32.Rates.value(RelocationThisYear) & ")")
+      Call HMITVanTypeNIC(rep, ee, BenArr, "{x=8}Cash equivalent or relevant amount of accommodation provided for the employee, or his/her family or household." & vbCrLf & "{x=8}Exceptions do not apply if using optional renumeration arrangements" & "{Arial=6,ni} (read P11D Guide)")
     Case HMIT_SECTIONS.HMIT_E
       ReDim BenArr(1 To 1)
       BenArr(1) = BC_EMPLOYEE_CAR_E
       Call HMITSectionHeader(rep, HMITS, "Mileage allowance payments not taxed at source")
       Call HMITColHeaders(rep, "", "", "", "", "", "Taxable amount")
       Call HMITVanType(rep, ee, BenArr, "{x=8}Enter the mileage allowances in excess of the exempt amounts only where you have been unable to tax" & _
-      vbCrLf & "{x=8}this under PAYE. The exceptions do not apply if using Optional Renumeration Arrangements" & _
-      "{Arial=6,ni}(See P11D Guide for " & _
-      p11d32.Rates.value(RelocationThisYear) & ")")
+      vbCrLf & "{x=8}this under PAYE. The exceptions do not apply if using optional renumeration arrangements" & _
+      "{Arial=6,ni}(read P11D Guide" & _
+      ")")
     Case HMIT_SECTIONS.HMIT_F
       ReDim BenArr(1 To 1)
       BenArr(1) = BC_COMPANY_CARS_F
@@ -1348,7 +1318,7 @@ Private Sub HMITLoan(rep As Reporter, Loan1 As IBenefitClass, lLoan1Number As Lo
   Call xSet("HMITLoan")
   
   Call HMITSectionHeader(rep, HMIT_H, "Interest-free and low interest loans" & vbCrLf & vbCrLf)
-  rep.Out ("{Arial=7,ni}{x=8}If the total amount outstanding on all loans doesn't exceed " & FormatWN(L_LOANDEMINIMUS) & " at any time in the year, there is no need to complete this section" & vbCrLf & "{Arial=7,ni}{x=8}unless the load is provided under an optional renumeration arrangement when the threshold doesn't apply")
+  rep.Out ("{Arial=7,ni}{x=8}If the total amount outstanding on all loans does not exceed " & FormatWN(L_LOANDEMINIMUS) & " at any time in the year, there is no need to complete this section" & vbCrLf & "{Arial=7,ni}{x=8}unless the load is provided under an optional renumeration arrangement when the threshold does not apply")
   
   'Number of borrowers
   Call rep.Out(vbCrLf & HMITColText("Loan " & CStr(lLoan1Number), L_HMIT_COL_2) & _

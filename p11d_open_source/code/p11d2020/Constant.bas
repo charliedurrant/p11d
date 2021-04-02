@@ -882,6 +882,7 @@ Public Enum COMPANY_CAR_FUEL_TYPE
   CCFT_GAS_ONLY 'new in 20032004 to get rid of the existing crap and confirm to ir calcs ...CAD
   CCFT_E85_BIO_ENTHANOL_AND_PETROL
   CCFT_RDE2_DIESEL
+  CCFT_NONE
   
 End Enum
 
@@ -1096,6 +1097,9 @@ Public Function P46FuelTypeStrings(ccft As COMPANY_CAR_FUEL_TYPE) As P46_FUEL_TY
       Case CCFT_RDE2_DIESEL:
         p46s.Letter = "F"
         p46s.Description = "RDE2 (Euro 6d)"
+      Case CCFT_NONE:
+        p46s.Letter = ""
+        p46s.Description = "Please select a value"
       Case Else
         Call ECASE("Invalid fuel type to convert to fuel type letter")
     End Select

@@ -7,9 +7,10 @@ Begin VB.Form F_PayeOnline
    Caption         =   "PayeOnline"
    ClientHeight    =   5190
    ClientLeft      =   150
-   ClientTop       =   840
+   ClientTop       =   795
    ClientWidth     =   9330
    ControlBox      =   0   'False
+   KeyPreview      =   -1  'True
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
@@ -228,7 +229,7 @@ Begin VB.Form F_PayeOnline
       Skew            =   0
       PictureOffsetTop=   0
       PictureOffsetLeft=   0
-      Enabled         =   -1  'True
+      Enabled         =   0   'False
       Increment       =   1
       TextAlignment   =   0
    End
@@ -333,7 +334,7 @@ PAYERun_ERR:
 End Sub
 
 Private Sub cmdRun_Click()
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   
   Call EnableFrame(Me, frmPAYEOnlineButtons, False)
   
@@ -349,7 +350,7 @@ Private Sub cmdRun_Click()
     Call PAYERun
   End If
 
-err_end:
+Err_End:
    
   If Not F_PayeOnlineP46Options Is Nothing Then
     Unload F_PayeOnlineP46Options
@@ -360,9 +361,9 @@ err_end:
   Call EnableFrame(Me, frmPAYEOnlineButtons, True)
   Call LicenceDependantSettings
   Exit Sub
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "Run", "Run", Err.Description)
-  Resume err_end
+  Resume Err_End
   Resume
 End Sub
 Private Sub cmdViewErrors_Click()
@@ -370,7 +371,7 @@ Private Sub cmdViewErrors_Click()
 End Sub
 
 Private Sub cmdViewLastFile_Click()
-  On Error GoTo err_err
+  On Error GoTo Err_Err
    
     
   
@@ -383,17 +384,17 @@ Private Sub cmdViewLastFile_Click()
     Call F_ViewFile.ViewFile("", , p11d32.PAYEonline.OutputDirectory, Me)
   End If
   
-err_end:
+Err_End:
   Exit Sub
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "ViewLastFile", "ViewLastFile", "Error viewing the last file:'" & p11d32.PAYEonline.LastPathAndFileCreated & "'")
-  Resume err_end
+  Resume Err_End
 End Sub
 
 Private Sub cmdViewLastResponse_Click()
   Dim sLastPathAndFileCreated
   
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   
   sLastPathAndFileCreated = Replace(p11d32.PAYEonline.LastPathAndFileCreated, ".xml", ".txt")
   If Not FileExists(sLastPathAndFileCreated) Then
@@ -403,11 +404,11 @@ Private Sub cmdViewLastResponse_Click()
   
   Call F_ViewFile.ViewFile(sLastPathAndFileCreated, , p11d32.PAYEonline.OutputDirectory, Me)
   
-err_end:
+Err_End:
   Exit Sub
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "ViewLastRespose", "ViewLastResponse", "Error viewing the last response")
-  Resume err_end
+  Resume Err_End
 End Sub
 
 Private Sub LicenceDependantSettings()
@@ -422,6 +423,13 @@ Private Sub LicenceDependantSettings()
   Call optOnlineForm_Click(-1)
   
 End Sub
+
+Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+  If lows.IsControlShiftE(KeyCode, Shift) Then
+    mnuExtraSubmissionProperties.Visible = Not mnuExtraSubmissionProperties.Visible
+  End If
+End Sub
+
 Private Sub Form_Load()
   
   Call SetErrorButtons(True)
@@ -517,7 +525,7 @@ Public Sub lvPAYEEmployers_ItemCheck(ByVal Item As MSComctlLib.ListItem)
   Dim i As Long
   Dim li As ListItem
   
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   cmdRun.Enabled = ListViewAnyChecked(lvPAYEEmployers)
   
   If (Item Is Nothing) Then Exit Sub
@@ -531,7 +539,7 @@ Public Sub lvPAYEEmployers_ItemCheck(ByVal Item As MSComctlLib.ListItem)
     Next
   End If
   
-err_err:
+Err_Err:
   
 End Sub
 

@@ -1108,10 +1108,10 @@ On Error GoTo clsEvent_DebugMenuItem_err
         Case UCASE$(S_MNU_F12_MAGNETIC_MEDIA_ERROR_LOGGING)
           p11d32.MagneticMedia.ErrorLogging = Not p11d32.MagneticMedia.ErrorLogging
         Case UCASE$(S_MNU_F12_MAGNETIC_MEDIA_USER_DATA_SIZE)
-          F_Input.ValText.TypeOfData = VT_LONG
-          F_Input.ValText.Minimum = p11d32.MagneticMedia.MinDiskFreeSpace + 1
-          If F_Input.Start("Magnetic media", "Enter the min (" & p11d32.MagneticMedia.MinDiskFreeSpace & ") file size in bytes.", F_Input.ValText.Minimum) Then
-            p11d32.MagneticMedia.UserDataSize = F_Input.ValText.Text
+          F_Input.valText.TypeOfData = VT_LONG
+          F_Input.valText.Minimum = p11d32.MagneticMedia.MinDiskFreeSpace + 1
+          If F_Input.Start("Magnetic media", "Enter the min (" & p11d32.MagneticMedia.MinDiskFreeSpace & ") file size in bytes.", F_Input.valText.Minimum) Then
+            p11d32.MagneticMedia.UserDataSize = F_Input.valText.Text
           End If
         Case UCASE$(S_MNU_F12_UPDATE_LIST_ITEM)
           If IsBenefitForm(CurrentForm) Then
@@ -1492,25 +1492,25 @@ End Sub
 
 
 Private Sub mnuFileImportBegin_Click()
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   
   Call p11d32.Importing.InitImport
   
-err_end:
+Err_End:
   Exit Sub
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "FileImportBegin", "File Import Begin", Err.Description)
-  Resume err_end
+  Resume Err_End
 End Sub
 
 Private Sub mnuFileImportTracking_Click()
-  On Error GoTo err_err:
+  On Error GoTo Err_Err:
   Call p11d32.Help.ShowForm(F_ImportTracking, vbModal)
-err_end:
+Err_End:
   Exit Sub
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "FileImportTracking", "File Import Tracking ", "Failed to setp import tracking")
-  Resume err_end
+  Resume Err_End
 End Sub
 Private Function SelectedIndex() As Long
   Dim i As Long
@@ -1596,17 +1596,17 @@ Private Sub mnuFileToolsImportTracking_Click()
 End Sub
 
 Private Sub mnuFileResetSettings_Click()
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   
   Call FlushIniBuffer(p11d32.IniPathAndFile)
   Call xKill(p11d32.IniPathAndFile)
   Call p11d32.IniSettings(Ini_read)
   
-err_err:
+Err_Err:
   Exit Sub
-err_end:
+Err_End:
   Call ErrorMessage(ERR_ERROR, Err, "ResetSettings", "ResetSettings", Err.Description)
-  Resume err_end
+  Resume Err_End
   
 End Sub
 
@@ -1614,26 +1614,26 @@ Private Sub mnuFileToolsZipEmployer_Click()
   Dim iEmployerIndex As Long
   Dim ben As IBenefitClass
   Dim sFileName As String, s As String
-  On Error GoTo err_err
+  On Error GoTo Err_Err
 
   iEmployerIndex = SelectedIndex()
 
-  If iEmployerIndex = -1 Then GoTo err_end
+  If iEmployerIndex = -1 Then GoTo Err_End
     
   Set ben = p11d32.Employers(iEmployerIndex)
   
   sFileName = ben.value(employer_FileName)
   Call SplitPath(sFileName, , sFileName)
   s = FileSaveAsDlg("Zip employer", "Zip files (*.zip)|*.zip", CurDir$, sFileName & ".zip")
-  If Len(s) = 0 Then GoTo err_end
+  If Len(s) = 0 Then GoTo Err_End
   If FileExists(s) Then Call xKill(s)
   Call p11d32.Importing.Zip(ben, s)
 
-err_err:
+Err_Err:
   Exit Sub
-err_end:
+Err_End:
   Call ErrorMessage(ERR_ERROR, Err, "Zip Employer", "Zip Employer", Err.Description)
-  Resume err_end
+  Resume Err_End
 End Sub
 
 Private Sub mnuGeneralExpensesBusinessTravel_Click()
@@ -1915,15 +1915,15 @@ Private Sub mnuViewSelectCurrentEmployees_Click()
 End Sub
 
 Private Sub mnuViewSelectEmployeeAlphabetically_Click()
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   
   
   
-err_end:
+Err_End:
   Exit Sub
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "mnuViewSelectEmployeeAlphabetically_Click", "Select Employees by Report", Err.Description)
-  Resume err_end
+  Resume Err_End
   
 End Sub
 
@@ -1932,15 +1932,15 @@ Private Sub mnuViewSelectEmployeeAlphabeticallyLetter_Click(Index As Integer)
 End Sub
 
 Private Sub mnuViewSelectEmployeeByReport_Click()
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   
   Call p11d32.Help.ShowForm(F_SelectEmployeesByReport, vbModal)
   
-err_end:
+Err_End:
   Exit Sub
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "mnuViewSelectEmployeeByReport_Click", "Select Employees by Report", Err.Description)
-  Resume err_end
+  Resume Err_End
 End Sub
 
 Private Sub mnuViewSelectGroup1_Click()
@@ -2151,7 +2151,7 @@ Private Sub DisplayDebugVars()
 End Sub
 
 Private Sub TimerVersionCheck_Timer()
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   
   If p11d32.VersionCheckFinished Then
     TimerVersionCheck.Enabled = False
@@ -2160,8 +2160,8 @@ Private Sub TimerVersionCheck_Timer()
       End If
   End If
   
-err_end:
+Err_End:
   Exit Sub
-err_err:
-  Resume err_end
+Err_Err:
+  Resume Err_End
 End Sub

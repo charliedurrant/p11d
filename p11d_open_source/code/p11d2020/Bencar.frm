@@ -85,64 +85,37 @@ Begin VB.Form F_CompanyCar
       TabCaption(1)   =   "P46 Details"
       TabPicture(1)   =   "Bencar.frx":001C
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "L_Data(15)"
-      Tab(1).Control(0).Enabled=   0   'False
-      Tab(1).Control(1)=   "L_Data(14)"
-      Tab(1).Control(1).Enabled=   0   'False
-      Tab(1).Control(2)=   "L_Data(5)"
-      Tab(1).Control(2).Enabled=   0   'False
-      Tab(1).Control(3)=   "L_Data(11)"
-      Tab(1).Control(3).Enabled=   0   'False
-      Tab(1).Control(4)=   "L_Data(16)"
-      Tab(1).Control(4).Enabled=   0   'False
-      Tab(1).Control(5)=   "L_Data(17)"
-      Tab(1).Control(5).Enabled=   0   'False
-      Tab(1).Control(6)=   "L_Data(18)"
-      Tab(1).Control(6).Enabled=   0   'False
-      Tab(1).Control(7)=   "Label1"
-      Tab(1).Control(7).Enabled=   0   'False
-      Tab(1).Control(8)=   "Label2(1)"
-      Tab(1).Control(8).Enabled=   0   'False
-      Tab(1).Control(9)=   "Op_Data(3)"
-      Tab(1).Control(9).Enabled=   0   'False
-      Tab(1).Control(10)=   "CB_CARLIST"
-      Tab(1).Control(10).Enabled=   0   'False
-      Tab(1).Control(11)=   "Op_Data(2)"
-      Tab(1).Control(11).Enabled=   0   'False
-      Tab(1).Control(12)=   "Op_Data(5)"
-      Tab(1).Control(12).Enabled=   0   'False
-      Tab(1).Control(13)=   "Op_Data(1)"
-      Tab(1).Control(13).Enabled=   0   'False
-      Tab(1).Control(14)=   "CB_FuelType(0)"
-      Tab(1).Control(14).Enabled=   0   'False
-      Tab(1).Control(15)=   "Op_Data(6)"
-      Tab(1).Control(15).Enabled=   0   'False
+      Tab(1).Control(0)=   "Op_Data(6)"
+      Tab(1).Control(1)=   "CB_FuelType(0)"
+      Tab(1).Control(2)=   "Op_Data(1)"
+      Tab(1).Control(3)=   "Op_Data(5)"
+      Tab(1).Control(4)=   "Op_Data(2)"
+      Tab(1).Control(5)=   "CB_CARLIST"
+      Tab(1).Control(6)=   "Op_Data(3)"
+      Tab(1).Control(7)=   "Label2(1)"
+      Tab(1).Control(8)=   "Label1"
+      Tab(1).Control(9)=   "L_Data(18)"
+      Tab(1).Control(10)=   "L_Data(17)"
+      Tab(1).Control(11)=   "L_Data(16)"
+      Tab(1).Control(12)=   "L_Data(11)"
+      Tab(1).Control(13)=   "L_Data(5)"
+      Tab(1).Control(14)=   "L_Data(14)"
+      Tab(1).Control(15)=   "L_Data(15)"
       Tab(1).ControlCount=   16
       TabCaption(2)   =   "Fuel Benefit"
       TabPicture(2)   =   "Bencar.frx":0038
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "lblFuelType"
-      Tab(2).Control(0).Enabled=   0   'False
-      Tab(2).Control(1)=   "Label2(3)"
-      Tab(2).Control(1).Enabled=   0   'False
-      Tab(2).Control(2)=   "L_Data(6)"
-      Tab(2).Control(2).Enabled=   0   'False
-      Tab(2).Control(3)=   "TB_DATA(17)"
-      Tab(2).Control(3).Enabled=   0   'False
-      Tab(2).Control(4)=   "TB_DATA(14)"
-      Tab(2).Control(4).Enabled=   0   'False
+      Tab(2).Control(0)=   "Op_Data(12)"
+      Tab(2).Control(1)=   "CB_FuelType(1)"
+      Tab(2).Control(2)=   "fraFuelBenefit"
+      Tab(2).Control(3)=   "Op_Data(10)"
+      Tab(2).Control(4)=   "Op_Data(9)"
       Tab(2).Control(5)=   "Op_Data(8)"
-      Tab(2).Control(5).Enabled=   0   'False
-      Tab(2).Control(6)=   "Op_Data(9)"
-      Tab(2).Control(6).Enabled=   0   'False
-      Tab(2).Control(7)=   "Op_Data(10)"
-      Tab(2).Control(7).Enabled=   0   'False
-      Tab(2).Control(8)=   "fraFuelBenefit"
-      Tab(2).Control(8).Enabled=   0   'False
-      Tab(2).Control(9)=   "CB_FuelType(1)"
-      Tab(2).Control(9).Enabled=   0   'False
-      Tab(2).Control(10)=   "Op_Data(12)"
-      Tab(2).Control(10).Enabled=   0   'False
+      Tab(2).Control(6)=   "TB_DATA(14)"
+      Tab(2).Control(7)=   "TB_DATA(17)"
+      Tab(2).Control(8)=   "L_Data(6)"
+      Tab(2).Control(9)=   "Label2(3)"
+      Tab(2).Control(10)=   "lblFuelType"
       Tab(2).ControlCount=   11
       Begin VB.CheckBox Op_Data 
          Alignment       =   1  'Right Justify
@@ -720,7 +693,6 @@ Begin VB.Form F_CompanyCar
          Width           =   1575
          _ExtentX        =   2778
          _ExtentY        =   503
-         BackColor       =   255
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "MS Sans Serif"
             Size            =   8.25
@@ -732,7 +704,7 @@ Begin VB.Form F_CompanyCar
          EndProperty
          MouseIcon       =   "Bencar.frx":0090
          Text            =   "1/8/95"
-         TypeOfData      =   2
+         TypeOfData      =   4
          AllowEmpty      =   0   'False
       End
       Begin atc2valtext.ValText TB_DATA 
@@ -1465,9 +1437,7 @@ Begin VB.Form F_CompanyCar
          EndProperty
          MouseIcon       =   "Bencar.frx":0174
          Text            =   "6/4/2000"
-         TypeOfData      =   2
-         Maximum         =   "5/4/2001"
-         Minimum         =   "6/4/2000"
+         TypeOfData      =   4
          AllowEmpty      =   0   'False
       End
       Begin atc2valtext.ValText TB_DATA 
@@ -1844,6 +1814,9 @@ Public Enum LV_CAR_SUBITEMS
   'LV_CAR_AVAIALABELTO_SORT = 6
 End Enum
 
+Private Const L_REGISTRATION_DATE_INDEX = 8
+Private Const L_AVAILABLE_FROM_INDEX = 2
+
 Private Sub B_Make_Click()
   Call DialogToScreen(F_CompanyCarCO2Emissions, Nothing, 0, Me, p11d32.CurrentEmployer.CurrentEmployee.benefits.ItemIndex(benefit), False)
   Call CO2StuffChanged
@@ -1919,7 +1892,11 @@ End Sub
 Private Function FuelTypeDescription(ccft As COMPANY_CAR_FUEL_TYPE) As String
   Dim p46s As P46_FUEL_TYPE_STRINGS
   p46s = P46FuelTypeStrings(ccft)
-  FuelTypeDescription = "(" & p46s.Letter & ") " & p46s.Description
+  If (Len(p46s.Letter)) > 0 Then
+    FuelTypeDescription = "(" & p46s.Letter & ") " & p46s.Description
+  Else
+    FuelTypeDescription = p46s.Description
+  End If
 End Function
 Private Sub Form_Load()
   If Not (mclsResize.InitResize(Me, L_DES_HEIGHT, L_DES_WIDTH, DESIGN, , , MDIMain)) Then
@@ -1932,6 +1909,7 @@ Private Sub Form_Load()
   CB_Frequency.AddItem (S_WEEKLY)
   CB_Frequency.AddItem (S_ACTUAL) 'so lisindex = 4
   
+  Call AddComboItemAndItemData(CB_FuelType(1), FuelTypeDescription(CCFT_NONE), CCFT_NONE)
   Call AddComboItemAndItemData(CB_FuelType(1), FuelTypeDescription(CCFT_PETROL), CCFT_PETROL)
   Call AddComboItemAndItemData(CB_FuelType(1), FuelTypeDescription(CCFT_DIESEL), CCFT_DIESEL)
   Call AddComboItemAndItemData(CB_FuelType(1), FuelTypeDescription(CCFT_EUROIVDIESEL), CCFT_EUROIVDIESEL)
@@ -1944,13 +1922,11 @@ Private Sub Form_Load()
   Call AddComboItemAndItemData(CB_FuelType(1), FuelTypeDescription(CCFT_BIFUEL_CONVERSION_OTHER_NOT_WITHIN_TYPE_B), CCFT_BIFUEL_CONVERSION_OTHER_NOT_WITHIN_TYPE_B)
   
     
-  
-  
   'Call SetSortOrderToColumn(lb, LV_CAR_AVAIALABELFROM_SORT + 1, lvwAscending)
-  Call SetDefaultVTDate(TB_Data(2))
+  Call SetDefaultVTDate(TB_Data(L_AVAILABLE_FROM_INDEX))
   Call SetDefaultVTDate(TB_Data(3))
   Call SetDefaultVTDate(TB_Data(15))
-  Call SetDefaultVTDate(TB_Data(8), UNDATED, UNDATED, True) 'registration date
+  Call SetDefaultVTDate(TB_Data(L_REGISTRATION_DATE_INDEX), UNDATED, UNDATED, True) 'registration date
   
   Me.tab.tab = 0
   Op_Data(7).Caption = S_COMPANY_CAR_DAYS_UNAVAILABLE_FUEL_DESCRIPTION
@@ -2016,7 +1992,7 @@ Private Function IBenefitForm2_AddBenefitSetDefaults(ben As IBenefitClass) As Lo
   ben.value(car_Make_db) = "Please enter make..."
   ben.value(car_Model_db) = ""
   ben.value(car_p46PaymentFrequency_db) = P46_PAYMENT_FREQUENCY.P46PF_ACTUAL
-  ben.value(car_p46FuelType_db) = CCFT_PETROL
+  ben.value(car_p46FuelType_db) = CCFT_NONE
   ben.value(car_p46CarbonDioxide_db) = 0
   ben.value(car_Registrationdate_db) = p11d32.Rates.value(CarRegDateDef)
   'RK default fuel to car available dates
@@ -2030,6 +2006,7 @@ Private Function IBenefitForm2_AddBenefitSetDefaults(ben As IBenefitClass) As Lo
   ben.value(car_ForceP46_db) = False
   ben.value(ITEM_OPRA_AMOUNT_FOREGONE) = 0
   ben.value(car_FuelOPRA_Ammount_Foregone_db) = 0
+  ben.value(car_ElectricRangeMiles_db) = 0
   
   Set car = ben
   Call StandardReadData(car.Fuel)
@@ -2197,8 +2174,6 @@ Private Function IBenefitForm2_UpdateBenefitListViewItem(li As MSComctlLib.IList
     li.SubItems(LV_CAR_AVAILABLE_FROM) = DateValReadToScreen(benefit.value(Car_AvailableFrom_db))
     li.SubItems(LV_CAR_AVAILABLE_TO) = DateValReadToScreen(benefit.value(Car_AvailableTo_db))
     li.SubItems(LV_CAR_FUEL_BENEFIT) = FormatWN(benefit.value(car_FuelBenefit))
-    'li.SubItems(LV_CAR_AVAIALABELFROM_SORT) = CDbl(TryConvertDate(benefit.value(Car_AvailableFrom_db)))
-    'li.SubItems(LV_CAR_AVAIALABELTO_SORT) = CDbl(TryConvertDate(benefit.value(Car_AvailableTo_db)))
     If SelectItem Then li.Selected = SelectItem
     IBenefitForm2_UpdateBenefitListViewItem = li.Index
     
@@ -2253,6 +2228,18 @@ Private Function IFrmGeneral_CheckChanged(c As Control) As Boolean
             bDirty = CheckTextInput(.Text, benefit, car_Make_db)
           Case 8
             bDirty = CheckTextInput(.Text, benefit, car_Registrationdate_db)
+            If (bDirty) Then
+              If IsDate(benefit.value(car_Registrationdate_db)) Then
+                If benefit.value(car_Registrationdate_db) < p11d32.Rates.value(TaxYearStart) Then
+                  TB_Data(L_AVAILABLE_FROM_INDEX).Minimum = DateStringEx(p11d32.Rates.value(TaxYearStart), UNDATED)
+                Else
+                  TB_Data(L_AVAILABLE_FROM_INDEX).Minimum = DateStringEx(benefit.value(car_Registrationdate_db), UNDATED)
+                End If
+              Else
+                TB_Data(L_AVAILABLE_FROM_INDEX).Minimum = DateStringEx(p11d32.Rates.value(TaxYearStart), UNDATED)
+              End If
+            End If
+            
           Case 9
             bDirty = CheckTextInput(.Text, benefit, car_Model_db)
           Case 11
@@ -2312,6 +2299,13 @@ Private Function IFrmGeneral_CheckChanged(c As Control) As Boolean
         benefit.value(car_p46PaymentFrequency_db) = CB_Frequency.ListIndex
       Case "CB_FuelType"
            i = CB_FuelType(1).ItemData(CB_FuelType(1).ListIndex)
+           If (i = CCFT_NONE) Then
+            CB_FuelType(1).BackColor = TB_Data(1).InvalidColor
+            
+           Else
+            CB_FuelType(1).BackColor = TB_Data(1).ValidColor
+           End If
+           
            bDirty = i <> benefit.value(car_p46FuelType_db)
            If (bDirty) Then
              benefit.value(car_p46FuelType_db) = i
@@ -2333,6 +2327,8 @@ Private Function IFrmGeneral_CheckChanged(c As Control) As Boolean
   End With
   IFrmGeneral_CheckChanged = AfterCheckChanged(c, Me, bDirty)
   If (bDirty) Then
+    lblAccessories = benefit.value(car_Accessories)
+    
     Call electricRangeMiles
   End If
   
@@ -2525,12 +2521,6 @@ Private Sub LB_ItemClick(ByVal Item As MSComctlLib.ListItem)
 End Sub
 
 Private Sub lb_ColumnClick(ByVal ColumnHeader As MSComctlLib.ColumnHeader)
-  'Select Case ColumnHeader.Index
-   ' Case LV_CAR_AVAILABLE_FROM + 1
-   '   Set ColumnHeader = lb.ColumnHeaders(LV_CAR_AVAIALABELFROM_SORT + 1)
-   ' Case LV_CAR_AVAILABLE_TO + 1
-   '   Set ColumnHeader = lb.ColumnHeaders(LV_CAR_AVAIALABELTO_SORT + 1)
-  'End Select
   Call SetSortOrder(LB, ColumnHeader)
 End Sub
 
@@ -2616,7 +2606,7 @@ Private Sub CO2StuffChanged()
    ccft = benefit.value(car_p46FuelType_db)
       
    Select Case ccft
-    Case CCFT_PETROL, CCFT_DIESEL, CCFT_HYBRID, CCFT_BIFUEL_WITH_CO2_FOR_GAS, CCFT_EUROIVDIESEL, CCFT_BIFUEL_CONVERSION_OTHER_NOT_WITHIN_TYPE_B, CCFT_GAS_ONLY, CCFT_E85_BIO_ENTHANOL_AND_PETROL, CCFT_RDE2_DIESEL
+    Case CCFT_PETROL, CCFT_DIESEL, CCFT_HYBRID, CCFT_BIFUEL_WITH_CO2_FOR_GAS, CCFT_EUROIVDIESEL, CCFT_BIFUEL_CONVERSION_OTHER_NOT_WITHIN_TYPE_B, CCFT_GAS_ONLY, CCFT_E85_BIO_ENTHANOL_AND_PETROL, CCFT_RDE2_DIESEL, CCFT_NONE
         bCO2Required = True
      Case CCFT_ELECTRIC
         bCO2Required = False
@@ -2652,30 +2642,6 @@ Private Sub CO2StuffChanged()
    TB_Data(11).Enabled = NoOfficalCO2.Enabled = lblEmissions.Enabled = CO2Level.Enabled = bCO2Required
    
    TB_Data(11).Validate = CO2Level.Validate = bCO2Required
-    
-   
-'   If (bCO2Required) Then 'aslo means fuel benefit
-'
-'
-'    bNoOfficalCO2 = ChkBoxToBool(NoOfficalCO2)
-'    If (bNoOfficalCO2) Then
-'      CO2Level.Minimum = 0
-'      CO2Level.Text = 0
-'    Else
-'      CO2Level.Minimum = 1
-'    End If
-'    CO2Level.Enabled = Not bNoOfficalCO2
-'    lblEmissions.Enabled = Not bNoOfficalCO2
-'   Else
-'     CO2Level.Minimum = 0
-'     CO2Level.Text = 0
-'     TB_Data(11).Text = 0 'Engine size is 0 if electric
-'     Call IFrmGeneral_CheckChanged(TB_Data(11))
-'
-'     NoOfficalCO2.value = BoolToChkBox(True) 'make true so ready reconer is chosen in calc, this is consistant with bookelet 480
-'   End If
-     
-   
 End Sub
 Private Property Get CO2Level() As ValText
   Set CO2Level = TB_Data(12)

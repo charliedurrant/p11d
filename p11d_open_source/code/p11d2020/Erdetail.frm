@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
-Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "ATC2VTEXT.OCX"
+Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "atc2vtext.ocx"
 Begin VB.Form F_EmployerDetails 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Employer Details"
@@ -27,28 +27,22 @@ Begin VB.Form F_EmployerDetails
       _Version        =   393216
       Style           =   1
       Tabs            =   4
-      Tab             =   2
+      Tab             =   1
       TabsPerRow      =   4
       TabHeight       =   520
       TabCaption(0)   =   "Required"
       TabPicture(0)   =   "Erdetail.frx":0000
       Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "TxtBx(2)"
-      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "TxtBx(0)"
-      Tab(0).Control(1).Enabled=   0   'False
       Tab(0).Control(2)=   "TxtBx(1)"
-      Tab(0).Control(2).Enabled=   0   'False
       Tab(0).Control(3)=   "Lab(2)"
-      Tab(0).Control(3).Enabled=   0   'False
       Tab(0).Control(4)=   "Lab(1)"
-      Tab(0).Control(4).Enabled=   0   'False
       Tab(0).Control(5)=   "Lab(0)"
-      Tab(0).Control(5).Enabled=   0   'False
       Tab(0).ControlCount=   6
       TabCaption(1)   =   "Electronic Submission"
       TabPicture(1)   =   "Erdetail.frx":001C
-      Tab(1).ControlEnabled=   0   'False
+      Tab(1).ControlEnabled=   -1  'True
       Tab(1).Control(0)=   "Lab(11)"
       Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "Lab(12)"
@@ -82,131 +76,71 @@ Begin VB.Form F_EmployerDetails
       Tab(1).ControlCount=   15
       TabCaption(2)   =   "P11D(b)"
       TabPicture(2)   =   "Erdetail.frx":0038
-      Tab(2).ControlEnabled=   -1  'True
-      Tab(2).Control(0)=   "Label12"
-      Tab(2).Control(0).Enabled=   0   'False
-      Tab(2).Control(1)=   "Label8"
-      Tab(2).Control(1).Enabled=   0   'False
-      Tab(2).Control(2)=   "Label7"
-      Tab(2).Control(2).Enabled=   0   'False
-      Tab(2).Control(3)=   "Label11"
-      Tab(2).Control(3).Enabled=   0   'False
-      Tab(2).Control(4)=   "Label10"
-      Tab(2).Control(4).Enabled=   0   'False
-      Tab(2).Control(5)=   "Label9"
-      Tab(2).Control(5).Enabled=   0   'False
-      Tab(2).Control(6)=   "Label6"
-      Tab(2).Control(6).Enabled=   0   'False
-      Tab(2).Control(7)=   "Label13"
-      Tab(2).Control(7).Enabled=   0   'False
-      Tab(2).Control(8)=   "Label14"
-      Tab(2).Control(8).Enabled=   0   'False
-      Tab(2).Control(9)=   "Label4"
-      Tab(2).Control(9).Enabled=   0   'False
-      Tab(2).Control(10)=   "Label3"
-      Tab(2).Control(10).Enabled=   0   'False
-      Tab(2).Control(11)=   "Label1"
-      Tab(2).Control(11).Enabled=   0   'False
-      Tab(2).Control(12)=   "Label5"
-      Tab(2).Control(12).Enabled=   0   'False
-      Tab(2).Control(13)=   "Label2"
-      Tab(2).Control(13).Enabled=   0   'False
-      Tab(2).Control(14)=   "Label15"
-      Tab(2).Control(14).Enabled=   0   'False
-      Tab(2).Control(15)=   "lblEmployerDeclaration"
-      Tab(2).Control(15).Enabled=   0   'False
+      Tab(2).ControlEnabled=   0   'False
+      Tab(2).Control(0)=   "ChkBx(5)"
+      Tab(2).Control(1)=   "ChkBx(4)"
+      Tab(2).Control(2)=   "ChkBx(3)"
+      Tab(2).Control(3)=   "TxtBx(18)"
+      Tab(2).Control(4)=   "TxtBx(19)"
+      Tab(2).Control(5)=   "TxtBx(20)"
+      Tab(2).Control(6)=   "TxtBx(21)"
+      Tab(2).Control(7)=   "TxtBx(22)"
+      Tab(2).Control(8)=   "TxtBx(23)"
+      Tab(2).Control(9)=   "TxtBx(24)"
+      Tab(2).Control(10)=   "TxtBx(14)"
+      Tab(2).Control(11)=   "TxtBx(15)"
+      Tab(2).Control(12)=   "TxtBx(25)"
+      Tab(2).Control(13)=   "TxtBx(26)"
+      Tab(2).Control(14)=   "TxtBx(16)"
+      Tab(2).Control(15)=   "TxtBx(17)"
       Tab(2).Control(16)=   "Label19"
-      Tab(2).Control(16).Enabled=   0   'False
-      Tab(2).Control(17)=   "TxtBx(17)"
-      Tab(2).Control(17).Enabled=   0   'False
-      Tab(2).Control(18)=   "TxtBx(16)"
-      Tab(2).Control(18).Enabled=   0   'False
-      Tab(2).Control(19)=   "TxtBx(26)"
-      Tab(2).Control(19).Enabled=   0   'False
-      Tab(2).Control(20)=   "TxtBx(25)"
-      Tab(2).Control(20).Enabled=   0   'False
-      Tab(2).Control(21)=   "TxtBx(15)"
-      Tab(2).Control(21).Enabled=   0   'False
-      Tab(2).Control(22)=   "TxtBx(14)"
-      Tab(2).Control(22).Enabled=   0   'False
-      Tab(2).Control(23)=   "TxtBx(24)"
-      Tab(2).Control(23).Enabled=   0   'False
-      Tab(2).Control(24)=   "TxtBx(23)"
-      Tab(2).Control(24).Enabled=   0   'False
-      Tab(2).Control(25)=   "TxtBx(22)"
-      Tab(2).Control(25).Enabled=   0   'False
-      Tab(2).Control(26)=   "TxtBx(21)"
-      Tab(2).Control(26).Enabled=   0   'False
-      Tab(2).Control(27)=   "TxtBx(20)"
-      Tab(2).Control(27).Enabled=   0   'False
-      Tab(2).Control(28)=   "TxtBx(19)"
-      Tab(2).Control(28).Enabled=   0   'False
-      Tab(2).Control(29)=   "TxtBx(18)"
-      Tab(2).Control(29).Enabled=   0   'False
-      Tab(2).Control(30)=   "ChkBx(3)"
-      Tab(2).Control(30).Enabled=   0   'False
-      Tab(2).Control(31)=   "ChkBx(4)"
-      Tab(2).Control(31).Enabled=   0   'False
-      Tab(2).Control(32)=   "ChkBx(5)"
-      Tab(2).Control(32).Enabled=   0   'False
+      Tab(2).Control(17)=   "lblEmployerDeclaration"
+      Tab(2).Control(18)=   "Label15"
+      Tab(2).Control(19)=   "Label2"
+      Tab(2).Control(20)=   "Label5"
+      Tab(2).Control(21)=   "Label1"
+      Tab(2).Control(22)=   "Label3"
+      Tab(2).Control(23)=   "Label4"
+      Tab(2).Control(24)=   "Label14"
+      Tab(2).Control(25)=   "Label13"
+      Tab(2).Control(26)=   "Label6"
+      Tab(2).Control(27)=   "Label9"
+      Tab(2).Control(28)=   "Label10"
+      Tab(2).Control(29)=   "Label11"
+      Tab(2).Control(30)=   "Label7"
+      Tab(2).Control(31)=   "Label8"
+      Tab(2).Control(32)=   "Label12"
       Tab(2).ControlCount=   33
       TabCaption(3)   =   "General"
       TabPicture(3)   =   "Erdetail.frx":0054
       Tab(3).ControlEnabled=   0   'False
       Tab(3).Control(0)=   "Lab(3)"
-      Tab(3).Control(0).Enabled=   0   'False
       Tab(3).Control(1)=   "Lab(5)"
-      Tab(3).Control(1).Enabled=   0   'False
       Tab(3).Control(2)=   "Lab(13)"
-      Tab(3).Control(2).Enabled=   0   'False
       Tab(3).Control(3)=   "Lab(4)"
-      Tab(3).Control(3).Enabled=   0   'False
       Tab(3).Control(4)=   "Lab(8)"
-      Tab(3).Control(4).Enabled=   0   'False
       Tab(3).Control(5)=   "Lab(7)"
-      Tab(3).Control(5).Enabled=   0   'False
       Tab(3).Control(6)=   "Lab(6)"
-      Tab(3).Control(6).Enabled=   0   'False
       Tab(3).Control(7)=   "Lab(10)"
-      Tab(3).Control(7).Enabled=   0   'False
       Tab(3).Control(8)=   "Lab(9)"
-      Tab(3).Control(8).Enabled=   0   'False
       Tab(3).Control(9)=   "Label18"
-      Tab(3).Control(9).Enabled=   0   'False
       Tab(3).Control(10)=   "Label17"
-      Tab(3).Control(10).Enabled=   0   'False
       Tab(3).Control(11)=   "Label16"
-      Tab(3).Control(11).Enabled=   0   'False
       Tab(3).Control(12)=   "TxtBx(33)"
-      Tab(3).Control(12).Enabled=   0   'False
       Tab(3).Control(13)=   "TxtBx(32)"
-      Tab(3).Control(13).Enabled=   0   'False
       Tab(3).Control(14)=   "TxtBx(31)"
-      Tab(3).Control(14).Enabled=   0   'False
       Tab(3).Control(15)=   "TxtBx(10)"
-      Tab(3).Control(15).Enabled=   0   'False
       Tab(3).Control(16)=   "TxtBx(9)"
-      Tab(3).Control(16).Enabled=   0   'False
       Tab(3).Control(17)=   "TxtBx(8)"
-      Tab(3).Control(17).Enabled=   0   'False
       Tab(3).Control(18)=   "TxtBx(7)"
-      Tab(3).Control(18).Enabled=   0   'False
       Tab(3).Control(19)=   "TxtBx(6)"
-      Tab(3).Control(19).Enabled=   0   'False
       Tab(3).Control(20)=   "TxtBx(13)"
-      Tab(3).Control(20).Enabled=   0   'False
       Tab(3).Control(21)=   "TxtBx(5)"
-      Tab(3).Control(21).Enabled=   0   'False
       Tab(3).Control(22)=   "TxtBx(3)"
-      Tab(3).Control(22).Enabled=   0   'False
       Tab(3).Control(23)=   "TxtBx(4)"
-      Tab(3).Control(23).Enabled=   0   'False
       Tab(3).Control(24)=   "ChkBx(0)"
-      Tab(3).Control(24).Enabled=   0   'False
       Tab(3).Control(25)=   "ChkBx(1)"
-      Tab(3).Control(25).Enabled=   0   'False
       Tab(3).Control(26)=   "ChkBx(2)"
-      Tab(3).Control(26).Enabled=   0   'False
       Tab(3).ControlCount=   27
       Begin VB.CheckBox ChkBx 
          Alignment       =   1  'Right Justify
@@ -214,7 +148,7 @@ Begin VB.Form F_EmployerDetails
          ForeColor       =   &H00800000&
          Height          =   285
          Index           =   5
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   82
          Top             =   6240
          Width           =   5235
@@ -225,7 +159,7 @@ Begin VB.Form F_EmployerDetails
          ForeColor       =   &H00800000&
          Height          =   405
          Index           =   4
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   81
          Top             =   5760
          Width           =   5235
@@ -236,7 +170,7 @@ Begin VB.Form F_EmployerDetails
          ForeColor       =   &H00800000&
          Height          =   405
          Index           =   3
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   80
          Top             =   5280
          Width           =   5235
@@ -351,7 +285,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   11
-         Left            =   -72840
+         Left            =   2160
          TabIndex        =   5
          Top             =   840
          Width           =   1425
@@ -376,7 +310,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   12
-         Left            =   -72840
+         Left            =   2160
          TabIndex        =   6
          Top             =   1200
          Width           =   3450
@@ -445,7 +379,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   18
-         Left            =   3240
+         Left            =   -71760
          TabIndex        =   11
          Top             =   600
          Width           =   2325
@@ -468,7 +402,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   19
-         Left            =   3240
+         Left            =   -71760
          TabIndex        =   12
          Top             =   900
          Width           =   2325
@@ -539,7 +473,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   20
-         Left            =   3240
+         Left            =   -71760
          TabIndex        =   13
          Top             =   1200
          Width           =   2325
@@ -562,7 +496,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   21
-         Left            =   3240
+         Left            =   -71760
          TabIndex        =   14
          Top             =   1500
          Width           =   2325
@@ -585,7 +519,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   22
-         Left            =   3240
+         Left            =   -71760
          TabIndex        =   15
          Top             =   1800
          Width           =   2325
@@ -608,7 +542,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   23
-         Left            =   3240
+         Left            =   -71760
          TabIndex        =   16
          Top             =   2100
          Width           =   2325
@@ -631,7 +565,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   24
-         Left            =   3240
+         Left            =   -71760
          TabIndex        =   17
          Top             =   2400
          Width           =   2325
@@ -723,7 +657,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   14
-         Left            =   3840
+         Left            =   -71160
          TabIndex        =   20
          Top             =   3825
          Width           =   1725
@@ -747,7 +681,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   15
-         Left            =   1680
+         Left            =   -73320
          TabIndex        =   21
          Top             =   4125
          Width           =   3885
@@ -770,7 +704,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   25
-         Left            =   3240
+         Left            =   -71760
          TabIndex        =   18
          Top             =   2700
          Width           =   2325
@@ -793,7 +727,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   26
-         Left            =   3240
+         Left            =   -71760
          TabIndex        =   19
          Top             =   3000
          Width           =   2325
@@ -862,7 +796,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   16
-         Left            =   3840
+         Left            =   -71160
          TabIndex        =   22
          Top             =   4425
          Width           =   1725
@@ -886,7 +820,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   17
-         Left            =   1680
+         Left            =   -73320
          TabIndex        =   23
          Top             =   4725
          Width           =   3885
@@ -909,7 +843,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   27
-         Left            =   -72840
+         Left            =   2160
          TabIndex        =   7
          Top             =   2025
          Width           =   1665
@@ -933,7 +867,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   28
-         Left            =   -72840
+         Left            =   2160
          TabIndex        =   8
          Top             =   2400
          Width           =   1665
@@ -957,7 +891,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   29
-         Left            =   -72840
+         Left            =   2160
          TabIndex        =   9
          Top             =   2760
          Width           =   1665
@@ -981,7 +915,7 @@ Begin VB.Form F_EmployerDetails
       Begin atc2valtext.ValText TxtBx 
          Height          =   285
          Index           =   30
-         Left            =   -72840
+         Left            =   2160
          TabIndex        =   10
          Top             =   3120
          Width           =   2970
@@ -1084,7 +1018,7 @@ Begin VB.Form F_EmployerDetails
          Caption         =   "Brief description"
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   83
          Tag             =   "free,font"
          Top             =   4750
@@ -1103,7 +1037,7 @@ Begin VB.Form F_EmployerDetails
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   79
          Tag             =   "free,font"
          Top             =   5040
@@ -1122,7 +1056,7 @@ Begin VB.Form F_EmployerDetails
          EndProperty
          ForeColor       =   &H000000FF&
          Height          =   1455
-         Left            =   -74820
+         Left            =   180
          TabIndex        =   78
          Top             =   3780
          Width           =   5235
@@ -1173,7 +1107,7 @@ Begin VB.Form F_EmployerDetails
          ForeColor       =   &H00800000&
          Height          =   195
          Index           =   19
-         Left            =   -74760
+         Left            =   240
          TabIndex        =   74
          Top             =   1800
          Width           =   1350
@@ -1194,7 +1128,7 @@ Begin VB.Form F_EmployerDetails
          ForeColor       =   &H00800000&
          Height          =   195
          Index           =   18
-         Left            =   -74760
+         Left            =   240
          TabIndex        =   73
          Top             =   600
          Width           =   1365
@@ -1206,7 +1140,7 @@ Begin VB.Form F_EmployerDetails
          ForeColor       =   &H00800000&
          Height          =   195
          Index           =   17
-         Left            =   -74520
+         Left            =   480
          TabIndex        =   72
          Top             =   3165
          Width           =   375
@@ -1218,7 +1152,7 @@ Begin VB.Form F_EmployerDetails
          ForeColor       =   &H00800000&
          Height          =   195
          Index           =   16
-         Left            =   -74520
+         Left            =   480
          TabIndex        =   71
          Top             =   2790
          Width           =   1200
@@ -1230,7 +1164,7 @@ Begin VB.Form F_EmployerDetails
          ForeColor       =   &H00800000&
          Height          =   195
          Index           =   15
-         Left            =   -74520
+         Left            =   480
          TabIndex        =   70
          Top             =   2445
          Width           =   690
@@ -1242,7 +1176,7 @@ Begin VB.Form F_EmployerDetails
          ForeColor       =   &H00800000&
          Height          =   195
          Index           =   14
-         Left            =   -74520
+         Left            =   480
          TabIndex        =   69
          Top             =   2070
          Width           =   540
@@ -1260,7 +1194,7 @@ Begin VB.Form F_EmployerDetails
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   68
          Top             =   360
          Width           =   2895
@@ -1269,7 +1203,7 @@ Begin VB.Form F_EmployerDetails
          Caption         =   "Amounts included on which Class 1A is not due"
          ForeColor       =   &H00800000&
          Height          =   285
-         Left            =   225
+         Left            =   -74775
          TabIndex        =   67
          Tag             =   "free,font"
          Top             =   4425
@@ -1279,7 +1213,7 @@ Begin VB.Form F_EmployerDetails
          Caption         =   "Brief description"
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   66
          Tag             =   "free,font"
          Top             =   4500
@@ -1313,7 +1247,7 @@ Begin VB.Form F_EmployerDetails
          Caption         =   "Amounts not included on which Class 1A is due"
          ForeColor       =   &H00800000&
          Height          =   270
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   63
          Tag             =   "free,font"
          Top             =   3825
@@ -1332,7 +1266,7 @@ Begin VB.Form F_EmployerDetails
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   180
+         Left            =   -74820
          TabIndex        =   62
          Tag             =   "free,font"
          Top             =   3510
@@ -1342,7 +1276,7 @@ Begin VB.Form F_EmployerDetails
          Caption         =   "Brief description"
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   61
          Tag             =   "free,font"
          Top             =   4125
@@ -1352,7 +1286,7 @@ Begin VB.Form F_EmployerDetails
          Caption         =   "Accounts office reference"
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   60
          Top             =   3000
          Width           =   2055
@@ -1397,7 +1331,7 @@ Begin VB.Form F_EmployerDetails
          Caption         =   "Telephone number"
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   56
          Top             =   2400
          Width           =   1935
@@ -1406,7 +1340,7 @@ Begin VB.Form F_EmployerDetails
          Caption         =   "Tax office reference"
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   55
          Top             =   2700
          Width           =   2175
@@ -1415,7 +1349,7 @@ Begin VB.Form F_EmployerDetails
          Caption         =   "Address line 3"
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   54
          Top             =   1500
          Width           =   2055
@@ -1424,7 +1358,7 @@ Begin VB.Form F_EmployerDetails
          Caption         =   "Address line 4"
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   53
          Top             =   1800
          Width           =   1935
@@ -1433,7 +1367,7 @@ Begin VB.Form F_EmployerDetails
          Caption         =   "Postcode"
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   52
          Top             =   2100
          Width           =   1815
@@ -1466,7 +1400,7 @@ Begin VB.Form F_EmployerDetails
          Caption         =   "Address line 1"
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   49
          Top             =   900
          Width           =   1935
@@ -1475,7 +1409,7 @@ Begin VB.Form F_EmployerDetails
          Caption         =   "Address line 2"
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   48
          Top             =   1200
          Width           =   1695
@@ -1484,7 +1418,7 @@ Begin VB.Form F_EmployerDetails
          Caption         =   "Tax office number"
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   240
+         Left            =   -74760
          TabIndex        =   47
          Top             =   600
          Width           =   1935
@@ -1520,7 +1454,7 @@ Begin VB.Form F_EmployerDetails
          ForeColor       =   &H00800000&
          Height          =   195
          Index           =   12
-         Left            =   -74520
+         Left            =   480
          TabIndex        =   44
          Top             =   1200
          Width           =   1095
@@ -1532,7 +1466,7 @@ Begin VB.Form F_EmployerDetails
          ForeColor       =   &H00800000&
          Height          =   195
          Index           =   11
-         Left            =   -74520
+         Left            =   480
          TabIndex        =   43
          Top             =   880
          Width           =   885
@@ -1613,7 +1547,7 @@ Private Sub B_OK_Click()
 End Sub
 Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
   If AllowElectronicFieldsToBeset Then
-    If ((Shift And vbShiftMask) = vbShiftMask) And ((Shift And vbCtrlMask) = vbCtrlMask) And ((KeyCode = Asc("E")) Or (KeyCode = Asc("e"))) Then
+    If lows.IsControlShiftE(KeyCode, Shift) Then
       'm media
       TxtBx(0).Text = "SCRIBE AND CO"
       TxtBx(6).Text = "The Office"
@@ -1654,6 +1588,7 @@ Private Sub Form_Load()
     s = "Press SHIFT CTRL E to fill with valid values"
   End If
   lblDemoElectronicFields.Caption = s
+  lblDemoElectronicFields.Visible = IsRunningInIDE()
 End Sub
 
 Private Function IFrmGeneral_CheckChanged(c As Control) As Boolean

@@ -1710,7 +1710,7 @@ Private Function SectionAandL(XML_doc As DOMDocument60, er As Employer, ee As Em
   Dim value As Variant, MadeGood As Variant, benefit As Variant, Description As Variant, IRDesc As Variant
   Dim node As IXMLDOMNode, node_asset As IXMLDOMNode
   Dim sText As String, sType As String, sValueDesc As String
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   
   Call xSet("SectionAandL")
   
@@ -1741,12 +1741,12 @@ Private Function SectionAandL(XML_doc As DOMDocument60, er As Employer, ee As Em
     Call Standard_XML_Out(XML_doc, node_asset, "", False, 0, True, MadeGood, True, benefit)
   End If
   
-err_end:
+Err_End:
   Call xReturn("SectionAandL")
   Exit Function
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionAandL", "SectionAandL", "Error in Type A or L Benefits in PAYEOnline.")
-  Resume err_end
+  Resume Err_End
   Resume
 End Function
 
@@ -1755,7 +1755,7 @@ Private Function SectionC(XML_doc As DOMDocument60, er As Employer, ee As Employ
   Dim BenArr(1 To 1) As BEN_CLASS
   Dim value As Variant, MadeGood As Variant, benefit As Variant, Description As Variant, IRDesc As Variant
   Dim node As IXMLDOMNode
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   
   Call xSet("SectionC")
   
@@ -1768,12 +1768,12 @@ Private Function SectionC(XML_doc As DOMDocument60, er As Employer, ee As Employ
     Call Standard_XML_Out(XML_doc, node, "", False, value, True, MadeGood, True, benefit)
   End If
   
-err_end:
+Err_End:
   Call xReturn("SectionC")
   Exit Function
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionC", "SectionC", "Error in Type C Benefits in PAYEOnline.")
-  Resume err_end
+  Resume Err_End
   Resume
 End Function
 Private Function SectionG(XML_doc As DOMDocument60, er As Employer, ee As Employee, benefits_node As IXMLDOMNode) As Boolean
@@ -1800,7 +1800,7 @@ Private Function SectionDandJ(XML_doc As DOMDocument60, er As Employer, ee As Em
   Dim value As Variant, MadeGood As Variant, benefit As Variant, Description As Variant, IRDesc As Variant
   Dim node As IXMLDOMNode
   Dim sText As String, sType As String, sBenefitText As String
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   
   Call xSet("SectionDandGandJ")
   Select Case benclass
@@ -1823,12 +1823,12 @@ Private Function SectionDandJ(XML_doc As DOMDocument60, er As Employer, ee As Em
     Call PAYEAddXMLChild(XML_doc, node, "", sBenefitText, GetXMLAmount(benefit))
   End If
   
-err_end:
+Err_End:
   Call xReturn("SectionDandGandJ")
   Exit Function
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionDandGandJ", "SectionDandGandJ", "Error in Type D, G or J Benefits in PAYEOnline.")
-  Resume err_end
+  Resume Err_End
   Resume
 End Function
 
@@ -1860,7 +1860,7 @@ Private Function SectionE(XML_doc As DOMDocument60, er As Employer, ee As Employ
   Dim NetBenefit As Variant
   Dim node As IXMLDOMNode
   Dim i As Long
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   
   Call xSet("SectionE")
   NetBenefit = 0
@@ -1880,12 +1880,12 @@ Private Function SectionE(XML_doc As DOMDocument60, er As Employer, ee As Employ
     Call PAYEAddXMLChild(XML_doc, node, "", "TaxablePmt", GetXMLAmount(NetBenefit))
   End If
   
-err_end:
+Err_End:
   Call xReturn("SectionE")
   Exit Function
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionE", "SectionE", "Error in Type E Benefits in PAYEOnline.")
-  Resume err_end
+  Resume Err_End
   Resume
 End Function
 
@@ -1894,7 +1894,7 @@ Private Function SectionIandK(XML_doc As DOMDocument60, er As Employer, ee As Em
   Dim value As Variant, MadeGood As Variant, benefit As Variant, Description As Variant, IRDesc As Variant
   Dim node As IXMLDOMNode
   Dim sText As String, sType As String
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   
   Call xSet("SectionIandK")
   
@@ -1917,12 +1917,12 @@ Private Function SectionIandK(XML_doc As DOMDocument60, er As Employer, ee As Em
     Call Standard_XML_Out(XML_doc, node, "", True, value, True, MadeGood, True, benefit)
   End If
   
-err_end:
+Err_End:
   Call xReturn("SectionIandK")
   Exit Function
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionIandK", "SectionIandK", "Error in Type I or K Benefits in PAYEOnline.")
-  Resume err_end
+  Resume Err_End
   Resume
 End Function
 
@@ -2029,13 +2029,13 @@ Private Function SectionH(XML_doc As DOMDocument60, er As Employer, ee As Employ
   Dim dDate As Date, dDischarge As Date
   Dim loans As loans
   Dim ben As IBenefitClass
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   Call xSet("SectionH")
   
   i = ee.GetLoansBenefitIndex
-  If i = 0 Then GoTo err_end
+  If i = 0 Then GoTo Err_End
   Set loans = ee.benefits(i)
-  If loans Is Nothing Then GoTo err_end
+  If loans Is Nothing Then GoTo Err_End
   
     For i = 1 To loans.loans.Count
       Set ben = loans.loans(i)
@@ -2064,12 +2064,12 @@ Private Function SectionH(XML_doc As DOMDocument60, er As Employer, ee As Employ
       End If
     Next
 
-err_end:
+Err_End:
   Call xReturn("SectionH")
   Exit Function
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionH", "SectionH", "Error in Type H Benefits in PAYEOnline.")
-  Resume err_end
+  Resume Err_End
   Resume
 End Function
 Public Function SumBenefit(ByRef Description As Variant, ByRef value As Variant, ByRef MadeGood As Variant, ByRef benefit As Variant, ey As IBenefitClass, ee As Employee, benefits As ObjectList, BenArr() As BEN_CLASS, Optional IRDesc As Variant) As Boolean
@@ -2096,7 +2096,7 @@ Private Function SectionM(XML_doc As DOMDocument60, er As Employer, ee As Employ
   Dim node As IXMLDOMNode, node_Class1A As IXMLDOMNode, node_NonClass1A As IXMLDOMNode
   Dim sText As String, sType As String, sValueDesc As String
   Dim bUCase As Boolean
-  On Error GoTo err_err
+  On Error GoTo Err_Err
 
   Call xSet("SectionM")
   
@@ -2146,12 +2146,12 @@ Private Function SectionM(XML_doc As DOMDocument60, er As Employer, ee As Employ
     End If
   End If
  
-err_end:
+Err_End:
   Call xReturn("SectionM")
   Exit Function
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionM", "SectionM", "Error in Type M Benefits in PAYEOnline.")
-  Resume err_end
+  Resume Err_End
   Resume
 End Function
 
@@ -2162,7 +2162,7 @@ Private Function SectionN(XML_doc As DOMDocument60, er As IBenefitClass, ee As E
   Dim node_travel As IXMLDOMNode, node_HomeTel As IXMLDOMNode, node_NonQualRes As IXMLDOMNode
   Dim node_other As IXMLDOMNode
   Dim sText As String, sType As String, sValueDesc As String
-  On Error GoTo err_err
+  On Error GoTo Err_Err
 
   Call xSet("SectionN")
   
@@ -2223,12 +2223,12 @@ Private Function SectionN(XML_doc As DOMDocument60, er As IBenefitClass, ee As E
     End If
   End If
     
-err_end:
+Err_End:
   Call xReturn("SectionN")
   Exit Function
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionN", "SectionN", "Error in Type O or L Benefits in PAYEOnline.")
-  Resume err_end
+  Resume Err_End
   Resume
 End Function
 
@@ -2371,7 +2371,7 @@ Private Sub CreatePAYEEmployerHead(node_p11d_record_count As IXMLDOMNode, node_p
   Dim sEmployerName As String
   
   
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   
   Call xSet("CreateEmployeeXML")
   
@@ -2437,12 +2437,12 @@ Private Sub CreatePAYEEmployerHead(node_p11d_record_count As IXMLDOMNode, node_p
   Set node_p46_record_count = PAYEAddXMLChild(XML_doc, XMLHeaderNode, "", "P46CarRecordCount", "0")
 
 
-err_end:
+Err_End:
   Call xReturn("CreatePAYEEmplyerHead")
   Exit Sub
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "CreatePAYEEmplyerHead", "CreatePAYEEmplyerHead", "Error creating Head Employee XML in PAYEOnline.")
-  Resume err_end
+  Resume Err_End
   Resume
 End Sub
 'returns if invalid NI
@@ -2459,7 +2459,7 @@ Public Sub CreateEmployeeXML(ByVal XML_doc As DOMDocument60, benefits_node As IX
     Dim node_name As IXMLDOMNode
     Dim sNodeName As String
     Dim node_ee_Details As IXMLDOMNode
-    On Error GoTo err_err
+    On Error GoTo Err_Err
   
     Call xSet("CreateEmployeeXML")
 
@@ -2560,12 +2560,12 @@ Public Sub CreateEmployeeXML(ByVal XML_doc As DOMDocument60, benefits_node As IX
         End If
   
 
-err_end:
+Err_End:
   Call xReturn("CreateEmployeeXML")
   Exit Sub
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "CreateEmployeeXML", "CreateEmployeeXML", "Error creating Employee XML in PAYEOnline.")
-  Resume err_end
+  Resume Err_End
   Resume
 End Sub
 Private Function MarkUpField(ByVal Field As String, Optional ByVal IfZeroLengthUseThis As String = "") As String
@@ -3138,7 +3138,7 @@ Private Sub ValidateXMLToRevenueLocal(ByVal xml As String, ByVal xsdPath As Stri
   Dim ValidateXML As String
   Dim validator As PayeOnlineXMLValidator
   Dim validateForm As F_PayeOnlineValidate
-On Error GoTo err_err
+On Error GoTo Err_Err
 
   ValidateXML = PAyeOnlineValidateXML(xml, xsdPath)
   If (IsRunningInIDE()) Then
@@ -3164,10 +3164,10 @@ On Error GoTo err_err
   'Call XMLErrorPayeOnline("Data sent to HMRC", qs.bstr)
    
 
-err_end:
+Err_End:
   Unload F_PayeOnlineValidate
   Exit Sub
-err_err:
+Err_Err:
   Call ClearAllCursors
   Unload F_PayeOnlineValidate
   If (Err.Number = ERR_PAYE_ONLINE_CANCEL) Then
@@ -3177,18 +3177,18 @@ err_err:
   If MsgBox("Error during local schema validation" & vbCrLf & vbCrLf & Err.Description & vbCrLf & vbCrLf & "Do you still wish to try and submit to the Revenue?", vbYesNo, "Local schema validation") = vbNo Then
     Call Err.Raise(ERR_INVALID, "ValidateXMLToRevenue", "Submission cancelled")
   End If
-  Resume err_end
+  Resume Err_End
   Resume
 End Sub
 Private Function AltovaXMLObject() As Object
   Dim altovaXML As Object
   
-  On Error GoTo err_err:
+  On Error GoTo Err_Err:
 
   Set altovaXML = CreateObject("AltovaXML.Application")
 
   Set AltovaXMLObject = altovaXML
-err_err:
+Err_Err:
   
   Exit Function
 End Function

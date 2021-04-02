@@ -108,6 +108,16 @@ Public Enum CarItems
   Car_AvailableFrom_db
   Car_AvailableTo_db 'bf test
   car_dateReplaced_db
+  car_BenefitFullYear
+  car_ModifiedCashEquivalent
+  car_DeductionForUnavailabilityRoundUpNextWholeNumber
+  car_DeductionForUnavailabilityRoundUpNextWholeNumberOpra
+  car_BenefitForThePeriodTheCarWasAvailable
+  car_ModifiedCashEquivalentForTheYear
+  car_CapitalContributionDeductionApplicableFullYear
+  car_CapitalContributionsAllowedInTheYear
+  car_ProvisionalSum
+  
   'Booleans
 'AM To be removed  car_UseActualMiles
   car_Replacement_db
@@ -146,7 +156,6 @@ Public Enum CarItems
   car_p46NoApprovedCO2Figure_db
   car_unrestrictedPercentage 'EK
   car_OPRAModifiedCashEquivalent
-  car_OPRACapitalContributionsTimeCarPercentage
   car_OPRAProvisionalSum
   
   
@@ -192,36 +201,11 @@ End Function
 Private Function UseWLTPCo2Rates(ByVal ben As IBenefitClass) As Boolean
   UseWLTPCo2Rates = (ben.value(car_Registrationdate_db) >= D_CAR_USE_ELECTRIC_RANGE_MILES)
 End Function
-Private Function IBenefitClass_CalculateBody() As Variant
-  'no calcualate only when required as p46 flags depend on then current dates
-  Dim benFueld As IBenefitClass
-  
-  Dim ben As IBenefitClass
-  Dim dPercentageOfValue As Double
-  Dim vNewLessCheapAccessories As Variant
-  Dim dDateFactor As Double
-  'see booklet 480 for reference for the year 2003/3004
-  
-On Error GoTo err_err
 
-Call xSet("CompanyCar_Calculate")
+Private Function CalculateFuelPercentage(ByVal ben As IBenefitClass) As Double
+  Dim dPercentageOfValue As Double
   
-  Set ben = Me
-  Call ben.SetCalcDefaults
-  'set the engine size flags, <=1400, 1400-2000 etc, these are required for p46
-  Call SetP46CC
-  'set other stuff required elswhere !!!
-  Call SetP46FuelTypeString
-  Call SetP46FrequencyPaymentString
-  Call CompanyCarAvailableDatesValid(ben)
-  ' ******************************** CAR CALC START ***********************************************
-  'the calculation divides into 2 clear areas that get a percentage to apply to the value of the car
-  '1: cars registered pre 01/01/1998
-  
-  If (ben.value(car_p46FuelType_db) = CCFT_HYBRID) And UseWLTPCo2Rates(ben) Then
-      ben.value(car_ElectricRangeMiles_Required) = True
-  End If
-  
+
   If ben.value(car_Registrationdate_db) < p11d32.Rates.value(carNOCO2CUTOFFDATE) Then
     'this is purely based on the CC of the car, even if an official CO2 figure existed, special cases for electricity
     If (ben.value(car_p46FuelType_db) = CCFT_ELECTRIC) Then
@@ -281,38 +265,94 @@ Call xSet("CompanyCar_Calculate")
   dPercentageOfValue = dPercentageOfValue + ben.value(car_supplement)
   dPercentageOfValue = Max(0, Min(dPercentageOfValue, p11d32.Rates.value(carBENPERCENTMAX)))
 
-  ben.value(car_percentage) = dPercentageOfValue
+  
+  CalculateFuelPercentage = dPercentageOfValue
+End Function
+
+Private Function IBenefitClass_CalculateBody() As Variant
+  'no calcualate only when required as p46 flags depend on then current dates
+  Dim benFueld As IBenefitClass
+  
+  Dim ben As IBenefitClass
+  Dim vNewLessCheapAccessories As Variant
+  Dim dDateFactor As Double
+  'see booklet 480 for reference for the year 2003/3004
+  
+On Error GoTo err_err
+
+Call xSet("CompanyCar_Calculate")
+  
+  Set ben = Me
+  Call ben.SetCalcDefaults
+  
+  Call SetP46CC
+  Call SetP46FuelTypeString
+  Call SetP46FrequencyPaymentString
+  Call CompanyCarAvailableDatesValid(ben)
+  ' ******************************** CAR CALC START ***********************************************
+  If (ben.value(car_p46FuelType_db) = CCFT_HYBRID) And UseWLTPCo2Rates(ben) Then
+      ben.value(car_ElectricRangeMiles_Required) = True
+  End If
+  
+  'WS2 I/K/L, WS2B F/G/H
+  ben.value(car_percentage) = CalculateFuelPercentage(ben)
   
   vNewLessCheapAccessories = ben.value(car_AccessoriesNew_db) - ben.value(car_CheapAccessories_db)
   ben.value(car_Accessories) = ben.value(car_AccessoriesOriginal_db) + IIf(vNewLessCheapAccessories > 0, vNewLessCheapAccessories, 0)
+  
+  'WS2/WS2B C
   ben.value(car_GrossPrice) = ben.value(car_ListPrice_db) + ben.value(car_Accessories)
+  'WS2 D
   ben.value(car_CapitalContributionRestricted) = Max(Min(ben.value(car_capitalcontribution_db), p11d32.Rates.value(carMAXCAPCONTRIB)), 0)
+  'WS2 E, WS2B N
+  ben.value(car_Price) = Max(0, ben.value(car_GrossPrice) - ben.value(car_CapitalContributionRestricted))
   
-  If (p11d32.AppYear > 2010) Then
-    'CAD 2010, max list price not restricted anymore to 80000
-    ben.value(car_Price) = Max(0, ben.value(car_GrossPrice) - ben.value(car_CapitalContributionRestricted))
-  Else
-    ben.value(car_Price) = Max(0, Min(ben.value(car_GrossPrice) - ben.value(car_CapitalContributionRestricted), p11d32.Rates.value(carMAXLISTPRICE)))
-  End If
-  
-  
+  'WS2 M
+  ben.value(car_BenefitFullYear) = ben.value(car_Price) * ben.value(car_percentage)
+  'WS2B I
+  ben.value(car_ModifiedCashEquivalent) = ben.value(car_GrossPrice) * ben.value(car_percentage)
+    
+  'WS2 N/365, WS2B J/365
   dDateFactor = dGetDateFactor(0, ben.value(Car_AvailableFrom_db), ben.value(Car_AvailableTo_db), m_BenItems(car_UnavailableDays_db), L_DAYS_UNAVAIL_MIN, False)
-  ben.value(car_OPRACapitalContributionsTimeCarPercentage) = RoundDownEx(ben.value(car_CapitalContributionRestricted) * ben.value(car_percentage), 0)
-
+  
+  'WS2 P
+  ben.value(car_DeductionForUnavailabilityRoundUpNextWholeNumber) = RoundUp(ben.value(car_BenefitFullYear) * (1 - dDateFactor), 0)
+  'WS2B K
+  ben.value(car_DeductionForUnavailabilityRoundUpNextWholeNumberOpra) = RoundUp(ben.value(car_ModifiedCashEquivalent) * (1 - dDateFactor), 0)
+  
+  'WS2 Q
+  ben.value(car_BenefitForThePeriodTheCarWasAvailable) = ben.value(car_BenefitFullYear) - ben.value(car_DeductionForUnavailabilityRoundUpNextWholeNumber)
+  
+  'WS2B L
+  ben.value(car_ModifiedCashEquivalentForTheYear) = ben.value(car_ModifiedCashEquivalent) - ben.value(car_DeductionForUnavailabilityRoundUpNextWholeNumberOpra)
+  
+  
+  'WS2B O
+  ben.value(car_CapitalContributionDeductionApplicableFullYear) = ben.value(car_CapitalContributionRestricted) * ben.value(car_percentage)
+  'WS2B P
+  ben.value(car_CapitalContributionsAllowedInTheYear) = RoundDownEx(ben.value(car_CapitalContributionDeductionApplicableFullYear) * dDateFactor, 0)
+  
+  'WS2B Q
+  ben.value(car_ProvisionalSum) = ben.value(car_OPRA_Ammount_Foregone_db) - ben.value(car_CapitalContributionsAllowedInTheYear)
+  
+  
+  'WS2 R, WS2B R
+  ben.value(car_ActualAmountMadeGood) = CalculatePaymentForPrivateUse(dDateFactor)
+  
+  
   '************* OPRA SPECIFIC START ***************
   
   'Section 121B ITEPA 2003:  Meaning of “modified cash equivalent”
   'ref: https://www.taxworld.co.uk/income-tax/itepa-2003/part-03-employment-income-earnings-and-benefits-etc-treated-as-earnings/chapter-06-taxable-benefits-cars-vans-and-related-benefits/section-121b-meaning-modified-cash-equivalent/
   'calcul as below ref STANDARD_CAR
-  ben.value(car_OPRAModifiedCashEquivalent) = RoundDownEx(Max(0, ben.value(car_GrossPrice)) * ben.value(car_percentage), 0) 'ignore capital contributions for modifled Opra cash equivalent
-  ben.value(car_OPRAModifiedCashEquivalent) = RoundDownEx(ben.value(car_OPRAModifiedCashEquivalent) * dDateFactor, 0)
+  'ben.value(car_OPRAModifiedCashEquivalent) = RoundDownEx(Max(0, ben.value(car_GrossPrice)) * ben.value(car_percentage), 0) 'ignore capital contributions for modifled Opra cash equivalent
+  ben.value(car_OPRAModifiedCashEquivalent) = ben.value(car_ModifiedCashEquivalentForTheYear) - ben.value(car_ActualAmountMadeGood)
   ben.value(car_OPRAModifiedCashEquivalent) = RoundDownEx(ben.value(car_OPRAModifiedCashEquivalent) / (ben.value(car_NumberOfUsers_db)), 0)
   '**** 75 CO2 thing, applies to car aswell?
   
   'Section 121A ITEPA 2003: Optional remuneration arrangements: method of calculating relevant amount
   'ref: https://www.taxworld.co.uk/income-tax/itepa-2003/part-03-employment-income-earnings-and-benefits-etc-treated-as-earnings/chapter-06-taxable-benefits-cars-vans-and-related-benefits/section-121a-optional-remuneration-arrangements-method-calculating-relevant-amount/
-  ben.value(car_OPRAProvisionalSum) = Max(ben.value(car_OPRA_Ammount_Foregone_db) - ben.value(car_OPRACapitalContributionsTimeCarPercentage), 0)
-  'ben.value(car_OPRARelevantAmount) = ben.value(car_OPRAProvisionalSum)
+  ben.value(car_OPRAProvisionalSum) = ben.value(car_ProvisionalSum) '  Max(ben.value(car_OPRA_Ammount_Foregone_db) - ben.value(car_OPRACapitalContributionsTimeCarPercentage), 0)
   '*************** OPRA SPECIFIC END ***************
   
   'STANDARD_CAR START
@@ -322,12 +362,14 @@ Call xSet("CompanyCar_Calculate")
   'STANDARD_CAR END
   
   ben.value(car_cardaysreduction) = ben.value(car_Scaled) - ben.value(ITEM_VALUE_NON_OPRA)  'ben.value(car_Scaled) * (1 - dDateFactor)
-  ben.value(car_ActualAmountMadeGood) = GetPayment(dDateFactor)
+  
   
 
+  Dim bOpraCalc As Boolean 'WS2B
   'Call CalculateOpRAValue(ben, ben.value(car_FuelDontUseAmountForegone),car_OPRAModifiedCashEquivalent)
   'can't use standard calc above as it's close but not quite standard
-  If ((ben.value(car_OPRA_Ammount_Foregone_db) > 0) And (ben.value(car_OPRA_Ammount_Foregone_db) > ben.value(car_OPRAModifiedCashEquivalent)) And (Not ben.value(car_FuelDontUseAmountForegone))) Then
+  bOpraCalc = ((ben.value(car_OPRA_Ammount_Foregone_db) > 0) And (ben.value(car_OPRA_Ammount_Foregone_db) > ben.value(car_OPRAModifiedCashEquivalent)) And (Not ben.value(car_FuelDontUseAmountForegone)))
+  If bOpraCalc Then
     ben.value(ITEM_VALUE) = ben.value(car_OPRAProvisionalSum)
     ben.value(ITEM_OPRA_AMOUNT_FOREGONE_USED_FOR_VALUE) = True
   Else
@@ -339,12 +381,12 @@ Call xSet("CompanyCar_Calculate")
   
   
   ben.value(car_MadeGood_Net) = Min(ben.value(car_carValue), ben.value(car_ActualAmountMadeGood))
-  ben.value(car_carBenefit) = ben.value(car_carValue) - ben.value(car_MadeGood_Net)
   
-  ''dividing benefit by number of shared users
-  'If Not (ben.value(ITEM_OPRA_AMOUNT_FOREGONE_USED_FOR_VALUE)) Then
-  '  ben.value(car_carBenefit) = RoundDownEx(ben.value(car_carBenefit) / (ben.value(car_NumberOfUsers_db)), 0)
-  'End If
+  If (bOpraCalc) Then
+    ben.value(car_carBenefit) = ben.value(ITEM_VALUE) - ben.value(car_MadeGood_Net)
+  Else
+    ben.value(car_carBenefit) = ben.value(ITEM_VALUE) - ben.value(car_MadeGood_Net)
+  End If
   
   
   
@@ -353,7 +395,7 @@ Call xSet("CompanyCar_Calculate")
   
   
   '****************************************** FUEL CALC START ********************************************
-  Call CalculateFuelBen(dPercentageOfValue)  'this is retained from original calc
+  Call CalculateFuelBen(ben.value(car_percentage))  'this is retained from original calc
     
   '****************************************** FUEL CALC END ********************************************
   Call BenCalcNIC(ben)
@@ -975,7 +1017,6 @@ Private Sub IBenefitClass_SetCalcDefaults()
   ben.value(car_FuelDontUseAmountForegone) = False
   ben.value(car_OPRAModifiedCashEquivalent) = 0
   ben.value(car_OPRAProvisionalSum) = 0
-  ben.value(car_OPRACapitalContributionsTimeCarPercentage) = 0
   ben.value(car_ElectricRangeMiles_Required) = False
   
   
@@ -1741,7 +1782,7 @@ SetP46CC_Err:
 End Function
 
 
-Public Function GetPayment(Optional DateFactor As Variant) As Variant
+Private Function CalculatePaymentForPrivateUse(Optional DateFactor As Variant) As Variant
   Dim l As Long
   Dim ben As IBenefitClass
   Dim vPayment
@@ -1769,7 +1810,7 @@ Public Function GetPayment(Optional DateFactor As Variant) As Variant
     End Select
   End With
     
-  GetPayment = vPayment
+  CalculatePaymentForPrivateUse = vPayment
   
 GetPayment_END:
   Call xReturn("GetPayment")

@@ -1,7 +1,7 @@
-CoreClass = 66, 87, 857, 574, 
+CoreClass = 66, 87, 857, 574, Z
 frmErr = 0, 0, 0, 0, C, 22, 22, 674, 408, C
 staticcls = 0, 0, 0, 0, C
-lows = 44, 58, 835, 545, Z
+lows = 44, 58, 835, 545, 
 frmAbout = 0, 0, 0, 0, C, 44, 44, 696, 430, C
 FunctionItem = 0, 0, 0, 0, C
 system = 88, 116, 879, 603, C
@@ -38,4 +38,4 @@ LocaleInfo = 154, 203, 998, 690, C
 BitmapMover = 0, 0, 0, 0, C
 IAutoAuditRecordADO = 0, 0, 0, 0, C
 ObjectHash = 22, 29, 920, 395, 
-Const = 88, 116, 932, 603, C
+Const = 88, 116, 932, 603, 

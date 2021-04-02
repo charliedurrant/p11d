@@ -591,7 +591,7 @@ Private Property Let IBenefitClass_value(ByVal Item As Long, RHS As Variant)
 End Property
 
 Private Property Get IBenefitClass_value(ByVal Item As Long) As Variant
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   Dim ben As IBenefitClass
   Dim benOther As other
   
@@ -619,10 +619,10 @@ Private Property Get IBenefitClass_value(ByVal Item As Long) As Variant
   End If
   'cad cdb thing
   
-err_end:
+Err_End:
   
   Exit Property
-err_err:
+Err_Err:
   Call Err.Raise(Err.Description, ErrorSource(Err, "Value"), Err.Description)
   Resume
 End Property

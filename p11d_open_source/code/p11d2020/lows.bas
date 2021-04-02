@@ -44,7 +44,7 @@ Public Function TrimEx(ByVal s As String)
   Dim p0 As Long, p1 As Long
   Dim i As Long, iLen As Long
 
-On Error GoTo err_err
+On Error GoTo Err_Err
 
   p0 = -1
   p1 = -1
@@ -66,16 +66,16 @@ On Error GoTo err_err
   Next
   
   If (p0 = -1) Then
-    GoTo err_end
+    GoTo Err_End
   End If
   
   s = Mid$(s, p0, (p1 - p0) + 1)
   
-err_end:
+Err_End:
   TrimEx = s
   Exit Function
-err_err:
-  Resume err_end
+Err_Err:
+  Resume Err_End
 End Function
 
 Public Function ConvertUNDATEDDateSQL(sFieldName As String, ByVal bEndOfYear As Boolean) As String
@@ -101,7 +101,7 @@ Public Function TextFileLoad(ByVal sPathAndFile As String) As String
   Dim fr As TCSFileread
   Dim s As String
   
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   Set fr = New TCSFileread
   
   If Not fr.OpenFile(sPathAndFile) Then Call Err.Raise(ERR_FILE_OPEN, "TextFileLoad", "Failed to open file " & sPathAndFile)
@@ -109,9 +109,9 @@ Public Function TextFileLoad(ByVal sPathAndFile As String) As String
   TextFileLoad = s
   
   
-err_end:
+Err_End:
   Exit Function
-err_err:
+Err_Err:
   Call Err.Raise(ERR_FILE_INVALID, ErrorSource(Err, "TextFileLoad"), Err.Description)
   
 End Function
@@ -122,7 +122,7 @@ Public Sub TextFileSave(ByVal sPathAndFile As String, ByRef sText As String)
   'Dim ts As TextStream
   Dim ifile As Long
   
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   
   ifile = 0
   ifile = FreeFile
@@ -142,9 +142,9 @@ Public Sub TextFileSave(ByVal sPathAndFile As String, ByRef sText As String)
   'Set ts = Nothing
   
   
-err_end:
+Err_End:
   Exit Sub
-err_err:
+Err_Err:
   If (Not bClosing) And (ifile <> 0) Then Close #ifile
   Call Err.Raise(ERR_FILE_INVALID, ErrorSource(Err, "TextFileLoad"), Err.Description)
   Resume
@@ -188,7 +188,7 @@ Public Function OpenDB(ws As Workspace, sPathAndFile As String, bExclusive As Bo
   If OpenDB Is Nothing Then Call Err.Raise(ERR_DB_IS_NOTHING, "", "Unable to open database, " & sPathAndFile & ", for unknown reason, check if opened exclusively")
 End Function
 Public Sub SaveTextFile(ByVal path_and_file As String, Text As String)
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   
   Dim fs As FileSystemObject
   Dim ts As TextStream
@@ -198,9 +198,9 @@ Public Sub SaveTextFile(ByVal path_and_file As String, Text As String)
   Call ts.Write(Text)
   Call ts.Close
   
-err_end:
+Err_End:
   Exit Sub
-err_err:
+Err_Err:
   If (Not ts Is Nothing) Then
     Call ts.Close
   End If
@@ -544,7 +544,7 @@ Public Sub ListViewSortByType(ByVal dt As DATABASE_FIELD_TYPES, ByVal lv As List
   Dim lsu As ListSubItem
   Dim iColumnIndex As Long
   
-On Error GoTo err_err
+On Error GoTo Err_Err
 
   iColumnIndex = ColumnHeader.Index - 1
   
@@ -595,9 +595,9 @@ On Error GoTo err_err
   Next
   
   
-err_end:
+Err_End:
   Exit Sub
-err_err:
+Err_Err:
   Call Err.Raise(Err.Number, ErrorSource(Err, "ListViewSorter"), Err.Description)
   Resume
 End Sub
@@ -1041,7 +1041,7 @@ Public Sub RemoveReadOnlyFolder(sFolder As String, Optional ByVal bNoErrors = Fa
   Dim fso As FileSystemObject
   Dim f As folder
   
-On Error GoTo err_err
+On Error GoTo Err_Err
 
   Set fso = New FileSystemObject
   Set f = fso.GetFolder(sFolder)
@@ -1049,10 +1049,10 @@ On Error GoTo err_err
     f.Attributes = f.Attributes - 1
   End If
   
-err_end:
+Err_End:
   Exit Sub
-err_err:
-  If bNoErrors Then Resume err_end
+Err_Err:
+  If bNoErrors Then Resume Err_End
   Call Err.Raise(ERR_DIRECTORY_CREATE, "RemoveReadOnlyFolder", "Failed to remove the read only attribute for the folder: " & sFolder)
 
 End Sub
@@ -1061,7 +1061,7 @@ Public Sub RemoveReadOnlyFile(s As String)
   Dim fso As FileSystemObject
   Dim f As File
   
-On Error GoTo err_err
+On Error GoTo Err_Err
 
   Set fso = New FileSystemObject
   Set f = fso.GetFile(s)
@@ -1069,16 +1069,16 @@ On Error GoTo err_err
     f.Attributes = f.Attributes - 1
   End If
   
-err_end:
+Err_End:
   Exit Sub
-err_err:
+Err_Err:
   Call Err.Raise(ERR_DIRECTORY_CREATE, "RemoveReadOnlyFile", "Failed to remove the read only attribute for the file: " & s)
   Resume
 End Sub
 
 Public Sub MkDirEx(ByVal sPath As String)
 
-On Error GoTo err_err
+On Error GoTo Err_Err
 
   If (Not xMkdir(sPath)) Then
     Call Err.Raise(ERR_DIRECTORY_CREATE, "MKDirEx", "Failed to create the folder " & sPath)
@@ -1117,9 +1117,9 @@ On Error GoTo err_err
 '    End If
 '  Next
 '
-err_end:
+Err_End:
   Exit Sub
-err_err:
+Err_Err:
   Call Err.Raise(Err.Number, ErrorSource(Err, "MkDirEx"), Err.Description)
   Resume
 End Sub
@@ -1278,7 +1278,7 @@ End Function
 Public Function SetPropertiesFromString(ByVal sSearchString As String, ParamArray P()) As String
   Dim iLB As Long, iUB As Long, i As Long
   Dim s As String
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   
   s = sSearchString
     iLB = LBound(P)
@@ -1288,9 +1288,9 @@ Public Function SetPropertiesFromString(ByVal sSearchString As String, ParamArra
     Next
   SetPropertiesFromString = s
   
-err_end:
+Err_End:
   Exit Function
-err_err:
+Err_Err:
   Call Err.Raise(Err.Number, ErrorSource(Err, "SetPropertiesFromString"), Err.Description)
   Resume
 End Function
@@ -1299,7 +1299,7 @@ Public Function SetPropertyFromString(ByVal sSearchString As String, ByVal sProp
   Dim p0 As Integer
   Dim p1 As Integer
   
-  On Error GoTo err_err
+  On Error GoTo Err_Err
   sProperty = LCase$(sProperty)
   sProperty = sProperty & S_STRING_PROPERTY_OPEN
   p0 = InStr(sSearchString, sProperty)
@@ -1311,11 +1311,11 @@ Public Function SetPropertyFromString(ByVal sSearchString As String, ByVal sProp
     SetPropertyFromString = sSearchString & sProperty & sNewValue & S_STRING_PROPERTY_CLOSE
   End If
   
-err_end:
+Err_End:
   Exit Function
-err_err:
+Err_Err:
   Call Err.Raise(Err.Number, ErrorSource(Err, "MkDirEx"), Err.Description)
-  Resume err_end
+  Resume Err_End
 
 End Function
 Public Function ReporterNew() As Reporter
@@ -1536,7 +1536,7 @@ Public Function RoundDouble(ByVal Number As Double, ByVal DecimalPlaces As Long,
   End Select
 End Function
 
-Public Function SetupOpraInput(lbl As Label, textBox As ValText, Optional ByVal sLabelAddtionalText As String = "")
+Public Function SetupOpraInput(lbl As Label, textBox As valText, Optional ByVal sLabelAddtionalText As String = "")
   
   lbl.Caption = S_UDM_OPRA_AMOUNT_FOREGONE & sLabelAddtionalText
   
@@ -1546,7 +1546,13 @@ Public Function SetupOpraInput(lbl As Label, textBox As ValText, Optional ByVal 
   textBox.ToolTipText = S_UDM_OPRA_AMOUNT_FOREGONE_HELP
 End Function
 
-
+Public Function IsControlShiftE(KeyCode As Integer, Shift As Integer) As Boolean
+  If ((Shift And vbShiftMask) = vbShiftMask) And ((Shift And vbCtrlMask) = vbCtrlMask) And ((KeyCode = Asc("E")) Or (KeyCode = Asc("e"))) Then
+    IsControlShiftE = True
+  Else
+    IsControlShiftE = False
+  End If
+End Function
 Public Sub SendKeysEx(Text As Variant, Optional Wait As Boolean = False)
   If (IsRunningInIDE()) Then
     Dim WshShell As Object

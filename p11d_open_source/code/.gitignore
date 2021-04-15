@@ -1,0 +1,15 @@
+.DS_Store
+.Trashes
+*.vbw
+*.csi
+*.exp
+*.lib
+*.lvw
+*.dca
+*.scc
+*.tmp
+*.bak
+*.obj
+*.log
+*.err
+*.msg

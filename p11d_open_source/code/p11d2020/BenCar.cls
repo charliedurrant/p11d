@@ -356,12 +356,13 @@ Call xSet("CompanyCar_Calculate")
   '*************** OPRA SPECIFIC END ***************
   
   'STANDARD_CAR START
-  ben.value(car_Scaled) = RoundDownEx(ben.value(car_Price) * ben.value(car_percentage), 0)
-  ben.value(ITEM_VALUE_NON_OPRA) = RoundDownEx(ben.value(car_Scaled) * dDateFactor, 0)
+  ben.value(car_Scaled) = ben.value(car_BenefitFullYear) 'WS2 M
+  'ben.value(ITEM_VALUE_NON_OPRA) = RoundDownEx(ben.value(car_Scaled) * dDateFactor, 0)
+  ben.value(ITEM_VALUE_NON_OPRA) = ben.value(car_BenefitForThePeriodTheCarWasAvailable) 'WS2 Q
   ben.value(ITEM_VALUE_NON_OPRA) = RoundDownEx(ben.value(ITEM_VALUE_NON_OPRA) / (ben.value(car_NumberOfUsers_db)), 0)
   'STANDARD_CAR END
   
-  ben.value(car_cardaysreduction) = ben.value(car_Scaled) - ben.value(ITEM_VALUE_NON_OPRA)  'ben.value(car_Scaled) * (1 - dDateFactor)
+  ben.value(car_cardaysreduction) = ben.value(car_DeductionForUnavailabilityRoundUpNextWholeNumber) 'WS2 P
   
   
 
@@ -369,6 +370,7 @@ Call xSet("CompanyCar_Calculate")
   'Call CalculateOpRAValue(ben, ben.value(car_FuelDontUseAmountForegone),car_OPRAModifiedCashEquivalent)
   'can't use standard calc above as it's close but not quite standard
   bOpraCalc = ((ben.value(car_OPRA_Ammount_Foregone_db) > 0) And (ben.value(car_OPRA_Ammount_Foregone_db) > ben.value(car_OPRAModifiedCashEquivalent)) And (Not ben.value(car_FuelDontUseAmountForegone)))
+  bOpraCalc = ((ben.value(car_OPRA_Ammount_Foregone_db) > 0) And (ben.value(car_OPRA_Ammount_Foregone_db) > ben.value(car_ModifiedCashEquivalentForTheYear)) And (Not ben.value(car_FuelDontUseAmountForegone)))
   If bOpraCalc Then
     ben.value(ITEM_VALUE) = ben.value(car_OPRAProvisionalSum)
     ben.value(ITEM_OPRA_AMOUNT_FOREGONE_USED_FOR_VALUE) = True
@@ -1782,7 +1784,7 @@ SetP46CC_Err:
 End Function
 
 
-Private Function CalculatePaymentForPrivateUse(Optional DateFactor As Variant) As Variant
+Private Function CalculatePaymentForPrivateUse(DateFactor As Variant) As Variant
   Dim l As Long
   Dim ben As IBenefitClass
   Dim vPayment
@@ -1791,12 +1793,11 @@ Private Function CalculatePaymentForPrivateUse(Optional DateFactor As Variant) A
   
   Set ben = Me
   vPayment = S_ERROR
-  DateFactor = dGetDateFactor(l, ben.value(Car_AvailableFrom_db), ben.value(Car_AvailableTo_db), m_BenItems(car_UnavailableDays_db), L_DAYS_UNAVAIL_MIN, False)
-
+    
   With ben
     Select Case .value(car_p46PaymentFrequency_db)
       Case 0
-        vPayment = (ben.value(car_MadeGood_db) * DateFactor)
+        vPayment = ben.value(car_MadeGood_db) * DateFactor
       Case 1
         vPayment = (ben.value(car_MadeGood_db) * DateFactor * 4)
       Case 2

@@ -342,22 +342,11 @@ Call xSet("CompanyCar_Calculate")
   
   '************* OPRA SPECIFIC START ***************
   
-  'Section 121B ITEPA 2003:  Meaning of “modified cash equivalent”
-  'ref: https://www.taxworld.co.uk/income-tax/itepa-2003/part-03-employment-income-earnings-and-benefits-etc-treated-as-earnings/chapter-06-taxable-benefits-cars-vans-and-related-benefits/section-121b-meaning-modified-cash-equivalent/
-  'calcul as below ref STANDARD_CAR
-  'ben.value(car_OPRAModifiedCashEquivalent) = RoundDownEx(Max(0, ben.value(car_GrossPrice)) * ben.value(car_percentage), 0) 'ignore capital contributions for modifled Opra cash equivalent
-  ben.value(car_OPRAModifiedCashEquivalent) = ben.value(car_ModifiedCashEquivalentForTheYear) - ben.value(car_ActualAmountMadeGood)
-  ben.value(car_OPRAModifiedCashEquivalent) = RoundDownEx(ben.value(car_OPRAModifiedCashEquivalent) / (ben.value(car_NumberOfUsers_db)), 0)
-  '**** 75 CO2 thing, applies to car aswell?
-  
-  'Section 121A ITEPA 2003: Optional remuneration arrangements: method of calculating relevant amount
-  'ref: https://www.taxworld.co.uk/income-tax/itepa-2003/part-03-employment-income-earnings-and-benefits-etc-treated-as-earnings/chapter-06-taxable-benefits-cars-vans-and-related-benefits/section-121a-optional-remuneration-arrangements-method-calculating-relevant-amount/
-  ben.value(car_OPRAProvisionalSum) = ben.value(car_ProvisionalSum) '  Max(ben.value(car_OPRA_Ammount_Foregone_db) - ben.value(car_OPRACapitalContributionsTimeCarPercentage), 0)
+  ben.value(car_OPRAProvisionalSum) = ben.value(car_ProvisionalSum)
   '*************** OPRA SPECIFIC END ***************
   
   'STANDARD_CAR START
   ben.value(car_Scaled) = ben.value(car_BenefitFullYear) 'WS2 M
-  'ben.value(ITEM_VALUE_NON_OPRA) = RoundDownEx(ben.value(car_Scaled) * dDateFactor, 0)
   ben.value(ITEM_VALUE_NON_OPRA) = ben.value(car_BenefitForThePeriodTheCarWasAvailable) 'WS2 Q
   ben.value(ITEM_VALUE_NON_OPRA) = RoundDownEx(ben.value(ITEM_VALUE_NON_OPRA) / (ben.value(car_NumberOfUsers_db)), 0)
   'STANDARD_CAR END
@@ -367,12 +356,12 @@ Call xSet("CompanyCar_Calculate")
   
 
   Dim bOpraCalc As Boolean 'WS2B
-  'Call CalculateOpRAValue(ben, ben.value(car_FuelDontUseAmountForegone),car_OPRAModifiedCashEquivalent)
-  'can't use standard calc above as it's close but not quite standard
-  bOpraCalc = ((ben.value(car_OPRA_Ammount_Foregone_db) > 0) And (ben.value(car_OPRA_Ammount_Foregone_db) > ben.value(car_OPRAModifiedCashEquivalent)) And (Not ben.value(car_FuelDontUseAmountForegone)))
+  
+  ben.value(car_OPRAModifiedCashEquivalent) = ben.value(car_ModifiedCashEquivalentForTheYear)
+  
   bOpraCalc = ((ben.value(car_OPRA_Ammount_Foregone_db) > 0) And (ben.value(car_OPRA_Ammount_Foregone_db) > ben.value(car_ModifiedCashEquivalentForTheYear)) And (Not ben.value(car_FuelDontUseAmountForegone)))
   If bOpraCalc Then
-    ben.value(ITEM_VALUE) = ben.value(car_OPRAProvisionalSum)
+    ben.value(ITEM_VALUE) = RoundDownEx(ben.value(car_OPRAProvisionalSum) / (ben.value(car_NumberOfUsers_db)), 0) ' ben.value(car_OPRAProvisionalSum)
     ben.value(ITEM_OPRA_AMOUNT_FOREGONE_USED_FOR_VALUE) = True
   Else
     ben.value(ITEM_VALUE) = ben.value(ITEM_VALUE_NON_OPRA)
@@ -627,7 +616,6 @@ Private Function IBenefitClass_PrintWkBody(rep As Reporter) As Boolean
   Else
     Call WKOut(rep, WK_ITEM_TEXT, S_WK_NORMAL_ITALIC_FONT & "Reduction according to fuel type ", S_WKCOL_3 & ReportPercentage(ben.value(car_supplement)))
   End If
-  
   Dim MAX_RATE_PERCENTAGE_STRING As String
   MAX_RATE_PERCENTAGE_STRING = RoundDownEx(p11d32.Rates.value(carBENPERCENTMAX) * 100, 0)
   
@@ -656,14 +644,27 @@ Private Function IBenefitClass_PrintWkBody(rep As Reporter) As Boolean
   End If
   Call WKOut(rep, WK_BLANK_LINE)
   
+  Dim bMoreThan2USers As Boolean
+  bMoreThan2USers = lTotalUsers > 1
   
-  'Call WKOut(rep, WK_ITEM_Total, IIf(lTotalUsers > 1, "Assessable car benefit per employee", "Assessable car benefit"), ben.value(car_carBenefit), , True)
-  
-  
-  
-  Call WKOut(rep, WK_ITEM_TEXT, "Payment from the employee for private use of the car", ben.value(car_ActualAmountMadeGood), , , True)
+  If (bMoreThan2USers) Then
+    Dim vBenefitBeforeUserReduction As Variant
+    If (ben.value(ITEM_OPRA_AMOUNT_FOREGONE_USED_FOR_VALUE)) Then 'opra calc
+      vBenefitBeforeUserReduction = ben.value(car_OPRAProvisionalSum)
+    Else
+      vBenefitBeforeUserReduction = ben.value(car_BenefitForThePeriodTheCarWasAvailable)
+    End If
+    Call WKOut(rep, WK_ITEM_TEXT, "Assessable car benefit before number of users taken into account", vBenefitBeforeUserReduction, , True)
+    Call WKOut(rep, WK_ITEM_TEXT, "Divided by number of users", lTotalUsers)
+  End If
+  Call WKOut(rep, WK_ITEM_TEXT, "Less payment from the employee for private use of the car", ben.value(car_ActualAmountMadeGood), , , True)
   
   Call WKOut(rep, WK_ITEM_Total, "Assessable car benefit", ben.value(car_carBenefit), , True)
+  
+  
+  
+  
+  
   
   Call WKOut(rep, WK_SECTION_HEADER, "Fuel Benefit")
   
@@ -685,18 +686,17 @@ Private Function IBenefitClass_PrintWkBody(rep As Reporter) As Boolean
   Call WKOut(rep, WK_ITEM_TEXT, "If so required, did the employee do so?", WKBool(ben, car_actualmadegood_db))
   Call WKOut(rep, WK_ITEM_TEXT, "Number of users?", lTotalUsers)
   Call WKOut(rep, WK_ITEM_TEXT, "Fuel benefit (percentage multiplied by £" & FormatNumber(p11d32.Rates.value(CarFUELBENSETFIGURE), 0, , , vbTrue) & "):", (ben.value(car_GrossFuel)), , True)
-  Call WKOut(rep, WK_ITEM_TEXT, "Divide by number of users '" & lTotalUsers & "'?", ben.value(car_FuelGrossDividedByUsers))
   
-  'If Not (ben.value(car_FuelOPRA_Ammount_Foregone_Used_For_Value)) Then
+  Call WKOut(rep, WK_ITEM_TEXT, "Divided by number of users", ben.value(car_FuelGrossDividedByUsers))
+  
   Call WKOut(rep, WK_ITEM_TEXT, "Reduction for days when car was unavailable", ben.value(car_fueldaysreduction), , , True)
-  'End If
   
   Call WKOut(rep, WK_BLANK_LINE)
   '
   
   Call OPRAWorkingPaperValue(Fuel, rep)
   
-  Call WKOut(rep, WK_ITEM_Total, IIf(lTotalUsers > 1, "Assessable fuel benefit per employee", "Assessable fuel benefit"), ben.value(car_FuelBenefit), , True)
+  Call WKOut(rep, WK_ITEM_Total, "Assessable fuel benefit", ben.value(car_FuelBenefit), , True)
 CAR_PRINTWK_End:
   Call xReturn("CAR_PRINTWK")
   Exit Function

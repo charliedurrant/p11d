@@ -114,6 +114,7 @@ Public Enum CarItems
   car_DeductionForUnavailabilityRoundUpNextWholeNumberOpra
   car_BenefitForThePeriodTheCarWasAvailable
   car_ModifiedCashEquivalentForTheYear
+  car_ModifiedCashEquivalentForTheYearPreNumberOfUsers
   car_CapitalContributionDeductionApplicableFullYear
   car_CapitalContributionsAllowedInTheYear
   car_ProvisionalSum
@@ -324,8 +325,8 @@ Call xSet("CompanyCar_Calculate")
   ben.value(car_BenefitForThePeriodTheCarWasAvailable) = ben.value(car_BenefitFullYear) - ben.value(car_DeductionForUnavailabilityRoundUpNextWholeNumber)
   
   'WS2B L
-  ben.value(car_ModifiedCashEquivalentForTheYear) = ben.value(car_ModifiedCashEquivalent) - ben.value(car_DeductionForUnavailabilityRoundUpNextWholeNumberOpra)
-  
+  ben.value(car_ModifiedCashEquivalentForTheYearPreNumberOfUsers) = ben.value(car_ModifiedCashEquivalent) - ben.value(car_DeductionForUnavailabilityRoundUpNextWholeNumberOpra)
+  ben.value(car_ModifiedCashEquivalentForTheYear) = RoundDownEx(ben.value(car_ModifiedCashEquivalentForTheYearPreNumberOfUsers) / ben.value(car_NumberOfUsers_db), 0)
   
   'WS2B O
   ben.value(car_CapitalContributionDeductionApplicableFullYear) = ben.value(car_CapitalContributionRestricted) * ben.value(car_percentage)
@@ -361,7 +362,7 @@ Call xSet("CompanyCar_Calculate")
   
   bOpraCalc = ((ben.value(car_OPRA_Ammount_Foregone_db) > 0) And (ben.value(car_OPRA_Ammount_Foregone_db) > ben.value(car_ModifiedCashEquivalentForTheYear)) And (Not ben.value(car_FuelDontUseAmountForegone)))
   If bOpraCalc Then
-    ben.value(ITEM_VALUE) = RoundDownEx(ben.value(car_OPRAProvisionalSum) / (ben.value(car_NumberOfUsers_db)), 0) ' ben.value(car_OPRAProvisionalSum)
+    ben.value(ITEM_VALUE) = ben.value(car_OPRAProvisionalSum)
     ben.value(ITEM_OPRA_AMOUNT_FOREGONE_USED_FOR_VALUE) = True
   Else
     ben.value(ITEM_VALUE) = ben.value(ITEM_VALUE_NON_OPRA)
@@ -625,17 +626,41 @@ Private Function IBenefitClass_PrintWkBody(rep As Reporter) As Boolean
   Call WKOut(rep, WK_ITEM_TEXT, "Adjusted car list price multiplied by percentage ", RoundDownEx(ben.value(car_Price) * lFinalPercentage / 100, 0))
   Call WKOut(rep, WK_ITEM_TEXT, "Reduction for days when the car was unavailable", ben.value(car_cardaysreduction), , , True)
   
+  Dim bMoreThan2USers As Boolean
+  bMoreThan2USers = lTotalUsers > 1
  
   If (ben.value(car_OPRA_Ammount_Foregone_db) > 0) Then
     Call WKOut(rep, WK_BLANK_LINE)
     Call WKOut(rep, WK_ITEM_TEXT, "OpRA amount foregone", ben.value(car_OPRA_Ammount_Foregone_db))
-    Call WKOut(rep, WK_ITEM_TEXT, "OpRA modified cash equivalent (ITEPA 2003 - Section 121B)", ben.value(car_OPRAModifiedCashEquivalent))
+    
+    
+    If (bMoreThan2USers) Then
+      Call WKOut(rep, WK_ITEM_TEXT, "OpRA modified cash equivalent (ITEPA 2003 - Section 121B) ", ben.value(car_ModifiedCashEquivalentForTheYearPreNumberOfUsers))
+      Call WKOut(rep, WK_ITEM_TEXT, "Divided by number of users", lTotalUsers)
+      Call WKOut(rep, WK_ITEM_TEXT, "Shared modified cash equivalent (ITEPA 2003 - Section 121B)", ben.value(car_OPRAModifiedCashEquivalent))
+    Else
+      Call WKOut(rep, WK_ITEM_TEXT, "OpRA modified cash equivalent (ITEPA 2003 - Section 121B)", ben.value(car_OPRAModifiedCashEquivalent))
+    End If
+    
+    
     Call WKOut(rep, WK_ITEM_TEXT, "OpRA provisional sum (ITEPA 2003 - Section 121A)", ben.value(car_OPRAProvisionalSum))
     Call WKOut(rep, WK_BLANK_LINE)
+    
+    Dim vOpraSwitchValue As Variant
+    
+    vOpraSwitchValue = Null
+    
+    
     If (ben.value(car_OPRA_Ammount_Foregone_Used_For_Value)) Then
-      Call WKOut(rep, WK_ITEM_TEXT, "'OpRA amount foregone' > 'OpRA modified cash equivalent', using the 'OpRA provisional sum' as the value (ITEPA 2003 - Section 120A)", ben.value(car_OPRAProvisionalSum))
+      If (Not bMoreThan2USers) Then
+        vOpraSwitchValue = ben.value(car_OPRAProvisionalSum)
+      End If
+      Call WKOut(rep, WK_ITEM_TEXT, "'OpRA amount foregone' > 'OpRA modified cash equivalent', using the 'OpRA provisional sum' as the value (ITEPA 2003 - Section 120A)", vOpraSwitchValue)
     Else
-      Call WKOut(rep, WK_ITEM_TEXT, "'OpRA amount foregone' <= to the 'OpRA modified cash equivalent', using the 'standard calculation' for the value (ITEPA 2003 - Section 120A)", ben.value(ITEM_VALUE_NON_OPRA))
+      If (Not bMoreThan2USers) Then
+        vOpraSwitchValue = ben.value(ITEM_VALUE_NON_OPRA)
+      End If
+      Call WKOut(rep, WK_ITEM_TEXT, "'OpRA amount foregone' <= to the 'OpRA modified cash equivalent', using the 'standard calculation' for the value (ITEPA 2003 - Section 120A)", vOpraSwitchValue)
     End If
   
   Else
@@ -644,18 +669,17 @@ Private Function IBenefitClass_PrintWkBody(rep As Reporter) As Boolean
   End If
   Call WKOut(rep, WK_BLANK_LINE)
   
-  Dim bMoreThan2USers As Boolean
-  bMoreThan2USers = lTotalUsers > 1
+  
   
   If (bMoreThan2USers) Then
     Dim vBenefitBeforeUserReduction As Variant
     If (ben.value(ITEM_OPRA_AMOUNT_FOREGONE_USED_FOR_VALUE)) Then 'opra calc
-      vBenefitBeforeUserReduction = ben.value(car_OPRAProvisionalSum)
+      Call WKOut(rep, WK_ITEM_TEXT, "Assessable car benefit before (ignoring number of users)", ben.value(car_OPRAProvisionalSum), , True)
     Else
-      vBenefitBeforeUserReduction = ben.value(car_BenefitForThePeriodTheCarWasAvailable)
+      Call WKOut(rep, WK_ITEM_TEXT, "Assessable car benefit before number of users taken into account", ben.value(car_BenefitForThePeriodTheCarWasAvailable), , True)
+      Call WKOut(rep, WK_ITEM_TEXT, "Divided by number of users", lTotalUsers)
     End If
-    Call WKOut(rep, WK_ITEM_TEXT, "Assessable car benefit before number of users taken into account", vBenefitBeforeUserReduction, , True)
-    Call WKOut(rep, WK_ITEM_TEXT, "Divided by number of users", lTotalUsers)
+
   End If
   Call WKOut(rep, WK_ITEM_TEXT, "Less payment from the employee for private use of the car", ben.value(car_ActualAmountMadeGood), , , True)
   

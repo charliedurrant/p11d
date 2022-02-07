@@ -563,7 +563,7 @@ NEXT_EMPLOYER:
     End If
 
     
-    If (lEmployeesWritten > 0) Then
+    If (lEmployeesWritten > 0) Or (Type_Selected = POT_P11DB_ONLY) Then
       
       m_Prg.Caption = "Completed Paye Online " & lEmployeesWritten & " employees written."
       m_Prg.Indicator = None
@@ -1425,7 +1425,7 @@ Private Function ValidateEmployers(ef As EFiler, Employers As ObjectList) As Boo
      
     
     Set benEmployer = ey
-    If benEmployer.value(employer_EmployeesCount) = 0 Then GoTo NEXT_EMPLOYER
+    If benEmployer.value(employer_EmployeesCount) = 0 And p11d32.PAYEonline.Type_Selected <> POT_P11DB_ONLY Then GoTo NEXT_EMPLOYER
     ' Set ben2 = p11d32.Employers(i)
     
     

@@ -309,7 +309,7 @@ Private Sub CheckIEVersion()
   Dim v As Variant
   Dim iCount As Long, i As Long
   Const SHDOCVW As String = "Shdocvw.dll"
-  On Error GoTo err_err
+  On Error GoTo Err_Err
 
   Dim s As String
   
@@ -343,9 +343,9 @@ Private Sub CheckIEVersion()
     End If
   End If
   
-err_end:
+Err_End:
   Exit Sub
-err_err:
+Err_Err:
   Call Err.Raise(Err.Number, ErrorSource(Err, "CheckIEVersion"), Err.Description)
 End Sub
 
@@ -485,7 +485,7 @@ Private Sub CheckCanSubmitWithAbatecEx(ByVal sApp As String, ByVal sVersion As S
   Dim sError As String
   Dim sResponseText As String
   
-On Error GoTo err_err
+On Error GoTo Err_Err
   
   Call Notify(iNotify, "Checking that PAYE Online submission is enabled, please wait...")
   sError = "Unable to verify whether the Revenue Online services connection is available." & vbCrLf
@@ -515,11 +515,11 @@ On Error GoTo err_err
     End If
   End If
   
-err_end:
+Err_End:
   Exit Sub
-err_err:
+Err_Err:
   If (InStr(1, Err.Description, "503", vbTextCompare) > 0) Then
-    Resume err_end
+    Resume Err_End
   End If
   
   If (Err.Number <> ERR_FAILED_SUBMISSIONS) Then

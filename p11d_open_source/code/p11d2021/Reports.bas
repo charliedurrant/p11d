@@ -94,6 +94,7 @@ Public Const S_WK_NORMAL_FONT As String = "{Arial=7,n}"
 Public Const S_WK_NORMAL_BOLD_FONT As String = "{Arial=7,bn}"
 Public Const S_WK_NORMAL_ITALIC_FONT As String = "{Arial=7,i}"
 Public Const S_WK_RIGHT_BOLD_FONT As String = "{Arial=7,rb}"
+Public Const S_WK_LINE_BREAK_FONT As String = "{Arial=6,n}"
 
 Public Const S_ELMC_MASTER As String = "Control Codes"
 
@@ -737,10 +738,15 @@ Private Function HMITCar(rep As Reporter, ee As Employee, CompanyCar1 As IBenefi
   "{x=83}{Arial=6,ni}details of cars that have" & vbCrLf & _
   "{x=6}{Arial=6,ni}box if the car does not have an approved CO2 figure" & _
   "{x=51}{Arial=6,ni}no approved CO2 figure " & _
-  "{x=83}{Arial=6,ni}no approved CO2 figure " & vbCrLf & vbCrLf)
+  "{x=83}{Arial=6,ni}no approved CO2 figure " & S_WK_LINE_BREAK_FONT & vbCrLf & vbCrLf)
+  
+'Approved zero emissions milage
+  Call rep.Out("{x=6}{Arial=7,n}Approved zero emissions mileage " & _
+  OutLineBoxR(HMIT_CAR_COL1, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, GetApprovedZeroEmissionsMileage(CompanyCar1) & " miles") & _
+  OutLineBoxR(HMIT_CAR_COL2, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, GetApprovedZeroEmissionsMileage(CompanyCar2) & " miles") & _
+  S_WK_LINE_BREAK_FONT & vbCrLf & vbCrLf)
   
   
-
 'KA: Engine size
   Call rep.Out(OutLineBoxR(HMIT_CAR_COL1, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, GetBenItem(CompanyCar1, car_enginesize_db) & "cc") & _
                OutLineBoxR(HMIT_CAR_COL2, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, GetBenItem(CompanyCar2, car_enginesize_db) & "cc") & _
@@ -753,6 +759,7 @@ Private Function HMITCar(rep As Reporter, ee As Employee, CompanyCar1 As IBenefi
   If Not CompanyCar2 Is Nothing Then
     FuelTypeString_Car2 = IIf(GetBenItem(CompanyCar2, car_P46WithdrawnWithoutReplacement), "", GetBenItem(CompanyCar2, car_p46FuelTypeString))
   End If
+  
   Call rep.Out(OutLineBoxR(HMIT_CAR_COL1, L_HMIT_STANDARDBOX_WIDTH / 2, L_HMIT_STANDARDBOX_HEIGHT, FuelTypeString_Car1) & _
                  OutLineBoxR(HMIT_CAR_COL2, L_HMIT_STANDARDBOX_WIDTH / 2, L_HMIT_STANDARDBOX_HEIGHT, FuelTypeString_Car2) & _
                  "{x=6}{Arial=7,n}Type of fuel or power used " & "{Arial=6,ni}Please use the key" & "{Arial=7,n}" & vbCrLf & _
@@ -1414,11 +1421,11 @@ Private Function LineText(ByVal sText As String, Optional ByVal bItalic As Boole
       If bItalic Then
         LineText = sFont & sText & vbCrLf & vbCrLf & vbCrLf
       Else
-        LineText = sFont & "{YREL=100}" & sText & "{YREL=-100}" & vbCrLf & vbCrLf & vbCrLf
+        LineText = sFont & "{YREL=100}" & sText & "{YREL=-100}" & S_WK_LINE_BREAK_FONT & vbCrLf & vbCrLf & vbCrLf
       End If
     End If
   Else
-    LineText = LineText & vbCrLf & vbCrLf & vbCrLf
+    LineText = LineText & S_WK_LINE_BREAK_FONT & vbCrLf & vbCrLf & vbCrLf
   End If
   
 LineText_END:
@@ -3621,6 +3628,33 @@ GetCO2DisplayFigure_Err:
   ' Call ErrorMessage(ERR_ERROR, Err, "GetCO2DisplayFigure", "Error in GetCO2DisplayFigure", "Undefined error.")
   Resume GetCO2DisplayFigure_End
 End Function
+
+Private Function GetApprovedZeroEmissionsMileage(CompanyCar As IBenefitClass) As String
+  On Error GoTo Err_Err
+  Call xSet("GetApprovedZeroEmissionsMileage")
+  Dim value As String
+    
+  If (CompanyCar Is Nothing) Then
+    value = ""
+  Else
+    If Not GetBenItem(CompanyCar, car_ElectricRangeMiles_Required) Then
+      value = "0"
+    Else
+      value = GetBenItem(CompanyCar, car_ElectricRangeMiles_db)
+    End If
+  End If
+
+  GetApprovedZeroEmissionsMileage = value
+  
+Err_End:
+  Call xReturn("GetApprovedZeroEmissionsMileage")
+  Exit Function
+
+Err_Err:
+  Resume Err_End
+End Function
+
+
 Public Function IsManagementReport(ByVal pr As P11D_REPORTS) As Boolean
   
   IsManagementReport = (pr >= [RPT_FIRST_MANAGEMENT]) And (pr <= [RPT_LAST_MANAGEMENT]) And Not p11d32.ReportPrint.GroupHeader(pr)
@@ -3643,7 +3677,7 @@ Public Sub QAManagementReports()
   Dim sFileName
   Set qs = New QString
 
-On Error GoTo err_err
+On Error GoTo Err_Err
 
   If (p11d32.CurrentEmployer Is Nothing) Then
     If p11d32.Employers.CountValid = 0 Then
@@ -3673,9 +3707,9 @@ On Error GoTo err_err
     End If
   End If
 
-err_end:
+Err_End:
   Exit Sub
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "ManagementReportFilesPresent", "QA ManagementReport", Err.Description)
 End Sub
 Public Sub ReportsUserToTree(ByVal tvwReports As TreeView)

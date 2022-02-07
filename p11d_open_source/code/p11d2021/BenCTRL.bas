@@ -1048,6 +1048,7 @@ Public Sub SetCalcDefaultsStandard(ben As IBenefitClass)
 End Sub
 
 Public Sub CalculateOpRAValue(ben As IBenefitClass, Optional forceIgnoreAmountForgone As Boolean = False, Optional iITEM_VALUE_NON_OPRA As Integer = ITEM_VALUE_NON_OPRA, Optional iITEM_OPRA_AMOUNT_FOREGONE As Integer = ITEM_OPRA_AMOUNT_FOREGONE, Optional iITEM_VALUE As Integer = ITEM_VALUE, Optional iITEM_OPRA_AMOUNT_FOREGONE_USED_FOR_VALUE As Integer = ITEM_OPRA_AMOUNT_FOREGONE_USED_FOR_VALUE)
+  
   If (ben.value(iITEM_VALUE_NON_OPRA) < ben.value(iITEM_OPRA_AMOUNT_FOREGONE)) And Not forceIgnoreAmountForgone Then
     ben.value(iITEM_VALUE) = ben.value(iITEM_OPRA_AMOUNT_FOREGONE)
     ben.value(iITEM_OPRA_AMOUNT_FOREGONE_USED_FOR_VALUE) = True

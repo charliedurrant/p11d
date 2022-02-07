@@ -741,16 +741,16 @@ Private Function HMITCar(rep As Reporter, ee As Employee, CompanyCar1 As IBenefi
   "{x=83}{Arial=6,ni}no approved CO2 figure " & S_WK_LINE_BREAK_FONT & vbCrLf & vbCrLf)
   
 'Approved zero emissions milage
-  Call rep.Out("{x=6}{Arial=7,n}Approved zero emissions mileage " & _
+  Call rep.Out("{x=6}{Arial=7,n}Approved zero emissions mileage if hybrid's" & _
   OutLineBoxR(HMIT_CAR_COL1, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, GetApprovedZeroEmissionsMileage(CompanyCar1) & " miles") & _
   OutLineBoxR(HMIT_CAR_COL2, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, GetApprovedZeroEmissionsMileage(CompanyCar2) & " miles") & _
-  S_WK_LINE_BREAK_FONT & vbCrLf & vbCrLf)
+  S_WK_LINE_BREAK_FONT & vbCrLf & "{x=6}{Arial=7,n}CO2 emissions is between 1-50 (inclusive)" & S_WK_LINE_BREAK_FONT & vbCrLf & vbCrLf)
   
   
 'KA: Engine size
   Call rep.Out(OutLineBoxR(HMIT_CAR_COL1, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, GetBenItem(CompanyCar1, car_enginesize_db) & "cc") & _
                OutLineBoxR(HMIT_CAR_COL2, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, GetBenItem(CompanyCar2, car_enginesize_db) & "cc") & _
-               LineText("{x=25}Engine size"))
+               LineText("{x=6}Engine size"))
   
 'KA: Type of fuel or power
   If Not CompanyCar1 Is Nothing Then
@@ -3638,7 +3638,7 @@ Private Function GetApprovedZeroEmissionsMileage(CompanyCar As IBenefitClass) As
     value = ""
   Else
     If Not GetBenItem(CompanyCar, car_ElectricRangeMiles_Required) Then
-      value = "0"
+      value = ""
     Else
       value = GetBenItem(CompanyCar, car_ElectricRangeMiles_db)
     End If

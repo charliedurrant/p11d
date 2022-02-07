@@ -1,0 +1,6 @@
+Query to extract data from latest_vcq
+
+SELECT m.Manufacturer, Replace(Replace(Model,"½",""),"é","e") & " " & Vehicles.Description AS CarModel, Vehicles.Transmission, Vehicles.EngineCapacity, Vehicles.FuelType,Vehicles.CO2 
+FROM (Manufacturers AS m INNER JOIN Models AS mo ON m.ManufacturerID = mo.ManufacturerID) INNER JOIN Vehicles ON mo.ModelID = Vehicles.ModelID;
+
+paste results in to pd co2 table

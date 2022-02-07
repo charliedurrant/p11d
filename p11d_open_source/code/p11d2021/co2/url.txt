@@ -1,0 +1,12 @@
+http://www.vcacarfueldata.org.uk/downloads/latest.asp
+
+or
+
+http://carfueldata.direct.gov.uk/downloads/default.aspx
+
+as of 2011 it is 
+
+
+http://www.vca.gov.uk/vca/fcb/alternative-download-option.asp
+
+then via link on page (full download, was http://www.dft.gov.uk/vca/additional/latest_data/latest_vca_data.zip)

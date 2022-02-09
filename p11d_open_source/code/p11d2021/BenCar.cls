@@ -1129,7 +1129,7 @@ Private Function CO2Percentage(ByVal ben As IBenefitClass) As Double
       Case Is < 51
         Select Case fuelType
           Case CCFT_ELECTRIC
-            Rate = 0
+            Rate = 1
           Case CCFT_HYBRID
             Select Case (electricRangeMiles)
               Case Is >= 130

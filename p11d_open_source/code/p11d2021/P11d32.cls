@@ -564,6 +564,7 @@ Public Function IniSettings(IRW As INI_READ_WRITE) As Boolean
     Call WriteIniEntry(S_INI_SECTION_REPORTS, "EmployeeLetterFontName", p11d32.ReportPrint.EmployeeLetterFontName, p11d32.IniPathAndFile)
     Call WriteIniEntry(S_INI_SECTION_REPORTS, "EmployeeLetterFontSize", p11d32.ReportPrint.EmployeeLetterFontSize, p11d32.IniPathAndFile)
     Call WriteIniEntry(S_INI_SECTION_REPORTS, "P11DTotalValue", p11d32.ReportPrint.P11DTotalValue, p11d32.IniPathAndFile)
+    Call WriteIniEntry(S_INI_SECTION_REPORTS, "DraftReports", p11d32.ReportPrint.DraftReports, p11d32.IniPathAndFile)
     
     Call WriteIniEntry(S_INI_SECTION_REPORTS, "CheckOptions", p11d32.ReportPrint.CheckOptions, p11d32.IniPathAndFile)
     Call WriteIniEntry(S_INI_SECTION_REPORTS, "CheckOrderBy", p11d32.ReportPrint.CHECKORDERBY, p11d32.IniPathAndFile)
@@ -746,8 +747,8 @@ Public Function IniSettings(IRW As INI_READ_WRITE) As Boolean
     p11d32.ReportPrint.PRNLoopLength = GetIniEntry(S_INI_SECTION_REPORTS, "PRNLoopLength", p11d32.ReportPrint.PRNLoopLength, p11d32.IniPathAndFile)
     
     p11d32.ReportPrint.RemeberEmployeeSelection = GetIniEntryBool(S_INI_SECTION_REPORTS, "RemeberEmployeeSelection", True)
-    
-    
+    p11d32.ReportPrint.DraftReports = GetIniEntryBool(S_INI_SECTION_REPORTS, "DraftReports", False)
+      
     
     ' rdc
     p11d32.ReportPrint.DatesOnWorkingPaper = GetIniEntry(S_INI_SECTION_REPORTS, "DatesOnWorkingPaper", False, p11d32.IniPathAndFile)

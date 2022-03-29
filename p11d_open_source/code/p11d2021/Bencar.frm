@@ -37,6 +37,7 @@ Begin VB.Form F_CompanyCar
       _ExtentY        =   6853
       _Version        =   393216
       Style           =   1
+      Tab             =   2
       TabHeight       =   520
       ForeColor       =   8388608
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -50,72 +51,68 @@ Begin VB.Form F_CompanyCar
       EndProperty
       TabCaption(0)   =   "General"
       TabPicture(0)   =   "Bencar.frx":0000
-      Tab(0).ControlEnabled=   -1  'True
-      Tab(0).Control(0)=   "L_Data(9)"
-      Tab(0).Control(0).Enabled=   0   'False
-      Tab(0).Control(1)=   "L_Data(8)"
-      Tab(0).Control(1).Enabled=   0   'False
-      Tab(0).Control(2)=   "L_Data(7)"
-      Tab(0).Control(2).Enabled=   0   'False
-      Tab(0).Control(3)=   "L_Data(19)"
-      Tab(0).Control(3).Enabled=   0   'False
-      Tab(0).Control(4)=   "Label4(16)"
-      Tab(0).Control(4).Enabled=   0   'False
-      Tab(0).Control(5)=   "lblAccessories"
-      Tab(0).Control(5).Enabled=   0   'False
-      Tab(0).Control(6)=   "Label2(2)"
-      Tab(0).Control(6).Enabled=   0   'False
+      Tab(0).ControlEnabled=   0   'False
+      Tab(0).Control(0)=   "B_Acc"
+      Tab(0).Control(1)=   "fraCO2"
+      Tab(0).Control(2)=   "TB_DATA(16)"
+      Tab(0).Control(3)=   "B_Make"
+      Tab(0).Control(4)=   "TB_DATA(8)"
+      Tab(0).Control(5)=   "TB_DATA(9)"
+      Tab(0).Control(6)=   "TB_DATA(7)"
       Tab(0).Control(7)=   "TB_DATA(13)"
-      Tab(0).Control(7).Enabled=   0   'False
-      Tab(0).Control(8)=   "TB_DATA(7)"
-      Tab(0).Control(8).Enabled=   0   'False
-      Tab(0).Control(9)=   "TB_DATA(9)"
-      Tab(0).Control(9).Enabled=   0   'False
-      Tab(0).Control(10)=   "TB_DATA(8)"
-      Tab(0).Control(10).Enabled=   0   'False
-      Tab(0).Control(11)=   "B_Make"
-      Tab(0).Control(11).Enabled=   0   'False
-      Tab(0).Control(12)=   "TB_DATA(16)"
-      Tab(0).Control(12).Enabled=   0   'False
-      Tab(0).Control(13)=   "fraCO2"
-      Tab(0).Control(13).Enabled=   0   'False
-      Tab(0).Control(14)=   "B_Acc"
-      Tab(0).Control(14).Enabled=   0   'False
+      Tab(0).Control(8)=   "Label2(2)"
+      Tab(0).Control(9)=   "lblAccessories"
+      Tab(0).Control(10)=   "Label4(16)"
+      Tab(0).Control(11)=   "L_Data(19)"
+      Tab(0).Control(12)=   "L_Data(7)"
+      Tab(0).Control(13)=   "L_Data(8)"
+      Tab(0).Control(14)=   "L_Data(9)"
       Tab(0).ControlCount=   15
       TabCaption(1)   =   "P46 Details"
       TabPicture(1)   =   "Bencar.frx":001C
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "Op_Data(6)"
-      Tab(1).Control(1)=   "CB_FuelType(0)"
-      Tab(1).Control(2)=   "Op_Data(1)"
-      Tab(1).Control(3)=   "Op_Data(5)"
-      Tab(1).Control(4)=   "Op_Data(2)"
-      Tab(1).Control(5)=   "CB_CARLIST"
-      Tab(1).Control(6)=   "Op_Data(3)"
-      Tab(1).Control(7)=   "Label2(1)"
-      Tab(1).Control(8)=   "Label1"
-      Tab(1).Control(9)=   "L_Data(18)"
-      Tab(1).Control(10)=   "L_Data(17)"
-      Tab(1).Control(11)=   "L_Data(16)"
-      Tab(1).Control(12)=   "L_Data(11)"
-      Tab(1).Control(13)=   "L_Data(5)"
-      Tab(1).Control(14)=   "L_Data(14)"
-      Tab(1).Control(15)=   "L_Data(15)"
+      Tab(1).Control(0)=   "L_Data(15)"
+      Tab(1).Control(1)=   "L_Data(14)"
+      Tab(1).Control(2)=   "L_Data(5)"
+      Tab(1).Control(3)=   "L_Data(11)"
+      Tab(1).Control(4)=   "L_Data(16)"
+      Tab(1).Control(5)=   "L_Data(17)"
+      Tab(1).Control(6)=   "L_Data(18)"
+      Tab(1).Control(7)=   "Label1"
+      Tab(1).Control(8)=   "Label2(1)"
+      Tab(1).Control(9)=   "Op_Data(3)"
+      Tab(1).Control(10)=   "CB_CARLIST"
+      Tab(1).Control(11)=   "Op_Data(2)"
+      Tab(1).Control(12)=   "Op_Data(5)"
+      Tab(1).Control(13)=   "Op_Data(1)"
+      Tab(1).Control(14)=   "CB_FuelType(0)"
+      Tab(1).Control(15)=   "Op_Data(6)"
       Tab(1).ControlCount=   16
       TabCaption(2)   =   "Fuel Benefit"
       TabPicture(2)   =   "Bencar.frx":0038
-      Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "Op_Data(12)"
-      Tab(2).Control(1)=   "CB_FuelType(1)"
-      Tab(2).Control(2)=   "fraFuelBenefit"
-      Tab(2).Control(3)=   "Op_Data(10)"
-      Tab(2).Control(4)=   "Op_Data(9)"
+      Tab(2).ControlEnabled=   -1  'True
+      Tab(2).Control(0)=   "lblFuelType"
+      Tab(2).Control(0).Enabled=   0   'False
+      Tab(2).Control(1)=   "Label2(3)"
+      Tab(2).Control(1).Enabled=   0   'False
+      Tab(2).Control(2)=   "L_Data(6)"
+      Tab(2).Control(2).Enabled=   0   'False
+      Tab(2).Control(3)=   "TB_DATA(17)"
+      Tab(2).Control(3).Enabled=   0   'False
+      Tab(2).Control(4)=   "TB_DATA(14)"
+      Tab(2).Control(4).Enabled=   0   'False
       Tab(2).Control(5)=   "Op_Data(8)"
-      Tab(2).Control(6)=   "TB_DATA(14)"
-      Tab(2).Control(7)=   "TB_DATA(17)"
-      Tab(2).Control(8)=   "L_Data(6)"
-      Tab(2).Control(9)=   "Label2(3)"
-      Tab(2).Control(10)=   "lblFuelType"
+      Tab(2).Control(5).Enabled=   0   'False
+      Tab(2).Control(6)=   "Op_Data(9)"
+      Tab(2).Control(6).Enabled=   0   'False
+      Tab(2).Control(7)=   "Op_Data(10)"
+      Tab(2).Control(7).Enabled=   0   'False
+      Tab(2).Control(8)=   "fraFuelBenefit"
+      Tab(2).Control(8).Enabled=   0   'False
+      Tab(2).Control(9)=   "CB_FuelType(1)"
+      Tab(2).Control(9).Enabled=   0   'False
+      Tab(2).Control(10)=   "Op_Data(12)"
+      Tab(2).Control(10).Enabled=   0   'False
       Tab(2).ControlCount=   11
       Begin VB.CheckBox Op_Data 
          Alignment       =   1  'Right Justify
@@ -132,7 +129,7 @@ Begin VB.Form F_CompanyCar
          ForeColor       =   &H00800000&
          Height          =   195
          Index           =   12
-         Left            =   -74940
+         Left            =   60
          TabIndex        =   56
          Tag             =   "free,font"
          Top             =   950
@@ -152,7 +149,7 @@ Begin VB.Form F_CompanyCar
          Height          =   315
          Index           =   1
          ItemData        =   "Bencar.frx":0054
-         Left            =   -73455
+         Left            =   1545
          List            =   "Bencar.frx":0056
          Style           =   2  'Dropdown List
          TabIndex        =   57
@@ -173,7 +170,7 @@ Begin VB.Form F_CompanyCar
             Strikethrough   =   0   'False
          EndProperty
          Height          =   285
-         Left            =   3015
+         Left            =   -71985
          TabIndex        =   13
          Top             =   1395
          Width           =   1215
@@ -192,7 +189,7 @@ Begin VB.Form F_CompanyCar
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   1005
-         Left            =   60
+         Left            =   -74940
          TabIndex        =   61
          Top             =   1710
          Width           =   4305
@@ -327,7 +324,7 @@ Begin VB.Form F_CompanyCar
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   1200
-         Left            =   -74950
+         Left            =   50
          TabIndex        =   59
          Top             =   1750
          Width           =   4215
@@ -428,7 +425,7 @@ Begin VB.Form F_CompanyCar
       Begin atc2valtext.ValText TB_DATA 
          Height          =   255
          Index           =   16
-         Left            =   3870
+         Left            =   -71130
          TabIndex        =   17
          Tag             =   "FREE,FONT"
          Top             =   2745
@@ -464,7 +461,7 @@ Begin VB.Form F_CompanyCar
             Strikethrough   =   0   'False
          EndProperty
          Height          =   285
-         Left            =   3000
+         Left            =   -72000
          TabIndex        =   10
          Top             =   420
          Width           =   1215
@@ -484,7 +481,7 @@ Begin VB.Form F_CompanyCar
          ForeColor       =   &H00800000&
          Height          =   240
          Index           =   10
-         Left            =   -74940
+         Left            =   60
          TabIndex        =   55
          Tag             =   "free,font"
          Top             =   700
@@ -505,7 +502,7 @@ Begin VB.Form F_CompanyCar
          ForeColor       =   &H00800000&
          Height          =   195
          Index           =   9
-         Left            =   -74940
+         Left            =   60
          TabIndex        =   54
          Tag             =   "free,font"
          Top             =   500
@@ -526,7 +523,7 @@ Begin VB.Form F_CompanyCar
          ForeColor       =   &H00800000&
          Height          =   195
          Index           =   8
-         Left            =   -74940
+         Left            =   60
          TabIndex        =   53
          Tag             =   "free,font"
          Top             =   250
@@ -686,7 +683,7 @@ Begin VB.Form F_CompanyCar
       Begin atc2valtext.ValText TB_DATA 
          Height          =   285
          Index           =   8
-         Left            =   1035
+         Left            =   -73965
          TabIndex        =   12
          Tag             =   "free,font"
          Top             =   1085
@@ -710,7 +707,7 @@ Begin VB.Form F_CompanyCar
       Begin atc2valtext.ValText TB_DATA 
          Height          =   285
          Index           =   9
-         Left            =   645
+         Left            =   -74355
          TabIndex        =   11
          Tag             =   "free,font"
          Top             =   745
@@ -735,7 +732,7 @@ Begin VB.Form F_CompanyCar
       Begin atc2valtext.ValText TB_DATA 
          Height          =   285
          Index           =   7
-         Left            =   645
+         Left            =   -74355
          TabIndex        =   9
          Tag             =   "free,font"
          Top             =   405
@@ -785,7 +782,7 @@ Begin VB.Form F_CompanyCar
       Begin atc2valtext.ValText TB_DATA 
          Height          =   285
          Index           =   13
-         Left            =   3015
+         Left            =   -71985
          TabIndex        =   18
          Tag             =   "free,font"
          Top             =   3060
@@ -812,7 +809,7 @@ Begin VB.Form F_CompanyCar
       Begin atc2valtext.ValText TB_DATA 
          Height          =   285
          Index           =   14
-         Left            =   -71990
+         Left            =   3010
          TabIndex        =   70
          Tag             =   "free,font"
          Top             =   3000
@@ -839,7 +836,7 @@ Begin VB.Form F_CompanyCar
       Begin atc2valtext.ValText TB_DATA 
          Height          =   285
          Index           =   17
-         Left            =   -71800
+         Left            =   3200
          TabIndex        =   69
          Tag             =   "FREE,FONT"
          Top             =   1500
@@ -881,7 +878,7 @@ Begin VB.Form F_CompanyCar
          ForeColor       =   &H00800000&
          Height          =   195
          Index           =   6
-         Left            =   -74940
+         Left            =   60
          TabIndex        =   71
          Tag             =   "FREE,FONT"
          Top             =   1500
@@ -905,7 +902,7 @@ Begin VB.Form F_CompanyCar
          ForeColor       =   &H00800000&
          Height          =   195
          Index           =   3
-         Left            =   -74940
+         Left            =   60
          TabIndex        =   65
          Tag             =   "free,font"
          Top             =   3000
@@ -929,7 +926,7 @@ Begin VB.Form F_CompanyCar
          ForeColor       =   &H00800000&
          Height          =   195
          Index           =   2
-         Left            =   60
+         Left            =   -74940
          TabIndex        =   64
          Tag             =   "free,font"
          Top             =   3060
@@ -948,7 +945,7 @@ Begin VB.Form F_CompanyCar
             Strikethrough   =   0   'False
          EndProperty
          Height          =   285
-         Left            =   1020
+         Left            =   -73980
          TabIndex        =   40
          Tag             =   "free,font"
          Top             =   1395
@@ -968,7 +965,7 @@ Begin VB.Form F_CompanyCar
          ForeColor       =   &H00800000&
          Height          =   255
          Index           =   16
-         Left            =   45
+         Left            =   -74955
          TabIndex        =   58
          Tag             =   "free,font"
          Top             =   2745
@@ -987,7 +984,7 @@ Begin VB.Form F_CompanyCar
          EndProperty
          ForeColor       =   &H00800000&
          Height          =   255
-         Left            =   -74940
+         Left            =   60
          TabIndex        =   52
          Tag             =   "free,font"
          Top             =   1200
@@ -1206,7 +1203,7 @@ Begin VB.Form F_CompanyCar
          ForeColor       =   &H00800000&
          Height          =   285
          Index           =   19
-         Left            =   90
+         Left            =   -74910
          TabIndex        =   44
          Tag             =   "free,font"
          Top             =   750
@@ -1230,7 +1227,7 @@ Begin VB.Form F_CompanyCar
          ForeColor       =   &H00800000&
          Height          =   285
          Index           =   7
-         Left            =   90
+         Left            =   -74910
          TabIndex        =   43
          Tag             =   "free,font"
          Top             =   405
@@ -1254,7 +1251,7 @@ Begin VB.Form F_CompanyCar
          ForeColor       =   &H00800000&
          Height          =   285
          Index           =   8
-         Left            =   90
+         Left            =   -74910
          TabIndex        =   42
          Tag             =   "free,font"
          Top             =   1080
@@ -1278,7 +1275,7 @@ Begin VB.Form F_CompanyCar
          ForeColor       =   &H00800000&
          Height          =   285
          Index           =   9
-         Left            =   90
+         Left            =   -74910
          TabIndex        =   41
          Tag             =   "free,font"
          Top             =   1395
@@ -2246,6 +2243,7 @@ Private Function IFrmGeneral_CheckChanged(c As Control) As Boolean
             bDirty = CheckTextInput(.Text, benefit, car_enginesize_db)
           Case 12
             bDirty = CheckTextInput(.Text, benefit, car_p46CarbonDioxide_db)
+            If (bDirty) Then Call CO2StuffChanged
           Case 13
             bDirty = CheckTextInput(.Text, benefit, ITEM_OPRA_AMOUNT_FOREGONE)
           Case 14
@@ -2326,9 +2324,9 @@ Private Function IFrmGeneral_CheckChanged(c As Control) As Boolean
     End Select
   End With
   IFrmGeneral_CheckChanged = AfterCheckChanged(c, Me, bDirty)
+  
   If (bDirty) Then
     lblAccessories = benefit.value(car_Accessories)
-    
     Call electricRangeMiles
   End If
   
@@ -2588,14 +2586,12 @@ End Function
 
 Private Sub electricRangeMiles()
   Dim b As Boolean
-  
-  b = benefit.value(car_p46FuelType_db) = COMPANY_CAR_FUEL_TYPE.CCFT_HYBRID
+    
+  b = benefit.value(car_ElectricRangeMiles_Required)
   
   TB_Data(17).Visible = b
   L_Data(6).Visible = b
   TB_Data(17).Validate = b
-  
-
 End Sub
 Private Sub CO2StuffChanged()
    Dim bCO2Required As Boolean
@@ -2619,6 +2615,7 @@ Private Sub CO2StuffChanged()
    Else
      Call EnableFrame(Me, fraFuelBenefit, benefit.value(car_privatefuel_db))
    End If
+   
    
    If (Not fraFuelBenefit.Enabled) Then 'WE ARE ELECTRIC
     

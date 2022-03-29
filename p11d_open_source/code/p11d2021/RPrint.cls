@@ -275,6 +275,8 @@ Private m_DefaultSelectEmployeeReportIndex As Long
 Private m_DefaultReportIndex As Long
 Private m_RepSettings(RPT_START To RPT_END) As REPORT_SETTINGS
 Private m_EmployeeLetterPath As String
+Private m_DraftReports As Boolean
+
 Public Property Get ReportSettingsIgnoreZeroOnly(ByVal rpt As P11D_REPORTS) As Boolean
   ReportSettingsIgnoreZeroOnly = m_RepSettings(rpt).IgnoreZeroOnly
 End Property
@@ -1550,7 +1552,7 @@ Public Sub ToolBarPreview(CurrentForm As Form)
     If ibf.benclass = BC_NONSHAREDVANS_G Then
       If ibf.benefit Is Nothing Then
         If p11d32.CurrentEmployer.CurrentEmployee.AnyVanBenefit Then
-          Set ben = p11d32.CurrentEmployer.CurrentEmployee.NonSharedVans
+          Set ben = p11d32.CurrentEmployer.CurrentEmployee.nonSharedVans
         End If
       Else
         Set ben = ibf.benefit
@@ -1731,14 +1733,19 @@ IsMasterLetterFile_ERR:
   Resume IsMasterLetterFile_END
 End Function
 
+
 Public Property Get DraftReports() As Boolean
-  Dim bDraftReports As Boolean
-  
-  bDraftReports = p11d32.JuneRelease
-  If Not IsRunningInIDE Then
-    bDraftReports = bDraftReports Or DraftReportsp46
-  End If
-  DraftReports = bDraftReports
+  'Dim bDraftReports As Boolean
+ '
+ ' bDraftReports = p11d32.JuneRelease
+ ' If Not IsRunningInIDE Then
+ '   bDraftReports = bDraftReports Or DraftReportsp46
+ ' End If
+ ' DraftReports = bDraftReports
+  DraftReports = m_DraftReports
+End Property
+Public Property Let DraftReports(ByVal value As Boolean)
+ m_DraftReports = value
 End Property
 Public Property Get DraftReportsp46() As Boolean
    If Not IsRunningInIDE Then

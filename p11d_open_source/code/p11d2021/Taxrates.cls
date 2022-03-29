@@ -538,7 +538,11 @@ Public Function GetInterestRate(ByVal d0 As Date, IT As INTERESTRATE_TYPE) As Do
   For i = OL.Count To 1 Step -1
     Set li = OL.Item(i)
     If d0 >= li.dtStartDate Then
-      GetInterestRate = li.dRate
+      If (IT = IT_STERLING) Then
+        GetInterestRate = p11d32.Rates.value(accomInterestRate)
+      Else
+        GetInterestRate = li.dRate
+      End If
       Exit For
     End If
   Next i

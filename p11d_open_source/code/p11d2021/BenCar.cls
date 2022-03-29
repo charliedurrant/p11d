@@ -291,7 +291,7 @@ Call xSet("CompanyCar_Calculate")
   Call SetP46FrequencyPaymentString
   Call CompanyCarAvailableDatesValid(ben)
   ' ******************************** CAR CALC START ***********************************************
-  If (ben.value(car_p46FuelType_db) = CCFT_HYBRID) And UseWLTPCo2Rates(ben) Then
+  If (ben.value(car_p46FuelType_db) = CCFT_HYBRID) And UseWLTPCo2Rates(ben) And ben.value(car_p46CarbonDioxide_db) < 51 Then
       ben.value(car_ElectricRangeMiles_Required) = True
   End If
   

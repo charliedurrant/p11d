@@ -1,8 +1,8 @@
 VERSION 5.00
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
-Object = "{A7CE771F-05B2-43CF-9650-ED841A9049FA}#1.0#0"; "atc3FolderBrowser.OCX"
-Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "ATC2VTEXT.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{A7CE771F-05B2-43CF-9650-ED841A9049FA}#1.0#0"; "ATC3FolderBrowser.ocx"
+Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "atc2vtext.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form F_PrintOptions 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Print options"
@@ -32,15 +32,15 @@ Begin VB.Form F_PrintOptions
       TabCaption(0)   =   "HMIT"
       TabPicture(0)   =   "F_PrintOptions.frx":0000
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "fmeHMITSections"
+      Tab(0).Control(0)=   "fraReportTotalValue"
       Tab(0).Control(1)=   "fmeHMITSectionChoice"
-      Tab(0).Control(2)=   "fraReportTotalValue"
+      Tab(0).Control(2)=   "fmeHMITSections"
       Tab(0).ControlCount=   3
       TabCaption(1)   =   "Employee Letter"
       TabPicture(1)   =   "F_PrintOptions.frx":001C
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "fraLetters"
-      Tab(1).Control(1)=   "fraEmployeeLetter"
+      Tab(1).Control(0)=   "fraEmployeeLetter"
+      Tab(1).Control(1)=   "fraLetters"
       Tab(1).ControlCount=   2
       TabCaption(2)   =   "Other"
       TabPicture(2)   =   "F_PrintOptions.frx":0038
@@ -211,6 +211,14 @@ Begin VB.Form F_PrintOptions
          TabIndex        =   28
          Top             =   4800
          Width           =   5700
+         Begin VB.CheckBox chkDraftReports 
+            Caption         =   "Draft reports"
+            Height          =   240
+            Left            =   2520
+            TabIndex        =   76
+            Top             =   1485
+            Width           =   2490
+         End
          Begin VB.CheckBox chkRememberEmployeeSelection 
             Caption         =   "Remember employee selection"
             Height          =   375
@@ -782,6 +790,10 @@ Private Sub chkChecksAutoRefresh_Click()
   p11d32.ReportPrint.ChecksAutoRefresh = ChkBoxToBool(chkChecksAutoRefresh)
 End Sub
 
+Private Sub chkDraftReports_Click()
+  p11d32.ReportPrint.DraftReports = ChkBoxToBool(chkDraftReports)
+End Sub
+
 Private Sub chkDatesOnWorkingPaper_Click()
   p11d32.ReportPrint.DatesOnWorkingPaper = ChkBoxToBool(chkDatesOnWorkingPaper)
 End Sub
@@ -1013,6 +1025,8 @@ Public Function SettingsToScreen() As Boolean
   chkA4ForcePrint.value = BoolToChkBox(p11d32.ReportPrint.A4ForcePrint)
   chkTimeStamp.value = BoolToChkBox(p11d32.ReportPrint.TimeStamp) 'JN code
   chkPrintedEmployees.value = BoolToChkBox(p11d32.ReportPrint.PrintedEmployees)
+  chkDraftReports = BoolToChkBox(p11d32.ReportPrint.DraftReports)
+  
   optHMITSectionChoice_Click (-1)
   optReportTotalValue_Click (-1)
   chkHMITSections_Click (-1)

@@ -563,19 +563,20 @@ Private Function IBenefitClass_PrintWkBody(rep As Reporter) As Boolean
   
   Call WKOut(rep, WK_SECTION_BREAK)
   
-  Set OL = p11d32.Rates.GetInterestRatesInYear(ben.value(ln_LoanCurrencyIndex))
   
-  If Not OL Is Nothing Then
-    Call WKOut(rep, WK_SECTION_HEADER, "Official interest rates:")
-    Call WKTblColXOffsets(10, 25)
-    Call WKTblColFormats("rn", "rn")
-    Call WKTableHeadings(rep, "From", "Rate")
-    For i = 1 To OL.Count
-      Set li = OL(i)
-      Call WKTableRow(rep, li.dtStartDate, Format$(li.dRate, "Percent"))
-    Next
-    Call WKOut(rep, WK_SECTION_BREAK)
-  End If
+ 'Set OL = p11d32.Rates.GetInterestRatesInYear(ben.value(ln_LoanCurrencyIndex))
+ '
+ ' If Not OL Is Nothing Then
+ '   Call WKOut(rep, WK_SECTION_HEADER, "Official interest rates:")
+ '   Call WKTblColXOffsets(10, 25)
+ '   Call WKTblColFormats("rn", "rn")
+ '   Call WKTableHeadings(rep, "From", "Rate")
+ '   For i = 1 To OL.Count
+ '     Set li = OL(i)
+ '     Call WKTableRow(rep, li.dtStartDate, Format$(li.dRate, "Percent"))
+ '   Next
+ '   Call WKOut(rep, WK_SECTION_BREAK)
+ ' End If
     
   Call WKOut(rep, WK_SECTION_HEADER, "Notes to the employee: ")
   

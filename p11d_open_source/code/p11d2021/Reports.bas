@@ -3630,14 +3630,14 @@ GetCO2DisplayFigure_Err:
 End Function
 
 Private Function GetApprovedZeroEmissionsMileage(CompanyCar As IBenefitClass) As String
-  On Error GoTo Err_Err
+  On Error GoTo err_err
   Call xSet("GetApprovedZeroEmissionsMileage")
   Dim value As String
     
   If (CompanyCar Is Nothing) Then
     value = ""
   Else
-    If Not GetBenItem(CompanyCar, car_ElectricRangeMiles_Required) Then
+    If Not GetBenItem(CompanyCar, car_ElectricRangeMiles_NeedToInput) Then
       value = ""
     Else
       value = GetBenItem(CompanyCar, car_ElectricRangeMiles_db)
@@ -3646,12 +3646,12 @@ Private Function GetApprovedZeroEmissionsMileage(CompanyCar As IBenefitClass) As
 
   GetApprovedZeroEmissionsMileage = value
   
-Err_End:
+err_end:
   Call xReturn("GetApprovedZeroEmissionsMileage")
   Exit Function
 
-Err_Err:
-  Resume Err_End
+err_err:
+  Resume err_end
 End Function
 
 
@@ -3677,7 +3677,7 @@ Public Sub QAManagementReports()
   Dim sFileName
   Set qs = New QString
 
-On Error GoTo Err_Err
+On Error GoTo err_err
 
   If (p11d32.CurrentEmployer Is Nothing) Then
     If p11d32.Employers.CountValid = 0 Then
@@ -3707,9 +3707,9 @@ On Error GoTo Err_Err
     End If
   End If
 
-Err_End:
+err_end:
   Exit Sub
-Err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "ManagementReportFilesPresent", "QA ManagementReport", Err.Description)
 End Sub
 Public Sub ReportsUserToTree(ByVal tvwReports As TreeView)

@@ -2111,7 +2111,7 @@ On Error GoTo BenefitOn_Err
      
     TB_Data(13).Text = .value(ITEM_OPRA_AMOUNT_FOREGONE)
     TB_Data(14).Text = .value(car_FuelOPRA_Ammount_Foregone_db)
-    Call electricRangeMiles
+    
   
   End With
 BenefitOn_End:
@@ -2307,7 +2307,6 @@ Private Function IFrmGeneral_CheckChanged(c As Control) As Boolean
            bDirty = i <> benefit.value(car_p46FuelType_db)
            If (bDirty) Then
              benefit.value(car_p46FuelType_db) = i
-             Call CO2StuffChanged
            End If
       Case "L_Data"
         Select Case .Index
@@ -2327,7 +2326,7 @@ Private Function IFrmGeneral_CheckChanged(c As Control) As Boolean
   
   If (bDirty) Then
     lblAccessories = benefit.value(car_Accessories)
-    Call electricRangeMiles
+    Call CO2StuffChanged
   End If
   
     
@@ -2587,7 +2586,7 @@ End Function
 Private Sub electricRangeMiles()
   Dim b As Boolean
     
-  b = benefit.value(car_ElectricRangeMiles_Required)
+  b = benefit.value(car_ElectricRangeMiles_NeedToInput)
   
   TB_Data(17).Visible = b
   L_Data(6).Visible = b
@@ -2639,6 +2638,8 @@ Private Sub CO2StuffChanged()
    TB_Data(11).Enabled = NoOfficalCO2.Enabled = lblEmissions.Enabled = CO2Level.Enabled = bCO2Required
    
    TB_Data(11).Validate = CO2Level.Validate = bCO2Required
+   
+   Call electricRangeMiles
 End Sub
 Private Property Get CO2Level() As ValText
   Set CO2Level = TB_Data(12)

@@ -126,6 +126,7 @@ Public Enum CarItems
   car_Second_db
   car_ElectricRangeMiles_db
   car_ElectricRangeMiles_Required
+  car_ElectricRangeMiles_NeedToInput
 'AM Car_Diesel To be removed for main 2002 release
 'MP DB ToDo remove car_Diesel? chk its use in MagneticMedia.SectionF
   car_privatefuel_db 'bf
@@ -291,8 +292,9 @@ Call xSet("CompanyCar_Calculate")
   Call SetP46FrequencyPaymentString
   Call CompanyCarAvailableDatesValid(ben)
   ' ******************************** CAR CALC START ***********************************************
-  If (ben.value(car_p46FuelType_db) = CCFT_HYBRID) And UseWLTPCo2Rates(ben) And ben.value(car_p46CarbonDioxide_db) < 51 Then
-      ben.value(car_ElectricRangeMiles_Required) = True
+  If (ben.value(car_p46FuelType_db) = CCFT_HYBRID) And ben.value(car_p46CarbonDioxide_db) < 51 Then
+      ben.value(car_ElectricRangeMiles_Required) = UseWLTPCo2Rates(ben)
+      ben.value(car_ElectricRangeMiles_NeedToInput) = True
   End If
   
   'WS2 I/K/L, WS2B F/G/H
@@ -1044,6 +1046,7 @@ Private Sub IBenefitClass_SetCalcDefaults()
   ben.value(car_OPRAModifiedCashEquivalent) = 0
   ben.value(car_OPRAProvisionalSum) = 0
   ben.value(car_ElectricRangeMiles_Required) = False
+  ben.value(car_ElectricRangeMiles_NeedToInput) = False
   
   
   

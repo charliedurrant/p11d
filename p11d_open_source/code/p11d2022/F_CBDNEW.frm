@@ -176,7 +176,7 @@ Begin VB.Form F_CompanyDefined
          TXTAlign        =   2
          AutoSelect      =   0
       End
-      Begin P11D2021.ValCombo cboIRDesc2 
+      Begin P11D2022.ValCombo cboIRDesc2 
          Height          =   315
          Left            =   1170
          TabIndex        =   12
@@ -335,7 +335,7 @@ Private Sub cbx_Click()
 End Sub
 
 Private Sub cmdApply_Click()
-  If F_Employees.LB.listitems.Count > 0 Then
+  If F_Employees.lb.listitems.Count > 0 Then
     If p11d32.CurrentEmployer.MoveMenuUpdateEmployee Then
       Set F_ApplyCompanyDefined.benefit = benefit
 '      F_ApplyCompanyDefined.Show vbModal
@@ -415,7 +415,7 @@ End Sub
 
 Private Sub Form_Resize()
   Call mclsResize.Resize
-  Call ColumnWidths(LB, 50, 25, 25)
+  Call ColumnWidths(lb, 50, 25, 25)
 End Sub
 
 Private Sub IBenefitForm2_AddBenefit()
@@ -556,7 +556,7 @@ Private Property Get IBenefitForm2_benclass() As BEN_CLASS
 End Property
 
 Private Property Get IBenefitForm2_lv() As MSComctlLib.IListView
-  Set IBenefitForm2_lv = LB
+  Set IBenefitForm2_lv = lb
 End Property
 
 Private Function IBenefitForm2_RemoveBenefit(ByVal BenefitIndex As Long) As Boolean
@@ -699,12 +699,12 @@ Private Property Set IFrmGeneral_InvalidVT(NewValue As Control)
 End Property
 
 Private Sub lb_ColumnClick(ByVal ColumnHeader As MSComctlLib.ColumnHeader)
-  Call SetSortOrder(LB, ColumnHeader)
+  Call SetSortOrder(lb, ColumnHeader)
 End Sub
 
 Private Sub LB_ItemClick(ByVal Item As MSComctlLib.ListItem)
   Call SetLastListItemSelected(Item)
-  If Not (LB.SelectedItem Is Nothing) Then
+  If Not (lb.SelectedItem Is Nothing) Then
     Call IBenefitForm2_BenefitToScreen(Item.Tag)
   End If
 End Sub

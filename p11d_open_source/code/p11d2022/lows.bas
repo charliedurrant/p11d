@@ -6,22 +6,31 @@ Private Declare Function SHGetPathFromIDList Lib "shell32" Alias "SHGetPathFromI
 Private Declare Function SHGetSpecialFolderLocation Lib "shell32" (ByVal hwndOwner As Long, ByVal nFolder As Long, pidl As Long) As Long
 Private Declare Sub CoTaskMemFree Lib "ole32" (ByVal pv As Long)
 
+Public Declare Function ShellExecute _
+                            Lib "shell32.dll" _
+                            Alias "ShellExecuteA" ( _
+                            ByVal hwnd As Long, _
+                            ByVal lpOperation As String, _
+                            ByVal lpFile As String, _
+                            ByVal lpParameters As String, _
+                            ByVal lpDirectory As String, _
+                            ByVal nShowCmd As Long) _
+                            As Long
+
+
+
 Public Const L_USER_APP_DATA As Long = CSIDL_PERSONAL   ' needs to be hrere else causes circular ref
 
 Public PreParser As Parser
 Public PreRep As Reporter
 Public PreAuto As AutoClass
 Public PreADOAuto As AutoClass
-
 Public Sub MathInit()
   Dim i As Long
   For i = LOW_POW To HIGH_POW
     Powers(i) = 10 ^ i
   Next i
 End Sub
-
-
-
 Function FileNameSafe(ByVal sFileName As String) As String
  Const sInvalidChars As String = "/\|<>:*?"""
  Dim lCt As Long
@@ -44,7 +53,7 @@ Public Function TrimEx(ByVal s As String)
   Dim p0 As Long, p1 As Long
   Dim i As Long, iLen As Long
 
-On Error GoTo Err_Err
+On Error GoTo err_err
 
   p0 = -1
   p1 = -1
@@ -66,16 +75,16 @@ On Error GoTo Err_Err
   Next
   
   If (p0 = -1) Then
-    GoTo Err_End
+    GoTo err_end
   End If
   
   s = Mid$(s, p0, (p1 - p0) + 1)
   
-Err_End:
+err_end:
   TrimEx = s
   Exit Function
-Err_Err:
-  Resume Err_End
+err_err:
+  Resume err_end
 End Function
 
 Public Function ConvertUNDATEDDateSQL(sFieldName As String, ByVal bEndOfYear As Boolean) As String
@@ -101,7 +110,7 @@ Public Function TextFileLoad(ByVal sPathAndFile As String) As String
   Dim fr As TCSFileread
   Dim s As String
   
-  On Error GoTo Err_Err
+  On Error GoTo err_err
   Set fr = New TCSFileread
   
   If Not fr.OpenFile(sPathAndFile) Then Call Err.Raise(ERR_FILE_OPEN, "TextFileLoad", "Failed to open file " & sPathAndFile)
@@ -109,9 +118,9 @@ Public Function TextFileLoad(ByVal sPathAndFile As String) As String
   TextFileLoad = s
   
   
-Err_End:
+err_end:
   Exit Function
-Err_Err:
+err_err:
   Call Err.Raise(ERR_FILE_INVALID, ErrorSource(Err, "TextFileLoad"), Err.Description)
   
 End Function
@@ -122,7 +131,7 @@ Public Sub TextFileSave(ByVal sPathAndFile As String, ByRef sText As String)
   'Dim ts As TextStream
   Dim ifile As Long
   
-  On Error GoTo Err_Err
+  On Error GoTo err_err
   
   ifile = 0
   ifile = FreeFile
@@ -142,9 +151,9 @@ Public Sub TextFileSave(ByVal sPathAndFile As String, ByRef sText As String)
   'Set ts = Nothing
   
   
-Err_End:
+err_end:
   Exit Sub
-Err_Err:
+err_err:
   If (Not bClosing) And (ifile <> 0) Then Close #ifile
   Call Err.Raise(ERR_FILE_INVALID, ErrorSource(Err, "TextFileLoad"), Err.Description)
   Resume
@@ -188,7 +197,7 @@ Public Function OpenDB(ws As Workspace, sPathAndFile As String, bExclusive As Bo
   If OpenDB Is Nothing Then Call Err.Raise(ERR_DB_IS_NOTHING, "", "Unable to open database, " & sPathAndFile & ", for unknown reason, check if opened exclusively")
 End Function
 Public Sub SaveTextFile(ByVal path_and_file As String, Text As String)
-  On Error GoTo Err_Err
+  On Error GoTo err_err
   
   Dim fs As FileSystemObject
   Dim ts As TextStream
@@ -198,9 +207,9 @@ Public Sub SaveTextFile(ByVal path_and_file As String, Text As String)
   Call ts.Write(Text)
   Call ts.Close
   
-Err_End:
+err_end:
   Exit Sub
-Err_Err:
+err_err:
   If (Not ts Is Nothing) Then
     Call ts.Close
   End If
@@ -283,17 +292,17 @@ Public Function IRLoanRateAdjustmentDailyInterestRate(ByVal vSumOfRates As Varia
   IRLoanRateAdjustmentDailyInterestRate = dblDailyInterestRate
     
 End Function
-Public Function IsFileOpen(FileAndPath As String, Optional Exclusive As Boolean = False) As Boolean
+Public Function IsFileOpen(fileAndPath As String, Optional Exclusive As Boolean = False) As Boolean
   Dim i As Integer
   
   On Error GoTo IsFileOpen_ERR
   
   i = FreeFile
-  If FileExists(FileAndPath) Then
+  If FileExists(fileAndPath) Then
     If Exclusive Then
-      Open FileAndPath For Input Shared As i
+      Open fileAndPath For Input Shared As i
     Else
-      Open FileAndPath For Input Lock Read Write As i
+      Open fileAndPath For Input Lock Read Write As i
     End If
   End If
   
@@ -544,7 +553,7 @@ Public Sub ListViewSortByType(ByVal dt As DATABASE_FIELD_TYPES, ByVal lv As List
   Dim lsu As ListSubItem
   Dim iColumnIndex As Long
   
-On Error GoTo Err_Err
+On Error GoTo err_err
 
   iColumnIndex = ColumnHeader.Index - 1
   
@@ -595,9 +604,9 @@ On Error GoTo Err_Err
   Next
   
   
-Err_End:
+err_end:
   Exit Sub
-Err_Err:
+err_err:
   Call Err.Raise(Err.Number, ErrorSource(Err, "ListViewSorter"), Err.Description)
   Resume
 End Sub
@@ -1041,7 +1050,7 @@ Public Sub RemoveReadOnlyFolder(sFolder As String, Optional ByVal bNoErrors = Fa
   Dim fso As FileSystemObject
   Dim f As folder
   
-On Error GoTo Err_Err
+On Error GoTo err_err
 
   Set fso = New FileSystemObject
   Set f = fso.GetFolder(sFolder)
@@ -1049,10 +1058,10 @@ On Error GoTo Err_Err
     f.Attributes = f.Attributes - 1
   End If
   
-Err_End:
+err_end:
   Exit Sub
-Err_Err:
-  If bNoErrors Then Resume Err_End
+err_err:
+  If bNoErrors Then Resume err_end
   Call Err.Raise(ERR_DIRECTORY_CREATE, "RemoveReadOnlyFolder", "Failed to remove the read only attribute for the folder: " & sFolder)
 
 End Sub
@@ -1061,7 +1070,7 @@ Public Sub RemoveReadOnlyFile(s As String)
   Dim fso As FileSystemObject
   Dim f As File
   
-On Error GoTo Err_Err
+On Error GoTo err_err
 
   Set fso = New FileSystemObject
   Set f = fso.GetFile(s)
@@ -1069,16 +1078,16 @@ On Error GoTo Err_Err
     f.Attributes = f.Attributes - 1
   End If
   
-Err_End:
+err_end:
   Exit Sub
-Err_Err:
+err_err:
   Call Err.Raise(ERR_DIRECTORY_CREATE, "RemoveReadOnlyFile", "Failed to remove the read only attribute for the file: " & s)
   Resume
 End Sub
 
 Public Sub MkDirEx(ByVal sPath As String)
 
-On Error GoTo Err_Err
+On Error GoTo err_err
 
   If (Not xMkdir(sPath)) Then
     Call Err.Raise(ERR_DIRECTORY_CREATE, "MKDirEx", "Failed to create the folder " & sPath)
@@ -1117,9 +1126,9 @@ On Error GoTo Err_Err
 '    End If
 '  Next
 '
-Err_End:
+err_end:
   Exit Sub
-Err_Err:
+err_err:
   Call Err.Raise(Err.Number, ErrorSource(Err, "MkDirEx"), Err.Description)
   Resume
 End Sub
@@ -1143,7 +1152,7 @@ End Function
 
 
 
-Public Function GetSpecialFolderEx(spt As CSIDLConstants) As String
+Public Function GetSpecialFolderEx(sPT As CSIDLConstants) As String
   Const MAX_PATH = 260
   Const S_OK = 0
 
@@ -1151,7 +1160,7 @@ Public Function GetSpecialFolderEx(spt As CSIDLConstants) As String
    Dim pidl As Long
    
   'fill the idl structure with the specified folder item
-   If SHGetSpecialFolderLocation(0, spt, pidl) = S_OK Then
+   If SHGetSpecialFolderLocation(0, sPT, pidl) = S_OK Then
      
      'if the pidl is returned, initialize
      'and get the path from the id list
@@ -1278,7 +1287,7 @@ End Function
 Public Function SetPropertiesFromString(ByVal sSearchString As String, ParamArray P()) As String
   Dim iLB As Long, iUB As Long, i As Long
   Dim s As String
-  On Error GoTo Err_Err
+  On Error GoTo err_err
   
   s = sSearchString
     iLB = LBound(P)
@@ -1288,9 +1297,9 @@ Public Function SetPropertiesFromString(ByVal sSearchString As String, ParamArra
     Next
   SetPropertiesFromString = s
   
-Err_End:
+err_end:
   Exit Function
-Err_Err:
+err_err:
   Call Err.Raise(Err.Number, ErrorSource(Err, "SetPropertiesFromString"), Err.Description)
   Resume
 End Function
@@ -1299,7 +1308,7 @@ Public Function SetPropertyFromString(ByVal sSearchString As String, ByVal sProp
   Dim p0 As Integer
   Dim p1 As Integer
   
-  On Error GoTo Err_Err
+  On Error GoTo err_err
   sProperty = LCase$(sProperty)
   sProperty = sProperty & S_STRING_PROPERTY_OPEN
   p0 = InStr(sSearchString, sProperty)
@@ -1311,20 +1320,24 @@ Public Function SetPropertyFromString(ByVal sSearchString As String, ByVal sProp
     SetPropertyFromString = sSearchString & sProperty & sNewValue & S_STRING_PROPERTY_CLOSE
   End If
   
-Err_End:
+err_end:
   Exit Function
-Err_Err:
+err_err:
   Call Err.Raise(Err.Number, ErrorSource(Err, "MkDirEx"), Err.Description)
-  Resume Err_End
+  Resume err_end
 
 End Function
-Public Function ReporterNew() As Reporter
+Public Function ReporterNew(ByVal repInterface As IReporter) As Reporter
   Dim rep As Reporter
   
   Set rep = New Reporter
-  rep.A4Force = p11d32.ReportPrint.A4ForcePrint
+  Call ReporterNewEx(repInterface, rep)
   Set ReporterNew = rep
 End Function
+Public Sub ReporterNewEx(ByVal repInterface As IReporter, ByVal rep As Reporter)
+  Set rep.ReporterInterface = repInterface
+  rep.A4Force = p11d32.ReportPrint.A4ForcePrint
+End Sub
 Public Function ReportWizardNew() As ReportWizard
   Dim repw As ReportWizard
   
@@ -1536,7 +1549,7 @@ Public Function RoundDouble(ByVal Number As Double, ByVal DecimalPlaces As Long,
   End Select
 End Function
 
-Public Function SetupOpraInput(lbl As Label, textBox As valText, Optional ByVal sLabelAddtionalText As String = "")
+Public Function SetupOpraInput(lbl As Label, textBox As ValText, Optional ByVal sLabelAddtionalText As String = "")
   
   lbl.Caption = S_UDM_OPRA_AMOUNT_FOREGONE & sLabelAddtionalText
   
@@ -1564,4 +1577,74 @@ Public Sub SendKeysEx(Text As Variant, Optional Wait As Boolean = False)
   End If
   
   
+End Sub
+
+Public Function UrlContentsAsString(ByVal sURL As String) As String
+  Dim fileAndPath As String
+  
+  On Error GoTo err_err
+  
+      fileAndPath = GetTempFilename
+      Call UrlDownload(sURL, fileAndPath)
+      UrlContentsAsString = TextFileLoad(fileAndPath)
+    
+err_end:
+    If (Len(fileAndPath) > 0) Then
+      xKill (fileAndPath)
+    End If
+    Exit Function
+err_err:
+    If (Len(fileAndPath) > 0) Then
+      xKill (fileAndPath)
+    End If
+    Call Err.Raise(ERR_ERROR, "UrlContentsAsString", Err.Description)
+    
+End Function
+Public Function UrlDownload(ByVal url As String, ByVal fileAndPath As String) As Boolean
+    Dim oStream As ADODB.Stream
+    Dim WinHttpReq As Object
+    
+    UrlDownload = False
+
+    Const HTTPREQUEST_SETCREDENTIALS_FOR_SERVER = 0
+    
+    
+    Set WinHttpReq = CreateObject("WinHttp.WinHttpRequest.5.1")
+    WinHttpReq.Open "GET", url, False
+    WinHttpReq.send
+  
+    Set oStream = New ADODB.Stream
+  
+    oStream.Open
+    oStream.Type = 1
+    oStream.Write WinHttpReq.responseBody
+    oStream.SaveToFile fileAndPath, 2
+    oStream.Close
+
+    UrlDownload = True
+End Function
+Sub DownloadFile(url, Path)
+
+   Dim objReq
+   Dim objStream
+
+   Set objReq = CreateObject("MSXML2.XMLHTTP")
+   objReq.Open "GET", url, False
+   objReq.send
+
+   If objReq.status = 200 Then
+       Set objStream = CreateObject("ADODB.Stream")
+       objStream.Open
+       objStream.Type = 1
+
+       objStream.Write objReq.responseBody
+       objStream.Position = 0
+
+       objStream.SaveToFile Path, 2
+       objStream.Close
+       Set objStream = Nothing
+   End If
+
+   Set objReq = Nothing
+
 End Sub

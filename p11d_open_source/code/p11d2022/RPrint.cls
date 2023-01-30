@@ -986,7 +986,7 @@ Public Function DoOtherReport(ByVal rep As Reporter, ByVal ReportType As P11D_RE
   
   Call xSet("DoOtherReport")
   
-  If rep Is Nothing Then Set rep = ReporterNew()
+  If rep Is Nothing Then Set rep = ReporterNew(Nothing)
   If Not rep.InitReport("P11D report:" & Name(ReportType), ReportDest, Orientation(ReportType), True) Then Call Err.Raise(ERR_DOREPORT, "DoOtherReport", "Unable to initialise Reporter." & vbCrLf & "Unable to initialise report engine.")
   
   Select Case ReportType
@@ -1504,6 +1504,7 @@ Public Sub ExportReport(ByVal rep As Reporter, ByVal ee As Employee, sReportName
     sPathAndFile = Me.ExportFileName(sReportName, ee, rep)
   
     Call rep.ExportReport(sPathAndFile, Me.ExportOption, True)
+    
   End If
   
 ExportReport_END:
@@ -1582,7 +1583,7 @@ Public Function PreviewBenefitWK(ben As IBenefitClass) As Long
   
   If ben Is Nothing Then Call Err.Raise(ERR_BEN_IS_NOTHING, "PreviewBenefitWK", "The benefit is nothing.")
   
-  Set rep = ReporterNew()
+  Set rep = ReporterNew(Nothing)
   Call rep.InitReport("P11D report:" & p11d32.Rates.BenClassTo(ben.BenefitClass, BCT_FORM_CAPTION), PREPARE_REPORT, p11d32.ReportPrint.Orientation(RPT_HMIT))
   Call ben.Calculate
   
@@ -1672,7 +1673,9 @@ Public Sub DestroyATCMAIL()
     'End If
   End If
 End Sub
-
+Public Property Get ExportingPdf(ByVal pr As P11D_REPORTS) As Boolean
+  ExportingPdf = Me.ExportOption = EXPORT_PDF And ((Me.Destination = REPD_FILE_HTML) Or (p11d32.ReportPrint.IsEmail(pr)))
+End Property
 Public Property Get ExportOption() As REPORT_EXPORTS
   ExportOption = m_ExportOption
 End Property

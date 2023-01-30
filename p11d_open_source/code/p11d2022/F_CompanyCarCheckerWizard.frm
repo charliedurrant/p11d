@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Object = "{00028CDA-0000-0000-0000-000000000046}#6.0#0"; "tdbg6.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form F_DataCheckerWizard 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Data checker"
@@ -116,7 +116,7 @@ Begin VB.Form F_DataCheckerWizard
       TabPicture(2)   =   "F_CompanyCarCheckerWizard.frx":0038
       Tab(2).ControlEnabled=   0   'False
       Tab(2).ControlCount=   0
-      Begin P11D2021.CarCheckOverlap ctlOverlappingCars 
+      Begin P11D2022.CarCheckOverlap ctlOverlappingCars 
          Height          =   3915
          Left            =   3225
          TabIndex        =   28
@@ -152,7 +152,7 @@ Begin VB.Form F_DataCheckerWizard
          TabIndex        =   23
          Top             =   6375
          Width           =   9240
-         Begin P11D2021.TransparentPictureBox TransparentPictureBox1 
+         Begin P11D2022.TransparentPictureBox TransparentPictureBox1 
             Height          =   615
             Left            =   300
             TabIndex        =   26
@@ -656,7 +656,7 @@ Private Sub cmdPrint_Click()
   
   On Error GoTo err_err
   
-  Set rep = ReporterNew()
+  Set rep = ReporterNew(Nothing)
        
   Set benEY = m_ey
   If Not rep.InitReport("TITLE" & vbCrLf & vbCrLf, REPORT_TARGET.PREPARE_REPORT, LANDSCAPE, True) Then GoTo err_end

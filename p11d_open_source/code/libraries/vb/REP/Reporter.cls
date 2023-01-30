@@ -52,7 +52,36 @@ Public Enum REPORT_ORIENTATION
   PORTRAIT = vbPRORPortrait
   LANDSCAPE = vbPRORLandscape
 End Enum
+
+Public Enum REPORTER_NOTIFICATON_TYPE
+  INIT_REPORT
+  HEADER_SET
+  FOOTER_SET
+  EXPORT_HEADER_SET
+  OUT_CALLED
+  END_REPORT
+  EXPORT_REPORT
+  PAGE_HEADER_SET
+  PAGE_FOOTER_SET
+  A4_FORCE
+End Enum
+
 Private m_ExportDateFormat As String
+Private m_ReporterInterface As IReporter
+Public Property Get ReporterInterface() As IReporter
+  Call xSet("ReporterInterface")
+  ReporterInterface = m_ReporterInterface
+  Call xReturn("ReporterInterface")
+End Property
+Public Property Set ReporterInterface(ByVal value As IReporter)
+  Call xSet("ReporterInterface")
+  Set m_ReporterInterface = value
+  Call xReturn("ReporterInterface")
+End Property
+Private Function ReporterInterfaceNotify(notifcationType As REPORTER_NOTIFICATON_TYPE, value As String) As Boolean
+  If m_ReporterInterface Is Nothing Then Exit Function
+  ReporterInterfaceNotify = m_ReporterInterface.Notify(Me, notifcationType, value)
+End Function
 Public Property Get ReportHeader() As String
   Call xSet("ReportHeaderGet")
   ReportHeader = SetHeaderFooter("", REPORT_HEADER, True)
@@ -61,7 +90,9 @@ End Property
 
 Public Property Let ReportHeader(NewValue As String)
   Call xSet("ReportHeaderLet")
+  If ReporterInterfaceNotify(HEADER_SET, NewValue) Then Exit Property
   Call SetHeaderFooter(NewValue, REPORT_HEADER)
+  
   Call xReturn("ReportHeaderLet")
 End Property
 
@@ -121,7 +152,9 @@ End Property
 
 Public Property Let ReportFooter(NewValue As String)
   Call xSet("ReportFooterLet")
+  If ReporterInterfaceNotify(HEADER_SET, NewValue) Then Exit Property
   Call SetHeaderFooter(NewValue, REPORT_FOOTER)
+  
   Call xReturn("ReportFooterLet")
 End Property
 
@@ -133,6 +166,7 @@ End Property
 
 Public Property Let ExportHeader(NewValue As String)
   Call xSet("ExportHeaderLet")
+  If ReporterInterfaceNotify(EXPORT_HEADER_SET, NewValue) Then Exit Property
   Call SetHeaderFooter(NewValue, EXPORT_HEADER)
   Call xReturn("ExportHeaderLet")
 End Property
@@ -145,6 +179,7 @@ End Property
 
 Public Property Let PageHeader(NewValue As String)
   Call xSet("PageHeaderLet")
+  If ReporterInterfaceNotify(PAGE_HEADER_SET, NewValue) Then Exit Property
   Call SetHeaderFooter(NewValue, PAGE_HEADER)
   Call xReturn("PageHeaderLet")
 End Property
@@ -157,6 +192,7 @@ End Property
 
 Public Property Let PageFooter(NewValue As String)
   Call xSet("PageFooterLet")
+  If ReporterInterfaceNotify(PAGE_FOOTER_SET, NewValue) Then Exit Property
   Call SetHeaderFooter(NewValue, PAGE_FOOTER)
   Call xReturn("PageFooterLet")
 End Property
@@ -201,8 +237,9 @@ Public Function InitReport(ByVal ReportName As String, ByVal Destination As REPO
   On Error GoTo InitReport_err
   Call xSet("InitReport")
   
-  
+  If ReporterInterfaceNotify(INIT_REPORT, "") Then Exit Function
   Call InitReportEx(ReportName, Destination, Orientation, ThrowPageOnSubReport, OverrideHeader, OverrideFooter)
+  
   InitReport = ReportControl.InReport
   
 InitReport_end:
@@ -223,7 +260,9 @@ Public Function EndReport(Optional ByVal Force As Boolean) As Boolean
   On Error GoTo EndReport_err
   
   Call xSet("EndReport")
+  If ReporterInterfaceNotify(END_REPORT, "") Then Exit Function
   Call EndReportEx(Force, False)
+  
   EndReport = True
 
 EndReport_end:
@@ -255,9 +294,11 @@ Public Function Out(FormattedText As String) As Boolean
   If ReportControl.AbortReport Then
     Exit Function
   End If
-  
+  If ReporterInterfaceNotify(OUT_CALLED, FormattedText) Then Exit Function
   Call PreOut
+  
   Out = bOut(FormattedText)
+  
   
 Out_end:
   Call xReturn("Out")
@@ -435,12 +476,13 @@ Public Function ExportReport(ByVal FileName As String, ByVal ExportType As REPOR
   On Error GoTo ExportReport_err
   Call xSet("ExportReport")
   
-  
+  If ReporterInterfaceNotify(EXPORT_REPORT, FileName) Then Exit Function
   If ReportControl.rTarget <> RPT_PREPARE Then Call Err.Raise(ERR_NOTPREVIEWREPORT, "ExportReport", "Cannot Export a Report that has not been prepared")
   If Not ReportControl.PreviewOK Then Call Err.Raise(ERR_NOTPREVIEWREPORT, "ExportReport", "Cannot Export a Report that has not been prepared for preview")
   If ReportControl.Pages_N <= 0 Then Call Err.Raise(ERR_NOTPREVIEWREPORT, "ExportReport", "Cannot Export as no pages prepared")
   If ReportControl.InReport Then Exit Function
   ExportReport = ExportReportEx(FileName, ExportType, Overwrite, False)
+  
   
 ExportReport_end:
   Call xReturn("ExportReport")
@@ -633,6 +675,7 @@ Public Property Get A4Force() As Boolean
   A4Force = g_A4Force
 End Property
 Public Property Let A4Force(ByVal NewValue As Boolean)
+  If ReporterInterfaceNotify(A4_FORCE, CStr(g_A4Force)) Then Exit Property
   g_A4Force = NewValue
 End Property
 

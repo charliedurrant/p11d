@@ -78,14 +78,18 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+
+Implements IReporter
+
 Private m_Cancel As Boolean
 Private m_rep As Reporter
 Private m_pr As P11D_REPORTS
 Private m_ReportOrient As REPORT_ORIENTATION
 Private m_sReportName As String
 Private m_ReportDest As REPORT_TARGET
+Private m_NotifyLog As QString
 Public Function DoReportStandardSub(ByVal rep As Reporter, ByVal pr As P11D_REPORTS, ByVal ReportDest As REPORT_TARGET, ByVal ReportOrient As REPORT_ORIENTATION, ByVal sReportName As String) As Boolean
-  On Error GoTo err_Err
+  On Error GoTo err_err
   Set m_rep = rep
   m_pr = pr
   m_ReportOrient = ReportOrient
@@ -95,10 +99,10 @@ Public Function DoReportStandardSub(ByVal rep As Reporter, ByVal pr As P11D_REPO
   DoReportStandardSub = m_Cancel <> True
   
 
-err_End:
+err_end:
   m_Cancel = False
   Exit Function
-err_Err:
+err_err:
   Call Err.Raise(Err.Number, "F_PrintCancel.DoReportStandardSub", Err.Description)
 End Function
 Private Sub DoStandardReportSubEx(ByVal rep As Reporter, ByVal pr As P11D_REPORTS, ByVal ReportDest As REPORT_TARGET, ByVal ReportOrient As REPORT_ORIENTATION, ByVal sReportName As String)
@@ -134,8 +138,23 @@ Private Sub DoStandardReportSubEx(ByVal rep As Reporter, ByVal pr As P11D_REPORT
   Call PrgAlignment(ALIGN_RIGHT)
   prg.TextAlignment = ALIGN_RIGHT
   
-  If rep Is Nothing Then Set rep = ReporterNew
   
+  If rep Is Nothing Then
+    If p11d32.ReportPrint.ExportingPdf(pr) Then
+      Set m_NotifyLog = New QString
+      Set rep = ReporterNew(Me)
+    Else
+      Set rep = ReporterNew(Nothing)
+    End If
+  Else
+    If p11d32.ReportPrint.ExportingPdf(pr) Then
+      Set m_NotifyLog = New QString
+      Call ReporterNewEx(Me, rep)
+    Else
+      Set rep.ReporterInterface = Nothing
+    End If
+  End If
+   
   RO = p11d32.ReportPrint.Orientation(pr)
   
   If bIsEmail Then
@@ -163,8 +182,12 @@ Private Sub DoStandardReportSubEx(ByVal rep As Reporter, ByVal pr As P11D_REPORT
   For i = 1 To p11d32.ReportPrint.SelectedEmployees.Count
      Set ee = p11d32.ReportPrint.SelectedEmployees(i)
      If ee Is Nothing Then GoTo NEXT_EMPLOYEE
-     Set p11d32.CurrentEmployer.CurrentEmployee = p11d32.ReportPrint.SelectedEmployees(i)
      
+     If p11d32.ReportPrint.ExportingPdf(pr) Then
+       Call ReporterNewEx(Me, rep)
+     End If
+     
+     Set p11d32.CurrentEmployer.CurrentEmployee = p11d32.ReportPrint.SelectedEmployees(i)
      DoEvents
      If (m_Cancel) Then Call Err.Raise(ERR_PRINT_CANCEL, "DoReportStandardSub", "Printing cancelled")
      MDIMain.sts.Step
@@ -188,7 +211,6 @@ Private Sub DoStandardReportSubEx(ByVal rep As Reporter, ByVal pr As P11D_REPORT
          Call p11d32.ReportPrint.InitATCMAIL
          Call ClearCursor
        End If
-       'Call atms.RemoveAll 'RK Email 19/03/03
      Else
        If Not rep.InitReport(sReportName, ReportDest, RO, True) Then Call Err.Raise(ERR_DOREPORT, "DoSubReport", "Unable to initialise Reporter." & vbCrLf & "Unable to initialise report engine.")
      End If
@@ -247,6 +269,8 @@ DoReportStandardSub_End:
 DoReportStandardSubEx_End:
   Me.Hide
   Unload Me
+  Set rep.ReporterInterface = Nothing
+  
   Set rep = Nothing
   Set m_rep = Nothing
   If Not (p11d32.CurrentEmployer Is Nothing) Then Set p11d32.CurrentEmployer.CurrentEmployee = CurrentEmployee
@@ -265,8 +289,48 @@ DoReportStandardSub_Err:
 End Sub
 Private Sub cmdCancel_Click()
   m_Cancel = True
-  
 End Sub
 Private Sub Form_Activate()
   Call DoStandardReportSubEx(m_rep, m_pr, m_ReportDest, m_ReportOrient, m_sReportName)
 End Sub
+Private Sub NotifiyLog(notificationType As REPORTER_NOTIFICATON_TYPE, value As String)
+  Dim line As String
+  
+  If Not HaveNotfityLog() Then Exit Sub
+  If (notificationType = OUT_CALLED) And Len(value) = 0 Then Exit Sub
+  line = CsvField(CStr(notificationType)) & "," & CsvField(value) & vbCrLf
+  Call m_NotifyLog.Append(line)
+End Sub
+Private Function HaveNotfityLog() As Boolean
+  HaveNotfityLog = Not m_NotifyLog Is Nothing
+End Function
+Private Function IReporter_Notify(rep As atc2rep.Reporter, notificationType As atc2rep.REPORTER_NOTIFICATON_TYPE, value As String) As Boolean
+  Select Case notificationType
+    Case REPORTER_NOTIFICATON_TYPE.EXPORT_REPORT
+      If HaveNotfityLog() And rep.ReportPages > 0 Then
+        Call NotifiyLog(notificationType, value)
+        
+        Dim tempFileName As String
+        Dim pdfPrintPath As String
+        Dim oShell As Object
+        tempFileName = GetTempFilename
+        Call TextFileSave(tempFileName, m_NotifyLog.bstr)
+        m_NotifyLog.bstr = ""
+
+        Dim shellString As String
+        
+        pdfPrintPath = FullPath(AppPath) & "PdfPrint.exe"
+        shellString = pdfPrintPath & " " & tempFileName
+        
+        Call ShellProgram(shellString, vbHide, True)
+        
+        'Set oShell = CreateObject("WSCript.shell")
+        'oShell.Run "cmd /C " & pdfPrintPath & " " & tempFileName, 0, True
+        Call xKill(tempFileName)
+      End If
+      IReporter_Notify = True
+    Case Else
+      Call NotifiyLog(notificationType, value)
+  End Select
+End Function
+

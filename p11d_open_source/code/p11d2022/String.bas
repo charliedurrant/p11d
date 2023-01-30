@@ -29,4 +29,34 @@ End Function
 Public Function ValueOfMaxStatus(sLeadingCaption, lValue As Long, lMax As Long) As String
   ValueOfMaxStatus = sLeadingCaption & " " & lValue & " of " & lMax
 End Function
-
+Public Function CsvField(ByVal value As String) As String
+  Dim needsQuotes As Boolean
+  Dim p0 As Long
+  
+  If (Len(value) = 0) Then
+    CsvField = value
+    Exit Function
+  End If
+  
+  
+  p0 = InStr(1, value, """")
+  If (p0 > 0) Then
+    value = Replace(value, """", """""")
+    needsQuotes = True
+  End If
+  
+  p0 = InStr(1, value, vbCrLf)
+  If (p0 > 0) Then
+    needsQuotes = True
+  End If
+  
+  p0 = InStr(1, value, ",")
+  If (p0 > 0) Then
+    needsQuotes = True
+  End If
+  
+  If (needsQuotes) Then
+    value = """" & value & """"
+  End If
+  CsvField = value
+End Function

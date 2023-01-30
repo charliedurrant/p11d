@@ -1,8 +1,8 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{AF27A9B5-A3F4-11D2-8DB7-00C04FA9DD6F}#1.2#0"; "TCSPROG.OCX"
 Object = "{A7CE771F-05B2-43CF-9650-ED841A9049FA}#1.0#0"; "ATC3FolderBrowser.ocx"
-Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "ATC2VTEXT.OCX"
+Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "atc2vtext.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form F_MM 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Magnetic Media"
@@ -155,7 +155,7 @@ Begin VB.Form F_MM
       Skew            =   0
       PictureOffsetTop=   0
       PictureOffsetLeft=   0
-      Enabled         =   0   'False
+      Enabled         =   -1  'True
       Increment       =   1
       TextAlignment   =   0
    End
@@ -431,7 +431,7 @@ Private Function SetButtons(bVisible As Boolean) As Boolean
   SetButtons = bVisible
 End Function
 
-Private Sub Form_Unload(cancel As Integer)
+Private Sub Form_Unload(Cancel As Integer)
   If Not p11d32 Is Nothing Then p11d32.MagneticMedia.UserDataSize = 0
 End Sub
 
@@ -501,11 +501,11 @@ Public Sub lvMMEmployers_ItemCheck(ByVal Item As MSComctlLib.ListItem)
   cmdRun.Enabled = ListViewAnyChecked(lvMMEmployers)
 End Sub
 
-Private Sub lvMMEmployers_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
-  Call EditEmployerDetails(Button, Shift, x, y)
+Private Sub lvMMEmployers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+  Call EditEmployerDetails(Button, Shift, X, Y)
 End Sub
 
-Private Sub EditEmployerDetails(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub EditEmployerDetails(Button As Integer, Shift As Integer, X As Single, Y As Single)
   Dim ibf As IBenefitForm2
   Dim li As ListItem, liMe As ListItem, liPrevious As ListItem
   
@@ -520,7 +520,7 @@ Private Sub EditEmployerDetails(Button As Integer, Shift As Integer, x As Single
   If ibf Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, Err, "The benfit for is nothing") 'JN
   If Not ibf.benclass = BC_EMPLOYER Then Call Err.Raise(ERR_IS_NOTHING, Err, "Edit Employer Details") 'JN
   
-  Set liMe = lvMMEmployers.HitTest(x, y)
+  Set liMe = lvMMEmployers.HitTest(X, Y)
   
   If liMe Is Nothing Then GoTo EditEmployerDetails_END
   

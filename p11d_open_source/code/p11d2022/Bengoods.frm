@@ -318,7 +318,7 @@ Begin VB.Form F_AssetsAtDisposal
          AllowEmpty      =   0   'False
          TXTAlign        =   2
       End
-      Begin P11D2021.ValCombo cboIRDesc2 
+      Begin P11D2022.ValCombo cboIRDesc2 
          Height          =   315
          Left            =   1200
          TabIndex        =   22
@@ -482,7 +482,7 @@ Private Sub Form_Load()
 End Sub
 Private Sub Form_Resize()
   mclsResize.Resize
-  Call ColumnWidths(LB, 75, 25)
+  Call ColumnWidths(lb, 75, 25)
 End Sub
 Private Sub IBenefitForm2_AddBenefit()
   Dim ben As IBenefitClass
@@ -590,7 +590,7 @@ End Property
 'End Property
 
 Private Property Get IBenefitForm2_lv() As MSComctlLib.IListView
-  Set IBenefitForm2_lv = LB
+  Set IBenefitForm2_lv = lb
 End Property
 
 Private Function IBenefitForm2_RemoveBenefit(ByVal BenefitIndex As Long) As Boolean
@@ -686,13 +686,13 @@ End Property
 
 Private Sub LB_ItemClick(ByVal Item As MSComctlLib.ListItem)
   Call SetLastListItemSelected(Item)
-  If Not (LB.SelectedItem Is Nothing) Then
+  If Not (lb.SelectedItem Is Nothing) Then
     IBenefitForm2_BenefitToScreen (Item.Tag)
   End If
 End Sub
 
 Private Sub lb_ColumnClick(ByVal ColumnHeader As MSComctlLib.ColumnHeader)
-  Call SetSortOrder(LB, ColumnHeader)
+  Call SetSortOrder(lb, ColumnHeader)
 End Sub
 
 Private Sub LB_KeyDown(KeyCode As Integer, Shift As Integer)

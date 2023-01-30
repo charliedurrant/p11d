@@ -116,12 +116,12 @@ Sub Main()
   Dim AppName As String, Version As String
   ' defaults only
   Dim s As String
+  Dim cmdLineArgs As String
   
   On Error GoTo main_err
-  
+    
   AppName = UCASE$(app.EXEName)
   Version = GetVersionString(False)
-  
   
   'apf cd  if app fails to load please give errormessage
   If Not CoreSetup(Command$(), VB.Global, False) Then Call ExitApp(True)

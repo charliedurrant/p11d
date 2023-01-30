@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{A7CE771F-05B2-43CF-9650-ED841A9049FA}#1.0#0"; "atc3FolderBrowser.OCX"
-Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "ATC2VTEXT.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{A7CE771F-05B2-43CF-9650-ED841A9049FA}#1.0#0"; "ATC3FolderBrowser.ocx"
+Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "atc2vtext.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form F_Print 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Print"
@@ -417,7 +417,7 @@ err_end:
 err_err:
   Call ErrorMessage(ERR_ALLOWIGNORE Or ERR_ERROR, Err, "SetActivePrinter", "Error setting active printer", "There was an error setting the active printer.")
   Resume err_end
-
+  Resume
 End Sub
 'Private Sub SetActivePrinterReporter()
 '  Dim rep As Reporter

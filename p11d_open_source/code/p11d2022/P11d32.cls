@@ -22,6 +22,8 @@ Public P11DWS As Workspace
 
 Public ReportPrint As ReportPrint
 
+Public Testing As Testing
+
 Public FindFilesSearchSubDirs As Boolean
 Public FindFilesDirList As String
 Public FindFilesSavedFilesList As String
@@ -66,6 +68,7 @@ Private Const S_INI_SECTION_PAYEONLINE As String = "PayeOnline"
 Private Const S_INI_SECTION_BRING_FORWARD As String = "BringForward"
 Private Const S_INI_SECTION_GENERAL As String = "General"
 Private Const S_INI_SECTION_INTRANET As String = "Intranet"
+Private Const S_INI_SECTION_TESTING As String = "Testing"
 
 'Private P11D32.IniPathAndFile As String
 Private m_AppYear As Long
@@ -330,7 +333,7 @@ Public Property Let BenDataLinkBenfitTable(ByVal bc As BEN_CLASS, ByVal NewValue
   If BenClassIsReal(bc) Then m_BenData.DataLinks(bc).BenefitTable = NewValue
 End Property
 
-Public Property Get BenDataLinkDataType(ByVal bc As BEN_CLASS, ByVal Item As Long) As DATABASE_FIELD_TYPES
+Public Property Get BenDataLinkDataType(ByVal bc As BEN_CLASS, ByVal Item As Long) As TCSBase.DATABASE_FIELD_TYPES
   If BenClassIsReal(bc) Then BenDataLinkDataType = m_BenData.DataLinks(bc).StaticData(Item).DataType
 End Property
 Public Property Let BenDataLinkDataType(ByVal bc As BEN_CLASS, ByVal Item As Long, ByVal NewValue As DATABASE_FIELD_TYPES)
@@ -664,6 +667,8 @@ Public Function IniSettings(IRW As INI_READ_WRITE) As Boolean
     Call WriteIniEntry(S_INI_SECTION_INTRANET, "BannerForeColor", p11d32.Intranet.BannerForeColor, p11d32.IniPathAndFile)
 
     Call WriteIniEntry(S_INI_SECTION_REPORTS, "SortOtherTypeBenefitsAlphabetically", p11d32.ReportPrint.SortOtherTypeBenefitsAlphabetically, p11d32.IniPathAndFile)
+    
+    Call WriteIniEntry(S_INI_SECTION_TESTING, "LastGoogleTestSheetId", p11d32.Testing.LastGoogleTestSheetId, p11d32.IniPathAndFile)
  Else
     p11d32.GlobalCopySerialNumber = GetIniEntry(S_INI_SECTION_GENERAL, "GlobalCopySerialNumber", "", p11d32.IniPathAndFile)
     p11d32.SerialNumber = GetIniEntry(S_INI_SECTION_GENERAL, "SerialNumber", "", p11d32.IniPathAndFile)
@@ -842,6 +847,9 @@ Public Function IniSettings(IRW As INI_READ_WRITE) As Boolean
     
     p11d32.ReportPrint.SortOtherTypeBenefitsAlphabetically = GetIniEntry(S_INI_SECTION_REPORTS, "SortOtherTypeBenefitsAlphabetically", False, p11d32.IniPathAndFile)
 
+    p11d32.Testing.LastGoogleTestSheetId = Trim(GetIniEntry(S_INI_SECTION_TESTING, "LastGoogleTestSheetId", "", p11d32.IniPathAndFile))
+    
+    
   End If
   
   IniSettings = True
@@ -1729,6 +1737,8 @@ Public Function Initialise() As Boolean
   Set Importing = New Importing
   Set BringForward = New BringForward
   Set ReportPrint = New ReportPrint
+  Set Testing = New Testing
+  
   ' help
   Set Help = New Help
   Help.DefaultLink = S_DEFAULT_HELP_PAGE

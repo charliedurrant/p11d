@@ -286,7 +286,7 @@ Public Sub XMLFile(ByVal prgEmployee As TCSProgressBar, ByVal lblFile As Label)
   'RC TTP#461 - Make independent of print dialog
   'Call CheckReportSelection
   If Not ClearFolder Then GoTo XMLFile_END
-  Set rep = ReporterNew()
+  Set rep = ReporterNew(Nothing)
   prgEmployee.Visible = True
   prgEmployee.value = prgEmployee.Min
   prgEmployee.Indicator = None

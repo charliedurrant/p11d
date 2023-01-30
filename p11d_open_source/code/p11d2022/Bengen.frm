@@ -146,7 +146,7 @@ Begin VB.Form F_Other
          TabIndex        =   21
          Top             =   270
          Width           =   3855
-         Begin P11D2021.ValCombo cboIRDesc2 
+         Begin P11D2022.ValCombo cboIRDesc2 
             Height          =   315
             Left            =   1425
             TabIndex        =   1
@@ -514,7 +514,7 @@ CopyCDBToEmployee_ERR:
 End Sub
 
 Private Sub ChkBx_Click()
-  Call IFrmGeneral_CheckChanged(chkbx)
+  Call IFrmGeneral_CheckChanged(ChkBx)
 End Sub
 
 Private Sub cmdCopyCDB_Click()
@@ -523,7 +523,7 @@ End Sub
 
 Private Sub Form_Resize()
   mclsResize.Resize
-  Call ColumnWidths(LB, 75, 25)
+  Call ColumnWidths(lb, 75, 25)
 End Sub
 Private Sub Form_Load()
   If Not (mclsResize.InitResize(Me, L_DES_HEIGHT, L_DES_WIDTH, DESIGN, , , MDIMain)) Then
@@ -619,7 +619,7 @@ Private Function IBenefitForm2_BenefitOn() As Boolean
   If IRDescriptionSelectorIsAvailable Then
     Call IRDescriptionToCombo(cboIRDesc2.ComboBox, benefit)
   End If
-  chkbx = BoolToChkBox(benefit.value(ITEM_MADEGOOD_IS_TAXDEDUCTED))
+  ChkBx = BoolToChkBox(benefit.value(ITEM_MADEGOOD_IS_TAXDEDUCTED))
   
 End Function
 Private Property Get IRDescriptionSelectorIsAvailable() As Boolean
@@ -711,12 +711,12 @@ End Property
 
 Private Sub LB_ItemClick(ByVal Item As MSComctlLib.ListItem)
   Call SetLastListItemSelected(Item)
-  If Not (LB.SelectedItem Is Nothing) Then
+  If Not (lb.SelectedItem Is Nothing) Then
     IBenefitForm2_BenefitToScreen (Item.Tag)
   End If
 End Sub
 Private Sub lb_ColumnClick(ByVal ColumnHeader As MSComctlLib.ColumnHeader)
-  Call SetSortOrder(LB, ColumnHeader)
+  Call SetSortOrder(lb, ColumnHeader)
 
 End Sub
 
@@ -942,7 +942,7 @@ Private Function IBenefitForm2_BenefitToScreen(Optional ByVal BenefitIndex As Lo
   IBenefitForm2_BenefitToScreen = BenefitToScreenHelper(Me, BenefitIndex, UpdateBenefit)
 End Function
 Private Property Get IBenefitForm2_lv() As MSComctlLib.IListView
-  Set IBenefitForm2_lv = Me.LB
+  Set IBenefitForm2_lv = Me.lb
 End Property
 Private Function IBenefitForm2_RemoveBenefit(ByVal BenefitIndex As Long) As Boolean
   IBenefitForm2_RemoveBenefit = p11d32.CurrentEmployer.CurrentEmployee.RemoveBenefit(Me, benefit, BenefitIndex)

@@ -2350,14 +2350,14 @@ Private Property Get IBenefitClass_TABLE() As BENEFIT_TABLES
   ECASE ("Table invalid for employer.")
 End Property
 
-Private Property Let IBenefitClass_value(ByVal Item As Long, RHS As Variant)
-  If Item = employer_PathAndFile Then Call CreatePathAndFile(RHS)
+Private Property Let IBenefitClass_value(ByVal item As Long, RHS As Variant)
+  If item = employer_PathAndFile Then Call CreatePathAndFile(RHS)
   
-  m_BenItems(Item) = CorrectBenValue(BC_EMPLOYER, Item, RHS)
+  m_BenItems(item) = CorrectBenValue(BC_EMPLOYER, item, RHS)
 End Property
 
-Private Property Get IBenefitClass_value(ByVal Item As Long) As Variant
-  IBenefitClass_value = m_BenItems(Item)
+Private Property Get IBenefitClass_value(ByVal item As Long) As Variant
+  IBenefitClass_value = m_BenItems(item)
   
 End Property
 
@@ -2642,46 +2642,6 @@ TransferEmployees_ERR:
   Resume TransferEmployees_END
   Resume
 End Function
-
-'MP DB confirm removal ok - does not need for any compatability?
-'Public Sub FindAccomExpenses()
-'  Dim rs As Recordset
-'  Dim sNames As String
-'  On Error GoTo FindAccomExpenses_Err
-'
-'  Call xSet("FindAccomExpenses")
-'
-'  Set rs = db.OpenRecordset(sql.Queries(FIND_ACCOM_EXPENSES))
-'  If Not rs Is Nothing And rs.RecordCount Then
-'      rs.MoveFirst
-'      Do While Not rs.EOF
-'        If Len(sNames) = 0 Then
-'          sNames = sNames + rs.Fields("P_NUM").value
-'        Else
-'          sNames = sNames + ", " + rs.Fields("P_NUM").value
-'        End If
-'        rs.MoveNext
-'      Loop
-'      Call MsgBox("Extra accomodation expenses are now to be entered separately under section N." & vbCrLf & _
-'              "Please re-enter any accomodation expenses for employee(s) " & sNames & " under section N.", vbOKOnly, "Accomodation Expenses")
-'      Call Err.Raise(ERR_ACCOMODATION_EXPENSES, , "Extra accomodation expenses are now to be entered separately under section N.  Please re-enter any accomodation expenses for employee(s) " & sNames & ".")
-'      Call db.Execute(sql.Queries(DELETE_ACCOM_EXPENSES))
-'  End If
-'
-'  Set rs = Nothing
-'FindAccomExpenses_End:
-'  Call xReturn("FindAccomExpenses")
-'  Exit Sub
-'FindAccomExpenses_Err:
-'  If Err.Number = ERR_ACCOMODATION_EXPENSES Then
-'    Call ErrorMessage(ERR_ACCOMODATION_EXPENSES, Err, "FindAccomExpenses", "Accomodation expenses change.", Err.Description)
-'    Resume Next
-'  Else
-'    Call ErrorMessage(ERR_ERROR, Err, "FindAccomExpenses", "FindAccomExpenses", "Error finding where there are any accomodation expenses.")
-'    Resume FindAccomExpenses_End
-'  End If
-'End Sub
-
 Public Property Get GroupCode1Alias() As String
   GroupCode1Alias = m_BenItems(employer_GroupCode1Alias_db)
 End Property
@@ -2691,4 +2651,6 @@ End Property
 Public Property Get GroupCode3Alias() As String
   GroupCode3Alias = m_BenItems(employer_GroupCode3Alias_db)
 End Property
-
+Public Property Get Name() As String
+  Name = m_BenItems(employer_Name_db)
+End Property

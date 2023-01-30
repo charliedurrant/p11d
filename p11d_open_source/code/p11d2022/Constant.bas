@@ -217,7 +217,7 @@ Public Const S_MONTHLY As String = "Monthly"
 Public Const S_WEEKLY As String = "Weekly"
 
 Public Const S_COMPANY_CAR_DAYS_UNAVAILABLE_FUEL_DESCRIPTION As String = "Do the car's days unavailable also relate to fuel?"
-Public Const S_COMPANY_CAR_ELECTFRIC_RANGE_MILES_DESCRIPTION As String = "Electric range (miles)"
+Public Const S_COMPANY_CAR_ELECTFRIC_RANGE_MILES_DESCRIPTION As String = "Electric range miles"
 Public Const S_COMPANY_CAR_CHECKS As String = "Company Car Checks"
 Public Const S_EMPLOYEE_CHECKS As String = "Employee Checks"
 Public Const S_ONLINE_CHECKS As String = "Online Submission Checks"
@@ -725,8 +725,8 @@ Public Enum ApplicationErrors
   ERR_CAR_FUEL_AVAILABLE_TO_INVALID
   ERR_DIESEL_REGISTERED_AFTER_1_1_2006
   ERR_CAR_ELEC_PRE_98
-      
-  TCSCLIENT_ERROR_END = ERR_CAR_ELEC_PRE_98
+  ERR_TESTING
+  TCSCLIENT_ERROR_END = ERR_TESTING
 End Enum
 
 

@@ -554,7 +554,7 @@ End Function
 Public Sub SetActivePrinter(ByVal Name As String)
   Dim rep As Reporter
   
-  Set rep = ReporterNew()
+  Set rep = ReporterNew(Nothing)
   Call rep.SetActivePrinter(Name)
   
 End Sub
@@ -568,7 +568,7 @@ Public Function ReportErrors(rs As Recordset, sReportHeader As String, ByVal Des
   Call xSet("ReportErrors")
   Set ac = New AutoClass
   If Not ac.InitAutoData("ReportErrors", rs) Then GoTo ReportErrors_End
-  Set rep = ReporterNew()
+  Set rep = ReporterNew(Nothing)
   If Not rep.InitReport(sTitle & vbCrLf & vbCrLf, Dest, LANDSCAPE, True) Then GoTo ReportErrors_End
   
   ac.dateFormat = "DD/MM/YYYY hh:mm:ss"

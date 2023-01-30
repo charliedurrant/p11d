@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{E297AE83-F913-4A8C-873C-EDEAC00CB9AC}#2.1#0"; "ATC3UBGRD.OCX"
+Object = "{E297AE83-F913-4A8C-873C-EDEAC00CB9AC}#2.1#0"; "atc3ubgrd.ocx"
 Begin VB.Form F_BalanceSheet 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Balance Sheet"
@@ -248,7 +248,7 @@ On Error GoTo F_BalanceSheet_Load_ERR
   
   
   Call AddUBGRDStandardColumn(grd, 0, 1244.976, "Date from", "")
-  Call AddUBGRDStandardColumn(grd, 1, 2200, "Amount received/(repaid) (£)", "General Number") '"##,##0;(##,##0)")
+  Call AddUBGRDStandardColumn(grd, 1, 2200, "Amount received/repaid (£)", "General Number") '"##,##0;(##,##0)")
   
   Set c = AddUBGRDStandardColumn(grd, 2, 1500, "Balance (£)", "General Number")
   Set c.Style = grd.Styles.Item("Heading")

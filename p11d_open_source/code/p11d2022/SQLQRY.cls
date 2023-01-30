@@ -213,17 +213,6 @@ Public Function Queries(QueryID As QUERY_NAMES, ParamArray P()) As String
       Queries = "SELECT * FROM T_BENEECARDETAILS WHERE (EECARKEY=" & NumSQL(P(i)) & ") ORDER BY MILESDATE"
     Case DELETE_EECARMILES
       Queries = "DELETE FROM T_BENEECARDETAILS WHERE (EECARKEY=" & NumSQL(P(i)) & ")"
-'    Case FIX_LOAN_OTHER_BALANCES
-'      Queries = "UPDATE DISTINCTROW T_BenLoan INNER JOIN T_Loans ON T_BenLoan.BalKey = T_Loans.Key SET T_Loans.P_Num = [T_BenLoan].[P_Num], T_Loans.Item = [T_BenLoan].[Item] " & _
-'                "Where ((T_Loans.Type = " & StrSQL(S_BENEFICIAL_LOANS_TYPE) & "))"
-'    Case FIX_RELOCATION_ITEMS
-'      Queries = "UPDATE DISTINCTROW T_BenReloc, T_BenRelocDetails SET T_BenRelocDetails.P_Num = [T_BenReloc].[P_Num], T_BenRelocDetails.Address = [T_BenReloc].[Item]"
-'    Case FIX_EECAR_MILES
-'      Queries = "UPDATE DISTINCTROW T_BenEeCar INNER JOIN T_BenEeCarDetails ON T_BenEeCar.EeCarKey = T_BenEeCarDetails.EeCarKey SET T_BenEeCarDetails.P_Num = [T_BenEECar].[P_Num], T_BenEeCarDetails.Reg = [T_BenEECar].[Item]"
-'    Case FIX_CAR_MILES
-'      Queries = "UPDATE DISTINCTROW T_BenCar INNER JOIN T_CarMiles ON T_BenCar.CarKey = T_CarMiles.CarKey SET T_CarMiles.P_Num = [T_BenCar].[P_Num], T_CarMiles.Reg = [T_BenCar].[Reg] "
-'    Case FIX_CARS_MAKE_MODEL
-'      Queries = "UPDATE DISTINCTROW T_BenCar SET T_BenCar.Make = T_BenCar.Item WHERE ((T_BenCar.Model Is Null) AND (T_BenCar.Make Is Null));"
     Case UPDATE_LAST_APPLICATION
       Queries = "UPDATE DISTINCTROW id SET id.LastApplication = " & StrSQL(p11d32.Rates.ApplicationType)
 'MP DB - not used anywhere
@@ -256,7 +245,7 @@ Public Function Queries(QueryID As QUERY_NAMES, ParamArray P()) As String
       Queries = "SELECT DISTINCTROW InterestDate, Sterling, Yen, Franc From T_InterestRates " & _
                 "ORDER BY InterestDate"
     Case DELETE_LOANBAL
-      Queries = "DELETE FROM T_LOANS WHERE (KEY=" & NumSQL(P(i)) & ") AND (TYPE=" & StrSQL(P(i + 1)) & ")"
+      Queries = "DELETE FROM T_LOANS WHERE (KEY=" & NumSQL(P(i)) & ")"
 '       Queries = "DELETE FROM T_LOANS WHERE (KEY=" & NumSQL(P(i)) & ") "
 '    Case FIX_VANS_ROGUE
 '      Queries = "DELETE DISTINCTROW T_BenVan.*, T_BenVan.P_Num From T_BenVan WHERE ((T_BenVan.P_Num=" & StrSQL("dsfsdf") & "));"
@@ -608,7 +597,7 @@ Function CCarCheckGapsInCarUsage(sOrderBy As String) As String
 err_end:
   Exit Function
 err_err:
-  Call ErrorMessage(Err.Number, Err, "CCarCheckGapsInCarUsage", "CCarCheckGapsInCarUsage", Err.Description)
+  Call ErrorMessage(err.Number, err, "CCarCheckGapsInCarUsage", "CCarCheckGapsInCarUsage", err.Description)
 End Function
 
 

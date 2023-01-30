@@ -735,6 +735,7 @@ CheckImportColumns_err:
   CheckImportColumns = False
   If RaiseError Then Err.Raise Err.Number, Err.Source, Err.Description
   Resume CheckImportColumns_end
+  Resume
 End Function
 Private Function ConstraintInList(ispec As ImportSpec, ByVal sItem As String, ByVal linenum As Long)
   If (ispec.Constraint And CONSTRAINT_INLIST) = CONSTRAINT_INLIST Then

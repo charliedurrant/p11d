@@ -233,9 +233,6 @@ Public Const S_SUBSCRIPTION_N As String = "Subscriptions"
 Public Const S_Other_M_Class1a As String = "Other items - Class 1A"
 Public Const S_Other_M_NonClass1a As String = "Other items - Non Class 1A"
 
-Public Const S_HOME_LOANS_TYPE As String = "[HOME LOANS]"
-Public Const S_BENEFICIAL_LOANS_TYPE As String = "[NORMAL LOAN]"
-
 Public Const S_VAN_FUEL_AVAILABLE_DESCRIPTION = "Was fuel available?"
 
 Public Const S_PRIVATE_MEDICAL_I As String = "Medical"

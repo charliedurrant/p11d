@@ -68,7 +68,7 @@ Public Function PreImport(ByVal bExclusive As Boolean) As Employer
   
 On Error GoTo err_err
 
-  If F_Employers.LB.SelectedItem Is Nothing Then Call Err.Raise(ERR_EMPLOYER_INVALID, "PreImport", "There is no employer selected")
+  If F_Employers.LB.SelectedItem Is Nothing Then Call err.Raise(ERR_EMPLOYER_INVALID, "PreImport", "There is no employer selected")
   
   Set ey = p11d32.Employers.Item(F_Employers.LB.SelectedItem.Tag)
   Set ben = ey
@@ -81,7 +81,7 @@ On Error GoTo err_err
 err_end:
   Exit Function
 err_err:
-  Call Err.Raise(Err.Number, ErrorSource(Err, "PreImport"), "Failed to pre init employer for import")
+  Call err.Raise(err.Number, ErrorSource(err, "PreImport"), "Failed to pre init employer for import")
   Resume
 End Function
 Public Sub Zip(ByVal ben As IBenefitClass, sDestFilename As String)
@@ -157,9 +157,9 @@ Public Sub InitImport()
     Set m_dbP11dFile = Employer.db
     Set wsError = DBEngine.CreateWorkspace("ErrorWS", p11d32.DBUserName, p11d32.DBPassword)
     Set m_dbError = InitDB(wsError, ben.value(employer_PathAndFile), ben.Name, , , False)
-    If m_dbError Is Nothing Then Call Err.Raise(ERR_INITIMPORT, "InitImport", "Unable to open employer database." & vbCrLf & "Employer name: " & ben.Name)
+    If m_dbError Is Nothing Then Call err.Raise(ERR_INITIMPORT, "InitImport", "Unable to open employer database." & vbCrLf & "Employer name: " & ben.Name)
     Set m_rsError = m_dbError.OpenRecordset(mSql.Queries(IMP_SELECT_ERRORS), dbOpenDynaset)
-    If m_rsError Is Nothing Then Call Err.Raise(ERR_INITIMPORT, "InitImport", "Unable to open import errors table.")
+    If m_rsError Is Nothing Then Call err.Raise(ERR_INITIMPORT, "InitImport", "Unable to open import errors table.")
     Do
       Set ic = New ImportClass
       Set ic.Workspace = p11d32.P11DWS
@@ -189,10 +189,16 @@ InitImport_End:
   Call xReturn("InitImport")
   Exit Sub
 InitImport_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "InitImport", "Initialise import", "Error initialising the Importer.")
+  Call ErrorMessage(ERR_ERROR, err, "InitImport", "Initialise import", "Error initialising the Importer.")
   Resume InitImport_End
   Resume
 End Sub
+Public Property Get DbP11dFile() As Database
+  Set DbP11dFile = m_dbP11dFile
+End Property
+Public Property Set DbP11dFile(ByVal value As Database)
+  Set m_dbP11dFile = value
+End Property
 
 Private Sub AddIRDescriptionImportData(qni As QUERY_NAMES_IMP, ParamArray Contraints())
   Dim i As Long
@@ -207,9 +213,9 @@ Private Sub AddIRDescriptionImportData(qni As QUERY_NAMES_IMP, ParamArray Contra
     Next
   End With
 End Sub
-Private Sub AddTaxYearConstraint(ImportName As String, sField As String)
-  Call m_iw.AddConstraint(ImportName, sField, TYPE_DATE, CONSTRAINT_MIN, p11d32.Rates.value(TaxYearStart))
-  Call m_iw.AddConstraint(ImportName, sField, TYPE_DATE, CONSTRAINT_MAX, p11d32.Rates.value(TaxYearEnd))
+Private Sub AddTaxYearConstraint(importName As String, sField As String)
+  Call m_iw.AddConstraint(importName, sField, TYPE_DATE, CONSTRAINT_MIN, p11d32.Rates.value(TaxYearStart))
+  Call m_iw.AddConstraint(importName, sField, TYPE_DATE, CONSTRAINT_MAX, p11d32.Rates.value(TaxYearEnd))
 End Sub
 Private Sub AddImportCompanyCars(ByVal bMatchOnAvailableFrom As Boolean, ByVal sNameSuffix As String, IPI As IProcessImport, dTaxYearStart As Date, dTaxYearEnd As Date)
   'COMPANY CARS
@@ -350,7 +356,6 @@ Private Sub AddImportQueries()
     Call .AddRequiredField(mSql.Name(IMP_BENEFICIAL_LOAN_BALANCES), "Personnel Number", True)
     Call .AddRequiredField(mSql.Name(IMP_BENEFICIAL_LOAN_BALANCES), "Loan description", True)
     Call .AddRequiredField(mSql.Name(IMP_BENEFICIAL_LOAN_BALANCES), "Date from", True)
-    Call .AddStaticLink(mSql.Name(IMP_BENEFICIAL_LOAN_BALANCES), "Loan type", TYPE_STR, S_BENEFICIAL_LOANS_TYPE, , True)
     Call .AddConstraint(mSql.Name(IMP_BENEFICIAL_LOAN_BALANCES), "Date from", TYPE_DATE, CONSTRAINT_MIN, dTaxYearStart)
     Call .AddConstraint(mSql.Name(IMP_BENEFICIAL_LOAN_BALANCES), "Date from", TYPE_DATE, CONSTRAINT_MAX, dTaxYearEnd)
     
@@ -494,7 +499,7 @@ AddImportQueries_End:
   Exit Sub
 
 AddImportQueries_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "AddImportQueries", "Add Import Queries", "Error setting up the import queries for the import wizard")
+  Call ErrorMessage(ERR_ERROR, err, "AddImportQueries", "Add Import Queries", "Error setting up the import queries for the import wizard")
   Resume AddImportQueries_End
   Resume
 End Sub
@@ -517,18 +522,18 @@ AddGeneralSQL_END:
   Call xReturn("AddGeneralSQL")
   Exit Function
 AddGeneralSQL_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "AddGeneralSQL", "Add General SQL", "Error adding general sql, query id = " & QueryID & ".")
+  Call ErrorMessage(ERR_ERROR, err, "AddGeneralSQL", "Add General SQL", "Error adding general sql, query id = " & QueryID & ".")
   Resume AddGeneralSQL_END
   Resume
 End Function
 
-Private Sub AddStandardDateFields(ByVal ImportName As String, ByVal dTaxYearStart As Date, ByVal dTaxYearEnd As Date)
-  Call m_iw.AddDefaultStaticLink(ImportName, S_FIELD_AVAILABLE_FROM, TYPE_DATE, dTaxYearStart, S_FIELD_AVAILABLE_FROM)
-  Call m_iw.AddDefaultStaticLink(ImportName, "Available to", TYPE_DATE, dTaxYearEnd, "Available to")
-  Call m_iw.AddConstraint(ImportName, S_FIELD_AVAILABLE_FROM, TYPE_DATE, CONSTRAINT_MIN, dTaxYearStart)
-  Call m_iw.AddConstraint(ImportName, S_FIELD_AVAILABLE_FROM, TYPE_DATE, CONSTRAINT_MAX, dTaxYearEnd)
-  Call m_iw.AddConstraint(ImportName, "Available to", TYPE_DATE, CONSTRAINT_MAX, dTaxYearEnd)
-  Call m_iw.AddConstraint(ImportName, "Available to", TYPE_DATE, CONSTRAINT_MIN, dTaxYearStart)
+Private Sub AddStandardDateFields(ByVal importName As String, ByVal dTaxYearStart As Date, ByVal dTaxYearEnd As Date)
+  Call m_iw.AddDefaultStaticLink(importName, S_FIELD_AVAILABLE_FROM, TYPE_DATE, dTaxYearStart, S_FIELD_AVAILABLE_FROM)
+  Call m_iw.AddDefaultStaticLink(importName, "Available to", TYPE_DATE, dTaxYearEnd, "Available to")
+  Call m_iw.AddConstraint(importName, S_FIELD_AVAILABLE_FROM, TYPE_DATE, CONSTRAINT_MIN, dTaxYearStart)
+  Call m_iw.AddConstraint(importName, S_FIELD_AVAILABLE_FROM, TYPE_DATE, CONSTRAINT_MAX, dTaxYearEnd)
+  Call m_iw.AddConstraint(importName, "Available to", TYPE_DATE, CONSTRAINT_MAX, dTaxYearEnd)
+  Call m_iw.AddConstraint(importName, "Available to", TYPE_DATE, CONSTRAINT_MIN, dTaxYearStart)
 End Sub
 
 
@@ -596,9 +601,9 @@ Private Function IErrorFilter_ViewAvailable() As Boolean
   IErrorFilter_ViewAvailable = True
 End Function
 
-Private Function IProcessImport_PostProcess(ic As ImportClass, RollBack As Boolean, LinesOK As Long, AddedRecordCount As Long, UpdatedRecordCount As Long) As Long
+Private Function IProcessImport_PostProcess(ic As ImportClass, RollBack As Boolean, linesOk As Long, AddedRecordCount As Long, UpdatedRecordCount As Long) As Long
   Dim rs As Recordset
-  Dim ErrorCount As Long, lTag As QUERY_NAMES_IMP, sImport As String
+  Dim errorCount As Long, lTag As QUERY_NAMES_IMP, sImport As String
   Dim sSelectSQL As String
   Dim bPostProcessed As Boolean
   
@@ -609,47 +614,59 @@ Private Function IProcessImport_PostProcess(ic As ImportClass, RollBack As Boole
       If Not ic.ImportWizard.CurrentDest Is Nothing Then
         sImport = ic.ImportWizard.CurrentDest.Name
         lTag = ic.ImportWizard.CurrentDest.Tag
-        Call GetPostProcessDataSQL(sSelectSQL, lTag, sImport)
-        bPostProcessed = Len(sSelectSQL) > 0
-        If bPostProcessed Then
-          ErrorCount = 0
-          Set rs = m_dbP11dFile.OpenRecordset(sSelectSQL, dbOpenSnapshot)
-          If Not (rs.EOF And rs.BOF) Then
-            rs.MoveLast
-            ErrorCount = rs.RecordCount
-          End If
-          If ErrorCount > 0 Then
-            Call MultiDialog("Errors in import", "Importing " & sImport & vbCrLf & CStr(ErrorCount) & " error(s) encountered in post processing", "&Ok")
-            rs.MoveFirst
-            Do
-              Err.Number = ERR_POST_PROCESS
-              Err.Description = "The " & rs.Fields(1).Name & " did not have a corresponding parent " & rs.Fields(0).Name
-              Call ErrorMessage(ERR_ERROR, Err, "PostProcess", rs.Fields(1).value & ",,," & rs.Fields(0).value, Err.Description)
-             
-              rs.MoveNext
-            Loop Until rs.EOF
-            LinesOK = LinesOK - ErrorCount
-            
-          End If
-        End If
-        If ErrorCount = 0 Then ErrorCount = BackwardsCompatibilityPostProcessing(lTag)
+        Call PostProcessEx(errorCount, linesOk, sImport, lTag)
       End If
-      
     End If
   End If
       
 PostProcessImport_END:
-  IProcessImport_PostProcess = ErrorCount
-  If ErrorCount > 0 Then RollBack = True
+  IProcessImport_PostProcess = errorCount
+  If errorCount > 0 Then RollBack = True
   Set rs = Nothing
   Call xReturn("PostProcessImport")
   Exit Function
 PostProcessImport_ERR:
-  ErrorCount = ErrorCount + 1
-  Call ErrorMessage(ERR_ERROR, Err, "PostProcessImport", "Post Process Import", "Error in post processing the import for '" & sImport & "'.")
+  errorCount = errorCount + 1
+  Call ErrorMessage(ERR_ERROR, err, "PostProcessImport", "Post Process Import", "Error in post processing the import for '" & sImport & "'.")
   Resume PostProcessImport_END
   Resume
 End Function
+
+Public Sub PostProcessEx(ByRef errorCount As Long, ByRef linesOk As Long, ByVal importName As String, ByVal importQuery As QUERY_NAMES_IMP)
+  Dim sSelectSQL As String
+  Dim bPostProcessed As Boolean
+  Dim rs As Recordset
+  
+  On Error GoTo err_err:
+  
+  Call GetPostProcessDataSQL(sSelectSQL, importQuery, importName)
+  bPostProcessed = Len(sSelectSQL) > 0
+  If bPostProcessed Then
+    errorCount = 0
+    Set rs = m_dbP11dFile.OpenRecordset(sSelectSQL, dbOpenSnapshot)
+    If Not (rs.EOF And rs.BOF) Then
+      rs.MoveLast
+      errorCount = rs.RecordCount
+    End If
+    If errorCount > 0 Then
+      Call MultiDialog("Errors in import", "Importing " & importName & vbCrLf & CStr(errorCount) & " error(s) encountered in post processing", "&Ok")
+      rs.MoveFirst
+      Do
+        err.Number = ERR_POST_PROCESS
+        err.Description = "The " & rs.Fields(1).Name & " did not have a corresponding parent " & rs.Fields(0).Name
+        Call ErrorMessage(ERR_ERROR, err, "PostProcess", rs.Fields(1).value & ",,," & rs.Fields(0).value, err.Description)
+        rs.MoveNext
+      Loop Until rs.EOF
+      linesOk = linesOk - errorCount
+    End If
+  End If
+  If errorCount = 0 Then errorCount = BackwardsCompatibilityPostProcessing(importQuery)
+  
+Exit Sub
+err_err:
+  Set rs = Nothing
+
+End Sub
 Private Function QuestionRollBack(ic As ImportClass, ByVal bPostProcessed As Boolean, ByVal lImportTag As Long)
   On Error GoTo QuestionRollBack_ERR
   
@@ -667,7 +684,7 @@ QuestionRollBack_END:
   Call xReturn("QuestionRollBack")
   Exit Function
 QuestionRollBack_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "QuestionRollBack", "Question Roll Back", "Error question the roll back of an import.")
+  Call ErrorMessage(ERR_ERROR, err, "QuestionRollBack", "Question Roll Back", "Error question the roll back of an import.")
   Resume QuestionRollBack_END
 End Function
 
@@ -714,7 +731,7 @@ ImportWizardSettings_End:
 ImportWizardSettings_Err:
   ImportWizardSettings = False
   'cd apf
-  Call ErrorMessage(ERR_ERROR, Err, "ImportWizardSettings", "Add Import Wizard settings", "Error adding default setting to the import wizard.")
+  Call ErrorMessage(ERR_ERROR, err, "ImportWizardSettings", "Add Import Wizard settings", "Error adding default setting to the import wizard.")
   Resume ImportWizardSettings_End
   Resume
 End Function
@@ -733,7 +750,7 @@ ReportHeader_END:
   Call xReturn("ReportHeader")
   Exit Property
 ReportHeader_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "ReportHeader", "Report Header", "Error getting the report header for import errors report.")
+  Call ErrorMessage(ERR_ERROR, err, "ReportHeader", "Report Header", "Error getting the report header for import errors report.")
   Resume ReportHeader_ERR
   Resume
 End Property
@@ -766,46 +783,46 @@ Private Sub UpdateGUIDKeys(ByVal QueryID As QUERY_NAMES_IMP)
 End Sub
 
 
-Private Sub GetPostProcessDataSQL(sSelectSQL As String, ByVal ImportSpecTag As Long, ByVal ImportName As String)
+Private Sub GetPostProcessDataSQL(sSelectSQL As String, ByVal ImportSpecTag As Long, ByVal importName As String)
   On Error GoTo GetPostProcessDataSQL_Err
   Call xSet("GetPostProcessDataSQL")
   sSelectSQL = ""
   Select Case ImportSpecTag
     Case IMP_EMPLOYEES
     Case IMP_HOMEPHONES
-        Call GetStandardPostProcessSQL(sSelectSQL, "T_BENPHONE", "Item", Left$(ImportName, Len(ImportName) - 1))
+        Call GetStandardPostProcessSQL(sSelectSQL, "T_BENPHONE", "Item", Left$(importName, Len(importName) - 1))
     Case IMP_CHAUFFEUR, IMP_CREDITCARDS_AND_VOUCHERS, IMP_EDUCATION, IMP_ENTERTAINMENT, IMP_GENERAL, IMP_MEDICAL, IMP_NOTIONAL_PAYMENTS, IMP_N_NON_CLASS_1A, IMP_N_CLASS_1A, IMP_TAXPAID, IMP_TRAVEL_AND_SUBSISTENCE
-        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_VOUCHERS_AND_CREDITCARDS_C, BCT_TABLE), "Item", Left$(ImportName, Len(ImportName) - 1))
+        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_VOUCHERS_AND_CREDITCARDS_C, BCT_TABLE), "Item", Left$(importName, Len(importName) - 1))
     Case IMP_O_OTHER_EXPENSES
         'NEEDS NOT TO QUERY CDB_ EMPLOYEE BENEFITS
         sSelectSQL = mSql.Queries(POST_PROCESS_OOTHER_O)
     Case IMP_ACCOMMODATION
-        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_LIVING_ACCOMMODATION_D, BCT_TABLE), "Item", Left$(ImportName, Len(ImportName) - 1))
+        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_LIVING_ACCOMMODATION_D, BCT_TABLE), "Item", Left$(importName, Len(importName) - 1))
     Case IMP_COMPANYCARS
-        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_COMPANY_CARS_F, BCT_TABLE), S_FIELD_CAR_REGISTRATION, Left$(ImportName, Len(ImportName) - 1))
+        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_COMPANY_CARS_F, BCT_TABLE), S_FIELD_CAR_REGISTRATION, Left$(importName, Len(importName) - 1))
     Case IMP_EMPLOYEE_CARS
-      Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_EMPLOYEE_CAR_E, BCT_TABLE), "Item", Left$(ImportName, Len(ImportName) - 1))
+      Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_EMPLOYEE_CAR_E, BCT_TABLE), "Item", Left$(importName, Len(importName) - 1))
       'CHANGE FUEL TYPE FROM D TO L if reg after 01/01/2006
       
     Case IMP_BENEFICIAL_LOANS
         Call UpdateGUIDKeys(IMP_BENEFICIAL_LOANS)
-        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_LOAN_OTHER_H, BCT_TABLE), "Item", Left$(ImportName, Len(ImportName) - 1))
+        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_LOAN_OTHER_H, BCT_TABLE), "Item", Left$(importName, Len(importName) - 1))
     Case IMP_ADDRESSES
-        Call GetStandardPostProcessSQL(sSelectSQL, "T_ADDRESSES", "Address1", Left$(ImportName, Len(ImportName) - 2))
+        Call GetStandardPostProcessSQL(sSelectSQL, "T_ADDRESSES", "Address1", Left$(importName, Len(importName) - 2))
     Case IMP_ASSETS_TRANSEFERRED
-        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_ASSETSTRANSFERRED_A, BCT_TABLE), "Item", Left$(ImportName, Len(ImportName) - 1))
+        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_ASSETSTRANSFERRED_A, BCT_TABLE), "Item", Left$(importName, Len(importName) - 1))
     Case IMP_ASSETS_AT_DISPOSAL
-        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_ASSETSATDISPOSAL_L, BCT_TABLE), "Item", Left$(ImportName, Len(ImportName) - 1))
+        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_ASSETSATDISPOSAL_L, BCT_TABLE), "Item", Left$(importName, Len(importName) - 1))
     Case IMP_SERVICES_PROVIDED
-        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_SERVICES_PROVIDED_K, BCT_TABLE), "Item", Left$(ImportName, Len(ImportName) - 1))
+        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_SERVICES_PROVIDED_K, BCT_TABLE), "Item", Left$(importName, Len(importName) - 1))
     Case IMP_RELOCATION_ITEM
-        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_QUALIFYING_RELOCATION_J, BCT_TABLE), "Item", Left$(ImportName, Len(ImportName) - 1))
+        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_QUALIFYING_RELOCATION_J, BCT_TABLE), "Item", Left$(importName, Len(importName) - 1))
     Case IMP_NON_SHARED_VANS
         sSelectSQL = mSql.Queries(POST_PROCESS_NON_SHARED_VANS_SELECT)
     Case IMP_SHARED_VANS
         sSelectSQL = mSql.Queries(POST_PROCESS_SHARED_VANS_SELECT)
     Case IMP_PAYMENTS_ON_BEHALF_OF_EMPLOYEE
-        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_PAYMENTS_ON_BEFALF_B, BCT_TABLE), "Item", Left$(ImportName, Len(ImportName) - 1))
+        Call GetStandardPostProcessSQL(sSelectSQL, p11d32.Rates.BenClassTo(BC_PAYMENTS_ON_BEFALF_B, BCT_TABLE), "Item", Left$(importName, Len(importName) - 1))
     Case IMP_EMPLOYEE_CAR_MILEAGE
         Call UpdateGUIDKeys(IMP_EMPLOYEE_CAR_MILEAGE)
         sSelectSQL = mSql.Queries(POST_PROCESS_EMPLOYEECAR_MILEAGE_SELECT)
@@ -824,7 +841,7 @@ GetPostProcessDataSQL_End:
   Exit Sub
 
 GetPostProcessDataSQL_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "GetPostProcessDataSQL", "Get postprocess sql string", "Unable to retrieve post process sql string. Import number: " & CStr(ImportSpecTag) & ".")
+  Call ErrorMessage(ERR_ERROR, err, "GetPostProcessDataSQL", "Get postprocess sql string", "Unable to retrieve post process sql string. Import number: " & CStr(ImportSpecTag) & ".")
   Resume GetPostProcessDataSQL_End
   Resume
 End Sub
@@ -855,7 +872,7 @@ BackwardsCompatibilityPostProcessing_End:
 
 BackwardsCompatibilityPostProcessing_Err:
   BackwardsCompatibilityPostProcessing = 1
-  Call ErrorMessage(ERR_ERROR, Err, "BackwardsCompatibilityPostProcessing", "Backwards Compatibility Post Processing", "Error processing imports for backwards compatability.")
+  Call ErrorMessage(ERR_ERROR, err, "BackwardsCompatibilityPostProcessing", "Backwards Compatibility Post Processing", "Error processing imports for backwards compatability.")
   Resume BackwardsCompatibilityPostProcessing_End
   Resume
 End Function
@@ -868,7 +885,7 @@ Private Function LogPostProcessingErrors(rsRecordsWhereParentNotAvailable As Rec
     If Not (.EOF And .BOF) Then
       .MoveFirst
       Do While Not .EOF
-        Call Err.Raise(ERR_POST_PROCESS, "LogPostProcessingErrors", sPostProcessingErrorMessage)
+        Call err.Raise(ERR_POST_PROCESS, "LogPostProcessingErrors", sPostProcessingErrorMessage)
         .MoveNext
       Loop
     End If
@@ -880,9 +897,9 @@ LogPostProcessingErrors_End:
 
 LogPostProcessingErrors_Err:
   If Not (rsRecordsWhereParentNotAvailable.EOF And rsRecordsWhereParentNotAvailable.BOF) Then
-    Call ErrorMessage(ERR_ERROR + ERR_ALLOWIGNORE, Err, "LogPostProcessingErrors", rsRecordsWhereParentNotAvailable.Fields(sSrcItemField), Err.Description)
+    Call ErrorMessage(ERR_ERROR + ERR_ALLOWIGNORE, err, "LogPostProcessingErrors", rsRecordsWhereParentNotAvailable.Fields(sSrcItemField), err.Description)
   Else
-    Call ErrorMessage(ERR_ERROR, Err, "LogPostProcessingErrors", "Log Post Processing Errors", "Error loging a post processing error.")
+    Call ErrorMessage(ERR_ERROR, err, "LogPostProcessingErrors", "Log Post Processing Errors", "Error loging a post processing error.")
   End If
   Resume Next
 End Function

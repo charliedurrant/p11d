@@ -84,7 +84,7 @@ On Error GoTo err_err
      Case "YEAR_START"
         Me.YearStart = CLng(value)
         If Me.YearStart <> p11d32.AppYear Then
-         Call Err.Raise(ERR_TESTING, "Testing.Init", "YEAR_START in the google sheet should be " & p11d32.AppYear)
+         Call err.Raise(ERR_TESTING, "Testing.Init", "YEAR_START in the google sheet should be " & p11d32.AppYear)
         End If
      Case "IMPORT_SHEET"
        
@@ -92,7 +92,7 @@ On Error GoTo err_err
        testingTest.Sheet = value
        
        If Not m_specs.Exists(testingTest.Sheet) Then
-         Call Err.Raise(ERR_TESTING, "Init", "No spec exist fot the import sheet " & testingTest.Sheet)
+         Call err.Raise(ERR_TESTING, "Init", "No spec exist fot the import sheet " & testingTest.Sheet)
        End If
        
        Set testingTest.Spec = m_specs(testingTest.Sheet)
@@ -104,7 +104,7 @@ On Error GoTo err_err
 err_end:
   Exit Sub
 err_err:
-  Call Err.Raise(ERR_ERROR, "Testing.Init", Err.Description)
+  Call err.Raise(ERR_ERROR, "Testing.Init", err.Description)
   Resume
 End Sub
 Private Function ReadSpecs(ByVal gSheet As GoogleSheet) As Dictionary
@@ -269,8 +269,8 @@ err_end:
   Exit Function
 err_err:
   
-  Call sb.Append(Err.Description)
-  Call ErrorMessage(ERR_TESTING, Err, "Run", "Testing", Err.Description)
+  Call sb.Append(err.Description)
+  Call ErrorMessage(ERR_TESTING, err, "Run", "Testing", err.Description)
   Resume err_end
   Resume
 End Function
@@ -280,6 +280,7 @@ Private Function ImportData(empr As Employer, sb As QString) As Boolean
   Dim importFilePath As String
   Dim specFilePath As String
   
+
   sb.Append (Title("Imports"))
   
   ImportData = False
@@ -301,28 +302,56 @@ Private Function ImportData(empr As Employer, sb As QString) As Boolean
     End If
     Call m_Errors.RemoveAll
   Next
+  
 End Function
 Private Sub ImportFile(ByVal empr As Employer, ByVal dataPathAndFile As String, ByVal specPathAndFile As String, importType As QUERY_NAMES_IMP, Sheet As String)
   Dim sql As SQLQUERIES_IMP
   Dim rs As Recordset
   Dim ic As ImportClass
   
+On Error GoTo err_err:
+
   Set ic = New ImportClass
   Set ic.Workspace = p11d32.P11DWS
   Set ic.ErrorFilter = Me
+  'cad import
+  Set atc2core.ErrorFilter = Me
+  
   m_importSheet = Sheet
   ic.RightTrimFields = True
   
   Call ic.InitImport(dataPathAndFile, IMPORT_DELIMITED, specPathAndFile)
-  
+    
   Set sql = New SQLQUERIES_IMP
   Set rs = empr.db.OpenRecordset(sql.Queries(importType))
+  'cad import
   
-  Call ic.ImportFile(rs)
-  rs.Close
+  Dim errorCount As Long
+  errorCount = ic.ImportFile(rs)
+  Call rs.Close
   Set rs = Nothing
+  If (errorCount < 0) Then
+    Call m_Errors.Add("Fatal error, no lines imported")
+  ElseIf errorCount = 0 Then
+    Dim linesOk As Long
+    Dim sqli As New SQLQUERIES_IMP
+    Dim importName As String
+    importName = sqli.Name(importType)
+    Set p11d32.Importing.DbP11dFile = empr.db
+    Call p11d32.Importing.PostProcessEx(errorCount, linesOk, importName, importType)
+  End If
   
   
+  
+err_end:
+  Set p11d32.Importing.DbP11dFile = Nothing
+  Set atc2core.ErrorFilter = Nothing
+  Exit Sub
+err_err:
+  Set p11d32.Importing.DbP11dFile = Nothing
+  Set atc2core.ErrorFilter = Nothing
+  Call m_Errors.Add(err.Description)
+  Call err.Raise(err.Number, err.Source, err.Description)
 End Sub
 Private Sub RunImport(dataPathAndFile As String, specPathAndFile As String)
   

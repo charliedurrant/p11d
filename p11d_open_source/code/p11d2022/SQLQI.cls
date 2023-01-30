@@ -262,7 +262,7 @@ Private Function QueriesEx(ByVal QueryID As QUERY_NAMES_IMP, params() As Variant
       If NameOnly Then
         QueriesEx = "Beneficial loan balances"
       Else
-        QueriesEx = "SELECT DISTINCTROW T_Loans.P_Num AS " & S_IMP_PNUM_ALIAS & ", T_Loans.Item AS [Loan description], T_Loans.From AS [Date from], T_Loans.Payment AS [Amount received/(repaid)], T_Loans.Type AS [Loan type] From T_Loans WHERE ((T_Loans.Type='" & S_BENEFICIAL_LOANS_TYPE & "'));"
+        QueriesEx = "SELECT DISTINCTROW T_Loans.P_Num AS " & S_IMP_PNUM_ALIAS & ", T_Loans.Item AS [Loan description], T_Loans.From AS [Date from], T_Loans.Payment AS [Amount received/repaid], T_Loans.Type AS [Loan type] From T_Loans;"
       End If
       
     Case IMP_BENEFICIAL_LOANS
@@ -376,7 +376,7 @@ Private Function QueriesEx(ByVal QueryID As QUERY_NAMES_IMP, params() As Variant
     
     
     Case POST_PROCESS_BENEFICIAL_LOAN_BALANCES_SELECT
-      QueriesEx = "SELECT DISTINCTROW T_Loans.Item as [Loan description], T_Loans.Payment as [Amount received] , T_Loans.P_Num AS " & S_IMP_PNUM_ALIAS & " FROM T_Loans LEFT JOIN T_BenLoan ON (T_Loans.Item = T_BenLoan.Item) AND (T_Loans.P_Num = T_BenLoan.P_Num) Where ((T_BenLoan.P_Num Is Null) AND (T_Loans.Type=" & StrSQL(S_BENEFICIAL_LOANS_TYPE) & "))"
+      QueriesEx = "SELECT DISTINCTROW T_Loans.Item as [Loan description], T_Loans.Payment as [Amount received] , T_Loans.P_Num AS " & S_IMP_PNUM_ALIAS & " FROM T_Loans LEFT JOIN T_BenLoan ON (T_Loans.Item = T_BenLoan.Item) AND (T_Loans.P_Num = T_BenLoan.P_Num) Where ((T_BenLoan.P_Num Is Null))"
     Case POST_PROCESS_RELOCATION_DETAIL_SELECT
       QueriesEx = "SELECT DISTINCTROW T_BenRelocDetails.Address, T_BenRelocDetails.Item, T_BenRelocDetails.P_Num AS " & S_IMP_PNUM_ALIAS & " FROM T_BenRelocDetails LEFT JOIN T_BenReloc ON (T_BenRelocDetails.P_Num = T_BenReloc.P_Num) AND (T_BenRelocDetails.Address = T_BenReloc.Item) WHERE (T_BenReloc.P_Num Is Null);"
     Case POST_PROCESS_OOTHER_O
@@ -387,7 +387,7 @@ Private Function QueriesEx(ByVal QueryID As QUERY_NAMES_IMP, params() As Variant
       QueriesEx = "UPDATE DISTINCTROW T_Employees SET T_Employees.Name = [T_Employees].[Surname] & ' ' & [T_Employees].[Title] & ' ' & [T_Employees].[FirstName] & ' ' & [T_Employees].[Initials] " & _
                   "Where ((T_Employees.Name Is Null))"
     Case UPDATE_BENEFICIAL_LOAN_BALANCES_KEYS
-      QueriesEx = "UPDATE DISTINCTROW T_Loans INNER JOIN T_BenLoan ON (T_Loans.Item = T_BenLoan.Item) AND (T_Loans.P_Num = T_BenLoan.P_Num) SET T_Loans.[Key] = [T_BenLoan].[BalKey] WHERE ((T_Loans.Key Is Null Or T_Loans.Key='') AND (T_Loans.Type=" & StrSQL(S_BENEFICIAL_LOANS_TYPE) & "));"
+      QueriesEx = "UPDATE DISTINCTROW T_Loans INNER JOIN T_BenLoan ON (T_Loans.Item = T_BenLoan.Item) AND (T_Loans.P_Num = T_BenLoan.P_Num) SET T_Loans.[Key] = [T_BenLoan].[BalKey] WHERE ((T_Loans.Key Is Null Or T_Loans.Key=''));"
 'MP DB - tbl deleted
 '   Case UPDATE_COMPANY_CAR_KEYS
 '      QueriesEx = "UPDATE DISTINCTROW T_CarMiles INNER JOIN T_BenCar ON (T_CarMiles.Reg = T_BenCar.Reg) AND (T_CarMiles.P_Num = T_BenCar.P_Num) SET T_CarMiles.CarKey = [T_BenCar].[CarKey] Where ((T_CarMiles.CarKey=0))"
@@ -405,7 +405,7 @@ QueriesEx_END:
   Call xReturn("Queries")
   Exit Function
 QueriesEx_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "QueriesEx", "Queries Ex", "Error getting the query string for an import, query id = " & QueryID & ".")
+  Call ErrorMessage(ERR_ERROR, err, "QueriesEx", "Queries Ex", "Error getting the query string for an import, query id = " & QueryID & ".")
   Resume QueriesEx_END
   Resume
 End Function

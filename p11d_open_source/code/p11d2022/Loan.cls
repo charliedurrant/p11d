@@ -212,10 +212,10 @@ Private Function IBenefitClass_Copy(Parent As Object) As IBenefitClass
   Call xSet("Copy")
   
   Set ee = Parent
-  If ee Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "Copy loan", "The employee is nothing.")
+  If ee Is Nothing Then Call err.Raise(ERR_IS_NOTHING, "Copy loan", "The employee is nothing.")
   
   Set loans = LoansAddToCurrentEmployee(ee)
-  If loans Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "Copy loan", "The loans collection for the destination employee is nothing.")
+  If loans Is Nothing Then Call err.Raise(ERR_IS_NOTHING, "Copy loan", "The loans collection for the destination employee is nothing.")
   
   Set ben = New Loan
   ben.BenefitClass = m_BenClass
@@ -237,7 +237,7 @@ Copy_END:
   Call xReturn("Copy")
   Exit Function
 Copy_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "Copy", "Copy", "Error copying a company car benefit.")
+  Call ErrorMessage(ERR_ERROR, err, "Copy", "Copy", "Error copying a company car benefit.")
   Resume Copy_ERR
 
 End Function
@@ -278,19 +278,10 @@ AddNOther_END:
   Call xReturn("AddNOther")
   Exit Sub
 AddNOther_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "AddNOther", "Add N Other", "Error adding an N other benefit with a loan benefit.")
+  Call ErrorMessage(ERR_ERROR, err, "AddNOther", "Add N Other", "Error adding an N other benefit with a loan benefit.")
   Resume AddNOther_END
   Resume
 End Sub
-
-'km
-Private Property Get LoanTypeString() As String
-    LoanTypeString = S_BENEFICIAL_LOANS_TYPE
-  
-End Property
-
-
-
 Public Function BalanceOnDate(dDate As Date, lLastIndex As Long) As Double
   Dim l As Long
   Dim bi As BalanceItem
@@ -326,7 +317,7 @@ BalanceOnDate_END:
   Call xReturn("BalanceOnDate")
   Exit Function
 BalanceOnDate_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "BalanceOnDate", "Balance On Date", "Error getting the balance on " & dDate & " for " & m_BenItems(ln_item_db) & ".")
+  Call ErrorMessage(ERR_ERROR, err, "BalanceOnDate", "Balance On Date", "Error getting the balance on " & dDate & " for " & m_BenItems(ln_item_db) & ".")
   Resume BalanceOnDate_END
 End Function
 
@@ -387,7 +378,7 @@ Private Function IBenefitClass_DeleteDB() As Boolean
   If Len(m_sbookmark) > 0 Then
     rs.Bookmark = m_sbookmark
     rs.Delete
-    Call p11d32.CurrentEmployer.db.Execute(sql.Queries(DELETE_LOANBAL, m_BenItems(ln_balkey_db), LoanTypeString))
+    Call p11d32.CurrentEmployer.db.Execute(sql.Queries(DELETE_LOANBAL, m_BenItems(ln_balkey_db)))
   End If
   
   IBenefitClass_DeleteDB = True
@@ -397,7 +388,7 @@ Loan_DeleteDB_End:
   Exit Function
   
 Loan_DeleteDB_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "Loan_DeleteDB", "Loan Delete DB", "Error deleting the loan benefit.")
+  Call ErrorMessage(ERR_ERROR, err, "Loan_DeleteDB", "Loan Delete DB", "Error deleting the loan benefit.")
   Resume Loan_DeleteDB_End
   Resume
 End Function
@@ -589,7 +580,7 @@ Private Function IBenefitClass_PrintWkBody(rep As Reporter) As Boolean
 clsLoan_PrintWK_end:
   Exit Function
 clsLoan_PrintWK_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "Loan_PRINTWK", "Loan Print Wk Body", "Error printing the loan working paper")
+  Call ErrorMessage(ERR_ERROR, err, "Loan_PRINTWK", "Loan Print Wk Body", "Error printing the loan working paper")
   Resume clsLoan_PrintWK_end
   Resume
 End Function
@@ -617,7 +608,7 @@ Private Sub BalanceSheetTable(rep As Reporter, ben As IBenefitClass)
 BalanceSheetTable_END:
   Exit Sub
 BalanceSheetTable_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "BalanceSheetTable", "Balance Sheet Table", "Error printing balance sheet table.")
+  Call ErrorMessage(ERR_ERROR, err, "BalanceSheetTable", "Balance Sheet Table", "Error printing balance sheet table.")
   Resume BalanceSheetTable_END
 End Sub
 Private Function IBenefitClass_ReadDB() As Long
@@ -679,7 +670,7 @@ clsLoan_ReadDB_end:
   Call xReturn("clsLoan_ReadDB")
   Exit Function
 clsLoan_ReadDB_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "Loan_readDB", "Loan ReadDC", "Unable to read the loan details.")
+  Call ErrorMessage(ERR_ERROR, err, "Loan_readDB", "Loan ReadDC", "Unable to read the loan details.")
   Resume clsLoan_ReadDB_end
   Resume
 End Function
@@ -816,7 +807,7 @@ SetBenItemsInformation_end:
   Exit Sub
   
 SetBenItemsInformation_err:
-  Call ErrorMessage(ERR_ERROR, Err, "SetBenItemsInformation", "Set Benefit Item Information", "Error setting benefit information")
+  Call ErrorMessage(ERR_ERROR, err, "SetBenItemsInformation", "Set Benefit Item Information", "Error setting benefit information")
   Resume SetBenItemsInformation_end
 End Sub
 
@@ -925,7 +916,7 @@ clsLoan_WriteDB_end:
 clsLoan_WriteDB_Err:
   IBenefitClass_WriteDB = False
   Call ClearEdit(rs)
-  Call ErrorMessage(ERR_ERROR, Err, "Loan_WriteDb", "Write DB", "Error writing the loan benefit.")
+  Call ErrorMessage(ERR_ERROR, err, "Loan_WriteDb", "Write DB", "Error writing the loan benefit.")
   Resume clsLoan_WriteDB_end
   Resume
 End Function
@@ -943,8 +934,8 @@ Private Sub WriteBalanceItem(rs As Recordset, bi As BalanceItem, sLoanType As St
   On Error GoTo WriteBalanceItem_ERR
   
 
-  If rs Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "WriteBalanceItem", "Write Balance Item", "The recordset is nothing")
-  If bi Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "WriteBalanceItem", "Write Balance Item", "The Balance item is nothing.")
+  If rs Is Nothing Then Call err.Raise(ERR_IS_NOTHING, "WriteBalanceItem", "Write Balance Item", "The recordset is nothing")
+  If bi Is Nothing Then Call err.Raise(ERR_IS_NOTHING, "WriteBalanceItem", "Write Balance Item", "The Balance item is nothing.")
   
   rs.AddNew
   rs.Fields("KEY").value = m_BenItems(ln_balkey_db)
@@ -958,7 +949,7 @@ Private Sub WriteBalanceItem(rs As Recordset, bi As BalanceItem, sLoanType As St
 WriteBalanceItem_END:
   Exit Sub
 WriteBalanceItem_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "WriteBalanceItem", "Write Balance Item", "Error writing balance item for a loan.")
+  Call ErrorMessage(ERR_ERROR, err, "WriteBalanceItem", "Write Balance Item", "Error writing balance item for a loan.")
   Resume WriteBalanceItem_END
   Resume
 End Sub
@@ -973,18 +964,17 @@ Public Function WriteBalances(dbEmployer As Database) As Boolean
   
   Call xSet("WriteBalances")
   
-  sLoanType = LoanTypeString
   
   Set ben = Me
   Set benEmployee = m_Parent.Parent
   sPNum = benEmployee.value(ee_PersonnelNumber_db)
   
-  If ben.value(ln_balkey_db) = Empty Then Call Err.Raise(ERR_IS_NOTHING, "WriteBalances", "Write Balances", "The Balance key has not been initialised.")
+  If ben.value(ln_balkey_db) = Empty Then Call err.Raise(ERR_IS_NOTHING, "WriteBalances", "Write Balances", "The Balance key has not been initialised.")
   
-  If ben.value(ln_BalancesAmmended) Then Call dbEmployer.Execute(sql.Queries(DELETE_LOANBAL, ben.value(ln_balkey_db), sLoanType))
+  If ben.value(ln_BalancesAmmended) Then Call dbEmployer.Execute(sql.Queries(DELETE_LOANBAL, ben.value(ln_balkey_db)))
   
   Set rs = dbEmployer.OpenRecordset(sql.Queries(SELECT_ALLLOANBALS), dbOpenDynaset, dbFailOnError)
-  If rs Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "WriteBalances", "Write Balances", "The Balance key has not been initialised.")
+  If rs Is Nothing Then Call err.Raise(ERR_IS_NOTHING, "WriteBalances", "Write Balances", "The Balance key has not been initialised.")
   
   If p11d32.BringForward.Yes Then
     Set bi = New BalanceItem
@@ -1007,7 +997,7 @@ WriteBalances_End:
   Exit Function
 
 WriteBalances_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "WriteBalances", "Write Balances", "Error writing the loan balances to the database.")
+  Call ErrorMessage(ERR_ERROR, err, "WriteBalances", "Write Balances", "Error writing the loan balances to the database.")
   Resume WriteBalances_End
 End Function
 
@@ -1031,7 +1021,7 @@ On Error GoTo ReadBalances_Err
 
   Set ben = Me
 
-  Set rs = dbEmployer.OpenRecordset(sql.Queries(SELECT_LOAN_BALANCES, ben.value(ln_balkey_db), LoanTypeString), dbOpenForwardOnly, dbFailOnError)
+  Set rs = dbEmployer.OpenRecordset(sql.Queries(SELECT_LOAN_BALANCES, ben.value(ln_balkey_db)), dbOpenForwardOnly, dbFailOnError)
   BalanceSheet.RemoveAll
   
   Do While Not rs.EOF
@@ -1053,7 +1043,7 @@ ReadBalances_End:
   Exit Function
 
 ReadBalances_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "ReadBalances", "Read Balances", "Error reading the loan balances.")
+  Call ErrorMessage(ERR_ERROR, err, "ReadBalances", "Read Balances", "Error reading the loan balances.")
   Resume ReadBalances_End
   Resume
 End Function
@@ -1113,7 +1103,7 @@ FinishBalances_End:
   Call xReturn("FinishBalances")
   Exit Function
 FinishBalances_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "FinishBalances", "Finish Balances", "Error finishing the balances information.")
+  Call ErrorMessage(ERR_ERROR, err, "FinishBalances", "Finish Balances", "Error finishing the balances information.")
   Resume FinishBalances_End
   Resume
 End Function
@@ -1141,7 +1131,7 @@ LoanBalance_End:
   Call xReturn("LoanBalance")
   Exit Function
 LoanBalance_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "LoanBalance", "Loan Balance", "Error obtaining the overall loan balance.")
+  Call ErrorMessage(ERR_ERROR, err, "LoanBalance", "Loan Balance", "Error obtaining the overall loan balance.")
   Resume LoanBalance_End
 End Function
 
@@ -1179,7 +1169,7 @@ GetNextBalanceItemFromDateFrom_End:
 
 GetNextBalanceItemFromDateFrom_Err:
   GetNextBalanceItemFromDateFrom = False
-  Call ErrorMessage(ERR_ERROR, Err, "GetNextBalanceItemFromDateFrom", "Get Next Balance Item From Date From", "Error obtaining the next balance item by date.")
+  Call ErrorMessage(ERR_ERROR, err, "GetNextBalanceItemFromDateFrom", "Get Next Balance Item From Date From", "Error obtaining the next balance item by date.")
   Resume GetNextBalanceItemFromDateFrom_End
 End Function
 
@@ -1211,7 +1201,7 @@ GetFirstBalanceItemFromDateFrom_End:
   Call xReturn("GetFirstBalanceItemFromDateFrom")
   Exit Function
 GetFirstBalanceItemFromDateFrom_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "GetFirstBalanceItemFromDateFrom", "Get First Balance Item From Date From", "Error obtaining the first balance item by date.")
+  Call ErrorMessage(ERR_ERROR, err, "GetFirstBalanceItemFromDateFrom", "Get First Balance Item From Date From", "Error obtaining the first balance item by date.")
   Resume GetFirstBalanceItemFromDateFrom_End
 End Function
 
@@ -1245,7 +1235,7 @@ MaxOutstandingAtAnyPointInYear_End:
 
 MaxOutstandingAtAnyPointInYear_Err:
   MaxOutstandingAtAnyPointInYear = S_ERROR
-  Call ErrorMessage(ERR_ERROR, Err, "MaxOutstandingAtAnyPointInYear", "Max Outstanding At Any Point In Year", "Error calculating the maximum balance outstanding at any point in the year.")
+  Call ErrorMessage(ERR_ERROR, err, "MaxOutstandingAtAnyPointInYear", "Max Outstanding At Any Point In Year", "Error calculating the maximum balance outstanding at any point in the year.")
   Resume MaxOutstandingAtAnyPointInYear_End
 End Property
 
@@ -1309,7 +1299,7 @@ OrderBalanceItemsByDateFrom_End:
   Exit Function
 
 OrderBalanceItemsByDateFrom_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "OrderBalanceItemsByDateFrom", "Order Balance Items By Date From", "Error ordering the balance items by date from.")
+  Call ErrorMessage(ERR_ERROR, err, "OrderBalanceItemsByDateFrom", "Order Balance Items By Date From", "Error ordering the balance items by date from.")
   Resume OrderBalanceItemsByDateFrom_End
   Resume
 End Function
@@ -1343,7 +1333,7 @@ NextActionDate_End:
   Exit Function
 
 NextActionDate_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "NextActionDate", "Next Action Date", "Error obtaining the next action date.")
+  Call ErrorMessage(ERR_ERROR, err, "NextActionDate", "Next Action Date", "Error obtaining the next action date.")
   Resume NextActionDate_End
   Resume
 End Function
@@ -1481,7 +1471,7 @@ DateLoanMade_End:
   Call xReturn("DateLoanMade")
   Exit Sub
 DateLoanMade_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "DateLoanMade", "Date Loan Made", "Error finding the date when the loan was made.")
+  Call ErrorMessage(ERR_ERROR, err, "DateLoanMade", "Date Loan Made", "Error finding the date when the loan was made.")
   Resume DateLoanMade_End
 End Sub
 Private Sub DateLoanDischargedOrMade()
@@ -1507,7 +1497,7 @@ Private Sub DateLoanDischargedOrMade()
 DateLoanDischargedOrMade_End:
   Exit Sub
 DateLoanDischargedOrMade_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "DateLoanDischargedOrMade", "Date Loan Discharged Or Made", "Error setting the date loan discharged or made.")
+  Call ErrorMessage(ERR_ERROR, err, "DateLoanDischargedOrMade", "Date Loan Discharged Or Made", "Error setting the date loan discharged or made.")
   Resume DateLoanDischargedOrMade_End
 End Sub
 Private Sub DateLoanDischanged(ByVal dblLoanBalance As Double)
@@ -1542,7 +1532,7 @@ DateLoanDischanged_End:
   Call xReturn("DateLoanDischanged")
   Exit Sub
 DateLoanDischanged_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "DateLoanDischanged", "Date Loan Dischanged", "Error finding the date when the loan was discharged.")
+  Call ErrorMessage(ERR_ERROR, err, "DateLoanDischanged", "Date Loan Dischanged", "Error finding the date when the loan was discharged.")
   Resume DateLoanDischanged_End
 End Sub
 
@@ -1590,7 +1580,7 @@ OpenOutStanding_End:
 
 OpenOutStanding_Err:
   OpenOutStanding = S_ERROR
-  Call ErrorMessage(ERR_ERROR, Err, "OpenOutStanding", "Open Out Standing", "Error finding the opening outstanding loan balance.")
+  Call ErrorMessage(ERR_ERROR, err, "OpenOutStanding", "Open Out Standing", "Error finding the opening outstanding loan balance.")
   Resume OpenOutStanding_End
 End Property
 
@@ -1640,7 +1630,7 @@ CloseOutStanding_End:
 
 CloseOutStanding_Err:
   CloseOutStanding = S_ERROR
-  Call ErrorMessage(ERR_ERROR, Err, "CloseOutStanding", "Close Out Standing", "Error finding the closing outstanding loan balance.")
+  Call ErrorMessage(ERR_ERROR, err, "CloseOutStanding", "Close Out Standing", "Error finding the closing outstanding loan balance.")
   Resume CloseOutStanding_End
 End Function
 
@@ -1675,7 +1665,7 @@ WholeTaxMonthsOutstanding_End:
   Exit Function
 
 WholeTaxMonthsOutstanding_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "WholeTaxMonthsOutstanding", "Whole Tax Months Outstanding", "Error finding the number of complete tax months the loan was outstanding.")
+  Call ErrorMessage(ERR_ERROR, err, "WholeTaxMonthsOutstanding", "Whole Tax Months Outstanding", "Error finding the number of complete tax months the loan was outstanding.")
   Resume WholeTaxMonthsOutstanding_End
 End Function
 
@@ -1693,7 +1683,7 @@ NumberOfBalances_End:
   Exit Property
 
 NumberOfBalances_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "NumberOfBalances", "Number Of Balances", "Error findinh the number of balances for the loan.")
+  Call ErrorMessage(ERR_ERROR, err, "NumberOfBalances", "Number Of Balances", "Error findinh the number of balances for the loan.")
   Resume NumberOfBalances_End
 End Property
 
@@ -1717,7 +1707,7 @@ SetLoanCurrenyIndex_End:
   Exit Function
 
 SetLoanCurrenyIndex_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "SetLoanCurrenyIndex", "Set Loan Curreny Index", "Error setting the loan currency index.")
+  Call ErrorMessage(ERR_ERROR, err, "SetLoanCurrenyIndex", "Set Loan Curreny Index", "Error setting the loan currency index.")
   Resume SetLoanCurrenyIndex_End
 End Function
 
@@ -1787,7 +1777,7 @@ CalculateInterest_End:
   Exit Function
 
 CalculateInterest_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "CalculateInterest", "Calculate Interest", "Error calculating the loan interest.")
+  Call ErrorMessage(ERR_ERROR, err, "CalculateInterest", "Calculate Interest", "Error calculating the loan interest.")
   Resume CalculateInterest_End
   Resume
 End Function

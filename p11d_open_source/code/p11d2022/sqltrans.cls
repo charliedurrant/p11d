@@ -52,14 +52,6 @@ Public Function Queries(QueryID As QUERY_NAMES_TRANSFER, ParamArray P()) As Stri
 
    i = LBound(P)
   Select Case QueryID
-    Case HOME_LOAN_TRANSFER_KEYS
-      Queries = "INSERT INTO T_Loans ( Type, [From], Payment, [Key], P_Num, Item ) IN " & StrSQL(P(i)) & " " & _
-                "SELECT DISTINCTROW T_Loans.Type, T_Loans.From, T_Loans.Payment, " & P(i + 1) & " AS Expr1, T_Loans.P_Num, T_Loans.Item " & _
-                "From T_Loans " & _
-                "Where ((T_Loans.Type = " & StrSQL(S_HOME_LOANS_TYPE) & ") And (T_Loans.Key = " & NumSQL(P(i + 2)) & "))"
-    Case HOME_LOAN_DELETE_KEYS
-      Queries = "DELETE DISTINCTROW T_Loans.*, T_Loans.Type, T_Loans.Key " & _
-                "From T_Loans Where ((T_Loans.Type = " & StrSQL(S_HOME_LOANS_TYPE) & ") And (T_Loans.Key = " & NumSQL(P(i)) & "))"
     Case OTHER_LOAN_TRANSFER_DATA
 'MP DB - CheapTaxableLoan was not present in INSERT, present in SELECT
 '       Queries = "INSERT INTO T_BenLoan ( P_Num, OLDBALKEY, Item, Interest,MadeGoodIsTaxDeducted, Waived, Curr, DailyOnly, LType, relocation,DidLoanCommenceOnFirstDayOfTaxYear ) IN " & StrSQL(P(i)) & " " & _
@@ -79,7 +71,7 @@ Public Function Queries(QueryID As QUERY_NAMES_TRANSFER, ParamArray P()) As Stri
                 " From T_Loans WHERE ((T_Loans.P_Num=" & StrSQL(P(i + 1)) & "))"
     Case OTHER_LOAN_DELETE_KEYS
       Queries = "DELETE DISTINCTROW T_Loans.*, T_Loans.Type, T_Loans.Key " & _
-                "From T_Loans Where ((T_Loans.Type = " & StrSQL(S_BENEFICIAL_LOANS_TYPE) & ") And (T_Loans.Key = " & NumSQL(P(i)) & "))"
+                "From T_Loans Where (And (T_Loans.Key = " & NumSQL(P(i)) & "))"
 
 
     Case RELOC_TRANSFER_DATA

@@ -32,7 +32,7 @@ Public Sub MathInit()
   Next i
 End Sub
 Function FileNameSafe(ByVal sFileName As String) As String
- Const sInvalidChars As String = "/\|<>:*?"""
+ Const sInvalidChars As String = "/\|<>:*?""" & vbCrLf & vbTab
  Dim lCt As Long
  
  sFileName = TrimEx(sFileName)

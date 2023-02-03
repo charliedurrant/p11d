@@ -152,10 +152,10 @@ Private Sub HMITSectionsToScreen()
         i = i + 1
         Load chkOptions(i)
         chkOptions(i).Visible = True
-        chkOptions(i).Top = chkOptions(i - 1).Top + (chkOptions(i - 1).Height)
+        chkOptions(i).Top = chkOptions(i - 1).Top + (chkOptions(i - 1).height)
         chkOptions(i).Left = chkOptions(i - 1).Left
-        chkOptions(i).Width = chkOptions(i - 1).Width
-        chkOptions(i).Height = chkOptions(i - 1).Height
+        chkOptions(i).width = chkOptions(i - 1).width
+        chkOptions(i).height = chkOptions(i - 1).height
         chkOptions(i).Tag = HS
       Else
         chkOptions(i).Tag = HS
@@ -166,16 +166,16 @@ Private Sub HMITSectionsToScreen()
         chkOptions(i).value = vbUnchecked
       End If
       
-      chkOptions(i).Caption = p11d32.Rates.HMITSectionToHMITDescription(HS)
+      chkOptions(i).Caption = p11d32.Rates.HMITSectionToValue(HS, HMIT_SECTION_BOX_AND_DESCRIPTION)
       bNotFirst = True
     End If
   Next
-  fraOther.Top = chkOptions(i).Top + (2 * chkOptions(i).Height)
-  cmdOK.Top = fraOther.Top + fraOther.Height + chkOptions(0).Height
+  fraOther.Top = chkOptions(i).Top + (2 * chkOptions(i).height)
+  cmdOK.Top = fraOther.Top + fraOther.height + chkOptions(0).height
 
   chkSelectAll.Top = cmdOK.Top
   
-  Me.Height = cmdOK.Top + cmdOK.Width + chkOptions(0).Height - (Me.Height - Me.ScaleHeight) + 100
+  Me.height = cmdOK.Top + cmdOK.width + chkOptions(0).height - (Me.height - Me.ScaleHeight) + 100
   
   Call CheckSelectAll
 
@@ -205,7 +205,7 @@ Private Sub cmdCancel_Click()
   Me.Hide
 End Sub
 
-Private Sub cmdOK_Click()
+Private Sub cmdOk_Click()
   Dim i As Long, j As Long
   
   Me.Hide

@@ -23,6 +23,10 @@ FormatWN_err:
   FormatWN = sCurrency & v
   Resume FormatWN_end
 End Function
+Public Function FormatWNNoCurrency(ByVal v As Variant, Optional ByVal bNegative As Boolean = False, Optional b2DP As Boolean = False) As String
+  FormatWNNoCurrency = FormatWN(v, "", bNegative, b2DP)
+End Function
+
 Public Function FormatWNRPT(v As Variant, Optional sCurrency As String = S_CURRENCY, Optional bNegative As Boolean = False, Optional b2DP As Boolean = False) As String
   FormatWNRPT = Chr$(34) & FormatWN(v, sCurrency, bNegative, b2DP) & Chr$(34)
 End Function

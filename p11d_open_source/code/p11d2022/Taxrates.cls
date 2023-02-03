@@ -38,6 +38,7 @@ Public Enum BEN_CLASS_TO
   BCT_TABLE
   BCT_CLASS1A_ABLE
   BCT_BENEFIT_TABLE
+  BCT_EMPLOYEE_BOX_ITEM
 End Enum
 
 
@@ -805,6 +806,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenTrans"
         Case BCT_CLASS1A_ABLE
           BenClassTo = True
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_A
        Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -828,6 +831,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenOther"
         Case BCT_CLASS1A_ABLE
           BenClassTo = False
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_B
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -853,6 +858,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenOther"
         Case BCT_CLASS1A_ABLE
           BenClassTo = False
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_B
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -878,6 +885,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenOther"
         Case BCT_CLASS1A_ABLE
           BenClassTo = False
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_C
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -899,6 +908,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenAccom"
         Case BCT_CLASS1A_ABLE
           BenClassTo = True
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_D
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -920,6 +931,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenEECar"
         Case BCT_CLASS1A_ABLE
           BenClassTo = False
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_E
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -939,6 +952,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenCar"
         Case BCT_CLASS1A_ABLE
           BenClassTo = True
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_F
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -960,6 +975,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenCar"
         Case BCT_CLASS1A_ABLE
           BenClassTo = True
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_F
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -990,6 +1007,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenVan"
         Case BCT_CLASS1A_ABLE
           BenClassTo = True
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_G
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -1005,6 +1024,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "Vans - fuel"
         Case BCT_CLASS1A_ABLE
           BenClassTo = True
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_G
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -1044,10 +1065,11 @@ On Error GoTo BenClassTo_Err
           End Select
         Case BCT_CLASS1A_ABLE
           BenClassTo = True
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_H
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
-    
     Case BC_PRIVATE_MEDICAL_I
       Select Case bCToType
         Case BCT_DBCLASS
@@ -1070,6 +1092,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenOther"
         Case BCT_CLASS1A_ABLE
           BenClassTo = True
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_I
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -1091,6 +1115,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenReloc"
         Case BCT_CLASS1A_ABLE
           BenClassTo = True
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_J
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -1112,6 +1138,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenGoods"
         Case BCT_CLASS1A_ABLE
           BenClassTo = True
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_K
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -1133,6 +1161,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenGoods"
         Case BCT_CLASS1A_ABLE
           BenClassTo = True
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_L
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -1166,6 +1196,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenOther"
         Case BCT_CLASS1A_ABLE
           BenClassTo = True
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_M
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -1199,6 +1231,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenOther"
         Case BCT_CLASS1A_ABLE
           BenClassTo = False
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_M
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -1225,6 +1259,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenOther"
         Case BCT_CLASS1A_ABLE
           BenClassTo = False
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_M
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -1250,6 +1286,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenOther"
         Case BCT_CLASS1A_ABLE
           BenClassTo = False
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_N
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -1273,6 +1311,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenOther"
         Case BCT_CLASS1A_ABLE
           BenClassTo = False
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_N
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -1298,6 +1338,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenOther"
         Case BCT_CLASS1A_ABLE
           BenClassTo = False
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_N
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -1323,6 +1365,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenOther"
         Case BCT_CLASS1A_ABLE
           BenClassTo = False
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_N
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -1346,6 +1390,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenPhone"
         Case BCT_CLASS1A_ABLE
           BenClassTo = False
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_N
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -1367,6 +1413,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenReloc"
         Case BCT_CLASS1A_ABLE
           BenClassTo = False
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_N
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -1390,6 +1438,8 @@ On Error GoTo BenClassTo_Err
           BenClassTo = "T_BenOther"
         Case BCT_CLASS1A_ABLE
           BenClassTo = False
+        Case BCT_EMPLOYEE_BOX_ITEM
+          BenClassTo = ee_BOX_N
         Case Else
           ECASE ("Invalid ben class to type, benclass=" & bc & ",ben class to type=" & bCToType)
       End Select
@@ -1444,44 +1494,54 @@ End Function
 Public Function HMITSectionToHMITCode(ByVal HMITS As HMIT_SECTIONS) As String
   HMITSectionToHMITCode = Chr$(Asc("A") - 1 + HMITS)
 End Function
-Public Function HMITSectionToHMITDescription(ByVal HMITS As HMIT_SECTIONS)
-  Select Case HMITS
-    Case HMIT_A
-      HMITSectionToHMITDescription = BenClassTo(BC_ASSETSTRANSFERRED_A, BCT_FORM_CAPTION)
-    Case HMIT_B
-      HMITSectionToHMITDescription = BenClassTo(BC_PAYMENTS_ON_BEFALF_B, BCT_FORM_CAPTION)
-    Case HMIT_C
-      HMITSectionToHMITDescription = BenClassTo(BC_VOUCHERS_AND_CREDITCARDS_C, BCT_FORM_CAPTION)
-    Case HMIT_D
-      HMITSectionToHMITDescription = BenClassTo(BC_LIVING_ACCOMMODATION_D, BCT_FORM_CAPTION)
-    Case HMIT_E
-      HMITSectionToHMITDescription = BenClassTo(BC_EMPLOYEE_CAR_E, BCT_FORM_CAPTION)
-    Case HMIT_F
-      HMITSectionToHMITDescription = BenClassTo(BC_COMPANY_CARS_F, BCT_FORM_CAPTION)
-    Case HMIT_G
-      HMITSectionToHMITDescription = BenClassTo(BC_NONSHAREDVANS_G, BCT_FORM_CAPTION)
-    Case HMIT_H
-      HMITSectionToHMITDescription = BenClassTo(BC_LOANS_H, BCT_FORM_CAPTION)
-    Case HMIT_I
-      HMITSectionToHMITDescription = BenClassTo(BC_PRIVATE_MEDICAL_I, BCT_FORM_CAPTION)
-    Case HMIT_J
-      HMITSectionToHMITDescription = BenClassTo(BC_QUALIFYING_RELOCATION_J, BCT_FORM_CAPTION)
-    Case HMIT_K
-      HMITSectionToHMITDescription = BenClassTo(BC_SERVICES_PROVIDED_K, BCT_FORM_CAPTION)
-    Case HMIT_L
-      HMITSectionToHMITDescription = BenClassTo(BC_ASSETSATDISPOSAL_L, BCT_FORM_CAPTION)
-'    Case HMIT_M
-'      HMITSectionToHMITDescription = BenClassTo(BC_SHARES_M, BCT_FORM_CAPTION)
-    Case HMIT_M
-      HMITSectionToHMITDescription = "Other items" 'BenClassTo(BC_NON_CLASS_1A_M, BCT_FORM_CAPTION)
-    Case HMIT_N
-      HMITSectionToHMITDescription = BenClassTo(BC_OOTHER_N, BCT_FORM_CAPTION)
-    Case Else
-      ECASE ("Invalid HMIT section in HMITSEctionToHMITDescription")
-  End Select
-  HMITSectionToHMITDescription = HMITSectionToHMITCode(HMITS) & " - " & HMITSectionToHMITDescription
+Public Function HMITSectionToValue(ByVal HMITS As HMIT_SECTIONS, ByVal valueType As HMIT_SECTION_VALUE) As Variant
+  Dim ret As Variant
   
+  If (valueType = HMIT_SECTION_BOX_LETTER) Then
+    ret = HMITSectionToHMITCode(HMITS)
+  ElseIf (valueType = HMIT_SECTION_EMPLOYER_BENEFIT_ITEM) Then
+    ret = (HMITS - HMIT_SECTIONS.HMIT_FIRST_ITEM) + Employer_ITEMS.employer_BOX_FIRST_ITEM
+  Else
+    Select Case HMITS
+      Case HMIT_A
+        ret = BenClassTo(BC_ASSETSTRANSFERRED_A, BCT_FORM_CAPTION)
+      Case HMIT_B
+        ret = BenClassTo(BC_PAYMENTS_ON_BEFALF_B, BCT_FORM_CAPTION)
+      Case HMIT_C
+        ret = BenClassTo(BC_VOUCHERS_AND_CREDITCARDS_C, BCT_FORM_CAPTION)
+      Case HMIT_D
+        ret = BenClassTo(BC_LIVING_ACCOMMODATION_D, BCT_FORM_CAPTION)
+      Case HMIT_E
+        ret = BenClassTo(BC_EMPLOYEE_CAR_E, BCT_FORM_CAPTION)
+      Case HMIT_F
+        ret = BenClassTo(BC_COMPANY_CARS_F, BCT_FORM_CAPTION)
+      Case HMIT_G
+        ret = BenClassTo(BC_NONSHAREDVANS_G, BCT_FORM_CAPTION)
+      Case HMIT_H
+        ret = BenClassTo(BC_LOANS_H, BCT_FORM_CAPTION)
+      Case HMIT_I
+        ret = BenClassTo(BC_PRIVATE_MEDICAL_I, BCT_FORM_CAPTION)
+      Case HMIT_J
+        ret = BenClassTo(BC_QUALIFYING_RELOCATION_J, BCT_FORM_CAPTION)
+      Case HMIT_K
+        ret = BenClassTo(BC_SERVICES_PROVIDED_K, BCT_FORM_CAPTION)
+      Case HMIT_L
+        ret = BenClassTo(BC_ASSETSATDISPOSAL_L, BCT_FORM_CAPTION)
+      Case HMIT_M
+        ret = "Other items"
+      Case HMIT_N
+        ret = BenClassTo(BC_OOTHER_N, BCT_FORM_CAPTION)
+      Case Else
+        ECASE ("Invalid HMIT section in HMITSEctionToHMITDescription")
+    End Select
+    If (valueType = HMIT_SECTION_BOX_AND_DESCRIPTION) Then
+      ret = HMITSectionToHMITCode(HMITS) & " - " & ret
+    End If
+  End If
+  
+  HMITSectionToValue = ret
 End Function
+
 Public Function DBClassToBCClass(sClass As String) As BEN_CLASS
    Select Case UCASE$(sClass)
     Case UCASE$(S_N), UCASE$("O Other Expense") 'fix to ma when M shares was removed

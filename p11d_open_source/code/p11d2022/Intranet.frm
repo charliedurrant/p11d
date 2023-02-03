@@ -1,8 +1,7 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{AF27A9B5-A3F4-11D2-8DB7-00C04FA9DD6F}#1.2#0"; "TCSPROG.OCX"
-Object = "{A7CE771F-05B2-43CF-9650-ED841A9049FA}#1.0#0"; "ATC3FolderBrowser.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form F_Intranet 
    Caption         =   "FullPath(OutputDirectory)"
    ClientHeight    =   7860
@@ -13,6 +12,15 @@ Begin VB.Form F_Intranet
    ScaleHeight     =   7860
    ScaleWidth      =   8760
    StartUpPosition =   3  'Windows Default
+   Begin P11D2022.MyFolderBrowser fb 
+      Height          =   615
+      Left            =   2040
+      TabIndex        =   29
+      Top             =   6720
+      Width           =   6615
+      _ExtentX        =   11668
+      _ExtentY        =   1085
+   End
    Begin MSComDlg.CommonDialog cdlg 
       Left            =   5550
       Top             =   5325
@@ -28,7 +36,7 @@ Begin VB.Form F_Intranet
       Left            =   4050
       ScaleHeight     =   360
       ScaleWidth      =   660
-      TabIndex        =   25
+      TabIndex        =   24
       Top             =   5325
       Width           =   690
    End
@@ -40,7 +48,7 @@ Begin VB.Form F_Intranet
       Left            =   1200
       ScaleHeight     =   360
       ScaleWidth      =   660
-      TabIndex        =   23
+      TabIndex        =   22
       Top             =   5325
       Width           =   690
    End
@@ -48,7 +56,7 @@ Begin VB.Form F_Intranet
       Appearance      =   0  'Flat
       Height          =   390
       Left            =   1200
-      TabIndex        =   15
+      TabIndex        =   14
       Text            =   "txtBannerTitle"
       Top             =   4875
       Width           =   4140
@@ -58,7 +66,7 @@ Begin VB.Form F_Intranet
       Height          =   690
       Left            =   1200
       ScrollBars      =   3  'Both
-      TabIndex        =   13
+      TabIndex        =   12
       Text            =   "txtUserInfoHTML"
       Top             =   5925
       Width           =   7440
@@ -67,7 +75,7 @@ Begin VB.Form F_Intranet
       Caption         =   "Output Type"
       Height          =   1650
       Left            =   6390
-      TabIndex        =   10
+      TabIndex        =   9
       Top             =   4140
       Width           =   2310
       Begin VB.OptionButton optP11DType 
@@ -75,7 +83,7 @@ Begin VB.Form F_Intranet
          Height          =   330
          Index           =   3
          Left            =   120
-         TabIndex        =   29
+         TabIndex        =   28
          Top             =   1215
          Width           =   1575
       End
@@ -84,7 +92,7 @@ Begin VB.Form F_Intranet
          Height          =   375
          Index           =   2
          Left            =   120
-         TabIndex        =   28
+         TabIndex        =   27
          Top             =   855
          Width           =   1575
       End
@@ -93,7 +101,7 @@ Begin VB.Form F_Intranet
          Height          =   375
          Index           =   1
          Left            =   120
-         TabIndex        =   12
+         TabIndex        =   11
          Top             =   540
          Width           =   2070
       End
@@ -102,7 +110,7 @@ Begin VB.Form F_Intranet
          Height          =   375
          Index           =   0
          Left            =   120
-         TabIndex        =   11
+         TabIndex        =   10
          Top             =   240
          Value           =   -1  'True
          Width           =   1695
@@ -112,14 +120,14 @@ Begin VB.Form F_Intranet
       Caption         =   "Authentication Type"
       Height          =   1515
       Left            =   6360
-      TabIndex        =   6
+      TabIndex        =   5
       Top             =   2565
       Width           =   2310
       Begin VB.CheckBox chkCaseSensitive 
          Caption         =   "Case sensitive"
          Height          =   240
          Left            =   600
-         TabIndex        =   22
+         TabIndex        =   21
          Top             =   525
          Width           =   1590
       End
@@ -128,7 +136,7 @@ Begin VB.Form F_Intranet
          Height          =   375
          Index           =   2
          Left            =   150
-         TabIndex        =   17
+         TabIndex        =   16
          Top             =   1050
          Width           =   1455
       End
@@ -137,7 +145,7 @@ Begin VB.Form F_Intranet
          Height          =   375
          Index           =   1
          Left            =   150
-         TabIndex        =   8
+         TabIndex        =   7
          Top             =   750
          Width           =   2055
       End
@@ -146,20 +154,11 @@ Begin VB.Form F_Intranet
          Height          =   375
          Index           =   0
          Left            =   150
-         TabIndex        =   7
+         TabIndex        =   6
          Top             =   225
          Value           =   -1  'True
          Width           =   1830
       End
-   End
-   Begin atc3FolderBrowser.FolderBrowser fb 
-      Height          =   555
-      Left            =   2175
-      TabIndex        =   5
-      Top             =   6750
-      Width           =   6390
-      _ExtentX        =   11271
-      _ExtentY        =   979
    End
    Begin VB.Frame fraUsername 
       Caption         =   "User login name source"
@@ -174,7 +173,7 @@ Begin VB.Form F_Intranet
          Height          =   375
          Index           =   3
          Left            =   150
-         TabIndex        =   21
+         TabIndex        =   20
          Top             =   1305
          Width           =   1455
       End
@@ -183,7 +182,7 @@ Begin VB.Form F_Intranet
          Height          =   255
          Index           =   2
          Left            =   150
-         TabIndex        =   20
+         TabIndex        =   19
          Top             =   975
          Width           =   1455
       End
@@ -192,7 +191,7 @@ Begin VB.Form F_Intranet
          Height          =   495
          Index           =   1
          Left            =   150
-         TabIndex        =   19
+         TabIndex        =   18
          Top             =   525
          Width           =   1680
       End
@@ -201,7 +200,7 @@ Begin VB.Form F_Intranet
          Height          =   450
          Index           =   0
          Left            =   150
-         TabIndex        =   18
+         TabIndex        =   17
          Top             =   225
          Width           =   1905
       End
@@ -242,7 +241,7 @@ Begin VB.Form F_Intranet
       Skew            =   0
       PictureOffsetTop=   0
       PictureOffsetLeft=   0
-      Enabled         =   -1  'True
+      Enabled         =   0   'False
       Increment       =   1
       TextAlignment   =   0
    End
@@ -293,7 +292,7 @@ Begin VB.Form F_Intranet
    Begin VB.Label lblWritingFile 
       Height          =   390
       Left            =   150
-      TabIndex        =   27
+      TabIndex        =   26
       Top             =   4275
       Width           =   6015
    End
@@ -301,7 +300,7 @@ Begin VB.Form F_Intranet
       Caption         =   "Banner background color color"
       Height          =   390
       Left            =   2625
-      TabIndex        =   26
+      TabIndex        =   25
       Top             =   5325
       Width           =   1290
    End
@@ -309,7 +308,7 @@ Begin VB.Form F_Intranet
       Caption         =   "Banner text color"
       Height          =   390
       Left            =   150
-      TabIndex        =   24
+      TabIndex        =   23
       Top             =   5325
       Width           =   915
    End
@@ -317,7 +316,7 @@ Begin VB.Form F_Intranet
       Caption         =   "Banner title"
       Height          =   390
       Left            =   150
-      TabIndex        =   16
+      TabIndex        =   15
       Top             =   4875
       Width           =   915
    End
@@ -325,7 +324,7 @@ Begin VB.Form F_Intranet
       Caption         =   "User info"
       Height          =   615
       Left            =   150
-      TabIndex        =   14
+      TabIndex        =   13
       Top             =   5925
       Width           =   765
    End
@@ -333,7 +332,7 @@ Begin VB.Form F_Intranet
       Caption         =   "Location to write files to:"
       Height          =   495
       Left            =   150
-      TabIndex        =   9
+      TabIndex        =   8
       Top             =   6750
       Width           =   1815
    End

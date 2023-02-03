@@ -1116,11 +1116,18 @@ Public Sub SaveReport()
   Dim FileNum As Integer
   Dim rFld As ReportField
   Dim i As Long
-
+  Dim sDirectory As String, sFileName As String, sExtension As String
+  
   On Error GoTo SaveReport_Err
   Call xSet("SaveReport")
   'RK TODO InitialDirectory is not being set in FileSaveAsDlg
-  FileName = FileSaveAsDlg("Save Report As", "Report Wizard Files (*.rep)|*.rep|All Files (*.*)|*.*", m_ReportFilesPath, m_ReportFileName)
+  
+  
+  Call SplitPath(m_ReportFileName, sDirectory, sFileName, sExtension)
+  
+  sFileName = sFileName & sExtension
+  
+  FileName = FileSaveAsDlg("Save Report As", "Report Wizard Files (*.rep)|*.rep|All Files (*.*)|*.*", m_ReportFilesPath, sFileName)
   If Len(FileName) > 0 Then
     m_ReportFileName = FileName
     FileNum = FreeFile

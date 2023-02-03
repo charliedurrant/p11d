@@ -1,1 +1,1 @@
-powershell ..\x.ps1 %1
+powershell ..\x.ps1 atc3repw

@@ -84,7 +84,7 @@ On Error GoTo err_err
      Case "YEAR_START"
         Me.YearStart = CLng(value)
         If Me.YearStart <> p11d32.AppYear Then
-         Call err.Raise(ERR_TESTING, "Testing.Init", "YEAR_START in the google sheet should be " & p11d32.AppYear)
+         Call Err.Raise(ERR_TESTING, "Testing.Init", "YEAR_START in the google sheet should be " & p11d32.AppYear)
         End If
      Case "IMPORT_SHEET"
        
@@ -92,7 +92,7 @@ On Error GoTo err_err
        testingTest.Sheet = value
        
        If Not m_specs.Exists(testingTest.Sheet) Then
-         Call err.Raise(ERR_TESTING, "Init", "No spec exist fot the import sheet " & testingTest.Sheet)
+         Call Err.Raise(ERR_TESTING, "Init", "No spec exist fot the import sheet " & testingTest.Sheet)
        End If
        
        Set testingTest.Spec = m_specs(testingTest.Sheet)
@@ -104,7 +104,7 @@ On Error GoTo err_err
 err_end:
   Exit Sub
 err_err:
-  Call err.Raise(ERR_ERROR, "Testing.Init", err.Description)
+  Call Err.Raise(ERR_ERROR, "Testing.Init", Err.Description)
   Resume
 End Sub
 Private Function ReadSpecs(ByVal gSheet As GoogleSheet) As Dictionary
@@ -269,8 +269,8 @@ err_end:
   Exit Function
 err_err:
   
-  Call sb.Append(err.Description)
-  Call ErrorMessage(ERR_TESTING, err, "Run", "Testing", err.Description)
+  Call sb.Append(Err.Description)
+  Call ErrorMessage(ERR_TESTING, Err, "Run", "Testing", Err.Description)
   Resume err_end
   Resume
 End Function
@@ -308,13 +308,14 @@ Private Sub ImportFile(ByVal empr As Employer, ByVal dataPathAndFile As String, 
   Dim sql As SQLQUERIES_IMP
   Dim rs As Recordset
   Dim ic As ImportClass
+  Dim errorCount As Long
   
 On Error GoTo err_err:
 
   Set ic = New ImportClass
   Set ic.Workspace = p11d32.P11DWS
   Set ic.ErrorFilter = Me
-  'cad import
+  
   Set atc2core.ErrorFilter = Me
   
   m_importSheet = Sheet
@@ -326,7 +327,6 @@ On Error GoTo err_err:
   Set rs = empr.db.OpenRecordset(sql.Queries(importType))
   'cad import
   
-  Dim errorCount As Long
   errorCount = ic.ImportFile(rs)
   Call rs.Close
   Set rs = Nothing
@@ -340,18 +340,17 @@ On Error GoTo err_err:
     Set p11d32.Importing.DbP11dFile = empr.db
     Call p11d32.Importing.PostProcessEx(errorCount, linesOk, importName, importType)
   End If
-  
-  
-  
+    
 err_end:
   Set p11d32.Importing.DbP11dFile = Nothing
   Set atc2core.ErrorFilter = Nothing
+  Set ic = Nothing
   Exit Sub
 err_err:
   Set p11d32.Importing.DbP11dFile = Nothing
   Set atc2core.ErrorFilter = Nothing
-  Call m_Errors.Add(err.Description)
-  Call err.Raise(err.Number, err.Source, err.Description)
+  Call m_Errors.Add(Err.Description)
+  Call Err.Raise(Err.Number, Err.Source, Err.Description)
 End Sub
 Private Sub RunImport(dataPathAndFile As String, specPathAndFile As String)
   

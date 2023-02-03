@@ -39,6 +39,9 @@ End Property
 Public Property Get TrackingPath() As String
   TrackingPath = m_TrackingPath
 End Property
+Public Property Get TrackingPathActual() As String
+  TrackingPathActual = p11d32.BrowseForFolderDefault(TrackingPath)
+End Property
 Private Sub KillImport(ic As ImportClass)
   Dim ben As IBenefitClass
   
@@ -68,7 +71,7 @@ Public Function PreImport(ByVal bExclusive As Boolean) As Employer
   
 On Error GoTo err_err
 
-  If F_Employers.LB.SelectedItem Is Nothing Then Call err.Raise(ERR_EMPLOYER_INVALID, "PreImport", "There is no employer selected")
+  If F_Employers.LB.SelectedItem Is Nothing Then Call Err.Raise(ERR_EMPLOYER_INVALID, "PreImport", "There is no employer selected")
   
   Set ey = p11d32.Employers.Item(F_Employers.LB.SelectedItem.Tag)
   Set ben = ey
@@ -81,14 +84,14 @@ On Error GoTo err_err
 err_end:
   Exit Function
 err_err:
-  Call err.Raise(err.Number, ErrorSource(err, "PreImport"), "Failed to pre init employer for import")
+  Call Err.Raise(Err.Number, ErrorSource(Err, "PreImport"), "Failed to pre init employer for import")
   Resume
 End Function
 Public Sub Zip(ByVal ben As IBenefitClass, sDestFilename As String)
   Dim Zip As cZip
   Call ben.Kill
   Set Zip = New cZip
-  Zip.BasePath = p11d32.WorkingDirectory
+  Zip.BasePath = p11d32.workingDirectory
   Zip.AddFileSpec (ben.value(employer_FileName))
   Zip.RecurseSubDirs = False
   Zip.ZipFile = sDestFilename
@@ -142,8 +145,8 @@ Public Sub InitImport()
       dt = Now
       sDestFilename = sTrackingDescription & "_" & sGuid & "_"
       sDestFilename = sDestFilename & Year(dt) & Format$(Month(dt), "0#") & Format$(Day(dt), "0#") & Format$(Hour(dt), "0#") & Format$(Minute(dt), "0#") & Format$(Second(dt), "0#")
-      sDestFilename = Me.TrackingPath & sDestFilename & S_FILE_EXTENSION_BAK
-      sSourceFileName = p11d32.WorkingDirectory & ben.value(employer_FileName)
+      sDestFilename = Me.TrackingPathActual & sDestFilename & S_FILE_EXTENSION_BAK
+      sSourceFileName = p11d32.workingDirectory & ben.value(employer_FileName)
       Call Me.Zip(ben, sDestFilename)
       
     End If
@@ -157,9 +160,9 @@ Public Sub InitImport()
     Set m_dbP11dFile = Employer.db
     Set wsError = DBEngine.CreateWorkspace("ErrorWS", p11d32.DBUserName, p11d32.DBPassword)
     Set m_dbError = InitDB(wsError, ben.value(employer_PathAndFile), ben.Name, , , False)
-    If m_dbError Is Nothing Then Call err.Raise(ERR_INITIMPORT, "InitImport", "Unable to open employer database." & vbCrLf & "Employer name: " & ben.Name)
+    If m_dbError Is Nothing Then Call Err.Raise(ERR_INITIMPORT, "InitImport", "Unable to open employer database." & vbCrLf & "Employer name: " & ben.Name)
     Set m_rsError = m_dbError.OpenRecordset(mSql.Queries(IMP_SELECT_ERRORS), dbOpenDynaset)
-    If m_rsError Is Nothing Then Call err.Raise(ERR_INITIMPORT, "InitImport", "Unable to open import errors table.")
+    If m_rsError Is Nothing Then Call Err.Raise(ERR_INITIMPORT, "InitImport", "Unable to open import errors table.")
     Do
       Set ic = New ImportClass
       Set ic.Workspace = p11d32.P11DWS
@@ -189,7 +192,7 @@ InitImport_End:
   Call xReturn("InitImport")
   Exit Sub
 InitImport_Err:
-  Call ErrorMessage(ERR_ERROR, err, "InitImport", "Initialise import", "Error initialising the Importer.")
+  Call ErrorMessage(ERR_ERROR, Err, "InitImport", "Initialise import", "Error initialising the Importer.")
   Resume InitImport_End
   Resume
 End Sub
@@ -499,7 +502,7 @@ AddImportQueries_End:
   Exit Sub
 
 AddImportQueries_Err:
-  Call ErrorMessage(ERR_ERROR, err, "AddImportQueries", "Add Import Queries", "Error setting up the import queries for the import wizard")
+  Call ErrorMessage(ERR_ERROR, Err, "AddImportQueries", "Add Import Queries", "Error setting up the import queries for the import wizard")
   Resume AddImportQueries_End
   Resume
 End Sub
@@ -522,7 +525,7 @@ AddGeneralSQL_END:
   Call xReturn("AddGeneralSQL")
   Exit Function
 AddGeneralSQL_ERR:
-  Call ErrorMessage(ERR_ERROR, err, "AddGeneralSQL", "Add General SQL", "Error adding general sql, query id = " & QueryID & ".")
+  Call ErrorMessage(ERR_ERROR, Err, "AddGeneralSQL", "Add General SQL", "Error adding general sql, query id = " & QueryID & ".")
   Resume AddGeneralSQL_END
   Resume
 End Function
@@ -603,7 +606,7 @@ End Function
 
 Private Function IProcessImport_PostProcess(ic As ImportClass, RollBack As Boolean, linesOk As Long, AddedRecordCount As Long, UpdatedRecordCount As Long) As Long
   Dim rs As Recordset
-  Dim errorCount As Long, lTag As QUERY_NAMES_IMP, sImport As String
+  Dim ErrorCount As Long, lTag As QUERY_NAMES_IMP, sImport As String
   Dim sSelectSQL As String
   Dim bPostProcessed As Boolean
   
@@ -614,25 +617,25 @@ Private Function IProcessImport_PostProcess(ic As ImportClass, RollBack As Boole
       If Not ic.ImportWizard.CurrentDest Is Nothing Then
         sImport = ic.ImportWizard.CurrentDest.Name
         lTag = ic.ImportWizard.CurrentDest.Tag
-        Call PostProcessEx(errorCount, linesOk, sImport, lTag)
+        Call PostProcessEx(ErrorCount, linesOk, sImport, lTag)
       End If
     End If
   End If
       
 PostProcessImport_END:
-  IProcessImport_PostProcess = errorCount
-  If errorCount > 0 Then RollBack = True
+  IProcessImport_PostProcess = ErrorCount
+  If ErrorCount > 0 Then RollBack = True
   Set rs = Nothing
   Call xReturn("PostProcessImport")
   Exit Function
 PostProcessImport_ERR:
-  errorCount = errorCount + 1
-  Call ErrorMessage(ERR_ERROR, err, "PostProcessImport", "Post Process Import", "Error in post processing the import for '" & sImport & "'.")
+  ErrorCount = ErrorCount + 1
+  Call ErrorMessage(ERR_ERROR, Err, "PostProcessImport", "Post Process Import", "Error in post processing the import for '" & sImport & "'.")
   Resume PostProcessImport_END
   Resume
 End Function
 
-Public Sub PostProcessEx(ByRef errorCount As Long, ByRef linesOk As Long, ByVal importName As String, ByVal importQuery As QUERY_NAMES_IMP)
+Public Sub PostProcessEx(ByRef ErrorCount As Long, ByRef linesOk As Long, ByVal importName As String, ByVal importQuery As QUERY_NAMES_IMP)
   Dim sSelectSQL As String
   Dim bPostProcessed As Boolean
   Dim rs As Recordset
@@ -642,25 +645,25 @@ Public Sub PostProcessEx(ByRef errorCount As Long, ByRef linesOk As Long, ByVal 
   Call GetPostProcessDataSQL(sSelectSQL, importQuery, importName)
   bPostProcessed = Len(sSelectSQL) > 0
   If bPostProcessed Then
-    errorCount = 0
+    ErrorCount = 0
     Set rs = m_dbP11dFile.OpenRecordset(sSelectSQL, dbOpenSnapshot)
     If Not (rs.EOF And rs.BOF) Then
       rs.MoveLast
-      errorCount = rs.RecordCount
+      ErrorCount = rs.RecordCount
     End If
-    If errorCount > 0 Then
-      Call MultiDialog("Errors in import", "Importing " & importName & vbCrLf & CStr(errorCount) & " error(s) encountered in post processing", "&Ok")
+    If ErrorCount > 0 Then
+      Call MultiDialog("Errors in import", "Importing " & importName & vbCrLf & CStr(ErrorCount) & " error(s) encountered in post processing", "&Ok")
       rs.MoveFirst
       Do
-        err.Number = ERR_POST_PROCESS
-        err.Description = "The " & rs.Fields(1).Name & " did not have a corresponding parent " & rs.Fields(0).Name
-        Call ErrorMessage(ERR_ERROR, err, "PostProcess", rs.Fields(1).value & ",,," & rs.Fields(0).value, err.Description)
+        Err.Number = ERR_POST_PROCESS
+        Err.Description = "The " & rs.Fields(1).Name & " did not have a corresponding parent " & rs.Fields(0).Name
+        Call ErrorMessage(ERR_ERROR, Err, "PostProcess", rs.Fields(1).value & ",,," & rs.Fields(0).value, Err.Description)
         rs.MoveNext
       Loop Until rs.EOF
-      linesOk = linesOk - errorCount
+      linesOk = linesOk - ErrorCount
     End If
   End If
-  If errorCount = 0 Then errorCount = BackwardsCompatibilityPostProcessing(importQuery)
+  If ErrorCount = 0 Then ErrorCount = BackwardsCompatibilityPostProcessing(importQuery)
   
 Exit Sub
 err_err:
@@ -684,7 +687,7 @@ QuestionRollBack_END:
   Call xReturn("QuestionRollBack")
   Exit Function
 QuestionRollBack_ERR:
-  Call ErrorMessage(ERR_ERROR, err, "QuestionRollBack", "Question Roll Back", "Error question the roll back of an import.")
+  Call ErrorMessage(ERR_ERROR, Err, "QuestionRollBack", "Question Roll Back", "Error question the roll back of an import.")
   Resume QuestionRollBack_END
 End Function
 
@@ -717,8 +720,8 @@ Private Function ImportWizardSettings() As Boolean
     Call .AddFileExtension("All files (*.*)", "*.*")
   
     .AutoOpenSourceFile = True
-    .SourcePath = p11d32.WorkingDirectory
-    .SpecPath = p11d32.WorkingDirectory
+    .SourcePath = p11d32.workingDirectory
+    .SpecPath = p11d32.workingDirectory
     .TitlePrefix = GetStatic("ApplicationName") & " Importer  -  "
     .AllowChangeUpdateType = True
   End With
@@ -731,7 +734,7 @@ ImportWizardSettings_End:
 ImportWizardSettings_Err:
   ImportWizardSettings = False
   'cd apf
-  Call ErrorMessage(ERR_ERROR, err, "ImportWizardSettings", "Add Import Wizard settings", "Error adding default setting to the import wizard.")
+  Call ErrorMessage(ERR_ERROR, Err, "ImportWizardSettings", "Add Import Wizard settings", "Error adding default setting to the import wizard.")
   Resume ImportWizardSettings_End
   Resume
 End Function
@@ -750,7 +753,7 @@ ReportHeader_END:
   Call xReturn("ReportHeader")
   Exit Property
 ReportHeader_ERR:
-  Call ErrorMessage(ERR_ERROR, err, "ReportHeader", "Report Header", "Error getting the report header for import errors report.")
+  Call ErrorMessage(ERR_ERROR, Err, "ReportHeader", "Report Header", "Error getting the report header for import errors report.")
   Resume ReportHeader_ERR
   Resume
 End Property
@@ -841,7 +844,7 @@ GetPostProcessDataSQL_End:
   Exit Sub
 
 GetPostProcessDataSQL_Err:
-  Call ErrorMessage(ERR_ERROR, err, "GetPostProcessDataSQL", "Get postprocess sql string", "Unable to retrieve post process sql string. Import number: " & CStr(ImportSpecTag) & ".")
+  Call ErrorMessage(ERR_ERROR, Err, "GetPostProcessDataSQL", "Get postprocess sql string", "Unable to retrieve post process sql string. Import number: " & CStr(ImportSpecTag) & ".")
   Resume GetPostProcessDataSQL_End
   Resume
 End Sub
@@ -872,7 +875,7 @@ BackwardsCompatibilityPostProcessing_End:
 
 BackwardsCompatibilityPostProcessing_Err:
   BackwardsCompatibilityPostProcessing = 1
-  Call ErrorMessage(ERR_ERROR, err, "BackwardsCompatibilityPostProcessing", "Backwards Compatibility Post Processing", "Error processing imports for backwards compatability.")
+  Call ErrorMessage(ERR_ERROR, Err, "BackwardsCompatibilityPostProcessing", "Backwards Compatibility Post Processing", "Error processing imports for backwards compatability.")
   Resume BackwardsCompatibilityPostProcessing_End
   Resume
 End Function
@@ -885,7 +888,7 @@ Private Function LogPostProcessingErrors(rsRecordsWhereParentNotAvailable As Rec
     If Not (.EOF And .BOF) Then
       .MoveFirst
       Do While Not .EOF
-        Call err.Raise(ERR_POST_PROCESS, "LogPostProcessingErrors", sPostProcessingErrorMessage)
+        Call Err.Raise(ERR_POST_PROCESS, "LogPostProcessingErrors", sPostProcessingErrorMessage)
         .MoveNext
       Loop
     End If
@@ -897,9 +900,9 @@ LogPostProcessingErrors_End:
 
 LogPostProcessingErrors_Err:
   If Not (rsRecordsWhereParentNotAvailable.EOF And rsRecordsWhereParentNotAvailable.BOF) Then
-    Call ErrorMessage(ERR_ERROR + ERR_ALLOWIGNORE, err, "LogPostProcessingErrors", rsRecordsWhereParentNotAvailable.Fields(sSrcItemField), err.Description)
+    Call ErrorMessage(ERR_ERROR + ERR_ALLOWIGNORE, Err, "LogPostProcessingErrors", rsRecordsWhereParentNotAvailable.Fields(sSrcItemField), Err.Description)
   Else
-    Call ErrorMessage(ERR_ERROR, err, "LogPostProcessingErrors", "Log Post Processing Errors", "Error loging a post processing error.")
+    Call ErrorMessage(ERR_ERROR, Err, "LogPostProcessingErrors", "Log Post Processing Errors", "Error loging a post processing error.")
   End If
   Resume Next
 End Function

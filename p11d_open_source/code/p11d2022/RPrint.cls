@@ -42,9 +42,11 @@ Public Enum P11D_REPORTS
   
   RPT_PRINTEDEMPLOYEES  'jn code
   [RPT_LAST_STANDARD] = RPT_PRINTEDEMPLOYEES
-   RPT_P11Db
+  
+  RPT_P11Db
   [RPT_LAST_INI] = RPT_P11Db
   [RPT_FIRST_OTHER_REPORT] = RPT_P11Db
+  RPT_P11Db_RECONCILIATION
   RPT_MM_SUBMISSION
   [RPT_LAST_OTHER_REPORT] = RPT_MM_SUBMISSION
   
@@ -158,7 +160,8 @@ Public Enum REPORT_EXPORT_EMPLOYEE_FILE_NAME_FIELDS
   REEFNF_FIRST_ITEM = 0
   REEFNF_PERSONNEL_NUMBER = REEFNF_FIRST_ITEM
   REEFNF_SURNAME_FIRTNAME_PERSONNEL_NUMBER = 1
-  REEFNF_LAST_ITEM = REEFNF_SURNAME_FIRTNAME_PERSONNEL_NUMBER
+  REEFNF_CUSTOM = 2
+  REEFNF_LAST_ITEM = REEFNF_CUSTOM
 End Enum
 
 
@@ -210,6 +213,15 @@ Public Enum HMIT_SECTIONS
   [_HMIT_COUNT] = HMIT_NOT
 End Enum
 
+
+Public Enum HMIT_SECTION_VALUE
+  HMIT_SECTION_BOX_LETTER
+  HMIT_SECTION_DESCRIPTION
+  HMIT_SECTION_BOX_AND_DESCRIPTION
+  HMIT_SECTION_EMPLOYER_BENEFIT_ITEM
+End Enum
+  
+
 Private m_PrinterAvailable As Boolean
 Private m_ReportPathUser As String
 Private m_UsersLettersPath As String
@@ -259,6 +271,7 @@ Private m_ExportOption As REPORT_EXPORTS
 
 Public ExportAllowUserNameHTML As Boolean
 Public ExportEmployeeFileNameFields As REPORT_EXPORT_EMPLOYEE_FILE_NAME_FIELDS
+Public ExportEmployeeFileNameCustom As String
 Public EmailSubject As String
 Public SeparatePrintJobs As Boolean
 
@@ -276,7 +289,6 @@ Private m_DefaultReportIndex As Long
 Private m_RepSettings(RPT_START To RPT_END) As REPORT_SETTINGS
 Private m_EmployeeLetterPath As String
 Private m_DraftReports As Boolean
-
 Public Property Get ReportSettingsIgnoreZeroOnly(ByVal rpt As P11D_REPORTS) As Boolean
   ReportSettingsIgnoreZeroOnly = m_RepSettings(rpt).IgnoreZeroOnly
 End Property
@@ -355,6 +367,11 @@ Public Sub Initialise()
   m_RepSettings(RPT_HMIT_PLUS_WORKING_PAPERS).Name = "P11D return + working papers"
   m_RepSettings(RPT_WORKINGPAPERS).Name = "Working papers"
   m_RepSettings(RPT_P11Db).Name = "P11D(b)"
+  m_RepSettings(RPT_P11Db).Orientation = PORTRAIT
+  m_RepSettings(RPT_P11Db_RECONCILIATION).Name = "P11D(b) reconciliation"
+  m_RepSettings(RPT_P11Db_RECONCILIATION).Orientation = PORTRAIT
+  
+  
   m_RepSettings(RPT_MM_SUBMISSION).Name = "Expenses and Benefits Return Submission Document"
   m_RepSettings(RPT_PRINTEDEMPLOYEES).Name = "Printed Employees Report"
   'm_RepSettings(RPT_INFO_SHEET_PLUS_HMIT).Name = "Info sheet +  P11D return"
@@ -537,23 +554,23 @@ Public Sub StartReportWizard(ByVal sTemplateFile As String, ByVal RWT As REPORTW
   Dim benEmployer As IBenefitClass
   Dim sSourceDirectory As String
   Dim sExportPath As String, sExportFile As String, sExportExtension As String
-  
-  
+   
   On Error GoTo StartReportWizard_ERR
   
   Call xSet("StartReportWizard")
   Set RW = ReportWizardNew()
   RW.DoReportOnCancel = False
   Set RW.ReportInterface = p11d32.udm
+  
   Call p11d32.udm.Initialise
   
   If Not FileExists(sTemplateFile) Then Call ErrorMessage(ERR_FILE_NOT_EXIST, Err, "StartReportWizard", "Start Report Wizard", "The report template file " & TemplatePathAndFile & " does not exist.")
-  
-  'RK Set appropriate directories for Report Wizard
+    
   Call SplitPath(sTemplateFile, sSourceDirectory)
   RW.ReportFileName = sTemplateFile
-  RW.ReportFilesPath = sSourceDirectory
-      
+  RW.ExportPath = p11d32.BrowseForFolderDefault(CurDir$)
+  RW.ReportFilesPath = p11d32.BrowseForFolderDefault(sSourceDirectory)
+  
   Set benEmployer = p11d32.CurrentEmployer
   If RWT = REPORTW_PREPARE_EXPORT And (Len(sExportPathAndFile) > 0) Then
     RW.ExportType = EXPORT_CSV
@@ -562,12 +579,10 @@ Public Sub StartReportWizard(ByVal sTemplateFile As String, ByVal RWT As REPORTW
     RW.ExportPath = sExportPath
     RW.ExportFileName = sExportFile & sExportExtension
   End If
-  'CAD need to think for future
-  'Call RW.AddControlCode("{REPORT_BANNER}", HMITBannerString("Enter you report title here", False), "Report Banner")
+  
   Call RW.AddControlCode(EmployeeLetterCode(ELC_COMPANY_NAME, ELCT_LETTER_FILE_CODES, False), benEmployer.Name, "Employer Name")
   Call RW.AddControlCode(EmployeeLetterCode(ELC_PAYE_REF, ELCT_LETTER_FILE_CODES, False), benEmployer.value(employer_Payeref_db), "PAYE Ref")
   Call RW.AddControlCode(EmployeeLetterCode(ELC_DATE_TAXYEAR, ELCT_LETTER_FILE_CODES, False), p11d32.Rates.value(TaxFormYear), "Tax Year")
-  
   
   RW.AutoPreviewTarget = RWT
   Call RW.StartReportWizard
@@ -598,7 +613,10 @@ Public Sub DoExportAbacusReportWizard()
   Me.EmployeeSelection = ES_ALL
   Set benEmployer = p11d32.CurrentEmployer
   sFIle = benEmployer.Name & ".csv"
-  sExportFile = BrowseForFolderEx(MDIMain.hwnd, CurDir$, "Please choose a directory for the output file [" & sFIle & "]")
+  
+  
+  
+  sExportFile = BrowseForFolderEx(MDIMain.hwnd, p11d32.BrowseForFolderDefault(CurDir$), "Please choose a directory for the output file [" & sFIle & "]")
   If Len(sExportFile) = 0 Then GoTo ExportAbacusReportWizard_END
   Call PrgStartCaption((RPT_LAST_ABACUSUDM - RPT_FIRST_ABACUSUDM) + 1, "Starting export")
   sFIle = FullPath(sExportFile) & sFIle
@@ -724,6 +742,10 @@ End Property
 Public Property Let UserLettersPath(ByVal NewValue As String)
   m_UsersLettersPath = NewValue
 End Property
+Public Property Get UserLettersPathActual() As String
+  UserLettersPathActual = p11d32.BrowseForFolderDefault(p11d32.FoldersDefaulToEmployerFolder)
+End Property
+
 Public Property Get SystemLettersPath()
   SystemLettersPath = FullPath(AppPath) & S_SYSTEMDIR_LETTERS
 End Property
@@ -951,22 +973,23 @@ Public Function DoStandardReport(ByVal pr As P11D_REPORTS, ByVal ReportDest As R
   If (Me.Destination = REPD_FILE_HTML) Or (Me.Destination = REPD_FILE_PRN) Then
     If Not FileExists(p11d32.ReportPrint.ExportDirectory, True) Then Call Err.Raise(ERR_DIRECTORY_NOT_EXIST, "DoReportStandard", "The export directory does not exist = " & p11d32.ReportPrint.ExportDirectory & ", unable to export to file.")
     If Me.ExportAllowUserNameHTML Then
-      Do Until Len(s) > 0
-        s = InputBox("Please enter report name for export....", "Report Name", sReportName)
-      Loop
+      s = InputBox("Please enter report name for export....", "Report Name", sReportName)
+      If (Len(s) = 0) Then
+        GoTo DoStandardReport_End
+      End If
+      
       sReportName = s
     End If
   End If
   
   DoStandardReport = F_PrintCancel.DoReportStandardSub(rep, pr, ReportDest, Orientation(pr), sReportName)
+   
   
-  
-  
+DoStandardReport_End:
   If IsEmail(pr) Then
     Call DestroyATCMAIL
   End If
   
-DoStandardReport_End:
   Me.Destination = rd
   Call xReturn("DoStandardReport")
   Exit Function
@@ -992,6 +1015,8 @@ Public Function DoOtherReport(ByVal rep As Reporter, ByVal ReportType As P11D_RE
   Select Case ReportType
     Case RPT_P11Db
       Call Report_P11db(rep, p11d32.CurrentEmployer)
+    Case RPT_P11Db_RECONCILIATION
+      Call Report_P11Db_Reconciliation(rep, p11d32.CurrentEmployer)
     Case RPT_MM_SUBMISSION
       Call Report_MM_Submission(rep, p11d32.CurrentEmployer)
     Case Else
@@ -1247,14 +1272,10 @@ WaitForPRN_ERR:
   Call Err.Raise(Err.Number, "WaitForPRN", Err.Description)
 End Sub
 Public Sub ReportTextToRep(ByVal rep As Reporter, ByVal ee As Employee, ByVal pr As P11D_REPORTS, sEmployeeLetterText As String, ByVal RO As REPORT_ORIENTATION, ByVal bIsEmail As Boolean, sReportName As String) 'RK Email 19/03/03
-'Public Sub ReportTextToRep(ByVal rep As Reporter, ByVal ee As employee, ByVal pr As P11D_REPORTS, sEmployeeLetterText As String, ByVal RO As REPORT_ORIENTATION, ByVal bIsEmail As Boolean, ByVal atms As MailAttachments, sReportName As String) 'RK Email 19/03/03
-  Dim p0 As Long, p1 As Long
-  Dim sCode As String
-  Dim qs As QString
-  Dim bSubReport As Boolean, sExportFile As String
   Dim i As Long
   Dim bFont As Boolean
-  Dim sFont As String
+  Dim sFont As String, sCode As String
+  Dim reportTextMarkedUp As String
   'Dim atm As MailAttachment 'RK Email 19/03/03
   Dim sPRNPathAndFilePerDriver As String
   
@@ -1270,10 +1291,61 @@ Public Sub ReportTextToRep(ByVal rep As Reporter, ByVal ee As Employee, ByVal pr
    
   If Not bIsEmail And Not (p11d32.ReportPrint.ExportOption = EXPORT_HTML_INTEXP5) Then rep.PageFooter = TimeStampReport  'km
   Call SetMargin(rep, True, bIsEmail)
-  Set qs = New QString
   
+  If (Not p11d32.ReportPrint.AllReports) Then
+    For i = EMPLOYEE_LETTER_CODE.ELC_FIRST_ITEM To EMPLOYEE_LETTER_CODE.ELC_LAST_ITEM
+      If (EmployeeLetterCodeIsSubReport(i) And (i <> ELC_P46CAR)) Then
+        sCode = EmployeeLetterCode(i, ELCT_LETTER_FILE_CODES, False, Nothing)
+        If InStr(1, sEmployeeLetterText, sCode, vbTextCompare) > 0 Then
+          Call Err.Raise(ERR_REPORT_INVALID, "ReportTextToRep", "Employee letters can only contain P46 car information with the version of the software." & vbCrLf & "Please remove the tag " & sCode)
+        End If
+      End If
+    Next
+  End If
+  
+  reportTextMarkedUp = EmployeeLetterReplaceCodesEx(sEmployeeLetterText, True, rep, bIsEmail, RO, ee)
+  Call SetMargin(rep, False, bIsEmail)
+  
+  
+  
+  If bIsEmail Then
+    Call email(reportTextMarkedUp, ee) 'RK Email 19/03/03
+    'Call Email(qs.bstr, ee, atms) 'RK Email 19/03/03
+  Else
+    If Me.Destination = REPD_FILE_PRN Then
+      sPRNPathAndFilePerDriver = Me.ExportDirectory & Me.PRNFileName & Me.PRNFileExtension
+      Call xKill(sPRNPathAndFilePerDriver)
+    End If
+    Call rep.EndReport
+    If Me.Destination = REPD_FILE_PRN Then
+      Call WaitForPRN(sReportName, ee, sPRNPathAndFilePerDriver, rep)
+    End If
+  End If
+  
+  
+ReportTextToRep_END:
+  Exit Sub
+ReportTextToRep_ERR:
+  Call ErrorMessage(ERR_ERROR, Err, "ReportTextToRep", "Report Text To Rep", "Error in ReportTextToRep.")
+  Resume ReportTextToRep_END
+  Resume
+End Sub
+Private Function EmployeeLetterReplaceCodes(ByRef sEmployeeLetterText As String, ByVal ee As Employee) As String
+  EmployeeLetterReplaceCodes = EmployeeLetterReplaceCodesEx(sEmployeeLetterText, False, Nothing, True, PORTRAIT, ee)
+End Function
+Private Function EmployeeLetterReplaceCodesEx(ByRef sEmployeeLetterText As String, ByVal forReport As Boolean, ByVal rep As Reporter, ByVal bIsEmail As Boolean, ByVal RO As REPORT_ORIENTATION, ByVal ee As Employee) As String
+  Dim p1 As Long, p0 As Long
+  Dim i As Long
+  Dim sCode As String
+  Dim qs As QString
+  Dim bSubReport As Boolean
+  Dim sExportFile As String
+  Dim sFont As String
+  
+  Set qs = New QString
   p1 = 1
   p0 = InStr(p1, sEmployeeLetterText, "{", vbBinaryCompare)
+  
   
   If (Not p11d32.ReportPrint.AllReports) Then
     For i = EMPLOYEE_LETTER_CODE.ELC_FIRST_ITEM To EMPLOYEE_LETTER_CODE.ELC_LAST_ITEM
@@ -1306,6 +1378,9 @@ Public Sub ReportTextToRep(ByVal rep As Reporter, ByVal ee As Employee, ByVal pr
     p1 = p0 + Len(sCode) - 1
     
     bSubReport = EmployeeLetterCodeIsSubReportAttachment(i)
+    If ((Not forReport) And bSubReport) Then
+      Call Err.Raise(ERR_ERROR, "EmployeeLetterReplaceCodes", "Requested not forReport but bSubReport")
+    End If
     
     If bSubReport Then
       Call SetMargin(rep, False, bIsEmail)
@@ -1353,54 +1428,9 @@ Public Sub ReportTextToRep(ByVal rep As Reporter, ByVal ee As Employee, ByVal pr
     End If
   Loop
   
-  Call SetMargin(rep, False, bIsEmail)
+  EmployeeLetterReplaceCodesEx = qs.bstr
   
-  If bIsEmail Then
-    Call email(qs.bstr, ee) 'RK Email 19/03/03
-    'Call Email(qs.bstr, ee, atms) 'RK Email 19/03/03
-  Else
-    If Me.Destination = REPD_FILE_PRN Then
-      sPRNPathAndFilePerDriver = Me.ExportDirectory & Me.PRNFileName & Me.PRNFileExtension
-      Call xKill(sPRNPathAndFilePerDriver)
-    End If
-    Call rep.EndReport
-    If Me.Destination = REPD_FILE_PRN Then
-      Call WaitForPRN(sReportName, ee, sPRNPathAndFilePerDriver, rep)
-    End If
-  End If
-  
-  
-  
-ReportTextToRep_END:
-  Exit Sub
-ReportTextToRep_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "ReportTextToRep", "Report Text To Rep", "Error in ReportTextToRep.")
-  Resume ReportTextToRep_END
-  Resume
-End Sub
-'Public Function UseNotes(Optional ByVal bRaiseErrors As Boolean = False) As Boolean 'RK Email 19/03/03
-'  Dim s As String
-'
-'  On Error GoTo UseNotes_ERR
-'
-'  If UseNotesForEmail Then
-'    If Not FileExists(NotesIniFile) Then Call Err.Raise(ERR_FILE_EXISTS, ErrorSource(Err, "UseNotes"), "Unable to find the notes.ini file - " & NotesIniFile)
-'  End If
-'
-'  Mail.UseNotesAPI = UseNotesForEmail
-'
-'  UseNotes = UseNotesForEmail
-'
-'UseNotes_END:
-'  Exit Function
-'UseNotes_ERR:
-'  s = "Please check your 'notes' settings on the Print/Options 'Other' tab, "
-'  If bRaiseErrors Then
-'    Call Err.Raise(Err.Number, ErrorSource(Err, "UseNotes"), s & Err.Description)
-'  Else
-'    Call ErrorMessage(ERR_ERROR, Err, "UseNotes", "UseNotes", s)
-'  End If
-'End Function
+End Function
 Private Function ParseForNetscapeClient(sParsedEmployeeLetterText As String) As String
   Dim qs As QString
   
@@ -1424,6 +1454,8 @@ Public Function ExportFileName(sReportName As String, ByVal ee As Employee, ByVa
   Dim sFileExt As String
   Dim sExportPath As String
   Dim sFileNameAndExtension As String
+  Dim sFileName As String
+  
   On Error GoTo ExportFileName_ERR
   
   'If ee Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "ExportFileName", "The employee is nothing.")
@@ -1437,10 +1469,12 @@ Public Function ExportFileName(sReportName As String, ByVal ee As Employee, ByVa
   If bIncludeExportPath Then sExportPath = Me.ExportDirectory
   
   If Not ee Is Nothing Then
-    sPathAndFile = ExportFileNameEmployeeReference(ee)
+    sFileName = ExportFileNameEmployeeReference(sReportName, ee)
+  Else
+    sFileName = sReportName
   End If
   
-  sFileNameAndExtension = sReportName & sPathAndFile & sFileExt
+  sFileNameAndExtension = sFileName & sFileExt
   sFileNameAndExtension = lows.FileNameSafe(sFileNameAndExtension)
   
   sPathAndFile = sExportPath & sFileNameAndExtension
@@ -1454,7 +1488,7 @@ ExportFileName_ERR:
   Resume ExportFileName_END
   Resume
 End Function
-Private Function ExportFileNameEmployeeReference(ByVal ee As Employee) As String
+Private Function ExportFileNameEmployeeReference(ByVal sReportName As String, ByVal ee As Employee) As String
   Dim s As String
   Dim sSurname As String
   Dim sFirstName As String
@@ -1483,6 +1517,8 @@ Private Function ExportFileNameEmployeeReference(ByVal ee As Employee) As String
           s = s & part
         End If
       Next
+    Case REPORT_EXPORT_EMPLOYEE_FILE_NAME_FIELDS.REEFNF_CUSTOM
+      s = EmployeeLetterReplaceCodes(p11d32.ReportPrint.ExportEmployeeFileNameCustom, ee)
     Case Else
        Call Err.Raise(ERR_BEN_IS_NOTHING, "ExportFileNameEmployeeReference", "Invalid value for ExportFileNameEmployeeReference.")
   End Select
@@ -1491,7 +1527,16 @@ Private Function ExportFileNameEmployeeReference(ByVal ee As Employee) As String
     s = Replace(s, " ", "")
   End If
   
-  s = "-" & s
+  If (Me.ExportNoSpaces) Then
+    s = Replace(s, Chr(13), "")
+    s = Replace(s, Chr(10), "")
+    s = Replace(s, vbTab, "")
+  End If
+  
+  If (p11d32.ReportPrint.ExportEmployeeFileNameFields <> REEFNF_CUSTOM) Then
+    s = sReportName & "-" & s
+  End If
+  
   
   ExportFileNameEmployeeReference = s
 End Function
@@ -1713,7 +1758,7 @@ Public Function GetLetterFiles(sLetterFiles() As String) As Long
 End Function
 
 Public Function GetUserLetterFiles(sLetterFiles() As String) As Long
-  GetUserLetterFiles = GetFiles(sLetterFiles, p11d32.ReportPrint.UserLettersPath, "*" & S_EMPLOYEE_LETTER_FILE_EXTENSION)   'EK separation in user and system dirs
+  GetUserLetterFiles = GetFiles(sLetterFiles, p11d32.ReportPrint.UserLettersPathActual, "*" & S_EMPLOYEE_LETTER_FILE_EXTENSION)   'EK separation in user and system dirs
 End Function
 
 Public Function EmployeeLetterPathAndFile() As String
@@ -1724,7 +1769,7 @@ Public Function IsMasterLetterFile(sPathAndFile As String) As Boolean
   
   Call xSet("IsMasterLetterFile")
   
-  If StrComp(sPathAndFile, p11d32.WorkingDirectory & S_SYSTEMDIR_LETTERS & p11d32.LetterFile & S_EMPLOYEE_LETTER_FILE_EXTENSION, vbTextCompare) = 0 Then
+  If StrComp(sPathAndFile, p11d32.workingDirectory & S_SYSTEMDIR_LETTERS & p11d32.LetterFile & S_EMPLOYEE_LETTER_FILE_EXTENSION, vbTextCompare) = 0 Then
     IsMasterLetterFile = True
   End If
   
@@ -1781,17 +1826,18 @@ IEnumFiles_File_ERR:
 End Sub
 Public Sub EmailSettingsShow()
 
- On Error GoTo err_err
+ On Error GoTo err_ERR
   
   Call InitATCMAIL
   Call ATCMail.ShowOptions
   Call DestroyATCMAIL
 
-err_end:
+err_END:
   Exit Sub
-err_err:
+err_ERR:
   Call ErrorMessage(ERR_ERROR, Err, "EmailSettingsShow", "EmailSettingsShow", "Failed to show the email settings")
-  Resume err_end
+  Resume err_END
 
 
 End Sub
+

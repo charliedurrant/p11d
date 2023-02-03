@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{770120E1-171A-436F-A3E0-4D51C1DCE486}#1.0#0"; "atc2stat.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.MDIForm MDIMain 
    AutoShowChildren=   0   'False
    BackColor       =   &H8000000C&
@@ -615,6 +615,52 @@ Begin VB.MDIForm MDIMain
       Begin VB.Menu mnuFileItems 
          Caption         =   "Change Directory"
          Index           =   10
+         Begin VB.Menu mnuBrowseDirectory 
+            Caption         =   "&Browse"
+         End
+         Begin VB.Menu mnuRecentWorkingDirectoryMenuBreak 
+            Caption         =   "-"
+         End
+         Begin VB.Menu mnuRecentWorkingDirectory 
+            Caption         =   "mnuRecentWorkingDirectory"
+            Index           =   1
+         End
+         Begin VB.Menu mnuRecentWorkingDirectory 
+            Caption         =   "mnuRecentWorkingDirectory"
+            Index           =   2
+         End
+         Begin VB.Menu mnuRecentWorkingDirectory 
+            Caption         =   "mnuRecentWorkingDirectory"
+            Index           =   3
+         End
+         Begin VB.Menu mnuRecentWorkingDirectory 
+            Caption         =   "mnuRecentWorkingDirectory"
+            Index           =   4
+         End
+         Begin VB.Menu mnuRecentWorkingDirectory 
+            Caption         =   "mnuRecentWorkingDirectory"
+            Index           =   5
+         End
+         Begin VB.Menu mnuRecentWorkingDirectory 
+            Caption         =   "mnuRecentWorkingDirectory"
+            Index           =   6
+         End
+         Begin VB.Menu mnuRecentWorkingDirectory 
+            Caption         =   "mnuRecentWorkingDirectory"
+            Index           =   7
+         End
+         Begin VB.Menu mnuRecentWorkingDirectory 
+            Caption         =   "mnuRecentWorkingDirectory"
+            Index           =   8
+         End
+         Begin VB.Menu mnuRecentWorkingDirectory 
+            Caption         =   "mnuRecentWorkingDirectory"
+            Index           =   9
+         End
+         Begin VB.Menu mnuRecentWorkingDirectory 
+            Caption         =   "mnuRecentWorkingDirectory"
+            Index           =   10
+         End
       End
       Begin VB.Menu mnuFileItems 
          Caption         =   "Employee &Letter"
@@ -1281,7 +1327,7 @@ Private Sub MDIForm_Load()
   mnuEmployeeSortEmployeeReferenceAsNumber.Checked = p11d32.SortEmployeeReferenceAsNumber
   mnuEmployeeValidateOnscreenNINumber.Checked = p11d32.ValidateNINumberOnEmployeeScreen
   
-  mnuTesting.Enabled = IsRunningInIDE()
+  mnuTesting.Enabled = True ' IsRunningInIDE()
 
   Call p11d32.VersionCheck
 End Sub
@@ -1385,6 +1431,21 @@ Private Sub mnuBringForward_Click()
 
 End Sub
 
+Private Sub mnuBrowseDirectory_Click()
+  Dim s As String
+  
+  On Error GoTo err_err
+  
+  s = p11d32.workingDirectory
+  Call p11d32.CreateAndSetWorkingDirectory(MDIMain, p11d32.workingDirectory, True)
+  F_Employers.workingDirectory = p11d32.workingDirectory
+    
+err_end:
+  Exit Sub
+err_err:
+  Call ErrorMessage(ERR_ERROR, Err, "mnuBrowseDirectory_Click", "Browse", Err.Description)
+  Resume err_end
+End Sub
 Private Sub mnuChauffeur_Click()
   Call BenScreenSwitch(BC_CHAUFFEUR_OTHERO_N)
 End Sub
@@ -1404,8 +1465,6 @@ End Sub
 Private Sub mnuCreditButtonSubscriptions_Click()
   Call BenScreenSwitch(BC_CLASS_1A_M)
 End Sub
-
-
 Private Sub mnuEmployeeCars_Click()
   Call BenScreenSwitch(BC_EMPLOYEE_CAR_E)
 End Sub
@@ -1557,19 +1616,9 @@ Private Sub mnuFileItems_Click(Index As Integer)
     Case MNU_FILE_ERROR_LOG
     Case MNU_FILE_ELECTRONIC_SUBMISSION
     Case MNU_FILE_IMPORT
-    'MP DB ToDo - this never get called as MNU_FILE_IMPORT=7 (ref to Menu Editor) - not clickable
-    '           - chk resulting impact as p11d32.Importing.InitImport is called from just here
-      
     Case MNU_FILE_PRINT
       Call p11d32.ReportPrint.InitPrintDialog
     Case MNU_FILE_CHANGEDIRECTORY
-      s = p11d32.WorkingDirectory
-      Call p11d32.CreateAndSetWorkingDirectory(MDIMain, p11d32.WorkingDirectory, True)
-      If (StrComp(s, p11d32.WorkingDirectory, vbTextCompare) <> 0) Then
-        Call ToolBarButton(TBR_REFRESH_EMPLOYERS, i)
-      End If
-    'Case MNU_FILE_EMPLOYEE_LETTER RK Removed 28/02/03
-      'F_EmployeeLetter.Show vbModal
     Case MNU_FILE_PASSWORD, MNU_FILE_TOOLS
       'nothing as have sub menus
     Case Else
@@ -1846,6 +1895,28 @@ Private Sub mnuOOther_Click()
   Call BenScreenSwitch(BC_OOTHER_N)
 End Sub
 
+Private Sub mnuRecentWorkingDirectory_Click(Index As Integer)
+  Dim workingDirectory As String
+  
+On Error GoTo err_err
+
+  workingDirectory = mnuRecentWorkingDirectory(Index).Tag
+  
+  If (Not FileExists(workingDirectory, True)) Then
+    Call Err.Raise(ERR_ERROR, "mnuRecentWorkingDirectory_Click", "The directory '" & workingDirectory * "' does not exist")
+  End If
+  
+  Call p11d32.WorkingDirectoryChange(workingDirectory)
+  Call p11d32.LoadEmployers
+  
+  
+err_end:
+  Exit Sub
+err_err:
+  Call ErrorMessage(Err.Number, Err, ErrorSource(Err, "mnuRecentWorkingDirectory_Click"), "RecentWorkingDirectoryChange", Err.Description)
+  Resume err_end
+End Sub
+
 Private Sub mnuRelocation_Click()
   Call BenScreenSwitch(BC_QUALIFYING_RELOCATION_J)
 End Sub
@@ -1869,7 +1940,22 @@ End Sub
 Private Sub mnuTaxPaidNotDeducted_Click()
   Call BenScreenSwitch(BC_INCOME_TAX_PAID_NOT_DEDUCTED_M)
 End Sub
-
+Public Sub LoadRecentWorkingDirectories()
+  Dim sl As StringList
+  Dim i As Long
+  
+  Set sl = p11d32.RecentWorkingDirectories.MenuEntries
+  For i = 1 To p11d32.RecentWorkingDirectories.Max
+    If (i > sl.Count) Then
+      mnuRecentWorkingDirectory(i).Visible = False
+    Else
+      mnuRecentWorkingDirectory(i).Visible = True
+      mnuRecentWorkingDirectory(i).Caption = CStr(i) & ". " & sl.Item(i)
+      mnuRecentWorkingDirectory(i).Tag = sl.Item(i)
+    End If
+  Next
+  
+End Sub
 
 
 Private Sub mnuTestingGoogleSheet_Click()

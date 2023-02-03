@@ -1,30 +1,29 @@
 VERSION 5.00
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
-Object = "{A7CE771F-05B2-43CF-9650-ED841A9049FA}#1.0#0"; "ATC3FolderBrowser.ocx"
 Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "atc2vtext.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form F_PrintOptions 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Print options"
-   ClientHeight    =   9240
+   ClientHeight    =   10020
    ClientLeft      =   45
    ClientTop       =   330
-   ClientWidth     =   5985
+   ClientWidth     =   7170
    ControlBox      =   0   'False
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   9240
-   ScaleWidth      =   5985
+   ScaleHeight     =   10020
+   ScaleWidth      =   7170
    StartUpPosition =   3  'Windows Default
    Begin TabDlg.SSTab tab 
-      Height          =   8580
+      Height          =   9420
       Left            =   -15
       TabIndex        =   1
       Top             =   0
-      Width           =   5925
-      _ExtentX        =   10451
-      _ExtentY        =   15134
+      Width           =   7110
+      _ExtentX        =   12541
+      _ExtentY        =   16616
       _Version        =   393216
       Style           =   1
       Tab             =   2
@@ -32,9 +31,9 @@ Begin VB.Form F_PrintOptions
       TabCaption(0)   =   "HMIT"
       TabPicture(0)   =   "F_PrintOptions.frx":0000
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "fraReportTotalValue"
+      Tab(0).Control(0)=   "fmeHMITSections"
       Tab(0).Control(1)=   "fmeHMITSectionChoice"
-      Tab(0).Control(2)=   "fmeHMITSections"
+      Tab(0).Control(2)=   "fraReportTotalValue"
       Tab(0).ControlCount=   3
       TabCaption(1)   =   "Employee Letter"
       TabPicture(1)   =   "F_PrintOptions.frx":001C
@@ -62,30 +61,30 @@ Begin VB.Form F_PrintOptions
          Caption         =   "Email settings"
          Height          =   375
          Left            =   1920
-         TabIndex        =   72
-         Top             =   8100
+         TabIndex        =   70
+         Top             =   8880
          Width           =   1305
       End
       Begin VB.CheckBox chkA4ForcePrint 
          Caption         =   "Force print to A4"
          Height          =   255
-         Left            =   225
-         TabIndex        =   71
-         Top             =   8145
+         Left            =   240
+         TabIndex        =   69
+         Top             =   8950
          Width           =   1635
       End
       Begin VB.Frame frmCheckOptions 
          Caption         =   "Data checker"
          Height          =   1335
          Left            =   120
-         TabIndex        =   63
-         Top             =   6720
-         Width           =   5655
+         TabIndex        =   61
+         Top             =   7440
+         Width           =   6855
          Begin VB.CheckBox chkChecksAutoRefresh 
             Caption         =   "Auto refresh of checks"
             Height          =   255
             Left            =   240
-            TabIndex        =   68
+            TabIndex        =   66
             Top             =   960
             Width           =   2175
          End
@@ -93,7 +92,7 @@ Begin VB.Form F_PrintOptions
             Caption         =   "Ask for checks before printing"
             Height          =   255
             Left            =   240
-            TabIndex        =   64
+            TabIndex        =   62
             Top             =   240
             Width           =   2415
          End
@@ -101,15 +100,15 @@ Begin VB.Form F_PrintOptions
             Caption         =   "Frame1"
             Height          =   615
             Left            =   120
-            TabIndex        =   65
+            TabIndex        =   63
             Top             =   240
-            Width           =   5295
+            Width           =   6615
             Begin VB.OptionButton optChkBeforePrint 
                Caption         =   "Never run checks"
                Height          =   255
                Index           =   1
                Left            =   2400
-               TabIndex        =   67
+               TabIndex        =   65
                Top             =   240
                Width           =   1815
             End
@@ -118,7 +117,7 @@ Begin VB.Form F_PrintOptions
                Height          =   255
                Index           =   0
                Left            =   120
-               TabIndex        =   66
+               TabIndex        =   64
                Top             =   240
                Width           =   1815
             End
@@ -126,24 +125,50 @@ Begin VB.Form F_PrintOptions
       End
       Begin VB.Frame fraExportOptions 
          Caption         =   "Automated export / e-mail-attachment options"
-         Height          =   1665
+         Height          =   2475
          Left            =   90
          TabIndex        =   31
          Top             =   3000
-         Width           =   5700
+         Width           =   6885
          Begin VB.Frame fraEmployeeReportNaming 
             Caption         =   "If employee report in the exported file name use:"
-            Height          =   615
+            Height          =   1410
             Left            =   120
-            TabIndex        =   73
+            TabIndex        =   71
             Top             =   960
-            Width           =   5415
+            Width           =   6615
+            Begin VB.TextBox txtCustomExportFileName 
+               BackColor       =   &H8000000F&
+               Height          =   375
+               Left            =   120
+               TabIndex        =   80
+               Text            =   "Text1"
+               Top             =   960
+               Width           =   5535
+            End
+            Begin VB.CommandButton cmdEditCustomExportFileName 
+               Caption         =   "Edit"
+               Height          =   375
+               Left            =   5760
+               TabIndex        =   78
+               Top             =   960
+               Width           =   615
+            End
+            Begin VB.OptionButton optReportExportEmployeeFileNameFields 
+               Caption         =   "Custom"
+               Height          =   195
+               Index           =   2
+               Left            =   4560
+               TabIndex        =   77
+               Top             =   260
+               Width           =   1575
+            End
             Begin VB.OptionButton optReportExportEmployeeFileNameFields 
                Caption         =   "Surname-Firstname-Personnel No"
                Height          =   195
                Index           =   1
                Left            =   1680
-               TabIndex        =   75
+               TabIndex        =   73
                Top             =   260
                Width           =   3135
             End
@@ -152,9 +177,17 @@ Begin VB.Form F_PrintOptions
                Height          =   195
                Index           =   0
                Left            =   120
-               TabIndex        =   74
+               TabIndex        =   72
                Top             =   260
                Width           =   1575
+            End
+            Begin VB.Label lblCustomFileName 
+               Caption         =   "Custom export file name"
+               Height          =   255
+               Left            =   120
+               TabIndex        =   79
+               Top             =   640
+               Width           =   4935
             End
          End
          Begin VB.PictureBox pctFrame4 
@@ -171,7 +204,7 @@ Begin VB.Form F_PrintOptions
                Height          =   330
                Index           =   3
                Left            =   2790
-               TabIndex        =   69
+               TabIndex        =   67
                Top             =   360
                Width           =   2085
             End
@@ -207,15 +240,15 @@ Begin VB.Form F_PrintOptions
       Begin VB.Frame fraOther 
          Caption         =   "Other"
          Height          =   1830
-         Left            =   90
+         Left            =   120
          TabIndex        =   28
-         Top             =   4800
-         Width           =   5700
+         Top             =   5520
+         Width           =   6885
          Begin VB.CheckBox chkDraftReports 
             Caption         =   "Draft reports"
             Height          =   240
             Left            =   2520
-            TabIndex        =   76
+            TabIndex        =   74
             Top             =   1485
             Width           =   2490
          End
@@ -284,35 +317,45 @@ Begin VB.Form F_PrintOptions
          Left            =   90
          TabIndex        =   27
          Top             =   405
-         Width           =   5700
+         Width           =   6885
          Begin VB.PictureBox pctFrame3 
             BorderStyle     =   0  'None
             Height          =   2235
             Left            =   90
             ScaleHeight     =   2235
-            ScaleWidth      =   5550
+            ScaleWidth      =   5655
             TabIndex        =   48
             Top             =   180
-            Width           =   5550
+            Width           =   5655
+            Begin P11D2022.MyFolderBrowser fbExportDirectory 
+               Height          =   255
+               Left            =   120
+               TabIndex        =   75
+               Top             =   1920
+               Width           =   5295
+               _ExtentX        =   9340
+               _ExtentY        =   450
+               BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+                  Name            =   "MS Sans Serif"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   400
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   -2147483630
+            End
             Begin VB.OptionButton optDestination 
                Caption         =   "PDF"
                Enabled         =   0   'False
                Height          =   330
                Index           =   3
                Left            =   45
-               TabIndex        =   70
+               TabIndex        =   68
                Top             =   840
                Visible         =   0   'False
                Width           =   975
-            End
-            Begin atc3FolderBrowser.FolderBrowser fbExportDirectory 
-               Height          =   435
-               Left            =   45
-               TabIndex        =   62
-               Top             =   1800
-               Width           =   5505
-               _ExtentX        =   9710
-               _ExtentY        =   767
             End
             Begin VB.OptionButton optDestination 
                Caption         =   "Export / e-mail (select type below)"
@@ -396,22 +439,32 @@ Begin VB.Form F_PrintOptions
          Left            =   -74910
          TabIndex        =   25
          Top             =   360
-         Width           =   5685
-         Begin atc3FolderBrowser.FolderBrowser fbUserLetters 
-            Height          =   555
-            Left            =   90
-            TabIndex        =   61
-            Top             =   3420
-            Width           =   5550
-            _ExtentX        =   9790
-            _ExtentY        =   979
+         Width           =   6885
+         Begin P11D2022.MyFolderBrowser fbUserLetters 
+            Height          =   375
+            Left            =   120
+            TabIndex        =   76
+            Top             =   3480
+            Width           =   6615
+            _ExtentX        =   9551
+            _ExtentY        =   873
+            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+               Name            =   "MS Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   -2147483630
          End
          Begin VB.CommandButton cmdEditEmployeeLetter 
             Caption         =   "Edit employee letter"
             Height          =   330
-            Left            =   3825
+            Left            =   5040
             TabIndex        =   38
-            Top             =   4005
+            Top             =   3960
             Width           =   1785
          End
          Begin MSComctlLib.TreeView tvwLetters 
@@ -419,8 +472,8 @@ Begin VB.Form F_PrintOptions
             Left            =   90
             TabIndex        =   26
             Top             =   225
-            Width           =   5460
-            _ExtentX        =   9631
+            Width           =   6645
+            _ExtentX        =   11721
             _ExtentY        =   5292
             _Version        =   393217
             Indentation     =   176
@@ -442,38 +495,38 @@ Begin VB.Form F_PrintOptions
          Height          =   2520
          Left            =   -74910
          TabIndex        =   19
-         Top             =   4815
-         Width           =   5685
+         Top             =   4920
+         Width           =   6885
          Begin VB.TextBox txtEmailSubject 
             Height          =   405
             Left            =   135
             TabIndex        =   32
             Top             =   1380
-            Width           =   5370
+            Width           =   6570
          End
          Begin VB.CommandButton cmdEmployeeLetterFont 
             Caption         =   "Font"
             Height          =   330
-            Left            =   4680
+            Left            =   720
             TabIndex        =   21
             Top             =   675
             Width           =   825
          End
          Begin VB.VScrollBar vsEmployeeLetterMargin 
             Height          =   330
-            Left            =   5355
+            Left            =   1440
             Max             =   0
             Min             =   15
             TabIndex        =   20
-            Top             =   255
+            Top             =   240
             Value           =   15
-            Width           =   150
+            Width           =   255
          End
          Begin atc2valtext.ValText vtEmployeeLetterMargin 
             Height          =   330
-            Left            =   4905
+            Left            =   960
             TabIndex        =   22
-            Top             =   255
+            Top             =   240
             Width           =   465
             _ExtentX        =   820
             _ExtentY        =   582
@@ -525,7 +578,7 @@ Begin VB.Form F_PrintOptions
          Left            =   -74865
          TabIndex        =   4
          Top             =   1620
-         Width           =   5595
+         Width           =   6795
          Begin VB.CheckBox chkHMITSections 
             Caption         =   "A - Assets transferred"
             Height          =   330
@@ -704,7 +757,7 @@ Begin VB.Form F_PrintOptions
          Left            =   -72615
          TabIndex        =   2
          Top             =   405
-         Width           =   3345
+         Width           =   4545
          Begin VB.PictureBox pctFrame1 
             BorderStyle     =   0  'None
             Height          =   780
@@ -748,9 +801,9 @@ Begin VB.Form F_PrintOptions
       Caption         =   "&OK"
       Default         =   -1  'True
       Height          =   330
-      Left            =   4800
+      Left            =   5880
       TabIndex        =   0
-      Top             =   8760
+      Top             =   9550
       Width           =   1050
    End
 End
@@ -759,6 +812,17 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
+
+
+
+
+
+
+
+
+
+
 Option Explicit
 Private m_LastSelectedNode As node
 Private m_NodeCount As Long
@@ -854,32 +918,20 @@ Private Sub chkTimeStamp_Click()
   p11d32.ReportPrint.TimeStamp = chkTimeStamp.value
 End Sub
 
-'Private Sub chkUseNotesIfPossible_Click() 'RK Email 19/03/03
-'  On Error GoTo chkUseNotesIfPossible_ERR
-'
-'  p11d32.ReportPrint.UseNotesForEmail = ChkBoxToBool(chkUseNotesIfPossible)
-'
-'  If p11d32.ReportPrint.UseNotesForEmail Then p11d32.ReportPrint.Mail.UseNotesAPI = True
-'
-'
-'chkUseNotesIfPossible_END:
-'  Exit Sub
-'chkUseNotesIfPossible_ERR:
-'  Call ErrorMessage(ERR_ERROR, Err, "UseNotesIfPossible", "UseNotesIfPossible", Err.Description)
-'End Sub
-
-
+Private Sub cmdEditCustomExportFileName_Click()
+  F_PrintOptionsExportCustomFileName.Text = txtCustomExportFileName.Text
+  If F_PrintOptionsExportCustomFileName.ShowDialog(Me) = vbOK Then
+    txtCustomExportFileName.Text = F_PrintOptionsExportCustomFileName.Text
+  End If
+  Unload F_PrintOptionsExportCustomFileName
+End Sub
 Private Sub cmdEditEmployeeLetter_Click()
-'  F_EmployeeLetter.Show vbModal
   Call p11d32.Help.ShowForm(F_EmployeeLetter, vbModal)
   ResetAllLetterNodes
 End Sub
-
 Private Sub cmdEmailSettings_Click()
   Call p11d32.ReportPrint.EmailSettingsShow
-  
 End Sub
-
 Private Sub cmdEmployeeLetterFont_Click()
   On Error GoTo cmdEmployeeLetterFont_ERR
   Call xSet("cmdEmployeeLetterFont")
@@ -953,6 +1005,11 @@ cmdOK_ERR:
 End Sub
 
 
+
+Private Sub Command1_Click()
+
+End Sub
+
 Private Sub Form_Load()
   Set tvwLetters.ImageList = MDIMain.imlTree
   Set m_LastSelectedNode = Nothing
@@ -1000,8 +1057,7 @@ Public Function SettingsToScreen() As Boolean
   n.Tag = FIT_SYSTEM_DEFINED
   n.Image = IMG_FOLDER_CLOSED
   
-  fbUserLetters.Directory = p11d32.ReportPrint.UserLettersPath
-  'RK/EK Could split below into separate function
+  fbUserLetters.ReadOnly = p11d32.FoldersDefaulToEmployerFolder
   
   j = p11d32.ReportPrint.GetLetterFiles(sLetterFiles_System)
   For i = 1 To j
@@ -1036,6 +1092,8 @@ Public Function SettingsToScreen() As Boolean
   optChkBeforePrint_Click (-1)
   optExportType_Click (-1)
   optReportExportEmployeeFileNameFields_Click (-1)
+  txtCustomExportFileName = p11d32.ReportPrint.ExportEmployeeFileNameCustom
+  
   
   chkEmailTextAsHTML = BoolToChkBox(p11d32.ReportPrint.EmailTextAsHTML)
   chkAllowUserReportNameHTML.value = BoolToChkBox(p11d32.ReportPrint.ExportAllowUserNameHTML)
@@ -1048,6 +1106,9 @@ Public Function SettingsToScreen() As Boolean
   
   
   chkRememberEmployeeSelection.value = BoolToChkBox(p11d32.ReportPrint.RemeberEmployeeSelection)
+  
+  
+  
   
 SettingsToScreen_End:
   Call xReturn("SettingsToScreen")
@@ -1221,6 +1282,8 @@ Private Sub optReportExportEmployeeFileNameFields_Click(Index As Integer)
             optReportExportEmployeeFileNameFields(0) = True
           Case REPORT_EXPORT_EMPLOYEE_FILE_NAME_FIELDS.REEFNF_SURNAME_FIRTNAME_PERSONNEL_NUMBER
             optReportExportEmployeeFileNameFields(1) = True
+          Case REPORT_EXPORT_EMPLOYEE_FILE_NAME_FIELDS.REEFNF_CUSTOM
+            optReportExportEmployeeFileNameFields(2) = True
           Case Else
             Call ECASE("Invalid Export Employee Field Name Fields, = " & p11d32.ReportPrint.ExportEmployeeFileNameFields)
         End Select
@@ -1230,6 +1293,8 @@ Private Sub optReportExportEmployeeFileNameFields_Click(Index As Integer)
           p11d32.ReportPrint.ExportEmployeeFileNameFields = REPORT_EXPORT_EMPLOYEE_FILE_NAME_FIELDS.REEFNF_PERSONNEL_NUMBER
         Case 1
           p11d32.ReportPrint.ExportEmployeeFileNameFields = REPORT_EXPORT_EMPLOYEE_FILE_NAME_FIELDS.REEFNF_SURNAME_FIRTNAME_PERSONNEL_NUMBER
+        Case 2
+          p11d32.ReportPrint.ExportEmployeeFileNameFields = REPORT_EXPORT_EMPLOYEE_FILE_NAME_FIELDS.REEFNF_CUSTOM
       End Select
   End Select
 End Sub
@@ -1264,6 +1329,10 @@ Private Sub tvwLetters_NodeClick(ByVal node As MSComctlLib.node)
     node.Expanded = Not (node.Expanded)
     node.Image = IIf(node.Expanded, IMG_FOLDER_OPEN, IMG_FOLDER_CLOSED)
   End If
+End Sub
+
+Private Sub txtCustomExportFileName_Change()
+  p11d32.ReportPrint.ExportEmployeeFileNameCustom = txtCustomExportFileName.Text
 End Sub
 
 Private Sub txtEmailSubject_Validate(Cancel As Boolean)
@@ -1403,7 +1472,7 @@ Private Sub SetAsSelectedNode(ByVal node As MSComctlLib.node)
   ' Modify letter nodes
   If nt = NODE_LETTER Then
     If GetNodeFileType(node) = FIT_USER_DEFINED Then
-      p11d32.ReportPrint.EmployeeLetterPath = p11d32.ReportPrint.UserLettersPath
+      p11d32.ReportPrint.EmployeeLetterPath = p11d32.ReportPrint.UserLettersPathActual
     Else
       p11d32.ReportPrint.EmployeeLetterPath = FullPath(AppPath) & S_SYSTEMDIR_LETTERS
     End If
@@ -1438,11 +1507,9 @@ MatchLetterNode_Err:
 End Function
 
 Private Sub fbUserLetters_Ended()
-  Dim s As String
-    
-    p11d32.ReportPrint.UserLettersPath = fbUserLetters.Directory
-    Call UserLettersToScreen
-    Call DefaultLetterSelection
+  p11d32.ReportPrint.UserLettersPath = fbUserLetters.Directory
+  Call UserLettersToScreen
+  Call DefaultLetterSelection
 End Sub
 
 Private Sub fbUserLetters_Started()
@@ -1456,5 +1523,3 @@ End Sub
 Private Sub fbExportDirectory_Started()
   fbExportDirectory.Directory = p11d32.ReportPrint.ExportDirectory
 End Sub
-
-

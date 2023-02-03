@@ -201,23 +201,23 @@ Private Function AdjustPercentage(dPercentageBase As Double, dPercentageAdjustme
   AdjustPercentage = dPercentageBase + dPercentageAdjustment
 End Function
 Private Function UseWLTPCo2Rates(ByVal ben As IBenefitClass) As Boolean
-  UseWLTPCo2Rates = (ben.Value(car_Registrationdate_db) >= D_CAR_USE_ELECTRIC_RANGE_MILES)
+  UseWLTPCo2Rates = (ben.value(car_Registrationdate_db) >= D_CAR_USE_ELECTRIC_RANGE_MILES)
 End Function
 
 Private Function CalculateFuelPercentage(ByVal ben As IBenefitClass) As Double
   Dim dPercentageOfValue As Double
   
 
-  If ben.Value(car_Registrationdate_db) < p11d32.Rates.Value(carNOCO2CUTOFFDATE) Then
+  If ben.value(car_Registrationdate_db) < p11d32.Rates.value(carNOCO2CUTOFFDATE) Then
     'this is purely based on the CC of the car, even if an official CO2 figure existed, special cases for electricity
-    If (ben.Value(car_p46FuelType_db) = CCFT_ELECTRIC) Then
+    If (ben.value(car_p46FuelType_db) = CCFT_ELECTRIC) Then
       dPercentageOfValue = 0.07   'see IR480 2016
     Else
-      If (ben.Value(car_P46HighCC)) Then
+      If (ben.value(car_P46HighCC)) Then
         dPercentageOfValue = 0.37
-      ElseIf ben.Value(car_P46MediumCC) Then
+      ElseIf ben.value(car_P46MediumCC) Then
         dPercentageOfValue = 0.27
-      ElseIf ben.Value(car_P46LowCC) Then
+      ElseIf ben.value(car_P46LowCC) Then
         dPercentageOfValue = 0.16
       Else 'must be 0 then we must consider as wankel engine, eg ben.value(car_P46NoCC) = true
         dPercentageOfValue = 0.37
@@ -226,17 +226,17 @@ Private Function CalculateFuelPercentage(ByVal ben As IBenefitClass) As Double
   Else
   '2: cars registered post and including 01/01/1998
     'first get the base percentage
-    If (ben.Value(car_p46FuelType_db) = CCFT_ELECTRIC) Then
+    If (ben.value(car_p46FuelType_db) = CCFT_ELECTRIC) Then
       dPercentageOfValue = CO2Percentage(ben)
       'dPercentageOfValue = 0#  'CAD 2010 was 0.15
     Else
       'if no approved C02 then use section 12.26
-      If (ben.Value(car_p46NoApprovedCO2Figure_db)) Then
-        If (ben.Value(car_P46HighCC)) Then
+      If (ben.value(car_p46NoApprovedCO2Figure_db)) Then
+        If (ben.value(car_P46HighCC)) Then
           dPercentageOfValue = 0.37
-        ElseIf ben.Value(car_P46MediumCC) Then
+        ElseIf ben.value(car_P46MediumCC) Then
           dPercentageOfValue = 0.25
-        ElseIf ben.Value(car_P46LowCC) Then
+        ElseIf ben.value(car_P46LowCC) Then
           dPercentageOfValue = 0.15
         Else 'must be 0 then we must consider as wankel engine, eg ben.value(car_P46NoCC) = true
           dPercentageOfValue = 0.37
@@ -245,27 +245,27 @@ Private Function CalculateFuelPercentage(ByVal ben As IBenefitClass) As Double
         dPercentageOfValue = CO2Percentage(ben)
       End If
     End If
-    ben.Value(car_unrestrictedPercentage) = dPercentageOfValue
+    ben.value(car_unrestrictedPercentage) = dPercentageOfValue
     'apply the supplement from section 12.27 of the revenue guide
     
     
-    Select Case ben.Value(car_p46FuelType_db)
+    Select Case ben.value(car_p46FuelType_db)
       Case CCFT_PETROL, CCFT_BIFUEL_CONVERSION_OTHER_NOT_WITHIN_TYPE_B, CCFT_HYBRID, CCFT_E85_BIO_ENTHANOL_AND_PETROL, CCFT_BIFUEL_WITH_CO2_FOR_GAS, CCFT_GAS_ONLY, CCFT_RDE2_DIESEL
         'nothing
       Case CCFT_DIESEL, CCFT_EUROIVDIESEL
-        ben.Value(car_supplement) = p11d32.Rates.Value(CarDIESELSUPPLEMENT)
+        ben.value(car_supplement) = p11d32.Rates.value(CarDIESELSUPPLEMENT)
       Case CCFT_ELECTRIC
-        ben.Value(car_supplement) = 0#
+        ben.value(car_supplement) = 0#
       Case Else
-        Call Err.Raise(ERR_CAR_CO2, "Calculate", "Unknown fuel type")
+        Call err.Raise(ERR_CAR_CO2, "Calculate", "Unknown fuel type")
     End Select
 
-    ben.Value(car_FuelDontUseAmountForegone) = CO2CalcValue(ben) <= 75
+    ben.value(car_FuelDontUseAmountForegone) = CO2CalcValue(ben) <= 75
       
   End If
 
-  dPercentageOfValue = dPercentageOfValue + ben.Value(car_supplement)
-  dPercentageOfValue = Max(0, Min(dPercentageOfValue, p11d32.Rates.Value(carBENPERCENTMAX)))
+  dPercentageOfValue = dPercentageOfValue + ben.value(car_supplement)
+  dPercentageOfValue = Max(0, Min(dPercentageOfValue, p11d32.Rates.value(carBENPERCENTMAX)))
 
   
   CalculateFuelPercentage = dPercentageOfValue
@@ -292,116 +292,113 @@ Call xSet("CompanyCar_Calculate")
   Call SetP46FrequencyPaymentString
   Call CompanyCarAvailableDatesValid(ben)
   ' ******************************** CAR CALC START ***********************************************
-  If (ben.Value(car_p46FuelType_db) = CCFT_HYBRID) And ben.Value(car_p46CarbonDioxide_db) < 51 Then
-      ben.Value(car_ElectricRangeMiles_Required) = UseWLTPCo2Rates(ben)
-      ben.Value(car_ElectricRangeMiles_NeedToInput) = True
+  If (ben.value(car_p46FuelType_db) = CCFT_HYBRID) And ben.value(car_p46CarbonDioxide_db) < 51 Then
+      ben.value(car_ElectricRangeMiles_Required) = UseWLTPCo2Rates(ben)
+      ben.value(car_ElectricRangeMiles_NeedToInput) = True
   End If
   
   'WS2 I/K/L, WS2B F/G/H
-  ben.Value(car_percentage) = CalculateFuelPercentage(ben)
+  ben.value(car_percentage) = CalculateFuelPercentage(ben)
   
-  vNewLessCheapAccessories = ben.Value(car_AccessoriesNew_db) - ben.Value(car_CheapAccessories_db)
-  ben.Value(car_Accessories) = ben.Value(car_AccessoriesOriginal_db) + IIf(vNewLessCheapAccessories > 0, vNewLessCheapAccessories, 0)
+  vNewLessCheapAccessories = ben.value(car_AccessoriesNew_db) - ben.value(car_CheapAccessories_db)
+  ben.value(car_Accessories) = ben.value(car_AccessoriesOriginal_db) + IIf(vNewLessCheapAccessories > 0, vNewLessCheapAccessories, 0)
   
   'WS2/WS2B C
-  ben.Value(car_GrossPrice) = ben.Value(car_ListPrice_db) + ben.Value(car_Accessories)
+  ben.value(car_GrossPrice) = ben.value(car_ListPrice_db) + ben.value(car_Accessories)
   'WS2 D
-  ben.Value(car_CapitalContributionRestricted) = Max(Min(ben.Value(car_capitalcontribution_db), p11d32.Rates.Value(carMAXCAPCONTRIB)), 0)
+  ben.value(car_CapitalContributionRestricted) = Max(Min(ben.value(car_capitalcontribution_db), p11d32.Rates.value(carMAXCAPCONTRIB)), 0)
   'WS2 E, WS2B N
-  ben.Value(car_Price) = Max(0, ben.Value(car_GrossPrice) - ben.Value(car_CapitalContributionRestricted))
+  ben.value(car_Price) = Max(0, ben.value(car_GrossPrice) - ben.value(car_CapitalContributionRestricted))
   
   'WS2 M
-  ben.Value(car_BenefitFullYear) = ben.Value(car_Price) * ben.Value(car_percentage)
+  ben.value(car_BenefitFullYear) = ben.value(car_Price) * ben.value(car_percentage)
   'WS2B I
-  ben.Value(car_ModifiedCashEquivalent) = ben.Value(car_GrossPrice) * ben.Value(car_percentage)
+  ben.value(car_ModifiedCashEquivalent) = ben.value(car_GrossPrice) * ben.value(car_percentage)
     
   'WS2 N/365, WS2B J/365
-  dDateFactor = dGetDateFactor(0, ben.Value(Car_AvailableFrom_db), ben.Value(Car_AvailableTo_db), m_BenItems(car_UnavailableDays_db), L_DAYS_UNAVAIL_MIN, False)
+  dDateFactor = dGetDateFactor(0, ben.value(Car_AvailableFrom_db), ben.value(Car_AvailableTo_db), m_BenItems(car_UnavailableDays_db), L_DAYS_UNAVAIL_MIN, False)
   
   'WS2 P
-  ben.Value(car_DeductionForUnavailabilityRoundUpNextWholeNumber) = RoundUp(ben.Value(car_BenefitFullYear) * (1 - dDateFactor), 0)
+  ben.value(car_DeductionForUnavailabilityRoundUpNextWholeNumber) = RoundUp(ben.value(car_BenefitFullYear) * (1 - dDateFactor), 0)
   'WS2B K
-  ben.Value(car_DeductionForUnavailabilityRoundUpNextWholeNumberOpra) = RoundUp(ben.Value(car_ModifiedCashEquivalent) * (1 - dDateFactor), 0)
+  ben.value(car_DeductionForUnavailabilityRoundUpNextWholeNumberOpra) = RoundUp(ben.value(car_ModifiedCashEquivalent) * (1 - dDateFactor), 0)
   
   'WS2 Q
-  ben.Value(car_BenefitForThePeriodTheCarWasAvailable) = ben.Value(car_BenefitFullYear) - ben.Value(car_DeductionForUnavailabilityRoundUpNextWholeNumber)
+  ben.value(car_BenefitForThePeriodTheCarWasAvailable) = ben.value(car_BenefitFullYear) - ben.value(car_DeductionForUnavailabilityRoundUpNextWholeNumber)
   
   'WS2B L
-  ben.Value(car_ModifiedCashEquivalentForTheYearPreNumberOfUsers) = ben.Value(car_ModifiedCashEquivalent) - ben.Value(car_DeductionForUnavailabilityRoundUpNextWholeNumberOpra)
-  ben.Value(car_ModifiedCashEquivalentForTheYear) = RoundDownEx(ben.Value(car_ModifiedCashEquivalentForTheYearPreNumberOfUsers) / ben.Value(car_NumberOfUsers_db), 0)
+  ben.value(car_ModifiedCashEquivalentForTheYearPreNumberOfUsers) = ben.value(car_ModifiedCashEquivalent) - ben.value(car_DeductionForUnavailabilityRoundUpNextWholeNumberOpra)
+  ben.value(car_ModifiedCashEquivalentForTheYear) = RoundDownEx(ben.value(car_ModifiedCashEquivalentForTheYearPreNumberOfUsers) / ben.value(car_NumberOfUsers_db), 0)
   
   'WS2B O
-  ben.Value(car_CapitalContributionDeductionApplicableFullYear) = ben.Value(car_CapitalContributionRestricted) * ben.Value(car_percentage)
+  ben.value(car_CapitalContributionDeductionApplicableFullYear) = ben.value(car_CapitalContributionRestricted) * ben.value(car_percentage)
   'WS2B P
-  ben.Value(car_CapitalContributionsAllowedInTheYear) = RoundDownEx(ben.Value(car_CapitalContributionDeductionApplicableFullYear) * dDateFactor, 0)
+  ben.value(car_CapitalContributionsAllowedInTheYear) = RoundDownEx(ben.value(car_CapitalContributionDeductionApplicableFullYear) * dDateFactor, 0)
   
   'WS2B Q
-  ben.Value(car_ProvisionalSum) = ben.Value(car_OPRA_Ammount_Foregone_db) - ben.Value(car_CapitalContributionsAllowedInTheYear)
+  ben.value(car_ProvisionalSum) = ben.value(car_OPRA_Ammount_Foregone_db) - ben.value(car_CapitalContributionsAllowedInTheYear)
   
   
   'WS2 R, WS2B R
-  ben.Value(car_ActualAmountMadeGood) = CalculatePaymentForPrivateUse(dDateFactor)
+  ben.value(car_ActualAmountMadeGood) = CalculatePaymentForPrivateUse(dDateFactor)
   
   
   '************* OPRA SPECIFIC START ***************
   
-  ben.Value(car_OPRAProvisionalSum) = ben.Value(car_ProvisionalSum)
+  ben.value(car_OPRAProvisionalSum) = ben.value(car_ProvisionalSum)
   '*************** OPRA SPECIFIC END ***************
   
   'STANDARD_CAR START
-  ben.Value(car_Scaled) = ben.Value(car_BenefitFullYear) 'WS2 M
-  ben.Value(ITEM_VALUE_NON_OPRA) = ben.Value(car_BenefitForThePeriodTheCarWasAvailable) 'WS2 Q
-  ben.Value(ITEM_VALUE_NON_OPRA) = RoundDownEx(ben.Value(ITEM_VALUE_NON_OPRA) / (ben.Value(car_NumberOfUsers_db)), 0)
+  ben.value(car_Scaled) = ben.value(car_BenefitFullYear) 'WS2 M
+  ben.value(ITEM_VALUE_NON_OPRA) = ben.value(car_BenefitForThePeriodTheCarWasAvailable) 'WS2 Q
+  ben.value(ITEM_VALUE_NON_OPRA) = RoundDownEx(ben.value(ITEM_VALUE_NON_OPRA) / (ben.value(car_NumberOfUsers_db)), 0)
   'STANDARD_CAR END
   
-  ben.Value(car_cardaysreduction) = ben.Value(car_DeductionForUnavailabilityRoundUpNextWholeNumber) 'WS2 P
+  ben.value(car_cardaysreduction) = ben.value(car_DeductionForUnavailabilityRoundUpNextWholeNumber) 'WS2 P
   
   
 
   Dim bOpraCalc As Boolean 'WS2B
   
-  ben.Value(car_OPRAModifiedCashEquivalent) = ben.Value(car_ModifiedCashEquivalentForTheYear)
+  ben.value(car_OPRAModifiedCashEquivalent) = ben.value(car_ModifiedCashEquivalentForTheYear)
   
-  bOpraCalc = ((ben.Value(car_OPRA_Ammount_Foregone_db) > 0) And (ben.Value(car_OPRA_Ammount_Foregone_db) > ben.Value(car_ModifiedCashEquivalentForTheYear)) And (Not ben.Value(car_FuelDontUseAmountForegone)))
+  bOpraCalc = ((ben.value(car_OPRA_Ammount_Foregone_db) > 0) And (ben.value(car_OPRA_Ammount_Foregone_db) > ben.value(car_ModifiedCashEquivalentForTheYear)) And (Not ben.value(car_FuelDontUseAmountForegone)))
   If bOpraCalc Then
-    ben.Value(ITEM_VALUE) = ben.Value(car_OPRAProvisionalSum)
-    ben.Value(ITEM_OPRA_AMOUNT_FOREGONE_USED_FOR_VALUE) = True
+    ben.value(ITEM_VALUE) = ben.value(car_OPRAProvisionalSum)
+    ben.value(ITEM_OPRA_AMOUNT_FOREGONE_USED_FOR_VALUE) = True
   Else
-    ben.Value(ITEM_VALUE) = ben.Value(ITEM_VALUE_NON_OPRA)
-    ben.Value(ITEM_OPRA_AMOUNT_FOREGONE_USED_FOR_VALUE) = False
+    ben.value(ITEM_VALUE) = ben.value(ITEM_VALUE_NON_OPRA)
+    ben.value(ITEM_OPRA_AMOUNT_FOREGONE_USED_FOR_VALUE) = False
   End If
   
   
   
   
-  ben.Value(car_MadeGood_Net) = Min(ben.Value(car_carValue), ben.Value(car_ActualAmountMadeGood))
+  ben.value(car_MadeGood_Net) = Min(ben.value(car_carValue), ben.value(car_ActualAmountMadeGood))
   
   If (bOpraCalc) Then
-    ben.Value(car_carBenefit) = ben.Value(ITEM_VALUE) - ben.Value(car_MadeGood_Net)
+    ben.value(car_carBenefit) = ben.value(ITEM_VALUE) - ben.value(car_MadeGood_Net)
   Else
-    ben.Value(car_carBenefit) = ben.Value(ITEM_VALUE) - ben.Value(car_MadeGood_Net)
+    ben.value(car_carBenefit) = ben.value(ITEM_VALUE) - ben.value(car_MadeGood_Net)
   End If
-  ben.Value(car_carBenefit) = ben.Value(car_carBenefit) + 1
-  
-  
   
   
   ' ******************************** CAR CALC END ***********************************************
   
   
   '****************************************** FUEL CALC START ********************************************
-  Call CalculateFuelBen(ben.Value(car_percentage))  'this is retained from original calc
+  Call CalculateFuelBen(ben.value(car_percentage))  'this is retained from original calc
     
   '****************************************** FUEL CALC END ********************************************
   Call BenCalcNIC(ben)
 
     
-  ben.Value(car_Benefit_Reportable) = True
-  ben.Value(car_FuelBenefit_Reportable) = True
+  ben.value(car_Benefit_Reportable) = True
+  ben.value(car_FuelBenefit_Reportable) = True
   
   Call SetHMIT
 
-  IBenefitClass_CalculateBody = ben.Value(car_carBenefit)
+  IBenefitClass_CalculateBody = ben.value(car_carBenefit)
    
 err_end:
   Call xReturn("CompanyCar_Calculate")
@@ -409,7 +406,7 @@ err_end:
   
 err_err:
   IBenefitClass_CalculateBody = S_ERROR
-  ben.Value(ITEM_ERROR) = Err.Description
+  ben.value(ITEM_ERROR) = err.Description
   Resume err_end
   Resume
 
@@ -454,7 +451,7 @@ Copy_END:
   Call xReturn("Copy")
   Exit Function
 Copy_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "Copy", "Copy", "Error copying a company car benefit.")
+  Call ErrorMessage(ERR_ERROR, err, "Copy", "Copy", "Error copying a company car benefit.")
   Resume Copy_ERR
 End Function
 
@@ -479,7 +476,7 @@ AddFuelBenefit_END:
   Call xReturn("AddFuelBenefit")
   Exit Sub
 AddFuelBenefit_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "AddFuelBenefit", "Add Non Qualifying Relocation", "Error adding a fuel benefit with a company car benefit.")
+  Call ErrorMessage(ERR_ERROR, err, "AddFuelBenefit", "Add Non Qualifying Relocation", "Error adding a fuel benefit with a company car benefit.")
   Resume AddFuelBenefit_END
   Resume
 End Sub
@@ -556,49 +553,49 @@ Private Function IBenefitClass_PrintWkBody(rep As Reporter) As Boolean
   lAdditionalDiscount = 0
   lFuelDeduction = 0
   lRunningPercentage = 0
-  If ben.Value(car_Price) = 0 Then
+  If ben.value(car_Price) = 0 Then
     lFinalPercentage = 0
   Else
-    lFinalPercentage = (ben.Value(car_percentage) * 100)
+    lFinalPercentage = (ben.value(car_percentage) * 100)
     ' lFinalPercentage = (ben.value(car_Scaled) / ben.value(car_Price)) * 100 'ek change for co2 working paper
   End If
-  lTotalUsers = ben.Value(car_NumberOfUsers_db)
+  lTotalUsers = ben.value(car_NumberOfUsers_db)
   
   Call WKOut(rep, WK_SECTION_HEADER_DETAILS)
-  Call WKOut(rep, WK_ITEM_DESCRIPTION, "Make and model: ", ben.Value(car_Make_db))
-  Call WKOut(rep, WK_ITEM_TEXT, "Made available from " & S_WK_NORMAL_BOLD_FONT & ben.Value(Car_AvailableFrom_db) & S_WK_NORMAL_FONT & " to " & S_WK_NORMAL_BOLD_FONT & ben.Value(Car_AvailableTo_db))
-  Call WKOut(rep, WK_ITEM_TEXT, "Qualifying days unavailable: " & S_WK_NORMAL_BOLD_FONT & ben.Value(car_UnavailableDays_db))
+  Call WKOut(rep, WK_ITEM_DESCRIPTION, "Make and model: ", ben.value(car_Make_db))
+  Call WKOut(rep, WK_ITEM_TEXT, "Made available from " & S_WK_NORMAL_BOLD_FONT & ben.value(Car_AvailableFrom_db) & S_WK_NORMAL_FONT & " to " & S_WK_NORMAL_BOLD_FONT & ben.value(Car_AvailableTo_db))
+  Call WKOut(rep, WK_ITEM_TEXT, "Qualifying days unavailable: " & S_WK_NORMAL_BOLD_FONT & ben.value(car_UnavailableDays_db))
   Call WKOut(rep, WK_ITEM_TEXT, "Number of employees using this car: " & S_WK_NORMAL_BOLD_FONT & lTotalUsers)
 
 'EK Changes to working paper 2003
   
   Call WKOut(rep, WK_BLANK_LINE)
-  If ben.Value(car_p46NoApprovedCO2Figure_db) Then
-    Call WKOut(rep, WK_ITEM_TEXT, "No approved CO2 figure: " & S_WK_NORMAL_BOLD_FONT & ben.Value(car_p46NoApprovedCO2Figure_db))
+  If ben.value(car_p46NoApprovedCO2Figure_db) Then
+    Call WKOut(rep, WK_ITEM_TEXT, "No approved CO2 figure: " & S_WK_NORMAL_BOLD_FONT & ben.value(car_p46NoApprovedCO2Figure_db))
   Else
     Call WKOut(rep, WK_ITEM_TEXT, "CO2 emissions figure: " & S_WK_NORMAL_BOLD_FONT & CO2CalcValue(ben) & S_WK_NORMAL_FONT & " g/km")
   End If
   
-  Call WKOut(rep, WK_ITEM_TEXT, "Date of registration: " & S_WK_NORMAL_BOLD_FONT & ben.Value(car_Registrationdate_db))
-  Call WKOut(rep, WK_ITEM_TEXT, "Engine size: " & S_WK_NORMAL_BOLD_FONT & ben.Value(car_enginesize_db) & S_WK_NORMAL_FONT & " cc")
-  Call WKOut(rep, WK_ITEM_TEXT, "Type of fuel: " & S_WK_NORMAL_BOLD_FONT & ben.Value(car_p46FuelTypeStringLong))
+  Call WKOut(rep, WK_ITEM_TEXT, "Date of registration: " & S_WK_NORMAL_BOLD_FONT & ben.value(car_Registrationdate_db))
+  Call WKOut(rep, WK_ITEM_TEXT, "Engine size: " & S_WK_NORMAL_BOLD_FONT & ben.value(car_enginesize_db) & S_WK_NORMAL_FONT & " cc")
+  Call WKOut(rep, WK_ITEM_TEXT, "Type of fuel: " & S_WK_NORMAL_BOLD_FONT & ben.value(car_p46FuelTypeStringLong))
       
       
 'AM To be removed  If ben.value(car_UseActualMiles) Then Call WKOut(rep, WK_ITEM_TEXT, "Total mileage " & ben.value(car_SumMiles))
 ' Price of car for tax purposes
   Call WKOut(rep, WK_SECTION_HEADER_VALUE)
-  Call WKOut(rep, WK_ITEM_TEXT, "Car list price ", ben.Value(car_ListPrice_db), , True, False)
-  Call WKOut(rep, WK_ITEM_TEXT, "Optional accessories available when the car was first made available", ben.Value(car_AccessoriesOriginal_db))
-  Call WKOut(rep, WK_ITEM_TEXT, "Accessories added after car was first made available", ben.Value(car_AccessoriesNew_db))
-  Call WKOut(rep, WK_ITEM_TEXT, "Accessories worth less than £100", ben.Value(car_CheapAccessories_db), , , True)
+  Call WKOut(rep, WK_ITEM_TEXT, "Car list price ", ben.value(car_ListPrice_db), , True, False)
+  Call WKOut(rep, WK_ITEM_TEXT, "Optional accessories available when the car was first made available", ben.value(car_AccessoriesOriginal_db))
+  Call WKOut(rep, WK_ITEM_TEXT, "Accessories added after car was first made available", ben.value(car_AccessoriesNew_db))
+  Call WKOut(rep, WK_ITEM_TEXT, "Accessories worth less than £100", ben.value(car_CheapAccessories_db), , , True)
   
-  Call WKOut(rep, WK_ITEM_Total, S_WK_LEFT_MARGIN & "Total car list price plus accessories ", ben.Value(car_GrossPrice), , True)
+  Call WKOut(rep, WK_ITEM_Total, S_WK_LEFT_MARGIN & "Total car list price plus accessories ", ben.value(car_GrossPrice), , True)
   ' Less reductions
   Call WKOut(rep, WK_SECTION_HEADER_LESS)
-  Call WKOut(rep, WK_ITEM_TEXT, "Capital contribution by the employee towards the cost of the car " & IIf(ben.Value(car_capitalcontribution_db) > p11d32.Rates.Value(carMAXCAPCONTRIB), "(" & FormatWN(ben.Value(car_capitalcontribution_db)) & " restricted to " & FormatWN(p11d32.Rates.Value(carMAXCAPCONTRIB)) & ")", ""), Min(ben.Value(car_capitalcontribution_db), p11d32.Rates.Value(carMAXCAPCONTRIB)), , True, True)
+  Call WKOut(rep, WK_ITEM_TEXT, "Capital contribution by the employee towards the cost of the car " & IIf(ben.value(car_capitalcontribution_db) > p11d32.Rates.value(carMAXCAPCONTRIB), "(" & FormatWN(ben.value(car_capitalcontribution_db)) & " restricted to " & FormatWN(p11d32.Rates.value(carMAXCAPCONTRIB)) & ")", ""), Min(ben.value(car_capitalcontribution_db), p11d32.Rates.value(carMAXCAPCONTRIB)), , True, True)
   
   'Call WKOut(rep, WK_ITEM_Total, "Adjusted price of the car for " & p11d32.Rates.value(TaxFormYear) & " (restricted to " & FormatWN(p11d32.Rates.value(carMAXLISTPRICE)) & ")", ben.value(car_Price), , True)
-  Call WKOut(rep, WK_ITEM_Total, "Adjusted price of the car for " & p11d32.Rates.Value(TaxFormYear), ben.Value(car_Price), , True)
+  Call WKOut(rep, WK_ITEM_Total, "Adjusted price of the car for " & p11d32.Rates.value(TaxFormYear), ben.value(car_Price), , True)
     
 'AM To be removed  Call WKOut(rep, WK_ITEM_TEXT, "Gross benefit for " & p11d32.Rates.value(TaxFormYear) & " (Adjusted price x " & ben.value(car_ReductionPercentageWK) & "%)", ben.value(car_Scaled) - ben.value(car_BusMilereduction))
 'AM To be removed  Call WKOut(rep, WK_ITEM_TEXT, S_WK_NORMAL_ITALIC_FONT & "Note: " & ben.value(car_ReductionPercentageWK) & "% reduction as car in " & ben.value(car_businessmiles) & " band.")
@@ -612,41 +609,41 @@ Private Function IBenefitClass_PrintWkBody(rep As Reporter) As Boolean
   Dim dReduction As Double
   Call WKOut(rep, WK_ITEM_TEXT, S_WK_NORMAL_BOLD_FONT & "Calculate appropriate percentage", "")
   
-  Call WKOut(rep, WK_ITEM_TEXT, S_WK_NORMAL_ITALIC_FONT & "Base calcuation percentage ", S_WKCOL_3 & ReportPercentage(ben.Value(car_unrestrictedPercentage)))
+  Call WKOut(rep, WK_ITEM_TEXT, S_WK_NORMAL_ITALIC_FONT & "Base calcuation percentage ", S_WKCOL_3 & ReportPercentage(ben.value(car_unrestrictedPercentage)))
   
   
-  If ben.Value(car_supplement) > 0 Then
-    Call WKOut(rep, WK_ITEM_TEXT, S_WK_NORMAL_ITALIC_FONT & "Supplement according to fuel type ", S_WKCOL_3 & ReportPercentage(ben.Value(car_supplement)))
+  If ben.value(car_supplement) > 0 Then
+    Call WKOut(rep, WK_ITEM_TEXT, S_WK_NORMAL_ITALIC_FONT & "Supplement according to fuel type ", S_WKCOL_3 & ReportPercentage(ben.value(car_supplement)))
   Else
-    Call WKOut(rep, WK_ITEM_TEXT, S_WK_NORMAL_ITALIC_FONT & "Reduction according to fuel type ", S_WKCOL_3 & ReportPercentage(ben.Value(car_supplement)))
+    Call WKOut(rep, WK_ITEM_TEXT, S_WK_NORMAL_ITALIC_FONT & "Reduction according to fuel type ", S_WKCOL_3 & ReportPercentage(ben.value(car_supplement)))
   End If
   Dim MAX_RATE_PERCENTAGE_STRING As String
-  MAX_RATE_PERCENTAGE_STRING = RoundDownEx(p11d32.Rates.Value(carBENPERCENTMAX) * 100, 0)
+  MAX_RATE_PERCENTAGE_STRING = RoundDownEx(p11d32.Rates.value(carBENPERCENTMAX) * 100, 0)
   
-  Call WKOut(rep, WK_ITEM_TEXT, S_WK_NORMAL_ITALIC_FONT & "Final calcuation percentage restricted to " & MAX_RATE_PERCENTAGE_STRING & "%", S_WKCOL_3 & ReportPercentage(ben.Value(car_percentage)))
+  Call WKOut(rep, WK_ITEM_TEXT, S_WK_NORMAL_ITALIC_FONT & "Final calcuation percentage restricted to " & MAX_RATE_PERCENTAGE_STRING & "%", S_WKCOL_3 & ReportPercentage(ben.value(car_percentage)))
   
   Call WKOut(rep, WK_BLANK_LINE)
-  Call WKOut(rep, WK_ITEM_TEXT, "Adjusted car list price multiplied by percentage ", RoundDownEx(ben.Value(car_Price) * lFinalPercentage / 100, 0))
-  Call WKOut(rep, WK_ITEM_TEXT, "Reduction for days when the car was unavailable", ben.Value(car_cardaysreduction), , , True)
+  Call WKOut(rep, WK_ITEM_TEXT, "Adjusted car list price multiplied by percentage ", RoundDownEx(ben.value(car_Price) * lFinalPercentage / 100, 0))
+  Call WKOut(rep, WK_ITEM_TEXT, "Reduction for days when the car was unavailable", ben.value(car_cardaysreduction), , , True)
   
   Dim bMoreThan2USers As Boolean
   bMoreThan2USers = lTotalUsers > 1
  
-  If (ben.Value(car_OPRA_Ammount_Foregone_db) > 0) Then
+  If (ben.value(car_OPRA_Ammount_Foregone_db) > 0) Then
     Call WKOut(rep, WK_BLANK_LINE)
-    Call WKOut(rep, WK_ITEM_TEXT, "OpRA amount foregone", ben.Value(car_OPRA_Ammount_Foregone_db))
+    Call WKOut(rep, WK_ITEM_TEXT, "OpRA amount foregone", ben.value(car_OPRA_Ammount_Foregone_db))
     
     
     If (bMoreThan2USers) Then
-      Call WKOut(rep, WK_ITEM_TEXT, "OpRA modified cash equivalent (ITEPA 2003 - Section 121B) ", ben.Value(car_ModifiedCashEquivalentForTheYearPreNumberOfUsers))
+      Call WKOut(rep, WK_ITEM_TEXT, "OpRA modified cash equivalent (ITEPA 2003 - Section 121B) ", ben.value(car_ModifiedCashEquivalentForTheYearPreNumberOfUsers))
       Call WKOut(rep, WK_ITEM_TEXT, "Divided by number of users", lTotalUsers)
-      Call WKOut(rep, WK_ITEM_TEXT, "Shared modified cash equivalent (ITEPA 2003 - Section 121B)", ben.Value(car_OPRAModifiedCashEquivalent))
+      Call WKOut(rep, WK_ITEM_TEXT, "Shared modified cash equivalent (ITEPA 2003 - Section 121B)", ben.value(car_OPRAModifiedCashEquivalent))
     Else
-      Call WKOut(rep, WK_ITEM_TEXT, "OpRA modified cash equivalent (ITEPA 2003 - Section 121B)", ben.Value(car_OPRAModifiedCashEquivalent))
+      Call WKOut(rep, WK_ITEM_TEXT, "OpRA modified cash equivalent (ITEPA 2003 - Section 121B)", ben.value(car_OPRAModifiedCashEquivalent))
     End If
     
     
-    Call WKOut(rep, WK_ITEM_TEXT, "OpRA provisional sum (ITEPA 2003 - Section 121A)", ben.Value(car_OPRAProvisionalSum))
+    Call WKOut(rep, WK_ITEM_TEXT, "OpRA provisional sum (ITEPA 2003 - Section 121A)", ben.value(car_OPRAProvisionalSum))
     Call WKOut(rep, WK_BLANK_LINE)
     
     Dim vOpraSwitchValue As Variant
@@ -654,20 +651,20 @@ Private Function IBenefitClass_PrintWkBody(rep As Reporter) As Boolean
     vOpraSwitchValue = Null
     
     
-    If (ben.Value(car_OPRA_Ammount_Foregone_Used_For_Value)) Then
+    If (ben.value(car_OPRA_Ammount_Foregone_Used_For_Value)) Then
       If (Not bMoreThan2USers) Then
-        vOpraSwitchValue = ben.Value(car_OPRAProvisionalSum)
+        vOpraSwitchValue = ben.value(car_OPRAProvisionalSum)
       End If
       Call WKOut(rep, WK_ITEM_TEXT, "'OpRA amount foregone' > 'OpRA modified cash equivalent', using the 'OpRA provisional sum' as the value (ITEPA 2003 - Section 120A)", vOpraSwitchValue)
     Else
       If (Not bMoreThan2USers) Then
-        vOpraSwitchValue = ben.Value(ITEM_VALUE_NON_OPRA)
+        vOpraSwitchValue = ben.value(ITEM_VALUE_NON_OPRA)
       End If
       Call WKOut(rep, WK_ITEM_TEXT, "'OpRA amount foregone' <= to the 'OpRA modified cash equivalent', using the 'standard calculation' for the value (ITEPA 2003 - Section 120A)", vOpraSwitchValue)
     End If
   
   Else
-    Call WKOut(rep, WK_ITEM_TEXT, "Value of benefit", ben.Value(ITEM_VALUE))
+    Call WKOut(rep, WK_ITEM_TEXT, "Value of benefit", ben.value(ITEM_VALUE))
   
   End If
   Call WKOut(rep, WK_BLANK_LINE)
@@ -676,17 +673,17 @@ Private Function IBenefitClass_PrintWkBody(rep As Reporter) As Boolean
   
   If (bMoreThan2USers) Then
     Dim vBenefitBeforeUserReduction As Variant
-    If (ben.Value(ITEM_OPRA_AMOUNT_FOREGONE_USED_FOR_VALUE)) Then 'opra calc
-      Call WKOut(rep, WK_ITEM_TEXT, "Assessable car benefit before (ignoring number of users)", ben.Value(car_OPRAProvisionalSum), , True)
+    If (ben.value(ITEM_OPRA_AMOUNT_FOREGONE_USED_FOR_VALUE)) Then 'opra calc
+      Call WKOut(rep, WK_ITEM_TEXT, "Assessable car benefit before (ignoring number of users)", ben.value(car_OPRAProvisionalSum), , True)
     Else
-      Call WKOut(rep, WK_ITEM_TEXT, "Assessable car benefit before number of users taken into account", ben.Value(car_BenefitForThePeriodTheCarWasAvailable), , True)
+      Call WKOut(rep, WK_ITEM_TEXT, "Assessable car benefit before number of users taken into account", ben.value(car_BenefitForThePeriodTheCarWasAvailable), , True)
       Call WKOut(rep, WK_ITEM_TEXT, "Divided by number of users", lTotalUsers)
     End If
 
   End If
-  Call WKOut(rep, WK_ITEM_TEXT, "Less payment from the employee for private use of the car", ben.Value(car_ActualAmountMadeGood), , , True)
+  Call WKOut(rep, WK_ITEM_TEXT, "Less payment from the employee for private use of the car", ben.value(car_ActualAmountMadeGood), , , True)
   
-  Call WKOut(rep, WK_ITEM_Total, "Assessable car benefit", ben.Value(car_carBenefit), , True)
+  Call WKOut(rep, WK_ITEM_Total, "Assessable car benefit", ben.value(car_carBenefit), , True)
   
   
   
@@ -695,16 +692,16 @@ Private Function IBenefitClass_PrintWkBody(rep As Reporter) As Boolean
   
   Call WKOut(rep, WK_SECTION_HEADER, "Fuel Benefit")
   
-  If ben.Value(Car_HasFuelUnavailableDays_db) Then
-    Call WKOut(rep, WK_ITEM_TEXT, "Qualifying days unavailable: " & S_WK_NORMAL_BOLD_FONT & Min(ben.Value(car_UnavailableDays_db), ben.Value(car_UnavailableDays_db)))
+  If ben.value(Car_HasFuelUnavailableDays_db) Then
+    Call WKOut(rep, WK_ITEM_TEXT, "Qualifying days unavailable: " & S_WK_NORMAL_BOLD_FONT & Min(ben.value(car_UnavailableDays_db), ben.value(car_UnavailableDays_db)))
   End If
   
   Call WKOut(rep, WK_ITEM_TEXT, "Was fuel provided for private use?", WKBool(ben, car_privatefuel_db))
   
   'if fuel benefit > 0 then display the date withdrawn if present - EK altered 2/04 TTP#212
-  If ben.Value(car_privatefuel_db) And (ben.Value(Car_AvailableTo_db) > ben.Value(Car_FuelAvailableTo_db)) Then
+  If ben.value(car_privatefuel_db) And (ben.value(Car_AvailableTo_db) > ben.value(Car_FuelAvailableTo_db)) Then
     'WILL THIS PRINT OUT ok in US LOCALE?
-    Call WKOut(rep, WK_ITEM_TEXT, "Date car fuel withdrawn: " & S_WK_NORMAL_BOLD_FONT & ben.Value(Car_FuelAvailableTo_db))
+    Call WKOut(rep, WK_ITEM_TEXT, "Date car fuel withdrawn: " & S_WK_NORMAL_BOLD_FONT & ben.value(Car_FuelAvailableTo_db))
     Call WKOut(rep, WK_ITEM_TEXT, "Was fuel reinstated?", WKBool(ben, car_fuelreinstated_db))
   End If
   
@@ -712,31 +709,31 @@ Private Function IBenefitClass_PrintWkBody(rep As Reporter) As Boolean
   Call WKOut(rep, WK_ITEM_TEXT, "Was the employee required to make good the cost of all fuel so provided?", WKBool(ben, car_requiredmakegood_db))
   Call WKOut(rep, WK_ITEM_TEXT, "If so required, did the employee do so?", WKBool(ben, car_actualmadegood_db))
   Call WKOut(rep, WK_ITEM_TEXT, "Number of users?", lTotalUsers)
-  Call WKOut(rep, WK_ITEM_TEXT, "Fuel benefit (percentage multiplied by £" & FormatNumber(p11d32.Rates.Value(CarFUELBENSETFIGURE), 0, , , vbTrue) & "):", (ben.Value(car_GrossFuel)), , True)
+  Call WKOut(rep, WK_ITEM_TEXT, "Fuel benefit (percentage multiplied by £" & FormatNumber(p11d32.Rates.value(CarFUELBENSETFIGURE), 0, , , vbTrue) & "):", (ben.value(car_GrossFuel)), , True)
   
-  Call WKOut(rep, WK_ITEM_TEXT, "Divided by number of users", ben.Value(car_FuelGrossDividedByUsers))
+  Call WKOut(rep, WK_ITEM_TEXT, "Divided by number of users", ben.value(car_FuelGrossDividedByUsers))
   
-  Call WKOut(rep, WK_ITEM_TEXT, "Reduction for days when car was unavailable", ben.Value(car_fueldaysreduction), , , True)
+  Call WKOut(rep, WK_ITEM_TEXT, "Reduction for days when car was unavailable", ben.value(car_fueldaysreduction), , , True)
   
   Call WKOut(rep, WK_BLANK_LINE)
   '
   
   Call OPRAWorkingPaperValue(Fuel, rep)
   
-  Call WKOut(rep, WK_ITEM_Total, "Assessable fuel benefit", ben.Value(car_FuelBenefit), , True)
+  Call WKOut(rep, WK_ITEM_Total, "Assessable fuel benefit", ben.value(car_FuelBenefit), , True)
 CAR_PRINTWK_End:
   Call xReturn("CAR_PRINTWK")
   Exit Function
 
 CAR_PRINTWK_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "CAR_PRINTWK", "CAR PRINT WK", "Error printing the company car working paper.")
+  Call ErrorMessage(ERR_ERROR, err, "CAR_PRINTWK", "CAR PRINT WK", "Error printing the company car working paper.")
   Resume CAR_PRINTWK_End
   Resume
   
 End Function
 Private Function WKBool(ben As IBenefitClass, Item As Long) As String
   If p11d32.BenDataLinkDataType(ben.BenefitClass, Item) = TYPE_BOOL Then
-    WKBool = IIf(ben.Value(Item), "Yes", "No")
+    WKBool = IIf(ben.value(Item), "Yes", "No")
   Else
     ECASE ("Non boolean value passed to WKBool")
   End If
@@ -998,7 +995,7 @@ SetBenItemsInformation_end:
   Exit Sub
   
 SetBenItemsInformation_err:
-  Call ErrorMessage(ERR_ERROR, Err, "SetBenItemsInformation", "Set Benefit Item Information", "Error setting benefit information")
+  Call ErrorMessage(ERR_ERROR, err, "SetBenItemsInformation", "Set Benefit Item Information", "Error setting benefit information")
   Resume SetBenItemsInformation_end
 End Sub
 
@@ -1013,41 +1010,41 @@ Private Sub IBenefitClass_SetCalcDefaults()
   Call SetCalcDefaultsStandard(ben)
   
   'HMIT items
-  ben.Value(car_HMIT_CC) = S_ERROR
-  ben.Value(car_HMIT_petrol) = False
-  ben.Value(car_HMIT_diesel) = False
+  ben.value(car_HMIT_CC) = S_ERROR
+  ben.value(car_HMIT_petrol) = False
+  ben.value(car_HMIT_diesel) = False
   'Set all fields to error
-  ben.Value(car_GrossPrice) = S_ERROR
-  ben.Value(car_Price) = S_ERROR
-  ben.Value(car_Scaled) = S_ERROR
-  ben.Value(car_Accessories) = S_ERROR
-  ben.Value(car_cardaysreduction) = 0
-  ben.Value(car_carValue) = S_ERROR
-  ben.Value(car_GrossFuel) = S_ERROR
-  ben.Value(car_fueldaysreduction) = S_ERROR
-  ben.Value(car_FuelValue) = S_ERROR
-  ben.Value(car_carBenefit) = S_ERROR
-  ben.Value(car_FuelBenefit) = S_ERROR
-  ben.Value(car_FuelValue) = S_ERROR
-  ben.Value(car_FuelMadeGood) = S_ERROR
-  ben.Value(car_FuelMadeGood_NET) = S_ERROR
-  ben.Value(car_FuelBenefit_Reportable) = False
-  ben.Value(car_FuelError) = ""
-  ben.Value(car_FuelClass1AAdjustment) = 0
-  ben.Value(car_unrestrictedPercentage) = 0
-  ben.Value(car_percentage) = 0
-  ben.Value(car_supplement) = 0
-  ben.Value(car_OPRA_Ammount_Foregone_Used_For_Value) = False
-  ben.Value(car_FuelOPRA_Ammount_Foregone_Used_For_Value) = False
-  ben.Value(car_FuelMadeGood) = 0
+  ben.value(car_GrossPrice) = S_ERROR
+  ben.value(car_Price) = S_ERROR
+  ben.value(car_Scaled) = S_ERROR
+  ben.value(car_Accessories) = S_ERROR
+  ben.value(car_cardaysreduction) = 0
+  ben.value(car_carValue) = S_ERROR
+  ben.value(car_GrossFuel) = S_ERROR
+  ben.value(car_fueldaysreduction) = S_ERROR
+  ben.value(car_FuelValue) = S_ERROR
+  ben.value(car_carBenefit) = S_ERROR
+  ben.value(car_FuelBenefit) = S_ERROR
+  ben.value(car_FuelValue) = S_ERROR
+  ben.value(car_FuelMadeGood) = S_ERROR
+  ben.value(car_FuelMadeGood_NET) = S_ERROR
+  ben.value(car_FuelBenefit_Reportable) = False
+  ben.value(car_FuelError) = ""
+  ben.value(car_FuelClass1AAdjustment) = 0
+  ben.value(car_unrestrictedPercentage) = 0
+  ben.value(car_percentage) = 0
+  ben.value(car_supplement) = 0
+  ben.value(car_OPRA_Ammount_Foregone_Used_For_Value) = False
+  ben.value(car_FuelOPRA_Ammount_Foregone_Used_For_Value) = False
+  ben.value(car_FuelMadeGood) = 0
   
-  ben.Value(car_FuelVATBenefit) = 0
-  ben.Value(car_GrossFuel) = 0
-  ben.Value(car_FuelDontUseAmountForegone) = False
-  ben.Value(car_OPRAModifiedCashEquivalent) = 0
-  ben.Value(car_OPRAProvisionalSum) = 0
-  ben.Value(car_ElectricRangeMiles_Required) = False
-  ben.Value(car_ElectricRangeMiles_NeedToInput) = False
+  ben.value(car_FuelVATBenefit) = 0
+  ben.value(car_GrossFuel) = 0
+  ben.value(car_FuelDontUseAmountForegone) = False
+  ben.value(car_OPRAModifiedCashEquivalent) = 0
+  ben.value(car_OPRAProvisionalSum) = 0
+  ben.value(car_ElectricRangeMiles_Required) = False
+  ben.value(car_ElectricRangeMiles_NeedToInput) = False
   
   
   
@@ -1072,8 +1069,8 @@ Private Function CO2Percentage(ByVal ben As IBenefitClass) As Double
   Dim rateDouble As Double
   Dim electricRangeMiles As Long
   
-  fuelType = ben.Value(car_p46FuelType_db)
-  electricRangeMiles = ben.Value(car_ElectricRangeMiles_db)
+  fuelType = ben.value(car_p46FuelType_db)
+  electricRangeMiles = ben.value(car_ElectricRangeMiles_db)
   co2 = CO2CalcValue(ben)
   
   'NEDC rates
@@ -1184,10 +1181,10 @@ Private Function IBenefitClass_Calculate() As Variant
 End Function
 
 Private Function CO2CalcValue(ben As IBenefitClass) As Long
-  If (ben.Value(car_p46FuelType_db) = COMPANY_CAR_FUEL_TYPE.CCFT_ELECTRIC) Then
+  If (ben.value(car_p46FuelType_db) = COMPANY_CAR_FUEL_TYPE.CCFT_ELECTRIC) Then
     CO2CalcValue = 0
   Else
-    CO2CalcValue = ben.Value(car_p46CarbonDioxide_db)
+    CO2CalcValue = ben.value(car_p46CarbonDioxide_db)
   End If
 End Function
 
@@ -1244,7 +1241,7 @@ Private Function FuelVATAnnualScaleCharge(ben As IBenefitClass)
     Case Is >= 225
       iFuelVATScaleAnnual = 2045
     Case Else
-      Call Err.Raise(ERR_INVALIDID, "FuelVATAnnualScaleCharge", "Invalid CO2 value" & iCO2)
+      Call err.Raise(ERR_INVALIDID, "FuelVATAnnualScaleCharge", "Invalid CO2 value" & iCO2)
   End Select
 
   FuelVATAnnualScaleCharge = iFuelVATScaleAnnual
@@ -1267,100 +1264,100 @@ Private Sub CalculateFuelBen(ByVal BenRate As Double)
   
   With ben
   
-  .Value(car_FuelUnavailableDays) = IIf(m_BenItems(Car_HasFuelUnavailableDays_db), m_BenItems(car_UnavailableDays_db), 0)
+  .value(car_FuelUnavailableDays) = IIf(m_BenItems(Car_HasFuelUnavailableDays_db), m_BenItems(car_UnavailableDays_db), 0)
   'fuel date factor
   
-    dFuelDateFrom = .Value(Car_AvailableFrom_db)
-    dFuelDateTo = .Value(Car_AvailableTo_db)
-    If .Value(Car_FuelAvailableTo_db) < dFuelDateTo Then
-      If Not .Value(car_fuelreinstated_db) Then
-        dFuelDateTo = .Value(Car_FuelAvailableTo_db)
+    dFuelDateFrom = .value(Car_AvailableFrom_db)
+    dFuelDateTo = .value(Car_AvailableTo_db)
+    If .value(Car_FuelAvailableTo_db) < dFuelDateTo Then
+      If Not .value(car_fuelreinstated_db) Then
+        dFuelDateTo = .value(Car_FuelAvailableTo_db)
       End If
     End If
-    dFuelDateFactor = dGetDateFactor(l, dFuelDateFrom, dFuelDateTo, .Value(car_FuelUnavailableDays), L_DAYS_UNAVAIL_MIN, False, iDaysAvailable)
+    dFuelDateFactor = dGetDateFactor(l, dFuelDateFrom, dFuelDateTo, .value(car_FuelUnavailableDays), L_DAYS_UNAVAIL_MIN, False, iDaysAvailable)
     
     'calculating fuel VAT benefit according to engine size and petrol type
-    If .Value(car_privatefuel_db) Then
+    If .value(car_privatefuel_db) Then
       'N.B. electric are zeroed below
       If (p11d32.AppYear >= 2007) Then
-        .Value(car_FuelVATBenefit) = FuelVATAnnualScaleCharge(ben)
+        .value(car_FuelVATBenefit) = FuelVATAnnualScaleCharge(ben)
       End If
 
       'Calculating Fuel benefit (=  set figure (£14,400 for 2003) * benefit rate)
-      .Value(car_GrossFuel) = p11d32.Rates.Value(CarFUELBENSETFIGURE) * BenRate  'CAD 2010 changed from 16900 to 18000
+      .value(car_GrossFuel) = p11d32.Rates.value(CarFUELBENSETFIGURE) * BenRate  'CAD 2010 changed from 16900 to 18000
       
       'RH - No Fuel Benefit if Electricity only
-      If ((.Value(car_requiredmakegood_db) And .Value(car_actualmadegood_db)) Or (.Value(car_p46FuelType_db) = CCFT_ELECTRIC)) Then
+      If ((.value(car_requiredmakegood_db) And .value(car_actualmadegood_db)) Or (.value(car_p46FuelType_db) = CCFT_ELECTRIC)) Then
         'electric - No taxable benefit - electricity does not sit within the meaning of fuel so the Fuel Benefit Charge does not apply. And there is no further benefit charge as s239(4) ITEPA 2003 specifically excludes a benefit connected with a taxable car.
         'currently only electrc cars have zero emissions, so no need for an additional check box on the form
 
-        .Value(car_FuelMadeGood) = (.Value(car_GrossFuel) * dFuelDateFactor) / .Value(car_NumberOfUsers_db)
+        .value(car_FuelMadeGood) = (.value(car_GrossFuel) * dFuelDateFactor) / .value(car_NumberOfUsers_db)
         '.value(car_GrossFuel) = 0
         '.value(car_FuelVATBenefit) = 0
       Else
-        .Value(car_FuelMadeGood) = 0
+        .value(car_FuelMadeGood) = 0
       End If
     Else
-      .Value(car_FuelVATBenefit) = 0
-      .Value(car_FuelMadeGood) = 0
-      .Value(car_GrossFuel) = 0
+      .value(car_FuelVATBenefit) = 0
+      .value(car_FuelMadeGood) = 0
+      .value(car_GrossFuel) = 0
     End If
         
     'cad company car change
-    .Value(Car_FuelAvailableTo_calc) = UNDATED
-    .Value(car_fuelreinstated_calc) = False
-    If (.Value(car_p46FuelType_db) = CCFT_ELECTRIC) Or (Not .Value(car_privatefuel_db)) Then
+    .value(Car_FuelAvailableTo_calc) = UNDATED
+    .value(car_fuelreinstated_calc) = False
+    If (.value(car_p46FuelType_db) = CCFT_ELECTRIC) Or (Not .value(car_privatefuel_db)) Then
       'leave false
     Else
-      If .Value(Car_FuelAvailableTo_db) >= .Value(Car_AvailableTo_db) Then
+      If .value(Car_FuelAvailableTo_db) >= .value(Car_AvailableTo_db) Then
         'leave false
-      ElseIf .Value(Car_FuelAvailableTo_db) < .Value(Car_AvailableFrom_db) Then
+      ElseIf .value(Car_FuelAvailableTo_db) < .value(Car_AvailableFrom_db) Then
         'leave false
       Else
-        .Value(Car_FuelAvailableTo_calc) = .Value(Car_FuelAvailableTo_db)
-        If .Value(car_fuelreinstated_db) Then
-          .Value(car_fuelreinstated_calc) = .Value(car_fuelreinstated_db)
+        .value(Car_FuelAvailableTo_calc) = .value(Car_FuelAvailableTo_db)
+        If .value(car_fuelreinstated_db) Then
+          .value(car_fuelreinstated_calc) = .value(car_fuelreinstated_db)
         End If
       End If
     End If
       
       
-    .Value(car_fueldaysreduction) = RoundUp(.Value(car_GrossFuel) * (1 - dFuelDateFactor), 0)
-    .Value(car_fueldaysreduction) = RoundDownEx(.Value(car_fueldaysreduction) / .Value(car_NumberOfUsers_db), 0)
+    .value(car_fueldaysreduction) = RoundUp(.value(car_GrossFuel) * (1 - dFuelDateFactor), 0)
+    .value(car_fueldaysreduction) = RoundDownEx(.value(car_fueldaysreduction) / .value(car_NumberOfUsers_db), 0)
     
-    .Value(car_FuelGrossDividedByUsers) = RoundDownEx((.Value(car_GrossFuel)) / .Value(car_NumberOfUsers_db), 0)
-    .Value(car_FuelValue_Non_OPRA) = Max(.Value(car_FuelGrossDividedByUsers) - .Value(car_fueldaysreduction), 0)
+    .value(car_FuelGrossDividedByUsers) = RoundDownEx((.value(car_GrossFuel)) / .value(car_NumberOfUsers_db), 0)
+    .value(car_FuelValue_Non_OPRA) = Max(.value(car_FuelGrossDividedByUsers) - .value(car_fueldaysreduction), 0)
     
     Dim iFuelValueNonOPRAField As Integer
-    If (.Value(car_requiredmakegood_db) And .Value(car_actualmadegood_db) And (.Value(car_FuelOPRA_Ammount_Foregone_db) > 0)) Then
+    If (.value(car_requiredmakegood_db) And .value(car_actualmadegood_db) And (.value(car_FuelOPRA_Ammount_Foregone_db) > 0)) Then
       'we need a temp field to have a  value of zero to force the value to 0 in CalculateOpRAValue
       'TODO: issue with working paper, this is an edge case for the last ever release!
-      .Value(car_FuelOPRAZeroField) = 0
+      .value(car_FuelOPRAZeroField) = 0
       iFuelValueNonOPRAField = car_FuelOPRAZeroField
     Else
       iFuelValueNonOPRAField = car_FuelValue_Non_OPRA
     End If
     
-    Call CalculateOpRAValue(ben, ben.Value(car_FuelDontUseAmountForegone), iFuelValueNonOPRAField, car_FuelOPRA_Ammount_Foregone_db, car_FuelValue, car_FuelOPRA_Ammount_Foregone_Used_For_Value)
+    Call CalculateOpRAValue(ben, ben.value(car_FuelDontUseAmountForegone), iFuelValueNonOPRAField, car_FuelOPRA_Ammount_Foregone_db, car_FuelValue, car_FuelOPRA_Ammount_Foregone_Used_For_Value)
     
-    If Not (.Value(car_FuelOPRA_Ammount_Foregone_Used_For_Value)) Then
+    If Not (.value(car_FuelOPRA_Ammount_Foregone_Used_For_Value)) Then
       '.value(car_FuelValue) = RoundDownEx(.value(car_FuelValue_Non_OPRA) / .value(car_NumberOfUsers_db), 0)
       
-    ElseIf (.Value(car_FuelMadeGood) > 0) Then    'actually made good or electric
+    ElseIf (.value(car_FuelMadeGood) > 0) Then    'actually made good or electric
       If (iFuelValueNonOPRAField = car_FuelOPRAZeroField) Then
-        .Value(car_FuelMadeGood) = 0
+        .value(car_FuelMadeGood) = 0
       Else
-        .Value(car_FuelMadeGood) = .Value(car_FuelOPRA_Ammount_Foregone_db)
+        .value(car_FuelMadeGood) = .value(car_FuelOPRA_Ammount_Foregone_db)
       End If
         
     
       
     End If
     
-    .Value(car_FuelMadeGood_NET) = Min(ben.Value(car_FuelValue), ben.Value(car_FuelMadeGood))
+    .value(car_FuelMadeGood_NET) = Min(ben.value(car_FuelValue), ben.value(car_FuelMadeGood))
     
-    .Value(car_FuelBenefit) = .Value(car_FuelValue) - .Value(car_FuelMadeGood_NET)
-    .Value(car_FuelVATBenefit) = (.Value(car_FuelVATBenefit) * dFuelDateFactor) / .Value(car_NumberOfUsers_db)
+    .value(car_FuelBenefit) = .value(car_FuelValue) - .value(car_FuelMadeGood_NET)
+    .value(car_FuelVATBenefit) = (.value(car_FuelVATBenefit) * dFuelDateFactor) / .value(car_NumberOfUsers_db)
     
     'get the vat on the number
         
@@ -1381,16 +1378,16 @@ Private Sub CalculateFuelBen(ByVal BenRate As Double)
     vatRates(4).Rate = 0.2
     
     
-    .Value(car_FuelVAT) = 0
+    .value(car_FuelVAT) = 0
     '.value(car_FuelVAT) = RoundN(.value(car_FuelVATBenefit) * (7 / 47))
     For l = LBound(vatRates) To UBound(vatRates)
       iDaysAtRate = DaysAtRate(dFuelDateFrom, dFuelDateTo, vatRates(l))
       If (iDaysAtRate > 0) Then
-        dVAT = (CDbl(.Value(car_FuelVATBenefit)) - (CDbl(.Value(car_FuelVATBenefit)) / (1 + vatRates(l).Rate))) * (CDbl(iDaysAtRate) / CDbl(iDaysAvailable))
-        .Value(car_FuelVAT) = .Value(car_FuelVAT) + dVAT
+        dVAT = (CDbl(.value(car_FuelVATBenefit)) - (CDbl(.value(car_FuelVATBenefit)) / (1 + vatRates(l).Rate))) * (CDbl(iDaysAtRate) / CDbl(iDaysAvailable))
+        .value(car_FuelVAT) = .value(car_FuelVAT) + dVAT
       End If
     Next l
-    .Value(car_FuelVAT) = RoundN(.Value(car_FuelVAT))
+    .value(car_FuelVAT) = RoundN(.value(car_FuelVAT))
     '.value(car_FuelVAT) = RoundN(.value(car_FuelVATBenefit) - (.value(car_FuelVATBenefit) / (1 + p11d32.Rates.value(vatRate))))
     
     
@@ -1403,7 +1400,7 @@ CalculateFuelBen_End:
   Exit Sub
   
 CalculateFuelBen_Err:
-  Call Err.Raise(ERR_CALCULATE_FUEL_BENEFITS, "CalculateFuelBen", "Error in Calculating Fuel Benefits")
+  Call err.Raise(ERR_CALCULATE_FUEL_BENEFITS, "CalculateFuelBen", "Error in Calculating Fuel Benefits")
   Resume CalculateFuelBen_End
   Resume
 End Sub
@@ -1436,24 +1433,24 @@ Private Sub SetHMIT()
   
   Set ben = Me
 
-  If ben.Value(car_FuelBenefit) > 0 Then
-    ben.Value(car_HMIT_CC) = ben.Value(car_enginesize_db)
-    If ben.Value(car_p46FuelType_db) = CCFT_DIESEL Then
-      ben.Value(car_HMIT_diesel) = True
-      ben.Value(car_HMIT_petrol) = False
+  If ben.value(car_FuelBenefit) > 0 Then
+    ben.value(car_HMIT_CC) = ben.value(car_enginesize_db)
+    If ben.value(car_p46FuelType_db) = CCFT_DIESEL Then
+      ben.value(car_HMIT_diesel) = True
+      ben.value(car_HMIT_petrol) = False
     Else
-      ben.Value(car_HMIT_diesel) = False
-      ben.Value(car_HMIT_petrol) = True
+      ben.value(car_HMIT_diesel) = False
+      ben.value(car_HMIT_petrol) = True
     End If
   Else
-    ben.Value(car_HMIT_CC) = ""
+    ben.value(car_HMIT_CC) = ""
   End If
   
 SetHMIT_END:
   Call xReturn("SetHMIT")
   Exit Sub
 SetHMIT_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "SetHMIT", "Set HMIT", "Error setting HMIT specific items in company car benefit calculate.")
+  Call ErrorMessage(ERR_ERROR, err, "SetHMIT", "Set HMIT", "Error setting HMIT specific items in company car benefit calculate.")
   Resume SetHMIT_END
 End Sub
 
@@ -1500,74 +1497,74 @@ Private Function IBenefitClass_ReadDB() As Long
     rs.Bookmark = ben.RSBookMark
     Call StandardReadData(ben, rs)
     Call OPRAReadDB(ben, rs, car_FuelOPRA_Ammount_Foregone_db, "Fuel")
-    ben.Value(car_Registration_db) = IIf(IsNull(rs.Fields(S_FIELD_CAR_REGISTRATION).Value), "", rs.Fields(S_FIELD_CAR_REGISTRATION).Value)
-    ben.Value(car_Make_db) = "" & rs.Fields("Make").Value
-    ben.Value(car_Model_db) = IIf(IsNull(rs.Fields("Model").Value), "", rs.Fields("Model").Value)
+    ben.value(car_Registration_db) = IIf(IsNull(rs.Fields(S_FIELD_CAR_REGISTRATION).value), "", rs.Fields(S_FIELD_CAR_REGISTRATION).value)
+    ben.value(car_Make_db) = "" & rs.Fields("Make").value
+    ben.value(car_Model_db) = IIf(IsNull(rs.Fields("Model").value), "", rs.Fields("Model").value)
     
     'P46 replacement
-    ben.Value(car_RegReplaced_db) = IIf(IsNull(rs.Fields("RegReplaced").Value), "", rs.Fields("RegReplaced").Value)
-    ben.Value(car_CarReplaced_db) = IIf(IsNull(rs.Fields("CarReplaced").Value), "", rs.Fields("CarReplaced").Value)
-    ben.Value(car_ListPrice_db) = IIf(IsNull(rs.Fields("Price").Value), 0, rs.Fields("Price").Value)
-    ben.Value(car_UnavailableDays_db) = IIf(IsNull(rs.Fields("Unavail").Value), 0, rs.Fields("Unavail").Value)
-    ben.Value(car_capitalcontribution_db) = IIf(IsNull(rs.Fields("CapContrib").Value), 0, rs.Fields("CapContrib").Value)
-    ben.Value(car_MadeGood_db) = IIf(IsNull(rs.Fields("UseContrib").Value), 0, rs.Fields("UseContrib").Value)
-    ben.Value(car_enginesize_db) = IIf(IsNull(rs.Fields("cc").Value), 0, rs.Fields("cc").Value)
-    ben.Value(car_AccessoriesOriginal_db) = IIf(IsNull(rs.Fields("Acc").Value), 0, rs.Fields("Acc").Value)
-    ben.Value(car_AccessoriesNew_db) = IIf(IsNull(rs.Fields("NewAcc").Value), 0, rs.Fields("NewAcc").Value)
-    ben.Value(car_CheapAccessories_db) = IIf(IsNull(rs.Fields("CheapAcc").Value), 0, rs.Fields("CheapAcc").Value)
-    ben.Value(car_carkey_db) = rs.Fields("CarKey").Value
-    ben.Value(car_Replacement_db) = rs.Fields("Replacement").Value
-    ben.Value(car_Replaced_db) = rs.Fields("Replaced").Value
-    ben.Value(car_Second_db) = rs.Fields("SecondCar").Value
-    ben.Value(car_ElectricRangeMiles_db) = IIf(IsNull(rs.Fields(S_FIELD_CAR_ELECTRIC_RANGE_MILES).Value), 0, rs.Fields(S_FIELD_CAR_ELECTRIC_RANGE_MILES).Value)
-    ben.Value(car_privatefuel_db) = rs.Fields("PvtFuel").Value
-    ben.Value(car_requiredmakegood_db) = rs.Fields("MakeGood").Value
-    ben.Value(car_actualmadegood_db) = rs.Fields("MadeGood").Value
-    ben.Value(car_ForceP46_db) = rs.Fields("ForceP46").Value
+    ben.value(car_RegReplaced_db) = IIf(IsNull(rs.Fields("RegReplaced").value), "", rs.Fields("RegReplaced").value)
+    ben.value(car_CarReplaced_db) = IIf(IsNull(rs.Fields("CarReplaced").value), "", rs.Fields("CarReplaced").value)
+    ben.value(car_ListPrice_db) = IIf(IsNull(rs.Fields("Price").value), 0, rs.Fields("Price").value)
+    ben.value(car_UnavailableDays_db) = IIf(IsNull(rs.Fields("Unavail").value), 0, rs.Fields("Unavail").value)
+    ben.value(car_capitalcontribution_db) = IIf(IsNull(rs.Fields("CapContrib").value), 0, rs.Fields("CapContrib").value)
+    ben.value(car_MadeGood_db) = IIf(IsNull(rs.Fields("UseContrib").value), 0, rs.Fields("UseContrib").value)
+    ben.value(car_enginesize_db) = IIf(IsNull(rs.Fields("cc").value), 0, rs.Fields("cc").value)
+    ben.value(car_AccessoriesOriginal_db) = IIf(IsNull(rs.Fields("Acc").value), 0, rs.Fields("Acc").value)
+    ben.value(car_AccessoriesNew_db) = IIf(IsNull(rs.Fields("NewAcc").value), 0, rs.Fields("NewAcc").value)
+    ben.value(car_CheapAccessories_db) = IIf(IsNull(rs.Fields("CheapAcc").value), 0, rs.Fields("CheapAcc").value)
+    ben.value(car_carkey_db) = rs.Fields("CarKey").value
+    ben.value(car_Replacement_db) = rs.Fields("Replacement").value
+    ben.value(car_Replaced_db) = rs.Fields("Replaced").value
+    ben.value(car_Second_db) = rs.Fields("SecondCar").value
+    ben.value(car_ElectricRangeMiles_db) = IIf(IsNull(rs.Fields(S_FIELD_CAR_ELECTRIC_RANGE_MILES).value), 0, rs.Fields(S_FIELD_CAR_ELECTRIC_RANGE_MILES).value)
+    ben.value(car_privatefuel_db) = rs.Fields("PvtFuel").value
+    ben.value(car_requiredmakegood_db) = rs.Fields("MakeGood").value
+    ben.value(car_actualmadegood_db) = rs.Fields("MadeGood").value
+    ben.value(car_ForceP46_db) = rs.Fields("ForceP46").value
         
-    ben.Value(car_Registrationdate_db) = IIf(IsNull(rs.Fields("RegDate").Value), p11d32.Rates.Value(CarRegDateDef), rs.Fields("RegDate").Value)
-    ben.Value(Car_AvailableFrom_db) = IIf(IsNull(rs.Fields("AvailFrom").Value), p11d32.Rates.Value(TaxYearStart), rs.Fields("AvailFrom").Value)
+    ben.value(car_Registrationdate_db) = IIf(IsNull(rs.Fields("RegDate").value), p11d32.Rates.value(CarRegDateDef), rs.Fields("RegDate").value)
+    ben.value(Car_AvailableFrom_db) = IIf(IsNull(rs.Fields("AvailFrom").value), p11d32.Rates.value(TaxYearStart), rs.Fields("AvailFrom").value)
     
-    ben.Value(Car_AvailableTo_db) = IIf(IsNull(rs.Fields("AvailTo").Value), p11d32.Rates.Value(TaxYearEnd), rs.Fields("AvailTo").Value)
-    ben.Value(car_dateReplaced_db) = IIf(IsNull(rs.Fields("DateCarReplaced").Value), UNDATED, rs.Fields("DateCarReplaced").Value)
+    ben.value(Car_AvailableTo_db) = IIf(IsNull(rs.Fields("AvailTo").value), p11d32.Rates.value(TaxYearEnd), rs.Fields("AvailTo").value)
+    ben.value(car_dateReplaced_db) = IIf(IsNull(rs.Fields("DateCarReplaced").value), UNDATED, rs.Fields("DateCarReplaced").value)
     
-    ben.Value(Car_FuelAvailableTo_db) = IIf(IsNull(rs.Fields("FuelAvailTo").Value), ben.Value(Car_AvailableTo_db), rs.Fields("FuelAvailTo").Value)
+    ben.value(Car_FuelAvailableTo_db) = IIf(IsNull(rs.Fields("FuelAvailTo").value), ben.value(Car_AvailableTo_db), rs.Fields("FuelAvailTo").value)
     
-    ben.Value(car_p46FuelType_db) = IIf(IsNull(rs.Fields("P46FuelType").Value), CCFT_PETROL, rs.Fields("P46FuelType").Value)
+    ben.value(car_p46FuelType_db) = IIf(IsNull(rs.Fields("P46FuelType").value), CCFT_PETROL, rs.Fields("P46FuelType").value)
 
     If p11d32.BringForward.Yes Then  'RH
-      ben.Value(car_NumberOfUsers_db) = 1
-      ben.Value(car_fuelreinstated_db) = False
+      ben.value(car_NumberOfUsers_db) = 1
+      ben.value(car_fuelreinstated_db) = False
       
       '666
-      ben.Value(car_FuelMadeGoodIsTaxDeducted_db) = False
-      ben.Value(car_p46PaymentFrequency_db) = P46_PAYMENT_FREQUENCY.P46PF_ACTUAL
+      ben.value(car_FuelMadeGoodIsTaxDeducted_db) = False
+      ben.value(car_p46PaymentFrequency_db) = P46_PAYMENT_FREQUENCY.P46PF_ACTUAL
       
       
         
     Else
-      ben.Value(car_NumberOfUsers_db) = IIf(IsNull(rs.Fields("NumOfUsers").Value), 1, rs.Fields("NumOfUsers").Value)
-      ben.Value(Car_HasFuelUnavailableDays_db) = rs.Fields("HasFuelUnavail").Value
+      ben.value(car_NumberOfUsers_db) = IIf(IsNull(rs.Fields("NumOfUsers").value), 1, rs.Fields("NumOfUsers").value)
+      ben.value(Car_HasFuelUnavailableDays_db) = rs.Fields("HasFuelUnavail").value
       
       'EK
-      ben.Value(car_fuelreinstated_db) = IIf(IsNull(rs.Fields("FuelReinstated").Value), 0, rs.Fields("FuelReinstated").Value)
-      ben.Value(car_p46PaymentFrequency_db) = IIf(IsNull(rs.Fields("P46PaymentFrequency").Value), P46PF_ACTUAL, rs.Fields("P46PaymentFrequency").Value)
-      ben.Value(car_FuelMadeGoodIsTaxDeducted_db) = rs.Fields("FuelMadeGoodIsTaxDeducted")
+      ben.value(car_fuelreinstated_db) = IIf(IsNull(rs.Fields("FuelReinstated").value), 0, rs.Fields("FuelReinstated").value)
+      ben.value(car_p46PaymentFrequency_db) = IIf(IsNull(rs.Fields("P46PaymentFrequency").value), P46PF_ACTUAL, rs.Fields("P46PaymentFrequency").value)
+      ben.value(car_FuelMadeGoodIsTaxDeducted_db) = rs.Fields("FuelMadeGoodIsTaxDeducted")
       
       
     End If
     
-    ben.Value(car_CarReplacedMake_db) = IIf(IsNull(rs.Fields("CarReplacedMake").Value), "", rs.Fields("CarReplacedMake").Value)
-    ben.Value(car_CarReplacedModel_db) = IIf(IsNull(rs.Fields("CarReplacedModel").Value), "", rs.Fields("CarReplacedModel").Value)
-    ben.Value(car_CarReplacedEngineSize_db) = IIf(IsNull(rs.Fields("CarReplacedEngineSize").Value), 0, rs.Fields("CarReplacedEngineSize").Value)
+    ben.value(car_CarReplacedMake_db) = IIf(IsNull(rs.Fields("CarReplacedMake").value), "", rs.Fields("CarReplacedMake").value)
+    ben.value(car_CarReplacedModel_db) = IIf(IsNull(rs.Fields("CarReplacedModel").value), "", rs.Fields("CarReplacedModel").value)
+    ben.value(car_CarReplacedEngineSize_db) = IIf(IsNull(rs.Fields("CarReplacedEngineSize").value), 0, rs.Fields("CarReplacedEngineSize").value)
     
-    ben.Value(car_p46CarbonDioxide_db) = IIf(IsNull(rs.Fields("P46CarbonDioxide").Value), 0, rs.Fields("P46CarbonDioxide").Value)
-    ben.Value(car_p46NoApprovedCO2Figure_db) = IIf(IsNull(rs.Fields("P46NoApprovedCO2Figure").Value), False, rs.Fields("P46NoApprovedCO2Figure").Value)
+    ben.value(car_p46CarbonDioxide_db) = IIf(IsNull(rs.Fields("P46CarbonDioxide").value), 0, rs.Fields("P46CarbonDioxide").value)
+    ben.value(car_p46NoApprovedCO2Figure_db) = IIf(IsNull(rs.Fields("P46NoApprovedCO2Figure").value), False, rs.Fields("P46NoApprovedCO2Figure").value)
     
     'just incase the value > 3 in length
     iLen = p11d32.BenDataLinkMMFieldSize(BC_COMPANY_CARS_F, car_p46CarbonDioxide_db)
-    If (Len(CStr(ben.Value(car_p46CarbonDioxide_db))) > iLen) Then
-      ben.Value(car_p46CarbonDioxide_db) = Right$(CStr(ben.Value(car_p46CarbonDioxide_db)), iLen)
+    If (Len(CStr(ben.value(car_p46CarbonDioxide_db))) > iLen) Then
+      ben.value(car_p46CarbonDioxide_db) = Right$(CStr(ben.value(car_p46CarbonDioxide_db)), iLen)
     End If
     
     m_ReadFromDB = True
@@ -1580,7 +1577,7 @@ CompanyCar_readDB_End:
   Call xReturn("CompanyCar_readDB")
   Exit Function
 CompanyCar_readDB_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "CompanyCar_readDB", "ERR_CAR_READDB", "Unable to read the company car details.")
+  Call ErrorMessage(ERR_ERROR, err, "CompanyCar_readDB", "ERR_CAR_READDB", "Unable to read the company car details.")
   Resume CompanyCar_readDB_End
   Resume
 End Function
@@ -1617,74 +1614,74 @@ Private Function IBenefitClass_WriteDB() As Boolean
   
   Call BenefitAddNewRecord(ben, rs)
   
-  rs.Fields(S_FIELD_CAR_REGISTRATION).Value = ben.Value(car_Registration_db)
-  rs.Fields("Make").Value = ben.Value(car_Make_db)
-  rs.Fields("Model").Value = ben.Value(car_Model_db)
-  rs.Fields("Price").Value = ben.Value(car_ListPrice_db)
-  rs.Fields("CapContrib").Value = ben.Value(car_capitalcontribution_db)
-  rs.Fields("cc").Value = ben.Value(car_enginesize_db)
-  rs.Fields("Acc").Value = ben.Value(car_AccessoriesOriginal_db)
-  rs.Fields("NewAcc").Value = ben.Value(car_AccessoriesNew_db)
-  rs.Fields("CheapAcc").Value = ben.Value(car_CheapAccessories_db)
+  rs.Fields(S_FIELD_CAR_REGISTRATION).value = ben.value(car_Registration_db)
+  rs.Fields("Make").value = ben.value(car_Make_db)
+  rs.Fields("Model").value = ben.value(car_Model_db)
+  rs.Fields("Price").value = ben.value(car_ListPrice_db)
+  rs.Fields("CapContrib").value = ben.value(car_capitalcontribution_db)
+  rs.Fields("cc").value = ben.value(car_enginesize_db)
+  rs.Fields("Acc").value = ben.value(car_AccessoriesOriginal_db)
+  rs.Fields("NewAcc").value = ben.value(car_AccessoriesNew_db)
+  rs.Fields("CheapAcc").value = ben.value(car_CheapAccessories_db)
   
   
-  rs.Fields("RegDate").Value = IIf(TryConvertDateDMY(CStr(ben.Value(car_Registrationdate_db))) = UNDATED, Null, ben.Value(car_Registrationdate_db))
-  rs.Fields("SecondCar").Value = ben.Value(car_Second_db)
+  rs.Fields("RegDate").value = IIf(TryConvertDateDMY(CStr(ben.value(car_Registrationdate_db))) = UNDATED, Null, ben.value(car_Registrationdate_db))
+  rs.Fields("SecondCar").value = ben.value(car_Second_db)
 
   'km 12/06/02 - this field no longer exists in the 2002 db
   'rs.Fields("BusMilesActual") = ben.value(car_UseActualMiles)
-  rs.Fields("P46PaymentFrequency").Value = ben.Value(car_p46PaymentFrequency_db) 'so
-  rs.Fields("P46FuelType").Value = ben.Value(car_p46FuelType_db) 'so
-  rs.Fields("P46CarbonDioxide").Value = ben.Value(car_p46CarbonDioxide_db) 'so
-  rs.Fields("P46NoApprovedCO2Figure").Value = ben.Value(car_p46NoApprovedCO2Figure_db) 'so
+  rs.Fields("P46PaymentFrequency").value = ben.value(car_p46PaymentFrequency_db) 'so
+  rs.Fields("P46FuelType").value = ben.value(car_p46FuelType_db) 'so
+  rs.Fields("P46CarbonDioxide").value = ben.value(car_p46CarbonDioxide_db) 'so
+  rs.Fields("P46NoApprovedCO2Figure").value = ben.value(car_p46NoApprovedCO2Figure_db) 'so
   'rs.Fields("FuelUnavail").value = ben.value(car_FuelUnavailableDays)
-  rs.Fields(S_FIELD_CAR_ELECTRIC_RANGE_MILES).Value = ben.Value(car_ElectricRangeMiles_db)
+  rs.Fields(S_FIELD_CAR_ELECTRIC_RANGE_MILES).value = ben.value(car_ElectricRangeMiles_db)
   
   Call StandardWriteData(ben, rs)
   
   Call BringForwardDatesWrite(ben, Car_AvailableFrom_db, Car_AvailableTo_db, rs, "AvailFrom", "AvailTo")
   
   If p11d32.BringForward.Yes Then
-    If (ben.Value(car_privatefuel_db)) And (ben.Value(Car_AvailableTo_db) <= ben.Value(Car_FuelAvailableTo_db) Or ben.Value(car_fuelreinstated_db)) Then
-      rs.Fields("PvtFuel").Value = True
+    If (ben.value(car_privatefuel_db)) And (ben.value(Car_AvailableTo_db) <= ben.value(Car_FuelAvailableTo_db) Or ben.value(car_fuelreinstated_db)) Then
+      rs.Fields("PvtFuel").value = True
     End If
     'car_fuelreinstated_db
     'If ben.value(car_privatefuel_db) And (ben.value(Car_AvailableTo_db) > ben.value(Car_FuelAvailableTo_db)) Then
   
     
-    rs.Fields("FuelAvailTo") = p11d32.Rates.Value(TaxYearEnd)
-    rs.Fields("P46PaymentFrequency").Value = ben.Value(car_p46PaymentFrequency_db)
-    rs.Fields("NumOfUsers").Value = 1 'ben.value(car_NumberOfUsers)
-    rs.Fields("FuelMadeGoodIsTaxDeducted").Value = False
+    rs.Fields("FuelAvailTo") = p11d32.Rates.value(TaxYearEnd)
+    rs.Fields("P46PaymentFrequency").value = ben.value(car_p46PaymentFrequency_db)
+    rs.Fields("NumOfUsers").value = 1 'ben.value(car_NumberOfUsers)
+    rs.Fields("FuelMadeGoodIsTaxDeducted").value = False
   Else
-    rs.Fields("PvtFuel").Value = ben.Value(car_privatefuel_db)
-    rs.Fields("MakeGood").Value = ben.Value(car_requiredmakegood_db)
-    rs.Fields("MadeGood").Value = ben.Value(car_actualmadegood_db)
+    rs.Fields("PvtFuel").value = ben.value(car_privatefuel_db)
+    rs.Fields("MakeGood").value = ben.value(car_requiredmakegood_db)
+    rs.Fields("MadeGood").value = ben.value(car_actualmadegood_db)
     
-    rs.Fields("FuelMadeGoodIsTaxDeducted") = ben.Value(car_FuelMadeGoodIsTaxDeducted_db)
-    rs.Fields("NumOfUsers").Value = CLng(ben.Value(car_NumberOfUsers_db))
-    rs.Fields("FuelReinstated").Value = ben.Value(car_fuelreinstated_db)
-    rs.Fields("HasFuelUnavail").Value = ben.Value(Car_HasFuelUnavailableDays_db)
+    rs.Fields("FuelMadeGoodIsTaxDeducted") = ben.value(car_FuelMadeGoodIsTaxDeducted_db)
+    rs.Fields("NumOfUsers").value = CLng(ben.value(car_NumberOfUsers_db))
+    rs.Fields("FuelReinstated").value = ben.value(car_fuelreinstated_db)
+    rs.Fields("HasFuelUnavail").value = ben.value(Car_HasFuelUnavailableDays_db)
     
-    If Len(ben.Value(car_RegReplaced_db)) Then rs.Fields("RegReplaced").Value = ben.Value(car_RegReplaced_db)
+    If Len(ben.value(car_RegReplaced_db)) Then rs.Fields("RegReplaced").value = ben.value(car_RegReplaced_db)
     
-    If Len(ben.Value(car_CarReplaced_db)) Then rs.Fields("CarReplaced").Value = ben.Value(car_CarReplaced_db)
-    If Len(ben.Value(car_CarReplacedMake_db)) Then rs.Fields("CarReplacedMake").Value = ben.Value(car_CarReplacedMake_db)
-    If Len(ben.Value(car_CarReplacedModel_db)) Then rs.Fields("CarReplacedModel").Value = ben.Value(car_CarReplacedModel_db)
-    If Len(ben.Value(car_CarReplacedEngineSize_db)) Then rs.Fields("CarReplacedEngineSize").Value = ben.Value(car_CarReplacedEngineSize_db)
-    If Len(ben.Value(car_dateReplaced_db)) Then rs.Fields("DateCarReplaced").Value = ben.Value(car_dateReplaced_db)
+    If Len(ben.value(car_CarReplaced_db)) Then rs.Fields("CarReplaced").value = ben.value(car_CarReplaced_db)
+    If Len(ben.value(car_CarReplacedMake_db)) Then rs.Fields("CarReplacedMake").value = ben.value(car_CarReplacedMake_db)
+    If Len(ben.value(car_CarReplacedModel_db)) Then rs.Fields("CarReplacedModel").value = ben.value(car_CarReplacedModel_db)
+    If Len(ben.value(car_CarReplacedEngineSize_db)) Then rs.Fields("CarReplacedEngineSize").value = ben.value(car_CarReplacedEngineSize_db)
+    If Len(ben.value(car_dateReplaced_db)) Then rs.Fields("DateCarReplaced").value = ben.value(car_dateReplaced_db)
 
-    rs.Fields("Unavail").Value = ben.Value(car_UnavailableDays_db)
-    rs.Fields("UseContrib").Value = ben.Value(car_MadeGood_db)
-    rs.Fields("Replacement").Value = ben.Value(car_Replacement_db)
-    rs.Fields("Replaced").Value = ben.Value(car_Replaced_db)
-    rs.Fields("ForceP46").Value = ben.Value(car_ForceP46_db)
-    rs.Fields("FuelAvailTo").Value = ben.Value(Car_FuelAvailableTo_db)
+    rs.Fields("Unavail").value = ben.value(car_UnavailableDays_db)
+    rs.Fields("UseContrib").value = ben.value(car_MadeGood_db)
+    rs.Fields("Replacement").value = ben.value(car_Replacement_db)
+    rs.Fields("Replaced").value = ben.value(car_Replaced_db)
+    rs.Fields("ForceP46").value = ben.value(car_ForceP46_db)
+    rs.Fields("FuelAvailTo").value = ben.value(Car_FuelAvailableTo_db)
   End If
   Call OPRAWriteDB(ben, rs, car_FuelOPRA_Ammount_Foregone_db, "Fuel")
  
   Call BenefitCloseRecord(ben, rs, True)
-  ben.Value(car_carkey_db) = rs.Fields("CarKey")
+  ben.value(car_carkey_db) = rs.Fields("CarKey")
   
 ' MP DB - T_CarMiles deleted
 '  If Not p11d32.BringForward.Yes Then Call WriteMileage
@@ -1697,7 +1694,7 @@ CompanyCar_WriteDB_End:
 CompanyCar_WriteDB_Err:
   IBenefitClass_WriteDB = False
   Call ClearEdit(rs)
-  Call ErrorMessage(ERR_ERROR, Err, "CompanyCar_WriteDB", "CompanyCar Write DB", "Error writing the company car to the database.")
+  Call ErrorMessage(ERR_ERROR, err, "CompanyCar_WriteDB", "CompanyCar Write DB", "Error writing the company car to the database.")
   Resume CompanyCar_WriteDB_End
   Resume
 End Function
@@ -1773,7 +1770,7 @@ CompanyCar_DeleteDB_End:
   Call xReturn("CompanyCar_DeleteDB")
   Exit Function
 CompanyCar_DeleteDB_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "CompanyCar_DeleteDB", "Company Car Delete DB", "Error deleting a company car from the database.")
+  Call ErrorMessage(ERR_ERROR, err, "CompanyCar_DeleteDB", "Company Car Delete DB", "Error deleting a company car from the database.")
   Resume CompanyCar_DeleteDB_End
   Resume
 End Function
@@ -1785,23 +1782,23 @@ Public Function SetP46CC() As Boolean
   
   Set ben = Me
   
-  ben.Value(car_P46HighCC) = False
-  ben.Value(car_P46MediumCC) = False
-  ben.Value(car_P46LowCC) = False
-  ben.Value(car_P46NoCC) = False
+  ben.value(car_P46HighCC) = False
+  ben.value(car_P46MediumCC) = False
+  ben.value(car_P46LowCC) = False
+  ben.value(car_P46NoCC) = False
   
   'RH - display of engine size should not be dependant on whether there is a fuel benefit
   'If ben.value(car_privatefuel_db) And Not ben.value(car_requiredmakegood_db) Then
   
-    Select Case CLng(ben.Value(car_enginesize_db))
-      Case Is > p11d32.Rates.Value(carCCHIGH)
-        ben.Value(car_P46HighCC) = True
-      Case Is > p11d32.Rates.Value(carCCLOW)
-        ben.Value(car_P46MediumCC) = True
+    Select Case CLng(ben.value(car_enginesize_db))
+      Case Is > p11d32.Rates.value(carCCHIGH)
+        ben.value(car_P46HighCC) = True
+      Case Is > p11d32.Rates.value(carCCLOW)
+        ben.value(car_P46MediumCC) = True
       Case Is = 0
-        ben.Value(car_P46NoCC) = True
+        ben.value(car_P46NoCC) = True
       Case Else
-        ben.Value(car_P46LowCC) = True
+        ben.value(car_P46LowCC) = True
     End Select
     
   'End If
@@ -1814,7 +1811,7 @@ SetP46CC_End:
   Exit Function
 
 SetP46CC_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "SetP46CC", "Set P46 CC", "Error setting the P46 car Engine size band.")
+  Call ErrorMessage(ERR_ERROR, err, "SetP46CC", "Set P46 CC", "Error setting the P46 car Engine size band.")
   Resume SetP46CC_End
 End Function
 
@@ -1830,19 +1827,19 @@ Private Function CalculatePaymentForPrivateUse(DateFactor As Variant) As Variant
   vPayment = S_ERROR
     
   With ben
-    Select Case .Value(car_p46PaymentFrequency_db)
+    Select Case .value(car_p46PaymentFrequency_db)
       Case 0
-        vPayment = ben.Value(car_MadeGood_db) * DateFactor
+        vPayment = ben.value(car_MadeGood_db) * DateFactor
       Case 1
-        vPayment = (ben.Value(car_MadeGood_db) * DateFactor * 4)
+        vPayment = (ben.value(car_MadeGood_db) * DateFactor * 4)
       Case 2
-        vPayment = (ben.Value(car_MadeGood_db) * DateFactor * 12)
+        vPayment = (ben.value(car_MadeGood_db) * DateFactor * 12)
       Case 3
-        vPayment = (ben.Value(car_MadeGood_db) * DateFactor * 52)
+        vPayment = (ben.value(car_MadeGood_db) * DateFactor * 52)
       Case 4
-        vPayment = ben.Value(car_MadeGood_db)
+        vPayment = ben.value(car_MadeGood_db)
       Case Else
-        Call Err.Raise(ERR_CAR_AMOUNT, "GetPayment", "Invalid payment frequency")
+        Call err.Raise(ERR_CAR_AMOUNT, "GetPayment", "Invalid payment frequency")
     End Select
   End With
     
@@ -1866,17 +1863,17 @@ Dim ben As IBenefitClass
   
   Set ben = Me
   With ben
-    Select Case .Value(car_p46PaymentFrequency_db)
+    Select Case .value(car_p46PaymentFrequency_db)
       Case CCPF_ANNUALLY
-        .Value(car_p46PaymentFrequencyString) = "Annually"
+        .value(car_p46PaymentFrequencyString) = "Annually"
       Case CCPF_QUARTERLY
-        .Value(car_p46PaymentFrequencyString) = "Quarterly"
+        .value(car_p46PaymentFrequencyString) = "Quarterly"
       Case CCPF_MONTHLY
-        .Value(car_p46PaymentFrequencyString) = "Monthly"
+        .value(car_p46PaymentFrequencyString) = "Monthly"
       Case CCPF_WEEKLY
-        .Value(car_p46PaymentFrequencyString) = "Weekly"
+        .value(car_p46PaymentFrequencyString) = "Weekly"
       Case CCPF_ACTUAL
-        .Value(car_p46PaymentFrequencyString) = "Actual"
+        .value(car_p46PaymentFrequencyString) = "Actual"
     End Select
   End With
 
@@ -1899,11 +1896,11 @@ Public Function SetP46FuelTypeString()
   
   Set ben = Me
   
-  p46s = P46FuelTypeStrings(ben.Value(car_p46FuelType_db))
+  p46s = P46FuelTypeStrings(ben.value(car_p46FuelType_db))
   
   With ben
-    .Value(car_p46FuelTypeString) = p46s.Letter
-    .Value(car_p46FuelTypeStringLong) = p46s.Description
+    .value(car_p46FuelTypeString) = p46s.Letter
+    .value(car_p46FuelTypeStringLong) = p46s.Description
   End With
 
   

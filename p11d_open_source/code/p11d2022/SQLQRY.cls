@@ -235,11 +235,11 @@ Public Function Queries(QueryID As QUERY_NAMES, ParamArray P()) As String
       Queries = "UPDATE DISTINCTROW [" & P(i) & "] SET P_Num = " & StrSQL(P(i + 1)) & " WHERE ((P_Num=" & StrSQL(P(i + 2)) & "));"
     Case SELECT_LOAN_BALANCES
       If IsNumeric(P(i)) Then
-        Queries = "SELECT DISTINCTROW [Key], [Type], [From], [Payment] FROM T_Loans " & _
-                 "WHERE ((Key = " & NumSQL(P(i)) & ") And (T_Loans.Type = " & StrSQL(P(i + 1)) & ")) ORDER BY T_Loans.From;" 'so
+        Queries = "SELECT DISTINCTROW [Key], [From], [Payment] FROM T_Loans " & _
+                 "WHERE ((Key = " & NumSQL(P(i)) & ")) ORDER BY T_Loans.From;" 'so
       Else
-        Queries = "SELECT DISTINCTROW [Key], [Type], [From], [Payment] FROM T_Loans " & _
-                 "WHERE ((Key = " & StrSQL(P(i)) & ") And (T_Loans.Type = " & StrSQL(P(i + 1)) & ")) ORDER BY T_Loans.From;" 'so
+        Queries = "SELECT DISTINCTROW [Key], [From], [Payment] FROM T_Loans " & _
+                 "WHERE ((Key = " & StrSQL(P(i)) & ")) ORDER BY T_Loans.From;" 'so
       End If
     Case SELECT_LOAN_RATES
       Queries = "SELECT DISTINCTROW InterestDate, Sterling, Yen, Franc From T_InterestRates " & _

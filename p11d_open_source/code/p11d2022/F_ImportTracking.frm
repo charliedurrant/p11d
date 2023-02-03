@@ -1,6 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
-Object = "{A7CE771F-05B2-43CF-9650-ED841A9049FA}#1.0#0"; "atc3FolderBrowser.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form F_ImportTracking 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Import Tracking"
@@ -15,14 +14,24 @@ Begin VB.Form F_ImportTracking
    ScaleWidth      =   6930
    ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
-   Begin atc3FolderBrowser.FolderBrowser fb 
-      Height          =   420
-      Left            =   90
+   Begin P11D2022.MyFolderBrowser fb 
+      Height          =   495
+      Left            =   120
       TabIndex        =   8
-      Top             =   4005
-      Width           =   6765
-      _ExtentX        =   11933
-      _ExtentY        =   741
+      Top             =   3960
+      Width           =   6735
+      _ExtentX        =   11880
+      _ExtentY        =   873
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   -2147483630
    End
    Begin VB.CommandButton cmdOK 
       Caption         =   "&OK"
@@ -145,30 +154,30 @@ Private Sub Restore()
   Dim LVI As ListItem
   Dim sDestFile As String
   Dim Unzip As cUnzip
-  On Error GoTo err_Err
+  On Error GoTo err_err
   
   Set LVI = lvFiles.SelectedItem
-  If LVI Is Nothing Then GoTo err_End
+  If LVI Is Nothing Then GoTo err_end
   
-  sDestFile = p11d32.WorkingDirectory & m_EmployerFileName
+  sDestFile = p11d32.workingDirectory & m_EmployerFileName
   'try ant get an exclusive lock on the file using file open
   If IsFileOpen(sDestFile, False) Then Call Err.Raise(ERR_EMPLOYER_INVALID, "Restore", "The employer file '" & sDestFile & "' is open. To perform a restore no one can be using the file.")
   Set Unzip = New cUnzip
   Unzip.ZipFile = LVI.Tag
-  Unzip.UnzipFolder = p11d32.WorkingDirectory
+  Unzip.UnzipFolder = p11d32.workingDirectory
   Unzip.ExtractOnlyNewer = False
   Unzip.OverwriteExisting = True
   Call Unzip.Unzip
   Call MsgBox("File successfully restored to " & sDestFile, vbInformation)
   
-err_End:
+err_end:
   Exit Sub
-err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "Restore", "Restore", Err.Description)
-  Resume err_End
+  Resume err_end
 End Sub
 
-Private Sub cmdOK_Click()
+Private Sub cmdOk_Click()
   Call cmdCancel_Click
 End Sub
 
@@ -180,7 +189,7 @@ Public Sub SettingsToScreen()
   Dim ey As Employer
   Dim LVI As ListItem
   Dim sEmployer As String
-  On Error GoTo err_Err
+  On Error GoTo err_err
   
   If (p11d32.Employers.Count = 0) Then
     Call Err.Raise(ERR_EMPLOYER_INVALID, "SettingsToScreen", "There are no employer files available")
@@ -190,8 +199,6 @@ Public Sub SettingsToScreen()
   Set ey = p11d32.Importing.PreImport(True)
   Set ben = ey
   Call ben.Kill
-    
-  fb.Directory = p11d32.Importing.TrackingPath
     
   chkImportTracking.value = BoolToChkBox(p11d32.Importing.Tracking)
   lblCurrentEmployer.Caption = ""
@@ -209,21 +216,22 @@ Public Sub SettingsToScreen()
   Call ColumnWidths(Me.lvFiles, 20, 20, 60)
   
   Call UpdateList
+  fb.ReadOnly = p11d32.FoldersDefaulToEmployerFolder
   
-err_End:
+err_end:
   Exit Sub
-err_Err:
+err_err:
   
   Call ErrorMessage(ERR_ERROR, Err, "SettingsToScreen", "Setting To Screen", "Failed to do settings to screen")
-  Resume err_End
+  Resume err_end
 End Sub
 Private Sub UpdateList()
 
   Call lvFiles.listitems.Clear
-  Call EnumFiles("", p11d32.Importing.TrackingPath, "*" & S_FILE_EXTENSION_BAK, Me)
+  Call EnumFiles("", p11d32.Importing.TrackingPathActual, "*" & S_FILE_EXTENSION_BAK, Me)
   
 End Sub
-Private Sub IEnumFiles_File(ByVal vData As Variant, ByVal sPathAndFile As Variant, ByVal sFile As String)
+Private Sub IEnumFiles_File(ByVal vData As Variant, ByVal sPathAndFile As Variant, ByVal sFIle As String)
   Dim sGuid As String
   Dim sTime As String, sMinutes As String, sHour As String, sSeconds As String
   Dim sDate As String, sDay As String, sMonth As String, sYear As String
@@ -233,31 +241,31 @@ Private Sub IEnumFiles_File(ByVal vData As Variant, ByVal sPathAndFile As Varian
   Dim p0 As Long
   Dim p1 As Long
   
-  On Error GoTo err_Err
+  On Error GoTo err_err
   
-  iLen = Len(sFile)
-  sFile = Left$(sFile, iLen - Len(S_FILE_EXTENSION_BAK))
-  iLen = Len(sFile)
+  iLen = Len(sFIle)
+  sFIle = Left$(sFIle, iLen - Len(S_FILE_EXTENSION_BAK))
+  iLen = Len(sFIle)
   
   p0 = iLen - 1
-  sSeconds = Mid$(sFile, p0, 2)
+  sSeconds = Mid$(sFIle, p0, 2)
   p0 = p0 - 2
-  sMinutes = Mid$(sFile, p0, 2)
+  sMinutes = Mid$(sFIle, p0, 2)
   p0 = p0 - 2
-  sHour = Mid$(sFile, p0, 2)
+  sHour = Mid$(sFIle, p0, 2)
   p0 = p0 - 2
-  sDay = Mid$(sFile, p0, 2)
+  sDay = Mid$(sFIle, p0, 2)
   p0 = p0 - 2
-  sMonth = Mid$(sFile, p0, 2)
+  sMonth = Mid$(sFIle, p0, 2)
   p0 = p0 - 4
-  sYear = Mid$(sFile, p0, 4)
+  sYear = Mid$(sFIle, p0, 4)
   p0 = p0 - 2
-  p1 = InStrRev(sFile, "_", p0)
-  sGuid = Mid$(sFile, p1 + 1, p0 - p1)
+  p1 = InStrRev(sFIle, "_", p0)
+  sGuid = Mid$(sFIle, p1 + 1, p0 - p1)
 
-  sComment = Left$(sFile, p1 - 1)
+  sComment = Left$(sFIle, p1 - 1)
   
-  If (StrComp(sGuid, m_GuidEmployer, vbTextCompare) <> 0) Then GoTo err_End
+  If (StrComp(sGuid, m_GuidEmployer, vbTextCompare) <> 0) Then GoTo err_end
   
   
   Set LVI = lvFiles.listitems.Add()
@@ -269,21 +277,21 @@ Private Sub IEnumFiles_File(ByVal vData As Variant, ByVal sPathAndFile As Varian
   Call LVI.ListSubItems.Add(, , sTime)
   Call LVI.ListSubItems.Add(, , sComment)
   
-err_End:
+err_end:
   Exit Sub
-err_Err:
-  Resume err_End
+err_err:
+  Resume err_end
 End Sub
 Private Sub fb_Ended()
-  On Error GoTo err_Err
+  On Error GoTo err_err
   
   p11d32.Importing.TrackingPath = fb.Directory
   Call UpdateList
-err_End:
+err_end:
   Exit Sub
-err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "Ended", "Ended", Err.Description)
-  Resume err_End
+  Resume err_end
 End Sub
 
 Private Sub fb_Started()

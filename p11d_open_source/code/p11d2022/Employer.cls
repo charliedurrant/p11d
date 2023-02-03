@@ -160,6 +160,24 @@ Public Enum Employer_ITEMS
   employer_PayeOnlineP46Q4SubmissionDate
   employer_PayeOnlineP46Q4SubmissionStatus
 
+
+  employer_BOX_A
+  [employer_BOX_FIRST_ITEM] = employer_BOX_A
+  employer_BOX_b
+  employer_BOX_c
+  employer_BOX_D
+  employer_BOX_E
+  employer_BOX_F
+  employer_BOX_G
+  employer_BOX_H
+  employer_BOX_I
+  employer_BOX_J
+  employer_BOX_K
+  employer_BOX_L
+  employer_BOX_M
+  employer_BOX_N
+  [employer_BOX_LAST_ITEM] = employer_BOX_N
+
   employer_TotalBenefitsPotentiallySubjectToClass1A
   
   employer_LAST_ITEM = employer_TotalBenefitsPotentiallySubjectToClass1A
@@ -1284,7 +1302,7 @@ Private Property Get IBenefitClass_BenefitClass() As Long
 End Property
 
 Private Function IBenefitClass_Calculate() As Variant
-  Dim i As Long
+  Dim i As Long, eeBoxIndex As Long, eyBoxIndex As Long
   Dim ee As IBenefitClass
   Dim ey As IBenefitClass
   Dim iEmployeesDeductions As Long
@@ -1308,6 +1326,13 @@ Private Function IBenefitClass_Calculate() As Variant
        ey.value(employer_TotalBenefitsPotentiallySubjectToClass1A) = ey.value(employer_TotalBenefitsPotentiallySubjectToClass1A) + ee.value(ee_TotalBenefitsPotentiallySubjectToClass1A)
        ey.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A) = ey.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A) + ee.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A)
        iEmployeesDeductions = iEmployeesDeductions + ee.value(ee_NIC_AdjustmentDeduct)
+       
+       For eeBoxIndex = [ee_BOX_FIRST_ITEM] To [ee_BOX_LAST_ITEM]
+         eyBoxIndex = employer_BOX_FIRST_ITEM + (eeBoxIndex - ee_BOX_FIRST_ITEM)
+         ey.value(eyBoxIndex) = ey.value(eyBoxIndex) + ee.value(eeBoxIndex)
+       Next
+              
+       
        'should ITEM_NIC_CLASS1A_BENEFIT be the class1a on the benefit after additions ? probably
     End If
   Next
@@ -1321,7 +1346,7 @@ Private Function IBenefitClass_Calculate() As Variant
   dNIC = p11d32.Rates.value(carNICRate) * ey.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A)
   dNIC = dNIC - 0.001
   dNIC = RoundN(dNIC, 2)
-  ey.value(ITEM_NIC_CLASS1A_BENEFIT) = dNIC 'RoundDownEx(p11d32.Rates.value(carNICRate) * ey.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A))
+  ey.value(ITEM_NIC_CLASS1A_BENEFIT) = dNIC
     
 Employer_Calculate_END:
   Call xReturn("Employer_Calculate")
@@ -2328,10 +2353,12 @@ SetBenItemsInformation_end:
 SetBenItemsInformation_err:
   Call ErrorMessage(ERR_ERROR, Err, "SetBenItemsInformation", "Set Benefit Item Information", "Error setting benefit information")
   Resume SetBenItemsInformation_end
+  Resume
 End Sub
 
 Private Sub IBenefitClass_SetCalcDefaults()
   Dim ben As IBenefitClass
+  Dim i As Long
   
   Set ben = Me
 '
@@ -2344,20 +2371,24 @@ Private Sub IBenefitClass_SetCalcDefaults()
   
   ben.value(employer_TotalBenefitsPotentiallySubjectToClass1A) = 0
   ben.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A) = 0
+  
+  For i = [employer_BOX_FIRST_ITEM] To [employer_BOX_LAST_ITEM]
+    ben.value(i) = 0
+  Next
 End Sub
 
 Private Property Get IBenefitClass_TABLE() As BENEFIT_TABLES
   ECASE ("Table invalid for employer.")
 End Property
 
-Private Property Let IBenefitClass_value(ByVal item As Long, RHS As Variant)
-  If item = employer_PathAndFile Then Call CreatePathAndFile(RHS)
+Private Property Let IBenefitClass_value(ByVal Item As Long, RHS As Variant)
+  If Item = employer_PathAndFile Then Call CreatePathAndFile(RHS)
   
-  m_BenItems(item) = CorrectBenValue(BC_EMPLOYER, item, RHS)
+  m_BenItems(Item) = CorrectBenValue(BC_EMPLOYER, Item, RHS)
 End Property
 
-Private Property Get IBenefitClass_value(ByVal item As Long) As Variant
-  IBenefitClass_value = m_BenItems(item)
+Private Property Get IBenefitClass_value(ByVal Item As Long) As Variant
+  IBenefitClass_value = m_BenItems(Item)
   
 End Property
 

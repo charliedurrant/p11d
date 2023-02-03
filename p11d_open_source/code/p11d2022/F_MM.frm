@@ -1,6 +1,5 @@
 VERSION 5.00
 Object = "{AF27A9B5-A3F4-11D2-8DB7-00C04FA9DD6F}#1.2#0"; "TCSPROG.OCX"
-Object = "{A7CE771F-05B2-43CF-9650-ED841A9049FA}#1.0#0"; "ATC3FolderBrowser.ocx"
 Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "atc2vtext.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form F_MM 
@@ -17,14 +16,14 @@ Begin VB.Form F_MM
    ScaleHeight     =   5400
    ScaleWidth      =   8115
    StartUpPosition =   3  'Windows Default
-   Begin atc3FolderBrowser.FolderBrowser fb 
-      Height          =   510
-      Left            =   90
+   Begin P11D2022.MyFolderBrowser fb 
+      Height          =   495
+      Left            =   0
       TabIndex        =   18
-      Top             =   3735
-      Width           =   6585
-      _ExtentX        =   11615
-      _ExtentY        =   900
+      Top             =   3720
+      Width           =   8055
+      _ExtentX        =   14208
+      _ExtentY        =   873
    End
    Begin VB.CommandButton cmdMMViewOptions 
       Caption         =   "View &Options"
@@ -155,7 +154,7 @@ Begin VB.Form F_MM
       Skew            =   0
       PictureOffsetTop=   0
       PictureOffsetLeft=   0
-      Enabled         =   -1  'True
+      Enabled         =   0   'False
       Increment       =   1
       TextAlignment   =   0
    End
@@ -320,7 +319,7 @@ Private Sub MMRun()
   If ValidateMMData Then
       
     Call p11d32.MagneticMedia.CreateMagneticMediaFiles(prgEmployee, lblWritingFile)
-    If SetButtons(p11d32.MagneticMedia.ErrorCount > 0) Then
+    If SetButtons(p11d32.MagneticMedia.errorCount > 0) Then
       If MsgBox("Warnings/Errors in magnetic media submission!" & vbCrLf & vbCrLf & "Do you wish to view the errors?", vbCritical Or vbYesNo, "Warnings and Errors") = vbYes Then
         p11d32.MagneticMedia.Errors (PREPARE_REPORT)
       End If

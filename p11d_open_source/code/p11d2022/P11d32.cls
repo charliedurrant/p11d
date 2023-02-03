@@ -35,6 +35,7 @@ Public Rates As Rates
 Public MagneticMedia As MagneticMedia
 Public PAYEonline As PAYEonline
 Public Help As Help
+Public RecentWorkingDirectories As RecentFiles
 
 Public Intranet As Intranet
 Public BringForward As BringForward
@@ -59,6 +60,7 @@ Public FixLevelsShow As Boolean
 Public KillBenefits As Boolean
 Public NameOrder As NAME_ORDERS
 Public CompanyCarCheckerCheck As Long
+Public FoldersDefaulToEmployerFolder As Boolean
 
 'Inisection constants
 Private Const S_INI_SECTION_REPORTS As String = "Reports"
@@ -122,7 +124,7 @@ Public Sub RepairAndCompactGeneral()
   
 On Error GoTo err_end
   
-  sPathAndFile = FileOpenDlg("Please select a database file to repair and compact", "All Files (*.*)|*.*", p11d32.WorkingDirectory)
+  sPathAndFile = FileOpenDlg("Please select a database file to repair and compact", "All Files (*.*)|*.*", p11d32.workingDirectory)
   If Len(sPathAndFile) = 0 Then
     GoTo err_end
   End If
@@ -333,7 +335,7 @@ Public Property Let BenDataLinkBenfitTable(ByVal bc As BEN_CLASS, ByVal NewValue
   If BenClassIsReal(bc) Then m_BenData.DataLinks(bc).BenefitTable = NewValue
 End Property
 
-Public Property Get BenDataLinkDataType(ByVal bc As BEN_CLASS, ByVal Item As Long) As TCSBase.DATABASE_FIELD_TYPES
+Public Property Get BenDataLinkDataType(ByVal bc As BEN_CLASS, ByVal Item As Long) As TCSBASE.DATABASE_FIELD_TYPES
   If BenClassIsReal(bc) Then BenDataLinkDataType = m_BenData.DataLinks(bc).StaticData(Item).DataType
 End Property
 Public Property Let BenDataLinkDataType(ByVal bc As BEN_CLASS, ByVal Item As Long, ByVal NewValue As DATABASE_FIELD_TYPES)
@@ -535,7 +537,7 @@ Public Function IniSettings(IRW As INI_READ_WRITE) As Boolean
       Call WriteIniEntry(S_INI_SECTION_GENERAL, "GlobalCopySerialNumber", p11d32.GlobalCopySerialNumber, p11d32.IniPathAndFile)
     End If
     
-    Call WriteIniEntry(S_INI_SECTION_GENERAL, "WorkingDirectory", p11d32.WorkingDirectory, p11d32.IniPathAndFile) 'EK for installsheild change to write working dir to ini file
+    Call WriteIniEntry(S_INI_SECTION_GENERAL, "WorkingDirectory", p11d32.workingDirectory, p11d32.IniPathAndFile) 'EK for installsheild change to write working dir to ini file
     
     Call WriteIniEntry(S_INI_SECTION_EMPLOYEE_LETTER, "EmployeeLetterFile", p11d32.ReportPrint.EmployeeLetterFile, p11d32.IniPathAndFile) 'this is the last file selecte
     Call WriteIniEntry(S_INI_SECTION_EMPLOYEE_LETTER, "EmployeeLetterPath", p11d32.ReportPrint.EmployeeLetterPath, p11d32.IniPathAndFile) ' this is the last path selected
@@ -586,7 +588,7 @@ Public Function IniSettings(IRW As INI_READ_WRITE) As Boolean
     Call WriteIniEntry(S_INI_SECTION_REPORTS, "ExportOption", p11d32.ReportPrint.ExportOption, p11d32.IniPathAndFile)
     Call WriteIniEntry(S_INI_SECTION_REPORTS, "ExportAllowUserNameHTML", p11d32.ReportPrint.ExportAllowUserNameHTML, p11d32.IniPathAndFile)
     Call WriteIniEntry(S_INI_SECTION_REPORTS, "ExportEmployeeFileNameFields", p11d32.ReportPrint.ExportEmployeeFileNameFields, p11d32.IniPathAndFile)
-        
+    Call WriteIniEntry(S_INI_SECTION_REPORTS, "ExportEmployeeFileNameCustom", p11d32.ReportPrint.ExportEmployeeFileNameCustom, p11d32.IniPathAndFile)
         
         
     Call WriteIniEntry(S_INI_SECTION_REPORTS, "EmailSubject", p11d32.ReportPrint.EmailSubject, p11d32.IniPathAndFile)
@@ -669,6 +671,9 @@ Public Function IniSettings(IRW As INI_READ_WRITE) As Boolean
     Call WriteIniEntry(S_INI_SECTION_REPORTS, "SortOtherTypeBenefitsAlphabetically", p11d32.ReportPrint.SortOtherTypeBenefitsAlphabetically, p11d32.IniPathAndFile)
     
     Call WriteIniEntry(S_INI_SECTION_TESTING, "LastGoogleTestSheetId", p11d32.Testing.LastGoogleTestSheetId, p11d32.IniPathAndFile)
+    
+    Call WriteIniEntry(S_INI_SECTION_GENERAL, "FoldersDefaulToEmployerFolder", p11d32.FoldersDefaulToEmployerFolder, p11d32.IniPathAndFile)
+    Call WriteIniEntry(S_INI_SECTION_GENERAL, "RecentWorkingDirectories", p11d32.RecentWorkingDirectories.Serialize, p11d32.IniPathAndFile)
  Else
     p11d32.GlobalCopySerialNumber = GetIniEntry(S_INI_SECTION_GENERAL, "GlobalCopySerialNumber", "", p11d32.IniPathAndFile)
     p11d32.SerialNumber = GetIniEntry(S_INI_SECTION_GENERAL, "SerialNumber", "", p11d32.IniPathAndFile)
@@ -684,6 +689,8 @@ Public Function IniSettings(IRW As INI_READ_WRITE) As Boolean
     
     If (Len(p11d32.SerialNumber) = 0) Then Call Err.Raise(ERR_WORKING_DIRECTORY, "IniSettings", "Failed to enter a valid serial number, exiting the program")
     
+    
+    p11d32.RecentWorkingDirectories.Deserialize (GetIniEntry(S_INI_SECTION_GENERAL, "RecentWorkingDirectories", "", p11d32.IniPathAndFile))
     s = GetIniEntry(S_INI_SECTION_GENERAL, "WorkingDirectory", IniSettingLastYear(S_INI_SECTION_GENERAL, "WorkingDirectory", "", True), p11d32.IniPathAndFile)
     Call CreateAndSetWorkingDirectory(Nothing, s)
     Call CreateUserDirectoriesAndData
@@ -761,7 +768,7 @@ Public Function IniSettings(IRW As INI_READ_WRITE) As Boolean
     p11d32.ReportPrint.ExportOption = GetIniEntry(S_INI_SECTION_REPORTS, "ExportOption", EXPORT_HTML_INTEXP5, p11d32.IniPathAndFile)   'km
     p11d32.ReportPrint.ExportAllowUserNameHTML = GetIniEntry(S_INI_SECTION_REPORTS, "ExportAllowUserNameHTML", False, p11d32.IniPathAndFile)
     p11d32.ReportPrint.ExportEmployeeFileNameFields = GetIniEntry(S_INI_SECTION_REPORTS, "ExportEmployeeFileNameFields", REPORT_EXPORT_EMPLOYEE_FILE_NAME_FIELDS.REEFNF_PERSONNEL_NUMBER, p11d32.IniPathAndFile)
-    
+    p11d32.ReportPrint.ExportEmployeeFileNameCustom = GetIniEntry(S_INI_SECTION_REPORTS, "ExportEmployeeFileNameCustom", "", p11d32.IniPathAndFile)
     
     
     p11d32.ReportPrint.EmailSubject = GetIniEntry(S_INI_SECTION_REPORTS, "EmailSubject", "P11D Information", p11d32.IniPathAndFile)
@@ -848,6 +855,7 @@ Public Function IniSettings(IRW As INI_READ_WRITE) As Boolean
     p11d32.ReportPrint.SortOtherTypeBenefitsAlphabetically = GetIniEntry(S_INI_SECTION_REPORTS, "SortOtherTypeBenefitsAlphabetically", False, p11d32.IniPathAndFile)
 
     p11d32.Testing.LastGoogleTestSheetId = Trim(GetIniEntry(S_INI_SECTION_TESTING, "LastGoogleTestSheetId", "", p11d32.IniPathAndFile))
+    p11d32.FoldersDefaulToEmployerFolder = GetIniEntryBool(S_INI_SECTION_GENERAL, "FoldersDefaulToEmployerFolder", True)
     
     
   End If
@@ -978,22 +986,27 @@ JUST_CHANGE:
     
   End If
   
-  ChDriveUNC (sWorkingDirectory)
-  ChDir (sWorkingDirectory)
   
   
-  sWorkingDirectory = FullPath(sWorkingDirectory)
-  p11d32.WorkingDirectory = sWorkingDirectory
-    
-  Call WriteIniEntry(S_INI_SECTION_GENERAL, "WorkingDirectory", sWorkingDirectory, p11d32.IniPathAndFile)
-  Call FlushIniBuffer(p11d32.IniPathAndFile)
+  Call WorkingDirectoryChange(sWorkingDirectory)
+  
 err_end:
   Exit Sub
 err_err:
   Call Err.Raise(Err.Number, "CreateAndSetWorkingDirectories", Err.Description)
   Resume
 End Sub
-
+Public Sub WorkingDirectoryChange(ByVal value As String)
+  ChDriveUNC (value)
+  ChDir (value)
+  
+  value = FullPath(value)
+  p11d32.workingDirectory = value
+  
+  Call WriteIniEntry(S_INI_SECTION_GENERAL, "WorkingDirectory", p11d32.workingDirectory, p11d32.IniPathAndFile)
+  Call FlushIniBuffer(p11d32.IniPathAndFile)
+  
+End Sub
 Public Property Get LetterFile() As String
   LetterFile = "Letter"
 End Property
@@ -1212,7 +1225,7 @@ Public Function LoadEmployers() As Long
     
   MDIMain.mnuFile.Enabled = False
   'WorkingDirectory = FullPath(CurDir()) ' EK Working Dir change, may need to comment out
-  F_Employers.lblEmployersDirectory.Caption = S_EMPLOYER_DIRECTORY_LABEL & WorkingDirectory
+  F_Employers.workingDirectory = workingDirectory
   Call Employers.RemoveAll
   Employers.Compact
   'use this as use in BringForward and did not want to duplicate
@@ -1460,7 +1473,7 @@ retryedit:
   
   If F_EmployerDetails.m_ok = False Then GoTo EditEmployer_End
   
-  If lEmployerIndex <= 0 Then If Not empr.CreateEmployer(p11d32.WorkingDirectory & F_EmployerDetails.TxtBx(2).Text & Rates.FileExtensionCurrent) Then GoTo retryedit
+  If lEmployerIndex <= 0 Then If Not empr.CreateEmployer(p11d32.workingDirectory & F_EmployerDetails.TxtBx(2).Text & Rates.FileExtensionCurrent) Then GoTo retryedit
   
   Call empr.OpenEmployer(False)
   
@@ -1738,6 +1751,9 @@ Public Function Initialise() As Boolean
   Set BringForward = New BringForward
   Set ReportPrint = New ReportPrint
   Set Testing = New Testing
+  
+  Set RecentWorkingDirectories = New RecentFiles
+  RecentWorkingDirectories.Max = 10
   
   ' help
   Set Help = New Help
@@ -2148,13 +2164,26 @@ CheckLicenceType_Err:
   Resume CheckLicenceType_End
 End Function
 
-Public Property Get WorkingDirectory() As String
-  WorkingDirectory = m_WorkingDirectory
+Public Property Get workingDirectory() As String
+  workingDirectory = m_WorkingDirectory
 End Property
-Public Property Let WorkingDirectory(ByVal sNewValue As String)
-  m_WorkingDirectory = sNewValue
+Public Property Let workingDirectory(ByVal sNewValue As String)
+  
+  'If (m_WorkingDirectory <> sNewValue) Then
+    m_WorkingDirectory = sNewValue
+    Call p11d32.RecentWorkingDirectories.Add(m_WorkingDirectory)
+    Call MDIMain.LoadRecentWorkingDirectories
+  'End If
+  
 End Property
-
+Public Function BrowseForFolderDefault(ByVal folder As String) As String
+  
+  If (p11d32.FoldersDefaulToEmployerFolder) Then
+    folder = p11d32.workingDirectory
+  End If
+  
+  BrowseForFolderDefault = folder
+End Function
 
 
 

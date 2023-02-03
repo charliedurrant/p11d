@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form F_Employers 
    Appearance      =   0  'Flat
    Caption         =   "Employer Details"
@@ -31,7 +31,7 @@ Begin VB.Form F_Employers
       TabIndex        =   0
       Tag             =   "free,font"
       Top             =   1560
-      Width           =   9220
+      Width           =   9225
       _ExtentX        =   16272
       _ExtentY        =   7223
       View            =   3
@@ -85,14 +85,17 @@ Begin VB.Form F_Employers
       Tag             =   "free,font"
       Top             =   0
       Width           =   10995
-      Begin VB.Label lblEmployersDirectory 
-         Appearance      =   0  'Flat
-         AutoSize        =   -1  'True
-         BackColor       =   &H80000005&
-         BackStyle       =   0  'Transparent
-         Caption         =   "Employer files in this directory:"
-         BeginProperty Font 
-            Name            =   "Verdana"
+      Begin P11D2022.MyFolderBrowser fbWorkingDirectory 
+         Height          =   375
+         Left            =   0
+         TabIndex        =   6
+         Tag             =   "FREE,FONT"
+         Top             =   1320
+         Width           =   9135
+         _ExtentX        =   15055
+         _ExtentY        =   661
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "MS Sans Serif"
             Size            =   8.25
             Charset         =   0
             Weight          =   400
@@ -100,13 +103,7 @@ Begin VB.Form F_Employers
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         ForeColor       =   &H00996633&
-         Height          =   195
-         Left            =   120
-         TabIndex        =   5
-         Tag             =   "FREE,FONT"
-         Top             =   1350
-         Width           =   8490
+         ForeColor       =   -2147483630
       End
       Begin VB.Label lblYear 
          BackStyle       =   0  'Transparent
@@ -179,7 +176,7 @@ Begin VB.Form F_Employers
          ForeColor       =   &H000000C0&
          Height          =   255
          Left            =   5505
-         TabIndex        =   6
+         TabIndex        =   5
          Tag             =   "FREE,FONT"
          Top             =   675
          Width           =   3015
@@ -202,6 +199,11 @@ Private Const L_DES_HEIGHT  As Long = 6165
 Private Const L_DES_WIDTH  As Long = 9285
 Private benefit As IBenefitClass
 
+
+Private Sub fbWorkingDirectory_Ended()
+  Call p11d32.WorkingDirectoryChange(fbWorkingDirectory.Directory)
+  Call p11d32.LoadEmployers
+End Sub
 
 Private Sub IBenefitForm2_AddBenefit()
    
@@ -404,8 +406,7 @@ Private Sub Form_Load()
   lblYear.Caption = p11d32.AppYear
   
   lblJuneRelease.Visible = p11d32.JuneRelease
-        
-        
+  fbWorkingDirectory.ForeColor = lblTitle.ForeColor
         
   lblTitle.Caption = app.companyName & " " & S_TELEPHONE
     
@@ -464,5 +465,10 @@ Private Sub lb_KeyPress(KeyAscii As Integer)
     Call lb_DblClick
   End If
 End Sub
-
+Public Property Get workingDirectory() As String
+  workingDirectory = fbWorkingDirectory.Directory
+End Property
+Public Property Let workingDirectory(ByVal value As String)
+  fbWorkingDirectory.Directory = value
+End Property
 

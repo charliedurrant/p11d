@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{A7CE771F-05B2-43CF-9650-ED841A9049FA}#1.0#0"; "ATC3FolderBrowser.ocx"
 Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "atc2vtext.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form F_Print 
@@ -16,14 +15,16 @@ Begin VB.Form F_Print
    ScaleHeight     =   7065
    ScaleWidth      =   7485
    StartUpPosition =   3  'Windows Default
-   Begin atc3FolderBrowser.FolderBrowser fbUserReportsDirectory 
-      Height          =   600
+   Begin P11D2022.MyFolderBrowser fbUserReportsDirectory 
+      Height          =   495
       Left            =   120
-      TabIndex        =   33
+      TabIndex        =   35
       Top             =   5880
-      Width           =   7305
-      _ExtentX        =   12885
-      _ExtentY        =   1058
+      Width           =   7335
+      _extentx        =   12938
+      _extenty        =   873
+      font            =   "F_Print.frx":0000
+      forecolor       =   -2147483630
    End
    Begin VB.CommandButton cmdReportWizard 
       Caption         =   "&Wizard"
@@ -49,7 +50,7 @@ Begin VB.Form F_Print
       Height          =   1155
       Left            =   5445
       TabIndex        =   11
-      ToolTipText     =   $"F_Print.frx":0000
+      ToolTipText     =   $"F_Print.frx":002C
       Top             =   45
       Width           =   1965
       Begin VB.PictureBox pctFrame3 
@@ -93,7 +94,7 @@ Begin VB.Form F_Print
          Caption         =   "Print replaced P46s"
          Height          =   255
          Left            =   225
-         TabIndex        =   34
+         TabIndex        =   33
          Top             =   2640
          Width           =   2895
       End
@@ -169,7 +170,7 @@ Begin VB.Form F_Print
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            MouseIcon       =   "F_Print.frx":008C
+            MouseIcon       =   "F_Print.frx":00B8
             Text            =   ""
             TypeOfData      =   2
             Maximum         =   "05/04/1999"
@@ -194,7 +195,7 @@ Begin VB.Form F_Print
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            MouseIcon       =   "F_Print.frx":00A8
+            MouseIcon       =   "F_Print.frx":00D4
             Text            =   ""
             TypeOfData      =   2
             Maximum         =   "05/04/1999"
@@ -321,11 +322,11 @@ Begin VB.Form F_Print
       Width           =   5325
       Begin VB.ComboBox cmbPrinter 
          Height          =   315
-         ItemData        =   "F_Print.frx":00C4
+         ItemData        =   "F_Print.frx":00F0
          Left            =   240
-         List            =   "F_Print.frx":00C6
+         List            =   "F_Print.frx":00F2
          Style           =   2  'Dropdown List
-         TabIndex        =   35
+         TabIndex        =   34
          Top             =   240
          Width           =   4935
       End
@@ -419,13 +420,6 @@ err_err:
   Resume err_end
   Resume
 End Sub
-'Private Sub SetActivePrinterReporter()
-'  Dim rep As Reporter
-'
-'  Set rep = ReporterNew()
-'
-'  Call rep.SetActivePrinter(F_Print.cmbPrinter.text)
-'End Sub
 Private Sub cmdCancel_Click()
   Call UnLoadPrintForm
 End Sub
@@ -652,7 +646,8 @@ Public Function SettingsToScreen() As Boolean
     
   chkPrintReplacedP46s.value = BoolToChkBox(p11d32.ReportPrint.P46PrintReplacedP46s)
     
-  fbUserReportsDirectory.Directory = p11d32.ReportPrint.ReportPathUser
+  fbUserReportsDirectory.ReadOnly = p11d32.FoldersDefaulToEmployerFolder
+  fbUserReportsDirectory.Directory = p11d32.BrowseForFolderDefault(p11d32.ReportPrint.ReportPathUser)
   
 SettingsToScreen_End:
   Call xReturn("SettingsToScreen")

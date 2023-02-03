@@ -22,9 +22,11 @@ Private Const BFFM_ENABLEOK = (WM_USER + 101)
 '#define BFFM_SETSELECTIONW      (WM_USER + 103)
 '#define BFFM_SETSTATUSTEXTW     (WM_USER + 104)
 
-Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
-Private Declare Function SendMessageStr Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As String) As Long
+Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
+Private Declare Function SendMessageStr Lib "user32" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As String) As Long
 Private Declare Function SHGetMalloc Lib "shell32.dll" (ppMalloc As IMalloc) As Long
+Private Declare Function PostMessage Lib "user32" Alias "PostMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
+
 Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" ( _
     lpvDest As Any, lpvSource As Any, ByVal cbCopy As Long)
 Private Declare Sub CopyMemoryLpToStr Lib "kernel32" Alias "RtlMoveMemory" ( _
@@ -47,7 +49,7 @@ End Property
 
 ' This function for standard module only--global module version
 ' must be in separate file
-Public Function BrowseCallbackProc(ByVal hWnd As Long, _
+Public Function BrowseCallbackProc(ByVal hwnd As Long, _
                             ByVal uMsg As Long, _
                             ByVal lParam As Long, _
                             ByVal lpData As Long) As Long
@@ -67,22 +69,28 @@ Dim cBF As BrowseForFolderClass
          If Not cBF Is Nothing Then
             pidl = cBF.pidlInitial
             If pidl > 0 Then
-               lR = SendMessage(hWnd, BFFM_SETSELECTIONA, 0, ByVal pidl)
+              'make sure the items is scrolled to
+              'ref: https://stackoverflow.com/questions/5975745/tbrowseforfolder-selected-row-out-of-focus
+              lR = SendMessage(hwnd, BFFM_SETSELECTIONA, 0, ByVal pidl)
+              Call Sleep(1000)
+              lR = PostMessage(hwnd, BFFM_SETSELECTIONA, 0, ByVal pidl)
             End If
-            cBF.Initialized hWnd
+            cBF.Initialized hwnd
          End If
-         
       End If
+      
+      
       BrowseCallbackProc = 0
       
    ' Selection has changed (lParam contains pidl of selected folder)
    Case BFFM_SELCHANGED
       Debug.Print "BFFM_SELCHANGED"
+      Call Sleep(20)
       ' Display full path if status area if enabled
       sPath = PathFromPidl(lParam)
-      lR = SendMessageStr(hWnd, BFFM_SETSTATUSTEXTA, 0&, sPath)
+      lR = SendMessageStr(hwnd, BFFM_SETSTATUSTEXTA, 0&, sPath)
       If lpData <> 0 Then
-         ObjectFromPtr(lpData).SelectionChange hWnd, sPath, lParam
+         ObjectFromPtr(lpData).SelectionChange hwnd, sPath, lParam
       End If
       BrowseCallbackProc = 0
    ' Invalid name in edit box (lParam parameter has invalid name string)
@@ -90,12 +98,12 @@ Dim cBF As BrowseForFolderClass
       Debug.Print "BFFM_VALIDATEFAILED"
       ' Return zero to dismiss dialog or nonzero to keep it displayed
       ' Disable the OK button
-      lR = SendMessage(hWnd, BFFM_ENABLEOK, ByVal 0&, ByVal 0&)
+      lR = SendMessage(hwnd, BFFM_ENABLEOK, ByVal 0&, ByVal 0&)
       sPath = PointerToString(lParam)
       sPath = "Path invalid: " & sPath
-      lR = SendMessageStr(hWnd, BFFM_SETSTATUSTEXT, ByVal 0&, sPath)
+      lR = SendMessageStr(hwnd, BFFM_SETSTATUSTEXT, ByVal 0&, sPath)
       If lpData <> 0 Then
-         BrowseCallbackProc = ObjectFromPtr(lpData).ValidateFailed(hWnd, sPath)
+         BrowseCallbackProc = ObjectFromPtr(lpData).ValidateFailed(hwnd, sPath)
       Else
          BrowseCallbackProc = 0
       End If
@@ -129,30 +137,32 @@ Public Function BrowseForFolderEx(ByVal hWndOwener As Long, Optional ByVal Initi
   Dim sRet As String
   Dim c As BrowseForFolderClass
   
-On Error GoTo err_Err
+On Error GoTo err_err
   Set c = New BrowseForFolderClass
+     
+  c.hwndOwner = hWndOwener
+  If (Len(Initialdirectory) = 0) Then
+   
+   Initialdirectory = CurDir
+  End If
   
-   c.hwndOwner = hWndOwener
-   If (Len(Initialdirectory) = 0) Then
-    Initialdirectory = CurDir
-   End If
+  c.InitialDir = Initialdirectory
+  c.FileSystemOnly = True
+  c.StatusText = True
+  c.Title = Title
+  c.EditBox = True
+  c.UseNewUI = True
+  sRet = c.BrowseForFolder
    
-   c.InitialDir = Initialdirectory
-   c.FileSystemOnly = True
-   c.StatusText = True
-   c.Title = Title
-   c.EditBox = True
-   c.UseNewUI = True
-   sRet = c.BrowseForFolder
-   
-err_End:
+err_end:
   BrowseForFolderEx = sRet
   Exit Function
-err_Err:
+err_err:
   
   sRet = BrowseForFolder(hWndOwener, Initialdirectory, Title)
-  Resume err_End
+  Resume err_end
 End Function
+
 
 
 

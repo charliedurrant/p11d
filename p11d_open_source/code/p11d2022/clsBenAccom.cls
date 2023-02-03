@@ -795,19 +795,6 @@ Private Function IBenefitClass_WriteDB() As Boolean
     rs.Fields("Rent").value = ben.value(accom_rent_db)
     rs.Fields("Consideration").value = ben.value(accom_ConsiderationForUse_db)
     rs.Fields("RecentImprov").value = ben.value(accom_RecentImprov_db)
-    
-    
-'MP DB - never read to assign enum from DB
-'   rs.Fields("Assets").value = ben.value(accom_Assets)
-'MP DB    rs.Fields("AvailDays").value = ben.value(accom_AvailDays_db)
-    
-    'EK removal of accomodation expenses TTP#28
-    'rs.Fields("Utilities").value = ben.value(accom_Utilities)
-    'rs.Fields("Repairs").value = ben.value(accom_Repairs)
-    'rs.Fields("Reimbursements").value = ben.value(accom_Reimbursements)
-    'rs.Fields("MadeGood").value = ben.value(accom_Expenses_MadeGood)
-    'rs.Fields("NetEmoluments").value = ben.value(accom_NetEmoluments)
-    'rs.Fields("Ancillary").value = ben.value(accom_Ancillary)
   Else
     If Not ben.value(accom_isrent_db) Then rs.Fields("Rent").value = ben.value(accom_rent_db)
   End If

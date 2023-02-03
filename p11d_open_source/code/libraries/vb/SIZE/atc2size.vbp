@@ -1,6 +1,6 @@
 Type=OleDll
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\WINNT\System32\stdole2.tlb#OLE Automation
-Reference=*\G{BCCA50E3-0401-11D3-8BE0-00508B2FF337}#1.1#0#..\..\..\WINNT\system32\TCSBASE.OLB#TCS Base Class (interface definitions only)
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\..\..\Windows\SysWOW64\stdole2.tlb#OLE Automation
+Reference=*\G{BCCA50E3-0401-11D3-8BE0-00508B2FF337}#1.1#0#..\..\..\..\..\..\..\Windows\SysWOW64\TCSBASE.OLB#TCS Base Class (interface definitions only)
 Object={5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0; MSFLXGRD.OCX
 Class=clsFormResize; Clsfrmat.cls
 Class=clsCtrlAttribute; Ctrldisp.cls

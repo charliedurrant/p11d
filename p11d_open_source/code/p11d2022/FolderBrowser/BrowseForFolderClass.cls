@@ -247,6 +247,8 @@ Dim sPath As String
    tBI.lpszTitle = StrPtr(sTitle)
    tBI.ulFlags = plGetOptions()
    tBI.iImage = 0
+   
+   
     
    If Len(m_sRootDir) <> 0 Then
       ' Get a PIDL for the selected path:
@@ -329,7 +331,7 @@ Friend Property Get DialoghWnd() As Long
    End If
 End Property
 Private Sub pError(ByVal lErr As Long)
-   Err.Raise 26000 + lErr, App.EXEName & ".cBrowseForFolder", "Operation invalid unless dialog is displayed."
+   Err.Raise 26000 + lErr, app.EXEName & ".cBrowseForFolder", "Operation invalid unless dialog is displayed."
 End Sub
 Private Function plAddressOf(ByVal lPtr As Long) As Long
    plAddressOf = lPtr
@@ -364,7 +366,7 @@ Dim sRet As String
 End Function
 Private Sub ApiRaise(ByVal e As Long)
    Err.Raise vbObjectError + 29000 + e, _
-              App.EXEName & ".cBrowseForFolder", ApiError(e)
+              app.EXEName & ".cBrowseForFolder", ApiError(e)
 End Sub
 Private Function ApiError(ByVal e As Long) As String
 Dim s As String, c As Long

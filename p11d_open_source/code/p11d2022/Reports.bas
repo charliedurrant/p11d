@@ -10,7 +10,7 @@ Private Const S_LIGHTGREY As String = "12632256"
 Private Const L_HMIT_COL_1 As Long = 50
 Private Const L_HMIT_COL_2 As Long = 63
 Private Const L_HMIT_COL_3 As Long = 78
-
+Private Const S_P11D_B = "P11D(b)"
 Private Const L_HMIT_COL_4 As Long = 82
 Private Const L_HMIT_COL_5 As Long = 94
 Private Const L_HMIT_STANDARDBOX_WIDTH = 12
@@ -99,12 +99,17 @@ Public Const S_WK_LINE_BREAK_FONT As String = "{Arial=6,n}"
 Public Const S_ELMC_MASTER As String = "Control Codes"
 
 Public Const S_WK_HEADER_FONT As String = "{Arial=7,b}"
-Public Const S_WKCOL_2 As String = "{x=97}"
-Public Const S_WKCOL_3 As String = "{x=77}"
+
 Public Const L_WK_OTHER_TABLE_COL1 As Long = 5
-Public Const L_WK_OTHER_TABLE_COL2 As Long = 77
 Public Const L_WK_OTHER_TABLE_COL3 As Long = 87
-Public Const L_WK_OTHER_TABLE_COL4 As Long = 97
+
+Public Const L_WK_OTHER_TABLE_COL4 As Long = 97 'change this, change below
+Public Const S_WKCOL_2 As String = "{x=97}"
+
+Public Const L_WK_OTHER_TABLE_COL2 As Long = 77 'change this, change below
+Public Const S_WKCOL_3 As String = "{x=77}"
+
+
 
 'rdc
 Public Const L_WK_OTHER_TABLE_COL_11 As Long = 5
@@ -141,7 +146,7 @@ Private m_lWKXOffsets() As Long
 '******************* End WK values **************************************
 
 '************************* WK functions ******************************
-Public Sub WKBenefitHeader(rep As Reporter, ben As IBenefitClass, bPrintDescription As Boolean)
+Public Sub WKBenefitHeader(rep As reporter, ben As IBenefitClass, bPrintDescription As Boolean)
 
   On Error GoTo WKBenefitHeader_ERR
 
@@ -162,7 +167,7 @@ End Sub
 '  If rep Is Nothing Then Call Err.Raise(ERR_REP_IS_NOTHING, "ReportEnd", "The reporter is nothing in report end.")
 '  If bDonePrinting Then Call rep.Out(EmployeeLetterCode(ELC_NEWPAGE, ELCT_LETTER_FILE_CODES, False))
 'End Sub
-Public Sub ReportBanner(rep As Reporter, BannerText As String)
+Public Sub ReportBanner(rep As reporter, BannerText As String)
   If rep Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "ReportBanner", "Reporter is nothing.")
   Call HMITBanner(rep, BannerText & " " & p11d32.Rates.value(TaxFormYear), True)
 End Sub
@@ -177,7 +182,7 @@ End Sub
 'End Sub
 
 
-Public Function WKMainHeader(rep As Reporter, ben As IBenefitClass, ee As Employee) As Boolean
+Public Function WKMainHeader(rep As reporter, ben As IBenefitClass, ee As Employee) As Boolean
   
   
   On Error GoTo WKMainHeader_ERR
@@ -218,7 +223,7 @@ Private Function WKTableItem(ByVal iCol As Long, ByVal sValue As String)
   WKTableItem = WKTableItem & "}{x=" & m_lWKXOffsets(iCol) & "}" & sValue
   
 End Function
-Public Function WKTableTotals(rep As Reporter, ParamArray TotalValues()) As Boolean
+Public Function WKTableTotals(rep As reporter, ParamArray TotalValues()) As Boolean
   Dim i As Long, s As String, j As Long
 
   On Error GoTo WKTableTotals_ERR
@@ -254,7 +259,7 @@ WKTableTotals_ERR:
   Resume WKTableTotals_END
   Resume
 End Function
-Public Sub WKTblOtherTypeTable(rep As Reporter, ByVal sCol1Caption As String, ByVal sCol2Caption As String, ByVal sCol3Caption As String, ByVal sCol4Caption As String)
+Public Sub WKTblOtherTypeTable(rep As reporter, ByVal sCol1Caption As String, ByVal sCol2Caption As String, ByVal sCol3Caption As String, ByVal sCol4Caption As String)
   Call WKTblColXOffsets(L_WK_OTHER_TABLE_COL1, L_WK_OTHER_TABLE_COL2, L_WK_OTHER_TABLE_COL3, L_WK_OTHER_TABLE_COL4)
   Call WKTblColFormats("n", "rn", "rn", "rn")
   Call WKTableHeadings(rep, sCol1Caption, sCol2Caption, sCol3Caption, sCol4Caption)
@@ -262,14 +267,14 @@ End Sub
 
 'CAD review 20/02 good
 ' rdc Differs to the above WKTblOtherTypeTable procedure to handle up to 7 columns/headings within the working-paper benefits report
-Public Sub WKTblOtherTypeTableWithDates(rep As Reporter, ByVal sCol1Caption As String, ByVal sCol2Caption As String, ByVal sCol3Caption As String, ByVal sCol4Caption As String, ByVal sCol5Caption As String, ByVal sCol6Caption As String, ByVal sCol7Caption As String)
+Public Sub WKTblOtherTypeTableWithDates(rep As reporter, ByVal sCol1Caption As String, ByVal sCol2Caption As String, ByVal sCol3Caption As String, ByVal sCol4Caption As String, ByVal sCol5Caption As String, ByVal sCol6Caption As String, ByVal sCol7Caption As String)
   Call WKTblColXOffsets(L_WK_OTHER_TABLE_COL_11, L_WK_OTHER_TABLE_COL_12, L_WK_OTHER_TABLE_COL_13, L_WK_OTHER_TABLE_COL_14, L_WK_OTHER_TABLE_COL_15, L_WK_OTHER_TABLE_COL_16, L_WK_OTHER_TABLE_COL_17)
   Call WKTblColFormats("n", "rn", "rn", "rn", "rn", "rn", "rn")
   Call WKTableHeadings(rep, sCol1Caption, sCol2Caption, sCol3Caption, sCol4Caption, sCol5Caption, sCol6Caption, sCol7Caption)
 End Sub
 
 
-Public Function WKOut(rep As Reporter, OutputType As WKOUT_TYPE, Optional OutputText As Variant, Optional OutputValue As Variant, Optional OutPutRef As Variant, Optional bCurrency As Boolean = False, Optional bNegative As Boolean = False) As Boolean
+Public Function WKOut(rep As reporter, OutputType As WKOUT_TYPE, Optional OutputText As Variant, Optional OutputValue As Variant, Optional OutPutRef As Variant, Optional bCurrency As Boolean = False, Optional bNegative As Boolean = False) As Boolean
   On Error GoTo WKOut_ERR
   
   Call xSet("WKOut")
@@ -338,7 +343,7 @@ WKOut_ERR:
   Call ErrorMessage(ERR_ERROR, Err, "WKOut", "WK Out", "Error priting a worksheet, output type = " & OutputType & ".")
   Resume WKOut_END
 End Function
-Public Function WKTableTotalBen(rep As Reporter, ByVal ben As IBenefitClass)
+Public Function WKTableTotalBen(rep As reporter, ByVal ben As IBenefitClass)
   Dim BenArr(1 To 1) As BEN_CLASS
   Dim value As Variant, benefit As Variant, MadeGood As Variant
     
@@ -347,7 +352,7 @@ Public Function WKTableTotalBen(rep As Reporter, ByVal ben As IBenefitClass)
   Call WKTableTotals(rep, "", FormatWN(ben.value(ITEM_VALUE)), FormatWN(ben.value(ITEM_MADEGOOD_NET), , True), FormatWN(ben.value(ITEM_BENEFIT)))
 
 End Function
-Public Function WKTableRow(rep As Reporter, ParamArray RowData()) As Boolean
+Public Function WKTableRow(rep As reporter, ParamArray RowData()) As Boolean
   Dim lOffset As Long, lNumCols As Long, i As Long, s As String
    
   On Error GoTo WKTableRow_ERR
@@ -378,7 +383,23 @@ WKTableRow_ERR:
   Call ErrorMessage(ERR_ERROR, Err, "WKTableRow", "WK Table Row", "Error creating a WK table row.")
   Resume WKTableRow_END
 End Function
-Public Function WKTableHeadings(rep As Reporter, ParamArray Headings()) As Boolean
+Public Function WKTableBlankRow(rep As reporter) As Boolean
+   
+  On Error GoTo err_ERR
+  
+  Call xSet("WKTableBlankRow")
+  
+  Call rep.Out(vbCrLf)
+  
+err_END:
+  Call xReturn("WKTableBlankRow")
+  Exit Function
+err_ERR:
+  Call ErrorMessage(ERR_ERROR, Err, "WKTableBlankRow", "WK Table Blank Row", "Error creating a WK table blank row.")
+  Resume err_END
+End Function
+
+Public Function WKTableHeadings(rep As reporter, ParamArray Headings()) As Boolean
   Dim lOffset As Long, lNumCols As Long, lNumRows As Long
   Dim i As Long, j As Long, k As Long, s As String, sHeadingLines() As String
   
@@ -389,12 +410,12 @@ Public Function WKTableHeadings(rep As Reporter, ParamArray Headings()) As Boole
   lOffset = LBound(Headings) - 1
   lNumCols = UBound(Headings) - lOffset
   
-  If lNumCols <> m_lWKNumberOfColumns Then
+  If lNumCols > m_lWKNumberOfColumns Then
     Call ECASE("WKTableHeadings" & vbCrLf & vbCrLf & "Parameters:" & lNumCols & vbCrLf & "Offsets:" & m_lWKNumberOfColumns)
     Exit Function
   End If
     
-  For i = 1 To m_lWKNumberOfColumns
+  For i = 1 To lNumCols
    k = 0
     j = InStr(1, Headings(i + lOffset), "~")
     Do While j
@@ -410,24 +431,22 @@ Public Function WKTableHeadings(rep As Reporter, ParamArray Headings()) As Boole
   
   For j = 1 To lNumRows
     s = ""
-    For i = 1 To m_lWKNumberOfColumns
-    
+    For i = 1 To lNumCols
       Call GetDelimitedValues(sHeadingLines, CStr(Headings(i + lOffset)), , , "~")
- 
       If j <= UBound(sHeadingLines) Then
         If Len(m_sWKColFormats(i)) > 0 Then
           s = s & "{Arial=7," & m_sWKColFormats(i) & "}"
         Else
           s = s & S_WK_NORMAL_FONT
         End If
-        s = s & "{x=" & m_lWKXOffsets(i) & "}" & sHeadingLines(j)
+        If Len(sHeadingLines(j)) > 0 Then
+          s = s & "{x=" & m_lWKXOffsets(i) & "}" & sHeadingLines(j)
+        End If
       End If
-      
     Next i
     s = s & vbCrLf
     Call rep.Out(s)
   Next j
-  
   
   Call rep.Out(vbCrLf)
   
@@ -552,7 +571,7 @@ StartAutoSTD_ERR:
 End Function
 
 Public Sub SetActivePrinter(ByVal Name As String)
-  Dim rep As Reporter
+  Dim rep As reporter
   
   Set rep = ReporterNew(Nothing)
   Call rep.SetActivePrinter(Name)
@@ -561,7 +580,7 @@ End Sub
 
 Public Function ReportErrors(rs As Recordset, sReportHeader As String, ByVal Dest As REPORT_TARGET, Optional sTitle As String = "Errors") As Boolean
   Dim ac As AutoClass
-  Dim rep As Reporter
+  Dim rep As reporter
   
   On Error GoTo ReportErrors_Err
 
@@ -679,7 +698,7 @@ End Function
 Private Function HMITCarMakeAndModel(ByVal benCar As IBenefitClass) As String
   HMITCarMakeAndModel = HMITFieldTrim(GetBenItem(benCar, car_Make_db) & " " & GetBenItem(benCar, car_Model_db), 30)
 End Function
-Private Function HMITCar(rep As Reporter, ee As Employee, CompanyCar1 As IBenefitClass, lCar1Number As Long, CompanyCar2 As IBenefitClass, lCar2Number As Long) As Long
+Private Function HMITCar(rep As reporter, ee As Employee, CompanyCar1 As IBenefitClass, lCar1Number As Long, CompanyCar2 As IBenefitClass, lCar2Number As Long) As Long
   Dim vTotalCarBenefit As Variant, vTotalFuelBenefit As Variant
   Dim FuelTypeString_Car1 As String
   Dim FuelTypeString_Car2 As String
@@ -863,7 +882,7 @@ HMITCar_ERR:
   Resume HMITCar_END
   Resume
 End Function
-Public Sub HMITBanner(rep As Reporter, sBannerText As String, Optional bIRFlag As Boolean = True)
+Public Sub HMITBanner(rep As reporter, sBannerText As String, Optional bIRFlag As Boolean = True)
   Call rep.Out(HMITBannerString(sBannerText, bIRFlag))
 End Sub
 
@@ -892,7 +911,7 @@ End Function
 Private Function HMITBullet(Optional lXStart As Long = 0) As String
   HMITBullet = "{Arial=10,nb}{x=" & lXStart & "}{WB}•"
 End Function
-Private Sub HMITPageHeader(rep As Reporter, ee As Employee)
+Private Sub HMITPageHeader(rep As reporter, ee As Employee)
   'Page 1 Title
   Call HMITBanner(rep, "P11D EXPENSES AND BENEFITS " & IIf(p11d32.AppYear > 2001, " ", "") & p11d32.Rates.value(TaxFormYear)) 'km - changed 2000 to 2001
   'notes to employer
@@ -906,7 +925,7 @@ Private Sub HMITPageHeader(rep As Reporter, ee As Employee)
                "{x=48}{BOX=50,5.5,F}{RESETCOLORS}" & _
                "{X=49}{YREL=5}{Arial=9,nb}Note to employer" & vbCrLf & "{YREL=4}" & _
                "{Arial=8,n}{x=49}Fill in this return for a director or an employee for the year to 5 April " & Format$(p11d32.Rates.value(TaxYearEnd), "YYYY") & "." & vbCrLf & _
-               "{x=49}Send all your P11Ds and one P11D(b) to your HMRC office by 6 July " & Format$(p11d32.Rates.value(TaxYearEnd), "YYYY") & "." & vbCrLf & _
+               "{x=49}Send all your P11Ds and one " & S_P11D_B & " to your HMRC office by 6 July " & Format$(p11d32.Rates.value(TaxYearEnd), "YYYY") & "." & vbCrLf & _
                "{x=49}Don't include payrolled benefits on the P11D. See www.gov.uk/guidance" & vbCrLf & _
                "{x=49}/paying-your-employees-expenses-and-benefits-through-your-payroll")
 
@@ -930,7 +949,7 @@ Private Sub HMITPageHeader(rep As Reporter, ee As Employee)
   'Call rep.Out("{x=3}{LINE=94}")
   
 End Sub
-Private Sub HMITEmpDetails(rep As Reporter, ee As Employee)
+Private Sub HMITEmpDetails(rep As reporter, ee As Employee)
   Dim ben As IBenefitClass
   Dim benEmployer As IBenefitClass
   
@@ -978,7 +997,7 @@ Private Sub HMITEmpDetails(rep As Reporter, ee As Employee)
     Call rep.Out("{x=3}{Arial=7,nb}Employers pay Class 1A National Insurance contributions on most benefits. These are shown in boxes which have a [1A] indicator" & vbCrLf & vbCrLf)
 '  End If
 End Sub
-Private Sub HMITWhichSection(rep As Reporter, ee As Employee, lSections As Long)
+Private Sub HMITWhichSection(rep As reporter, ee As Employee, lSections As Long)
   Dim i As Long
   Dim lCarsFound As Long, lBenefitStartIndexCars As Long
   Dim lLoansFound As Long, lBenefitStartIndexLoans As Long
@@ -1019,7 +1038,7 @@ Private Function SumBenefitFWNRPT(ee As Employee, Description As Variant, value 
     benefit = FormatWNRPT(benefit)
   End If
 End Function
-Private Function HMITSection(rep As Reporter, ee As Employee, HMITS As HMIT_SECTIONS, lBenefitStartIndex As Long, lBenefitsFound As Long) As Boolean
+Private Function HMITSection(rep As reporter, ee As Employee, HMITS As HMIT_SECTIONS, lBenefitStartIndex As Long, lBenefitsFound As Long) As Boolean
   Dim Description As String, value As Variant, MadeGood As Variant, benefit As Variant
   Dim loans As loans, l As Long
   Dim benEmployer As IBenefitClass
@@ -1177,11 +1196,6 @@ Private Function HMITSection(rep As Reporter, ee As Employee, HMITS As HMIT_SECT
       Call HMITAssetsTransferredType(rep, ee, BenArr, "{PUSH}" & TickOutPlusX(L_HMIT_COL_1 - 5, IIf(entertainmenttick, IIf(benEmployer.value(employer_CT_db), True, -2), 0)) & "{POP}{Arial=7,n}" & "Entertainment {Arial=7,i}(trading organisations read P11D Guide and~{Arial=7,n}{Arial=7,i}then enter a tick or a cross as appropriate here){Arial=7,n}" & "{Arial=7}", False)
 
       BenArr(1) = BC_GENERAL_EXPENSES_BUSINESS_N
-'      If p11d32.AppYear = 2000 Then 'km
-'        Call HMITAssetsTransferredType(rep, ee, BenArr, "{x=8}General expenses allowed for business travel", False)
-'      Else
-'        Call HMITAssetsTransferredType(rep, ee, BenArr, "{x=8}General expenses allowance for business travel", False) ' removed 2016/17
-'      End If
       BenArr(1) = BC_PHONE_HOME_N
       Call HMITAssetsTransferredType(rep, ee, BenArr, "{x=8}Payments for use of home telephone", False)
       BenArr(1) = BC_NON_QUALIFYING_RELOCATION_N
@@ -1226,7 +1240,7 @@ HMITCollectionsSet_ERR:
   Call ErrorMessage(ERR_ERROR, Err, "HMITCollectionsSet", "HMIT Collections Set", "Error setting valid benefits for HMIT collections.")
   Resume HMITCollectionsSet_END
 End Function
-Private Function HMITCollections(rep As Reporter, ee As Employee, lBenefitStartIndex, lCollectionItemsFound As Long, BenefitCollection As ObjectList, BenArr() As BEN_CLASS) As Boolean
+Private Function HMITCollections(rep As reporter, ee As Employee, lBenefitStartIndex, lCollectionItemsFound As Long, BenefitCollection As ObjectList, BenArr() As BEN_CLASS) As Boolean
   Dim i As Long, j As Long
   Dim ben As IBenefitClass
   Dim ben1 As IBenefitClass, ben2 As IBenefitClass, bendummy As IBenefitClass
@@ -1319,7 +1333,7 @@ Public Function HMITDate(v As Variant) As String
   HMITDate = Format$(v, "dd mmmm yyyy")
 End Function
 
-Private Sub HMITLoan(rep As Reporter, Loan1 As IBenefitClass, lLoan1Number As Long, Loan2 As IBenefitClass, lLoan2Number As Long)
+Private Sub HMITLoan(rep As reporter, Loan1 As IBenefitClass, lLoan1Number As Long, Loan2 As IBenefitClass, lLoan2Number As Long)
   On Error GoTo HMITLoan_ERR
   
   Call xSet("HMITLoan")
@@ -1446,7 +1460,7 @@ Public Function HMITFooter(sP11DType As String, Optional ee As Employee, Optiona
   End If
   HMITFooter = "{x=0}{Arial=8,i}" & sP11DType & IIf(bAppYear, "(" & p11d32.AppYear + 1 & ")", "") & IIf(bManual, "Man", "") & "(Substitute)(" & app.companyName & ")" & TimeStampReport & sEEDetails
 End Function
-Public Function Report_HMIT(rep As Reporter, ee As Employee) As Boolean
+Public Function Report_HMIT(rep As reporter, ee As Employee) As Boolean
   On Error GoTo Report_HMIT_ERR
   Dim y1 As Long, y2 As Long
   
@@ -1459,10 +1473,6 @@ Public Function Report_HMIT(rep As Reporter, ee As Employee) As Boolean
     End If
   End If
   
-'  If Not (p11d32.ReportPrint.ExportOption = EXPORT_HTML_INTEXP5) Then  'km
-'    rep.PageFooter = HMITFooter("P11D")
-'  End If
-
   Call rep.Out("{BEGINSECTION}")
   Call HMITPageHeader(rep, ee)
   Call HMITEmpDetails(rep, ee)
@@ -1478,7 +1488,7 @@ Report_HMIT_ERR:
   Resume Report_HMIT_END
   Resume
 End Function
-Public Function Report_PrintedEmployees(rep As Reporter, PrintedEmployees As ObjectList)
+Public Function Report_PrintedEmployees(rep As reporter, PrintedEmployees As ObjectList)
   Dim ben As IBenefitClass
   Dim bc As BEN_CLASS
   Dim j As Long
@@ -1537,8 +1547,12 @@ Public Function P11DbDeductionsDescription(benEmployer As IBenefitClass, Optiona
     P11DbDeductionsDescription = benEmployer.value(employer_deductClass1ADescription_db)
   End If
 End Function
+Private Function Report_P11db_NIC_Rate_Formatted() As String
+  Report_P11db_NIC_Rate_Formatted = (p11d32.Rates.value(carNICRate) * 100) & "%"
+End Function
 
-Public Function Report_P11db(rep As Reporter, benEmployer As IBenefitClass)
+
+Public Function Report_P11db(rep As reporter, benEmployer As IBenefitClass)
   Dim add1A As Long
   Dim deduct1A As Long
   Dim sNICPErcentage As String, sBenefitsPotentiallyWithClass1A As String
@@ -1552,14 +1566,14 @@ Public Function Report_P11db(rep As Reporter, benEmployer As IBenefitClass)
   Call xSet("p11dbform")
   
   Call benEmployer.Calculate
-  
-  sNICPErcentage = (p11d32.Rates.value(carNICRate) * 100) & "%"
+    
+  sNICPErcentage = Report_P11db_NIC_Rate_Formatted()
   sNICDue = FormatWNRPT(benEmployer.value(ITEM_NIC_CLASS1A_BENEFIT), , , True)
   add1A = benEmployer.value(employer_NIC_AdjustmentAdd)
   deduct1A = benEmployer.value(employer_NIC_AdjustmentDeduct)
   bPrintAdjustmentValues = (add1A > 0) Or (deduct1A > 0)
   sBenefitsPotentiallyWithClass1A = FormatWNRPT(benEmployer.value(employer_TotalBenefitsPotentiallySubjectToClass1A))
-  rep.PageFooter = HMITFooter("P11D(b)", , , True)
+  rep.PageFooter = HMITFooter(S_P11D_B, , , True)
   
   Call rep.Out("{PUSHY}")
   Call rep.Out(vbCrLf & "{Arial=13,b}{x=3}HM Revenue" & vbCrLf & _
@@ -1667,14 +1681,6 @@ Public Function Report_P11db(rep As Reporter, benEmployer As IBenefitClass)
            
   
     
-'    Call rep.Out(vbCrLf & vbCrLf & "{FILLRGB=" & S_LIGHTGREY & "}" & _
-'                 "{x=4}{BOX=95,10}{RESETCOLORS}" & _
-'                 "{Arial=9,bn}{x=5}Please remember to" & vbCrLf & vbCrLf & _
-'                 HMITBullet(5) & "{Arial=9,bn}{x=7}send the completed P11Ds and this form P11D(b) to reach your HM Revenue & Customs office by 6 July " & Year(p11d32.Rates.value(TaxYearEnd)) & vbCrLf & vbCrLf & _
-'                 HMITBullet(5) & "{Arial=9,bn}{x=7}give each employee or director a copy of their P11D information by 6 July " & Year(p11d32.Rates.value(TaxYearEnd)) & vbCrLf & vbCrLf & _
-'                 HMITBullet(5) & "{Arial=9,bn}{x=7}pay the Class 1A NICs shown on this return to the Accounts Office by 19 July " & Year(p11d32.Rates.value(TaxYearEnd)) & " using the special" & vbCrLf & _
-'                 "{x=7}payslip. Interest is chargeable on amounts paid late.")
-  
   'page 2
   Call rep.Out("{NEWPAGE}")
   
@@ -1781,7 +1787,7 @@ p11dbform_err:
   Resume
 End Function
 
-Private Sub DoReport_WKSub(rep As Reporter, ben As IBenefitClass, ByVal CurBenClass As BEN_CLASS, bFirst As Boolean, BenOtherPrinted() As Boolean, ee As Employee)
+Private Sub DoReport_WKSub(rep As reporter, ben As IBenefitClass, ByVal CurBenClass As BEN_CLASS, bFirst As Boolean, BenOtherPrinted() As Boolean, ee As Employee)
 
   If ben.BenefitClass = CurBenClass Then
     If Not bFirst Then
@@ -1799,7 +1805,7 @@ Private Sub DoReport_WKSub(rep As Reporter, ben As IBenefitClass, ByVal CurBenCl
   End If
 End Sub
 
-Public Function Report_WK(rep As Reporter, ee As Employee) As Boolean
+Public Function Report_WK(rep As reporter, ee As Employee) As Boolean
   Dim i As Long, j As Long, k As Long
   Dim RelevantBenClasses() As BEN_CLASS, BenClassCount As Long, CurBenClass As BEN_CLASS
   Dim BenOtherPrinted() As Boolean, LoansCol As loans
@@ -1870,7 +1876,7 @@ Private Function P46PaymentFrequencyEx(ByVal ben As IBenefitClass, ByVal ppf As 
   End If
   P46PaymentFrequencyEx = b
 End Function
-Private Sub RepOutCrLf(rep As Reporter, formattedText As String, Optional crLFXOffset As Long = -1)
+Private Sub RepOutCrLf(rep As reporter, formattedText As String, Optional crLFXOffset As Long = -1)
   Dim s As String
   Dim sReplace As String
     
@@ -1882,71 +1888,71 @@ Private Sub RepOutCrLf(rep As Reporter, formattedText As String, Optional crLFXO
   s = Replace$(formattedText, "\n", sReplace)
   Call rep.Out(s)
 End Sub
-Private Sub P46CaptionCol2(rep As Reporter, Caption As String, Optional Font As String = "{Arial=10,n}")
+Private Sub P46CaptionCol2(rep As reporter, Caption As String, Optional Font As String = "{Arial=10,n}")
   Call P46Caption(rep, Caption, L_P46_COL_2_X + 1, Font)
 End Sub
-Private Sub P46CaptionCol1(rep As Reporter, Caption As String, Optional Font As String = "{Arial=10,n}")
+Private Sub P46CaptionCol1(rep As reporter, Caption As String, Optional Font As String = "{Arial=10,n}")
   Call P46Caption(rep, Caption, L_P46_COL_1_X + 1, Font)
 End Sub
-Private Sub P46TickRowCol1(rep As Reporter, Caption As String, value As Boolean)
+Private Sub P46TickRowCol1(rep As reporter, Caption As String, value As Boolean)
   Call P46TickRow(rep, L_P46_COL_1_X + 1, Caption, value)
 End Sub
 
-Private Sub P46TickRowCol2(rep As Reporter, Caption As String, value As Boolean)
+Private Sub P46TickRowCol2(rep As reporter, Caption As String, value As Boolean)
   Call P46TickRow(rep, L_P46_COL_2_X + 1, Caption, value)
 End Sub
-Private Sub P46TickRow(rep As Reporter, xoffset As Long, Caption As String, value As Boolean)
+Private Sub P46TickRow(rep As reporter, xoffset As Long, Caption As String, value As Boolean)
   Call rep.Out("{x=" & (xoffset + 41) & "}")
   rep.Out (TickOut(value))
   Call rep.Out("{x=" & (xoffset) & "}")
   Call P46Caption(rep, Caption, xoffset)
 End Sub
 
-Private Sub P46Caption(rep As Reporter, Caption As String, xoffset As Long, Optional Font As String = "{Arial=10,n}")
+Private Sub P46Caption(rep As reporter, Caption As String, xoffset As Long, Optional Font As String = "{Arial=10,n}")
   If (Len(Caption) > 0) Then
     Call RepOutCrLf(rep, Font & "{x=" & xoffset & "}" & Caption & vbCrLf & "{Arial=6,n}" & vbCrLf, xoffset)
   End If
 End Sub
-Private Sub P46InputBoxFullColumnLength(rep As Reporter, Caption As String, value As String, xoffset As Long, Optional height As Single = L_HMIT_STANDARDBOX_HEIGHT)
+Private Sub P46InputBoxFullColumnLength(rep As reporter, Caption As String, value As String, xoffset As Long, Optional height As Single = L_HMIT_STANDARDBOX_HEIGHT)
   Call P46Caption(rep, Caption, xoffset)
   
   Call rep.Out(OutLineBoxL(xoffset, 45, height, value))
   Call rep.Out("{Arial=10,n}" & vbCrLf & "{Arial=6,n}" & vbCrLf & "{Arial=10,n}")
 End Sub
-Private Sub P46InputBoxFullColumnLengthCol1(rep As Reporter, Caption As String, value As String, Optional height As Single = L_HMIT_STANDARDBOX_HEIGHT)
+Private Sub P46InputBoxFullColumnLengthCol1(rep As reporter, Caption As String, value As String, Optional height As Single = L_HMIT_STANDARDBOX_HEIGHT)
   Call P46InputBoxFullColumnLength(rep, Caption, value, L_P46_COL_1_X + 1, height)
 End Sub
-Private Sub P46InputBoxFullColumnLengthCol2(rep As Reporter, Caption As String, value As String, Optional height As Single = L_HMIT_STANDARDBOX_HEIGHT)
+Private Sub P46InputBoxFullColumnLengthCol2(rep As reporter, Caption As String, value As String, Optional height As Single = L_HMIT_STANDARDBOX_HEIGHT)
   Call P46InputBoxFullColumnLength(rep, Caption, value, L_P46_COL_2_X + 1, height)
 End Sub
-Private Sub P46BackgroundBox(rep As Reporter, Title As String, xoffset As Long, width As Long, height As Double)
+Private Sub P46BackgroundBox(rep As reporter, Title As String, xoffset As Long, width As Long, height As Double)
   'Call RepOutCrLf(rep, "{x=" & xoffset & "}{FillRGB=15790320}{BOX=" & width & "," & height & ", F}{FillRGB=" & RGB(255, 255, 255) & "}")
   Call RepOutCrLf(rep, "{Arial=6,n}\n{x=" & xoffset & "}{BOX=" & width & "," & height & "}")
   Call RepOutCrLf(rep, "{Arial=6,n}\n")
   Call RepOutCrLf(rep, "{Arial=11,bn}{x=" & (xoffset + 1) & "}" & Title & "\n{Arial=6,n}\n{Arial=10,n}")
 End Sub
 
-Private Sub P46BackgroundBoxCol2(rep As Reporter, Title As String, height As Double)
+Private Sub P46BackgroundBoxCol2(rep As reporter, Title As String, height As Double)
   Call P46BackgroundBox(rep, Title, L_P46_COL_2_X, L_P46_BACKGROUND_COL_WIDTH, height)
 End Sub
-Private Sub P46BackgroundBoxCol1(rep As Reporter, Title As String, height As Double)
+Private Sub P46BackgroundBoxCol1(rep As reporter, Title As String, height As Double)
   Call P46BackgroundBox(rep, Title, L_P46_COL_1_X, L_P46_BACKGROUND_COL_WIDTH, height)
 End Sub
-Private Sub P464TickOut(rep As Reporter, xoffset As Long, caption1 As String, value1 As Boolean, caption2 As String, value2 As Boolean, caption3 As String, value3 As Boolean, caption4 As String, value4 As Boolean)
+Private Sub P464TickOut(rep As reporter, xoffset As Long, caption1 As String, value1 As Boolean, caption2 As String, value2 As Boolean, caption3 As String, value3 As Boolean, caption4 As String, value4 As Boolean)
   Call P462TickOut(rep, xoffset, caption1, value1, caption2, value2)
   Call P462TickOut(rep, xoffset, caption3, value3, caption4, value4)
 End Sub
-Private Sub P462TickOut(rep As Reporter, xoffset As Long, caption1 As String, value1 As Boolean, caption2 As String, value2 As Boolean)
+Private Sub P462TickOut(rep As reporter, xoffset As Long, caption1 As String, value1 As Boolean, caption2 As String, value2 As Boolean)
   Call rep.Out("{x=" & (xoffset + 16) & "}" & TickOut(value1))
   Call rep.Out("{x=" & (xoffset + 43) & "}" & TickOut(value2))
   Call P46Caption(rep, caption1 & "{x=" & (xoffset + 21) & "}" & caption2, xoffset + 1)
 End Sub
-Private Sub P46FuelTypeLine(rep As Reporter, Caption As String, fuelChar As String)
+Private Sub P46FuelTypeLine(rep As reporter, Caption As String, fuelChar As String)
   Call RepOutCrLf(rep, "{x=" & (L_P46_COL_1_X + 43) & "}" & " {Arial=10,b}" & fuelChar & "{Arial=10,n}" & HMITBullet(L_P46_COL_1_X + 1))
   Call P46CaptionCol1(rep, "  " & Caption)
 End Sub
 
-Public Function Report_P46CarBeforeApril2018(rep As Reporter, ee As Employee, dDateFrom As Date, dDateTo As Date) As Boolean
+Public Function Report_P46CarBeforeApril2018(rep As reporter, ee As Employee, dDateFrom As Date, dDateTo As Date) As Boolean
   Dim P46Cars As ObjectList
   Dim p46car As IBenefitClass
   Dim i As Long, ben As IBenefitClass
@@ -2137,11 +2143,11 @@ Report_P46Car_err:
   Resume
       
 End Function
-Public Function Report_P46Car(rep As Reporter, ee As Employee, dDateFrom As Date, dDateTo As Date) As Boolean
+Public Function Report_P46Car(rep As reporter, ee As Employee, dDateFrom As Date, dDateTo As Date) As Boolean
   Report_P46Car = Report_P46CarAfterApril2018(rep, ee, dDateFrom, dDateTo)
 End Function
 
-Public Function Report_P46CarAfterApril2018(rep As Reporter, ee As Employee, dDateFrom As Date, dDateTo As Date) As Boolean
+Public Function Report_P46CarAfterApril2018(rep As reporter, ee As Employee, dDateFrom As Date, dDateTo As Date) As Boolean
   Dim P46Cars As ObjectList
   Dim p46car As IBenefitClass
   Dim i As Long, ben As IBenefitClass
@@ -2627,7 +2633,7 @@ End Function
 'End Function
 
 
-Private Sub HMITSectionL(rep As Reporter, ee As Employee, BenArr() As BEN_CLASS)
+Private Sub HMITSectionL(rep As reporter, ee As Employee, BenArr() As BEN_CLASS)
   'same as HMITAssetsTransferredType but for value = 0 with Computer Related = true need to not include if effect of £500 deminimuns makes 0
   'came in 1999/2000
   Dim benefit As Variant, MadeGood As Variant, value As Variant, Description As String
@@ -2660,7 +2666,7 @@ Private Sub HMITSectionL(rep As Reporter, ee As Employee, BenArr() As BEN_CLASS)
   End If
   
 End Sub
-Private Sub HMITAssetsTransferredType(rep As Reporter, ee As Employee, BenArr() As BEN_CLASS, sSectionTitle As String, bAssetDescription As Boolean, Optional VALUE_ENUM As Long = ITEM_VALUE, Optional MADEGOOD_ENUM As Long = ITEM_MADEGOOD, Optional BENEFIT_ENUM As Long = ITEM_BENEFIT)
+Private Sub HMITAssetsTransferredType(rep As reporter, ee As Employee, BenArr() As BEN_CLASS, sSectionTitle As String, bAssetDescription As Boolean, Optional VALUE_ENUM As Long = ITEM_VALUE, Optional MADEGOOD_ENUM As Long = ITEM_MADEGOOD, Optional BENEFIT_ENUM As Long = ITEM_BENEFIT)
   Dim benefit As Variant, MadeGood As Variant, value As Variant, Description As String
   Dim sIRDesc As String, tempDesc As String
   
@@ -2674,7 +2680,7 @@ Private Sub HMITAssetsTransferredType(rep As Reporter, ee As Employee, BenArr() 
   
 End Sub
 
-Private Sub HMITAssetsTransferredTypeNIC(rep As Reporter, ee As Employee, BenArr() As BEN_CLASS, sSectionTitle As String, bAssetDescription As Boolean, Optional VALUE_ENUM As Long = ITEM_VALUE, Optional MADEGOOD_ENUM As Long = ITEM_MADEGOOD, Optional BENEFIT_ENUM As Long = ITEM_BENEFIT)
+Private Sub HMITAssetsTransferredTypeNIC(rep As reporter, ee As Employee, BenArr() As BEN_CLASS, sSectionTitle As String, bAssetDescription As Boolean, Optional VALUE_ENUM As Long = ITEM_VALUE, Optional MADEGOOD_ENUM As Long = ITEM_MADEGOOD, Optional BENEFIT_ENUM As Long = ITEM_BENEFIT)
   Dim benefit As Variant, MadeGood As Variant, value As Variant, Description As String
   Dim sIRDesc As String, tempDesc As String
     
@@ -2689,7 +2695,7 @@ Private Sub HMITAssetsTransferredTypeNIC(rep As Reporter, ee As Employee, BenArr
 End Sub
 
 
-Private Function HMITAssetsTransferredTypeOut(rep As Reporter, sBoxNumber As String, sSectionTitle As String, Description As String, value As Variant, MadeGood As Variant, benefit As Variant, bAssetDescription As Boolean)
+Private Function HMITAssetsTransferredTypeOut(rep As reporter, sBoxNumber As String, sSectionTitle As String, Description As String, value As Variant, MadeGood As Variant, benefit As Variant, bAssetDescription As Boolean)
   Description = HMITFieldTrim(Description, 25)
   
   rep.Out (IIf(bAssetDescription, OutLineBoxL(26, 22, 1.4, Description), "") & _
@@ -2702,7 +2708,7 @@ Private Function HMITAssetsTransferredTypeOut(rep As Reporter, sBoxNumber As Str
           LineText(sSectionTitle))
 End Function
 
-Private Function HMITAssetsTransferredTypeOutNIC(rep As Reporter, sBoxNumber As String, sSectionTitle As String, Description As String, value As Variant, MadeGood As Variant, benefit As Variant, bAssetDescription As Boolean, NIC As String)
+Private Function HMITAssetsTransferredTypeOutNIC(rep As reporter, sBoxNumber As String, sSectionTitle As String, Description As String, value As Variant, MadeGood As Variant, benefit As Variant, bAssetDescription As Boolean, NIC As String)
   Description = HMITFieldTrim(Description, 25)
   
   rep.Out (IIf(bAssetDescription, OutLineBoxL(26, 22, 1.4, Description), "") & _
@@ -2716,11 +2722,11 @@ Private Function HMITAssetsTransferredTypeOutNIC(rep As Reporter, sBoxNumber As 
           LineText(sSectionTitle))
 End Function
 
-Private Sub HMITColHeaders(rep As Reporter, sCol1Line1 As String, sCol1Line2 As String, sCol2Line1 As String, sCol2Line2 As String, sCol4Line1 As String, sCol4Line2 As String)
+Private Sub HMITColHeaders(rep As reporter, sCol1Line1 As String, sCol1Line2 As String, sCol2Line1 As String, sCol2Line2 As String, sCol4Line1 As String, sCol4Line2 As String)
   Call rep.Out(HMITColText(sCol1Line1, L_HMIT_COL_1) & HMITColText(sCol2Line1, L_HMIT_COL_2) & HMITColText(sCol4Line1, L_HMIT_COL_4) & vbCrLf & _
                HMITColText(sCol1Line2, L_HMIT_COL_1) & HMITColText(sCol2Line2, L_HMIT_COL_2) & HMITColText(sCol4Line2, L_HMIT_COL_4) & vbCrLf)
 End Sub
-Private Sub HMITVanType(rep As Reporter, ee As Employee, BenArr() As BEN_CLASS, sSectionTitle As String, Optional VALUE_ENUM As Long = ITEM_VALUE, Optional MADEGOOD_ENUM As Long = ITEM_MADEGOOD, Optional BENEFIT_ENUM As Long = ITEM_BENEFIT)
+Private Sub HMITVanType(rep As reporter, ee As Employee, BenArr() As BEN_CLASS, sSectionTitle As String, Optional VALUE_ENUM As Long = ITEM_VALUE, Optional MADEGOOD_ENUM As Long = ITEM_MADEGOOD, Optional BENEFIT_ENUM As Long = ITEM_BENEFIT)
   Dim benefit As Variant, MadeGood As Variant, value As Variant, Description As String
   
   Call SumBenefitFWNRPT(ee, Description, value, MadeGood, benefit, BenArr, VALUE_ENUM, MADEGOOD_ENUM, BENEFIT_ENUM)
@@ -2728,7 +2734,7 @@ Private Sub HMITVanType(rep As Reporter, ee As Employee, BenArr() As BEN_CLASS, 
                FillBox(L_HMIT_COL_3, 4, L_HMIT_STANDARDBOX_HEIGHT, p11d32.Rates.BenClassTo(BenArr(1), BCT_HMIT_BOX_NUMBER)) & LineText(sSectionTitle))
 End Sub
 
-Private Sub HMITVanTypeNIC(rep As Reporter, ee As Employee, BenArr() As BEN_CLASS, sSectionTitle As String, Optional VALUE_ENUM As Long = ITEM_VALUE, Optional MADEGOOD_ENUM As Long = ITEM_MADEGOOD, Optional BENEFIT_ENUM As Long = ITEM_BENEFIT, Optional BoxNumber As String = "")
+Private Sub HMITVanTypeNIC(rep As reporter, ee As Employee, BenArr() As BEN_CLASS, sSectionTitle As String, Optional VALUE_ENUM As Long = ITEM_VALUE, Optional MADEGOOD_ENUM As Long = ITEM_MADEGOOD, Optional BENEFIT_ENUM As Long = ITEM_BENEFIT, Optional BoxNumber As String = "")
   Dim benefit As Variant, MadeGood As Variant, value As Variant, Description As String
   
   If Len(BoxNumber) = 0 Then
@@ -2819,7 +2825,7 @@ Public Function EmployeeLetterMenuCaptions(ByVal elmc As EL_MENU_CAPTIONS) As St
 End Function
 
 
-Public Function EmployeeLetterCode(ByVal EMLC As EMPLOYEE_LETTER_CODE, ByVal EMLCT As EMPLOYEE_LETTER_CODE_TYPE, ByVal bIsEmail As Boolean, Optional ee As Employee = Nothing, Optional ByVal rep As Reporter) As String
+Public Function EmployeeLetterCode(ByVal EMLC As EMPLOYEE_LETTER_CODE, ByVal EMLCT As EMPLOYEE_LETTER_CODE_TYPE, ByVal bIsEmail As Boolean, Optional ee As Employee = Nothing, Optional ByVal rep As reporter) As String
   Dim ben As IBenefitClass, benEmployer As IBenefitClass
   Dim bEmployeeLetterCaption As Boolean
   On Error GoTo EmployeeLetterCode_ERR
@@ -2943,34 +2949,6 @@ Public Function EmployeeLetterCode(ByVal EMLC As EMPLOYEE_LETTER_CODE, ByVal EML
         Case Else
           Call ECASE("Unknown employee letter code type, " & EMLCT)
       End Select
-      
-'    Case ELC_DATE_PT_SUBMISSION_DEADLINE
-'      Select Case EMLCT
-'        Case ELCT_LETTER_FILE_CODES
-'          EmployeeLetterCode = "{PERSONAL_TAX_SUBMISSION_DEADLINE}"
-'        Case ELCT_MENU_CAPTION
-'          EmployeeLetterCode = "Personal tax submission deadline"
-'        Case ELCT_REPORT_CODE
-'          EmployeeLetterCode = Format$(p11d32.Rates.value(EmpLetPersonalTaxSubmissionDeadline), "Long Date")
-'        Case ELCT_MENU_PARENT
-'          EmployeeLetterCode = EmployeeLetterMenuCaptions(ELMC_DATES)
-'
-'        Case Else
-'          Call ECASE("Unknown employee letter code type, " & EMLCT)
-'      End Select
-'    Case ELC_DATE_PT_REVENUE_CALC_DEADLINE
-'      Select Case EMLCT
-'        Case ELCT_LETTER_FILE_CODES
-'          EmployeeLetterCode = "{PERSONAL_TAX_REVENUE_CALC_DEADLINE}"
-'        Case ELCT_MENU_CAPTION
-'          EmployeeLetterCode = "Personal tax IR will calculate deadline"
-'        Case ELCT_REPORT_CODE
-'          EmployeeLetterCode = Format$(p11d32.Rates.value(EmpLetPersonalTaxRevenueWillCalcDeadline), "Long Date")
-'        Case ELCT_MENU_PARENT
-'          EmployeeLetterCode = EmployeeLetterMenuCaptions(ELMC_DATES)
-'        Case Else
-'          Call ECASE("Unknown employee letter code type, " & EMLCT)
-'      End Select
     Case ELC_DATE_KEEP_DETAILS_UNTILL
       Select Case EMLCT
         Case ELCT_LETTER_FILE_CODES
@@ -3544,7 +3522,7 @@ End Function
 
 
 
-Public Function Report_MM_Submission(rep As Reporter, benEmployer As IBenefitClass)
+Public Function Report_MM_Submission(rep As reporter, benEmployer As IBenefitClass)
 
   On Error GoTo Report_MM_SUBMISSION_err
   Call xSet("Report_MM_SUBMISSION")
@@ -3630,7 +3608,7 @@ GetCO2DisplayFigure_Err:
 End Function
 
 Private Function GetApprovedZeroEmissionsMileage(CompanyCar As IBenefitClass) As String
-  On Error GoTo err_err
+  On Error GoTo err_ERR
   Call xSet("GetApprovedZeroEmissionsMileage")
   Dim value As String
     
@@ -3646,12 +3624,12 @@ Private Function GetApprovedZeroEmissionsMileage(CompanyCar As IBenefitClass) As
 
   GetApprovedZeroEmissionsMileage = value
   
-err_end:
+err_END:
   Call xReturn("GetApprovedZeroEmissionsMileage")
   Exit Function
 
-err_err:
-  Resume err_end
+err_ERR:
+  Resume err_END
 End Function
 
 
@@ -3677,7 +3655,7 @@ Public Sub QAManagementReports()
   Dim sFileName
   Set qs = New QString
 
-On Error GoTo err_err
+On Error GoTo err_ERR
 
   If (p11d32.CurrentEmployer Is Nothing) Then
     If p11d32.Employers.CountValid = 0 Then
@@ -3707,9 +3685,9 @@ On Error GoTo err_err
     End If
   End If
 
-err_end:
+err_END:
   Exit Sub
-err_err:
+err_ERR:
   Call ErrorMessage(ERR_ERROR, Err, "ManagementReportFilesPresent", "QA ManagementReport", Err.Description)
 End Sub
 Public Sub ReportsUserToTree(ByVal tvwReports As TreeView)
@@ -3877,7 +3855,7 @@ Public Function ReportPercentage(dDecimalPercentage As Double) As String
   ReportPercentage = s & "%"
 End Function
 
-Private Sub OPRAWorkingPaperValueValues(ByVal rep As Reporter, ByVal isOPRABenefit As Boolean, ByVal opraAmountForegone As Variant, ByVal valueNonOpra, ByVal value)
+Private Sub OPRAWorkingPaperValueValues(ByVal rep As reporter, ByVal isOPRABenefit As Boolean, ByVal opraAmountForegone As Variant, ByVal valueNonOpra, ByVal value)
 
    Call WKOut(rep, WK_BLANK_LINE)
   
@@ -3896,10 +3874,161 @@ Private Sub OPRAWorkingPaperValueValues(ByVal rep As Reporter, ByVal isOPRABenef
   Call WKOut(rep, WK_BLANK_LINE)
 
 End Sub
-Public Sub OPRAWorkingPaperValue(ByVal ben As IBenefitClass, ByVal rep As Reporter)
-  
+Public Sub OPRAWorkingPaperValue(ByVal ben As IBenefitClass, ByVal rep As reporter)
   Call OPRAWorkingPaperValueValues(rep, IsOpRABenefitClass(ben.BenefitClass), ben.value(ITEM_OPRA_AMOUNT_FOREGONE), ben.value(ITEM_VALUE_NON_OPRA), ben.value(ITEM_VALUE))
-  
-  
-
 End Sub
+Public Sub EmployeeLetterAddCodes(ByVal ce As codeEditor, ByVal exportFileNameEditor As Boolean)
+  Dim s As String, sParentName As String
+  Dim i As Long
+  Dim vbm As VBMenu
+  Dim vbmi As VBMenuItem
+  Dim slParentNames As StringList
+  
+  Set slParentNames = New StringList
+  
+  Set vbmi = ce.Menu.Add(S_ELMC_MASTER, "&" & S_ELMC_MASTER, "")
+  
+  For i = [_ELMC_FIRST_ITEM] To [_ELMC_LAST_ITEM]
+    
+     If exportFileNameEditor And i <> ELMC_EMPLOYER And i <> ELMC_EMPLOYEE And i <> ELMC_EMPLOYEE And i <> ELMC_DATES Then
+       GoTo NEXT_TOP_LEVEL_ITEM
+     End If
+    
+    s = EmployeeLetterMenuCaptions(i)
+    Call slParentNames.Add(s)
+    Call ce.Menu.Add(s, s, S_ELMC_MASTER)
+NEXT_TOP_LEVEL_ITEM:
+  Next
+  
+  For i = EMPLOYEE_LETTER_CODE.ELC_FIRST_ITEM To EMPLOYEE_LETTER_CODE.ELC_LAST_ITEM
+    If (exportFileNameEditor And i = EMPLOYEE_LETTER_CODE.ELC_ADDRESS) Then
+      GoTo NEXT_ITEM
+    End If
+    
+    sParentName = EmployeeLetterCode(i, ELCT_MENU_PARENT, False)
+    If (slParentNames.IsPresent(sParentName)) Then
+      s = EmployeeLetterCode(i, ELCT_MENU_CAPTION, False)
+      Set vbmi = ce.Menu.Add(s, s, EmployeeLetterCode(i, ELCT_MENU_PARENT, False))
+      s = EmployeeLetterCode(i, ELCT_LETTER_FILE_CODES, False)
+      Call ce.AddCode(s)
+      vbmi.Tag = i
+    End If
+NEXT_ITEM:
+  Next
+End Sub
+Public Sub Report_P11Db_Reconciliation(rep As reporter, ey As Employer)
+  Dim benEY As IBenefitClass
+  Dim vTotalBenfitsExClass1 As Variant
+  Dim vTotalBenfitsClass1 As Variant
+  
+  Const S_SUB_ITEM_MARKER As String = " - "
+  
+  
+On Error GoTo err_ERR
+    
+  Set benEY = ey
+  Call benEY.Calculate
+  
+  Call rep.Out("{Arial=12,bi}" & S_P11D_B & " reconciliation - " & p11d32.Rates.value(TaxFormYear) & ", Employer: " & ey.Name & vbCrLf)
+  
+'section p11d benfits
+  Call WKOut(rep, WK_SECTION_BREAK)
+  
+  Call P11Db_ReconciliationSubHeading(rep, "Total P11D benefits reported")
+  
+  Call WKTblColXOffsets(L_WK_OTHER_TABLE_COL1, 12, L_WK_OTHER_TABLE_COL4)
+  
+  Call WKTblColFormats("ib", "ib", "irb")
+  Call WKTableHeadings(rep, "P11D box", "Class 1A NIC benefits:", "£")
+  Call WKTblColFormats("n", "n", "rn")
+  
+  Dim HMITSection As HMIT_SECTIONS
+  
+  
+  vTotalBenfitsExClass1 = 0
+  For HMITSection = HMIT_SECTIONS.HMIT_FIRST_ITEM To HMIT_SECTIONS.HMIT_LAST_ITEM
+    If (HMITSection <> HMIT_N) Then
+      vTotalBenfitsExClass1 = vTotalBenfitsExClass1 + P11Db_ReconciliationTableLineP11DBox(rep, benEY, HMITSection)
+    End If
+  Next
+  
+  Call WKOut(rep, WK_ITEM_Total, "", vTotalBenfitsExClass1, , False)
+  
+  Call rep.Out(vbCrLf)
+  Call WKTblColFormats("n", "ib", "n")
+  Call WKTableHeadings(rep, "", "Less class 1 NIC benefits:", "")
+  
+  Call WKTblColFormats("n", "n", "rn")
+  
+  vTotalBenfitsClass1 = P11Db_ReconciliationTableLineP11DBox(rep, benEY, HMIT_N, True)
+  
+  Call WKOut(rep, WK_ITEM_Total, "", vTotalBenfitsExClass1 - vTotalBenfitsClass1, , False)
+  
+  Call WKOut(rep, WK_SECTION_BREAK)
+  
+  
+  
+'section p11db
+  Call P11Db_ReconciliationSubHeading(rep, S_P11D_B)
+  
+  Call WKTblColFormats("nib", "nib", "nirb")
+  Call WKTableHeadings(rep, S_P11D_B & "~box", "Caption", "£")
+  Call WKTblColFormats("n", "n", "rn")
+  Call WKTableRow(rep, "A", "Total benefits from P11Ds", FormatWNNoCurrency(benEY.value(employer_TotalBenefitsPotentiallySubjectToClass1A)))
+  Call WKTableBlankRow(rep)
+  Call WKTableRow(rep, "B", "Amounts not included in P11Ds", "")
+  Call WKTableBlankRow(rep)
+  Call WKTableRow(rep, "", S_SUB_ITEM_MARKER & "Add formally payrolled benefits", FormatWNNoCurrency(0))
+  Call WKTableRow(rep, "", S_SUB_ITEM_MARKER & "Less payrolled benefits for exmployees not subject to UK NIC", FormatWNNoCurrency(1, True))
+  Call WKTableRow(rep, "", S_SUB_ITEM_MARKER & "Add Class 1A NIC due on termination payments", FormatWNNoCurrency(15))
+  Call WKTableRow(rep, "", S_SUB_ITEM_MARKER & "Add Class 1A NIC due on sporting awards", FormatWNNoCurrency(10))
+  'addd user defined entries
+  Call WKTableBlankRow(rep)
+  Call WKTableRow(rep, "C", "Less amounts on which Class 1A NIC not due ", "")
+  Call WKTableBlankRow(rep)
+  Call WKTableRow(rep, "", S_SUB_ITEM_MARKER & "Employees not subject to NIC for the full tax year", FormatWNNoCurrency(10, True))
+  Call WKTableRow(rep, "", S_SUB_ITEM_MARKER & "Employees not subject to NIC for part of the tax year", FormatWNNoCurrency(10, True))
+  'addd user defined entries
+  
+  Call WKTableBlankRow(rep)
+  Call WKTableRow(rep, "D", "Total Amounts subject to Class 1A NIC", FormatWNNoCurrency(benEY.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A)))
+  Call WKTableBlankRow(rep)
+  Call WKTableRow(rep, "E", "Multilpy by Class 1A NIC rate", "x " & Report_P11db_NIC_Rate_Formatted())
+  Call WKTableBlankRow(rep)
+  Call WKTableRow(rep, "F", "Class 1A NIC payable", FormatWNNoCurrency(benEY.value(ITEM_NIC_CLASS1A_BENEFIT)))
+  Call WKOut(rep, WK_SECTION_BREAK)
+  'Call WKTableBlankRow(rep)
+    
+err_END:
+  Exit Sub
+err_ERR:
+  Call ErrorMessage(ERR_ERROR, Err, "P11DbReconciliation", "P11DbReconciliation", "Error printing the P11db reconciliation")
+  Resume err_END
+End Sub
+Private Sub P11Db_ReconciliationSubHeading(rep As reporter, subHeading As String)
+  Call WKTblColXOffsets(0)
+  Call WKTblColFormats("lb")
+  Call WKTableHeadings(rep, subHeading)
+  
+  Call WKTblColXOffsets(L_WK_OTHER_TABLE_COL1, 12, L_WK_OTHER_TABLE_COL4)
+End Sub
+
+Function P11Db_ReconciliationTableLineP11DBox(rep As reporter, benEY As IBenefitClass, HMITSection As HMIT_SECTIONS, Optional ByVal negate As Boolean = False) As Variant
+
+  Dim boxString As String
+  Dim boxName As String
+  Dim boxValue As String
+  Dim eeItem As EmployeeItems
+  
+  eeItem = p11d32.Rates.HMITSectionToValue(HMITSection, HMIT_SECTION_EMPLOYER_BENEFIT_ITEM)
+  
+  
+  boxString = p11d32.Rates.HMITSectionToValue(HMITSection, HMIT_SECTION_BOX_LETTER)
+  boxName = p11d32.Rates.HMITSectionToValue(HMITSection, HMIT_SECTION_DESCRIPTION)
+  
+  P11Db_ReconciliationTableLineP11DBox = benEY.value(eeItem)
+  boxValue = FormatWNNoCurrency(benEY.value(eeItem), negate)
+  Call WKTableRow(rep, boxString, boxName, boxValue)
+  
+End Function
+

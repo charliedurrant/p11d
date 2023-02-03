@@ -1,7 +1,5 @@
 VERSION 5.00
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Object = "{770120E1-171A-436F-A3E0-4D51C1DCE486}#1.0#0"; "atc2stat.ocx"
-Object = "{D08C90A4-2337-4BE1-8137-EB1A093571A4}#1.0#0"; "atc2dmenu.ocx"
 Begin VB.Form F_EmployeeLetter 
    Caption         =   "Employee Letter"
    ClientHeight    =   8355
@@ -12,17 +10,21 @@ Begin VB.Form F_EmployeeLetter
    ScaleHeight     =   8355
    ScaleWidth      =   7275
    StartUpPosition =   3  'Windows Default
-   Begin atc2dmenu.DMenu dmenu 
-      Left            =   1200
-      Top             =   1230
-      _ExtentX        =   847
-      _ExtentY        =   847
+   Begin P11D2022.CodeEditor ce 
+      Height          =   7980
+      Left            =   0
+      TabIndex        =   1
+      Tag             =   "EQUALISE"
+      Top             =   45
+      Width           =   7260
+      _extentx        =   4471
+      _extenty        =   3201
    End
    Begin atc2stat.TCSStatus sts 
       Align           =   2  'Align Bottom
       Height          =   345
       Left            =   0
-      TabIndex        =   1
+      TabIndex        =   0
       Top             =   8010
       Width           =   7275
       _ExtentX        =   12832
@@ -30,31 +32,6 @@ Begin VB.Form F_EmployeeLetter
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Arial"
          Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-   End
-   Begin RichTextLib.RichTextBox rtEmpLet 
-      Height          =   7980
-      Left            =   0
-      TabIndex        =   0
-      Tag             =   "EQUALISE"
-      Top             =   45
-      Width           =   7260
-      _ExtentX        =   12806
-      _ExtentY        =   14076
-      _Version        =   393217
-      BackColor       =   12648447
-      Enabled         =   -1  'True
-      ScrollBars      =   3
-      RightMargin     =   65535
-      TextRTF         =   $"F_EmpLet.frx":0000
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Arial"
-         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -114,172 +91,42 @@ Private Type BLOCK_DEL
   SelLength As Long
 End Type
 
-Private Enum LETTER_MODE
-  LM_OPENFILE = 1
-  LM_OPENTEXT
-    End Enum
-
 Private Enum SEL_COLOR_SET
   SCS_BLUE
   SCS_NORMAL
 End Enum
 
-Private BD As BLOCK_DEL
+Private Enum LETTER_MODE
+  LM_OPENFILE = 1
+  LM_OPENTEXT
+End Enum
+
 Private Panel As TCSPANEL
 Private mCRS As clsFormResize
 Private m_EmployeeLetterFileNumber As Long
-Private m_dirty As Boolean
 Private mb_ReadOnly As Boolean
 Private mb_Untitled As Boolean
 Private m_vbm As VBMenu
 Private m_FileType As FILE_TYPES
 
-
-
-Private Sub RecordKeyDown(KeyCode As Integer, Shift As Integer)
-
-  On Error GoTo RecordKeyDown_ERR
-  
-  Call xSet("RecordKeyDown")
-     
-  BD.LineTextCurrent = rtEmpLet.Text
-  BD.SelLength = rtEmpLet.SelLength
-  
-  If (Shift And vbShiftMask) Then
-    If Not BD.InShift Then
-      BD.InShift = True
-      BD.StartSelPos = rtEmpLet.SelStart
-    End If
-  Else
-    BD.InShift = False
-    BD.StartSelPos = -1
-  End If
-  If KeyCode = vbKeyDelete Or KeyCode = vbKeyBack Then
-    BD.EraseKeyPressed = True
-  Else
-    BD.EraseKeyPressed = False
-  End If
-  
-RecordKeyDown_END:
-  Call xReturn("RecordKeyDown")
-  Exit Sub
-RecordKeyDown_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "RecordKeyDown", "Record Key Down", "Error recording the keydown in the employee letter.")
-  Resume RecordKeyDown_END
-  
-End Sub
-Private Function InsideBrace(lStartBrace As Long, lEndBrace As Long, sTextToSearch As String, lStartPos As Long) As Boolean
-  Dim l As Long, m As Long, n As Long, o As Long
-  
-  On Error GoTo InsideBrace_ERR
-  
-  Call xSet("InsideBrace")
-  
-  lStartBrace = 0
-  lEndBrace = 0
-  
-  If Len(sTextToSearch) Then
-    l = InStr(lStartPos, sTextToSearch, "}", vbTextCompare)
-    If l > 0 Then
-      m = InStr(lStartPos, sTextToSearch, "{", vbTextCompare)
-      If m = 0 Or m > l Then
-        n = InStrRev(sTextToSearch, "{", lStartPos, vbTextCompare)
-        If n > 0 Then
-          o = InStrRev(sTextToSearch, "}", lStartPos - 1, vbTextCompare)
-          If (o = 0) Or o > 0 And o < n Then
-            lStartBrace = n
-            lEndBrace = l
-            InsideBrace = True
-          End If
-        End If
-      End If
-    Else
-      lStartBrace = 0
-      lEndBrace = 0
-    End If
-  End If
-
-InsideBrace_END:
-  Call xReturn("InsideBrace")
-  Exit Function
-InsideBrace_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "InsideBrace", "Inside Brace", "Error determining whether the caret is inside a set of braces.")
-  Resume InsideBrace_END
-      
-      
-End Function
-Private Sub SelCodes(KeyCode As Integer, CA As CURSOR_ACTION)
-  Dim lStartBrace As Long, lEndBrace As Long
-  
-  On Error GoTo SelCodes_ERR
-  
-  Call xSet("SelCodes")
-  
-  Select Case CA
-    Case CA_NONE
-    Case CA_MOVE_RIGHT
-      If InsideBrace(lStartBrace, lEndBrace, BD.LineTextCurrent, rtEmpLet.SelStart + 1 + Abs(BD.EraseKeyPressed)) Then
-        If BD.EraseKeyPressed Then
-          rtEmpLet.SelStart = lStartBrace - 1
-          rtEmpLet.SelLength = lEndBrace - lStartBrace
-          rtEmpLet.SelText = ""
-        Else
-          rtEmpLet.SelStart = lEndBrace
-        End If
-      End If
-    Case CA_MOVE_LEFT
-      If InsideBrace(lStartBrace, lEndBrace, BD.LineTextCurrent, rtEmpLet.SelStart + 1) Then
-          If BD.EraseKeyPressed Then
-            rtEmpLet.SelStart = lStartBrace - 1
-            rtEmpLet.SelLength = lEndBrace - lStartBrace
-            rtEmpLet.SelText = ""
-          Else
-            rtEmpLet.SelStart = lStartBrace - 1
-          End If
-      End If
-    Case CA_SELECT_RIGHT
-      If InsideBrace(lStartBrace, lEndBrace, BD.LineTextCurrent, rtEmpLet.SelStart + 1 + rtEmpLet.SelLength) Then
-        Select Case KeyCode
-          Case vbKeyLeft, vbKeyUp
-            rtEmpLet.SelLength = (lStartBrace - 1) - rtEmpLet.SelStart
-          Case vbKeyRight, vbKeyDown
-            rtEmpLet.SelLength = lEndBrace - rtEmpLet.SelStart
-        End Select
-      End If
-    Case CA_SELECT_LEFT
-      If InsideBrace(lStartBrace, lEndBrace, BD.LineTextCurrent, rtEmpLet.SelStart + 1) Then
-        Select Case KeyCode
-          Case vbKeyLeft, vbKeyUp
-              rtEmpLet.SelStart = lStartBrace - 1
-              rtEmpLet.SelLength = BD.StartSelPos - (lStartBrace - 1)
-              BD.InShift = False
-          Case vbKeyRight, vbKeyDown
-              rtEmpLet.SelStart = lEndBrace - 1
-              rtEmpLet.SelLength = 0
-        End Select
-      End If
-  End Select
-
-SelCodes_END:
-  Call xReturn("SelCodes")
-  Exit Sub
-SelCodes_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "SelCodes", "Sel Codes", "Error selecting an employee letter control code.")
-  Resume SelCodes_END
-  
-End Sub
-
-Private Sub dmenu_MenuClick(ByVal vbm As atc2DMenu.VBMenu, ByVal vbmi As atc2DMenu.VBMenuItem)
+Private Sub ce_MenuClick(ByVal vbm As atc2dmenu.VBMenu, ByVal vbmi As atc2dmenu.VBMenuItem)
   Call ControlCodeClick(vbmi.Tag)
 End Sub
+
+Private Sub dmenu_MenuClick(ByVal vbm As atc2dmenu.VBMenu, ByVal vbmi As atc2dmenu.VBMenuItem)
+  Call ControlCodeClick(vbmi.Tag)
+End Sub
+
 Private Sub Form_Load()
   Set Panel = sts.AddPanel(100, , , "PanelEmpLet")
-  rtEmpLet.Font.size = p11d32.ReportPrint.EmployeeLetterFontSize
-  rtEmpLet.Font.Name = p11d32.ReportPrint.EmployeeLetterFontName
+   
+  ce.Font.size = p11d32.ReportPrint.EmployeeLetterFontSize
+  ce.Font.Name = p11d32.ReportPrint.EmployeeLetterFontName
   Set mCRS = New clsFormResize
   Call mCRS.InitResize(Me, 9045, 7440)
   Call LoadControlCodes
   Call LoadLastLetter
+  
 End Sub
 
 Public Function IsBackUpLetterFile(ByVal sPathAndFile As String) As Boolean
@@ -287,7 +134,7 @@ Public Function IsBackUpLetterFile(ByVal sPathAndFile As String) As Boolean
     
   Call xSet("IsBackUpLetterFile")
   'IsBackUpLetterFile = StrComp(sPathAndFile, p11d32.EmployeeLetterPath & p11d32.LetterFile & S_EMPLOYEE_LETTER_BACKUP_FILE_EXTENSION) = 0
-  IsBackUpLetterFile = StrComp(sPathAndFile, p11d32.WorkingDirectory & S_USERDIR_ULETTERS & p11d32.LetterFile & S_EMPLOYEE_LETTER_BACKUP_FILE_EXTENSION) = 0
+  IsBackUpLetterFile = StrComp(sPathAndFile, p11d32.workingDirectory & S_USERDIR_ULETTERS & p11d32.LetterFile & S_EMPLOYEE_LETTER_BACKUP_FILE_EXTENSION) = 0
     
 IsBackUpLetterFile_END:
   Call xReturn("IsBackUpLetterFile")
@@ -296,7 +143,6 @@ IsBackUpLetterFile_ERR:
   Call ErrorMessage(ERR_ERROR, Err, "IsBackUpLetterFile", "Is Master File", "Error determining if the file " & sPathAndFile & " is a backup master letter file.")
   Resume IsBackUpLetterFile_END
 End Function
-
 Private Sub LoadControlCodes()
   
   Dim s As String
@@ -308,24 +154,11 @@ Private Sub LoadControlCodes()
 On Error GoTo LoadControlCodes_ERR
   
   Call xSet("LoadControlCodes")
-  
-  Set m_vbm = dmenu.Add("Menu")
-  Set vbmi = m_vbm.Add(S_ELMC_MASTER, "&" & S_ELMC_MASTER, "")
-  
-  
-  
-  For i = [_ELMC_FIRST_ITEM] To [_ELMC_LAST_ITEM]
-    s = EmployeeLetterMenuCaptions(i)
-    Call m_vbm.Add(s, s, S_ELMC_MASTER)
-  Next
-  
-  For i = EMPLOYEE_LETTER_CODE.ELC_FIRST_ITEM To EMPLOYEE_LETTER_CODE.ELC_LAST_ITEM
-    s = EmployeeLetterCode(i, ELCT_MENU_CAPTION, False)
-    Set vbmi = m_vbm.Add(s, s, EmployeeLetterCode(i, ELCT_MENU_PARENT, False))
-    vbmi.Tag = i
-  Next
-  dmenu.hwnd = Me.hwnd
-  
+    
+ 
+  Call EmployeeLetterAddCodes(Me.ce, False)
+ 
+  ce.FormHWnd = Me.hwnd
   
 LoadControlCodes_END:
   Call xReturn("LoadControlCodes")
@@ -346,10 +179,6 @@ Public Function LoadLastLetter() As Long
     'check for letters directory
     If Not FileExists(p11d32.ReportPrint.SystemLettersPath, True) Then Call Err.Raise(ERR_DIRECTORY_NOT_EXIST, "LoadLastLetter", "The directory " & p11d32.ReportPrint.SystemLettersPath & " does not exist, no employee letters to load.")
     If MsgBox("The last employee letter file does not exist." & vbCrLf & "File = " & p11d32.ReportPrint.EmployeeLetterPathAndFile & vbCrLf & "Do you wish to load the original file?", vbYesNo, "LoadLastLetter") = vbYes Then
-      'check th original file
-      'p11d32.EmployeeLetterPath = p11d32.LettersDirectoryMaster
-      'If Not FileExists(p11d32.UserLettersDirectoryMaster, True) Then Call Err.Raise(ERR_DIRECTORY_NOT_EXIST, "LoadLastLetter", "The directory " & p11d32.UserEmployeeLetterPath & " does not exist, no user employee letters to load.")
-      ' p11d32.UserEmployeeLetterPath = p11d32.UserLettersDirectoryMaster 'EK separation of user and application letters
       p11d32.ReportPrint.EmployeeLetterPath = p11d32.ReportPrint.SystemLettersPath
       p11d32.ReportPrint.EmployeeLetterFile = p11d32.LetterFile & S_EMPLOYEE_LETTER_FILE_EXTENSION
       If Not FileExists(p11d32.ReportPrint.EmployeeLetterPathAndFile) Then
@@ -418,11 +247,12 @@ Private Function OpenLetterFile(bFileCaption As Boolean, ByVal sPathAndFile As S
   Call FileExistsAndNotOpenExclusive(sPathAndFile)
   
   If lm = LM_OPENTEXT Then
-    rtEmpLet.Text = GetFileText(sPathAndFile)
-    Call ColorCodes
+    ce.Text = GetFileText(sPathAndFile)
+
+    
+    'Call ColorCodes
     Call SetFileType
-    Call SetSave   'IIf(Not CBoolean(m_FileType), True, False))
-    'Call SetSave(True)
+    Call SetSave
   End If
   
   If m_EmployeeLetterFileNumber > 0 Then Call Err.Raise(ERR_FILE_OPEN, "OpenLetterFile", "The file handle is non zero.")
@@ -460,8 +290,10 @@ Private Function OpenLetterFile(bFileCaption As Boolean, ByVal sPathAndFile As S
     mb_Untitled = True
   End If
   OpenLetterFile = True
+    
   
 OpenLetterFile_END:
+  ce.Dirty = False
   Call xReturn("OpenLetterFile")
   Exit Function
 OpenLetterFile_ERR:
@@ -492,22 +324,22 @@ Private Function ChangeFile(ByVal bFileCaption As Boolean, ByVal sNewPathAndFile
   End If
    
   
-  If m_dirty And Not p11d32.ReportPrint.IsMasterLetterFile(p11d32.ReportPrint.EmployeeLetterPathAndFile) Then 'JN
-        If MsgBox(sMsg, vbQuestion Or vbOKCancel, "Change File") = vbOK Then
+  If ce.Dirty And Not p11d32.ReportPrint.IsMasterLetterFile(p11d32.ReportPrint.EmployeeLetterPathAndFile) Then 'JN
+      If MsgBox(sMsg, vbQuestion Or vbOKCancel, "Change File") = vbOK Then
       Close m_EmployeeLetterFileNumber
       ChangeFile = True
-      m_dirty = False
       Panel.Caption = ""
-      rtEmpLet.Text = ""
+      ce.Text = ""
+      ce.Dirty = False
     Else
       ChangeFile = False
       GoTo ChangeFile_END 'JN
     End If
   Else
     Close m_EmployeeLetterFileNumber
-    rtEmpLet.Text = ""
+    ce.Text = ""
     Panel.Caption = ""
-    m_dirty = False
+    ce.Dirty = False
     ChangeFile = True
   End If
  
@@ -560,102 +392,16 @@ TRY_AGAIN:
 FileOpen_END:
   Call xReturn("FileOpen")
   End Sub
-Private Sub ColorCodes()
-  Dim i As Long
-  
-  On Error GoTo ColorCodes_ERR
-  
-  Call xSet("ColorCodes")
-  
-  For i = EMPLOYEE_LETTER_CODE.ELC_FIRST_ITEM To EMPLOYEE_LETTER_CODE.ELC_LAST_ITEM
-    Call ColorCode(EmployeeLetterCode(i, ELCT_LETTER_FILE_CODES, False))
-  Next
-  rtEmpLet.SelStart = 0
-  Call SetSelTextProperties(SCS_NORMAL)
-  
-ColorCodes_END:
-  Call xReturn("ColorCodes")
-  Exit Sub
-ColorCodes_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "ColorCodes", "Color Codes", "Error setting the color of the control codes in the current employee letter file.")
-  Resume ColorCodes_END
-End Sub
-Private Sub ColorCode(sCode As String, Optional bFromMenu As Boolean = False)
-  Dim l As Long
-  
-  On Error GoTo ColorCode_ERR
-  
-  Call xSet("ColorCode")
-  
-  
-  If bFromMenu Then
-    rtEmpLet.SelStart = rtEmpLet.SelStart - Len(sCode)
-    rtEmpLet.SelLength = Len(sCode)
-    Call SetSelTextProperties(SCS_BLUE)
-    rtEmpLet.SelStart = rtEmpLet.SelStart + rtEmpLet.SelLength
-  Else
-    'bug with RT does not do ignore case for loop twice?
-    Call ColorCodeEx(sCode)
-    Call ColorCodeEx(LCase(sCode))
-  End If
-    
-  
-ColorCode_END:
-  Call SetSelTextProperties(SCS_NORMAL)
-  Call xReturn("ColorCode")
-  Exit Sub
-ColorCode_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "ColorCode", "Color Code", "Error setting the color of the code " & sCode & " in the employee letter file.")
-  Resume ColorCode_END
-  
-  
-End Sub
-Private Sub ColorCodeEx(sCode As String)
-  Dim l As Long
-  
-  On Error GoTo ColorCodeEx_ERR
-  
-  Call xSet("ColorCodeEx")
-  Do
-      l = rtEmpLet.Find(sCode, l, , rtfWholeWord)
-    If l <> -1 Then
-      rtEmpLet.SelStart = l
-      rtEmpLet.SelLength = Len(sCode)
-      Call SetSelTextProperties(SCS_BLUE)
-      rtEmpLet.SelStart = rtEmpLet.SelStart + Len(sCode)
-      rtEmpLet.SelLength = 0
-      Call SetSelTextProperties(SCS_NORMAL)
-      l = l + 1
-    Else
-      Exit Do
-    End If
-    Loop While True
-    
-  
-ColorCodeEx_END:
-  Call SetSelTextProperties(SCS_NORMAL)
-  Call xReturn("ColorCodeEx")
-  Exit Sub
-ColorCodeEx_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "ColorCodeEx", "Color Code Ex", "Error setting the color of the code " & sCode & " in the employee letter file.")
-  Resume ColorCodeEx_END
-End Sub
-
 Private Sub Form_Unload(Cancel As Integer)
   Set mCRS = Nothing
   Set F_EmployeeLetter = Nothing
 End Sub
-Private Sub ControlCodeClick(Index As Long)
+Private Function ControlCodeClick(Index As Long) As String
   Dim sCode As String
   
   sCode = EmployeeLetterCode(Index, ELCT_LETTER_FILE_CODES, False)
-  rtEmpLet.SelText = sCode
-  Call ColorCode(sCode, True)
-  m_dirty = True
-  
-End Sub
-
-
+  ce.InsertCodeIntoText (sCode)
+End Function
 Private Sub mnuFileExit_Click()
   Unload Me
 End Sub
@@ -735,9 +481,9 @@ Private Function FileSave(ByVal sPathAndFile As String, bNewFile As Boolean) As 
   
   If IsFileOpen(sPathAndFile, True) Then Call Err.Raise(ERR_FILE_OPEN_EXCLUSIVE, "FileSave", "The file " & sPathAndFile & " is opened exclusively.")
   
-  Call TextFileSave(sPathAndFile, rtEmpLet.Text)
+  Call TextFileSave(sPathAndFile, ce.Text)
   
-  m_dirty = False
+  ce.Dirty = False
   
   FileSave = True
   
@@ -773,7 +519,7 @@ Private Function FileSaveAs() As Boolean
     
 TRY_AGAIN:
   If b_HasFileNumber Then Call CloseFile
-    sFIle = FileSaveAsDlg("Save As Letter File", "Employee letters (*" & S_EMPLOYEE_LETTER_FILE_EXTENSION & ")|*" & S_EMPLOYEE_LETTER_FILE_EXTENSION, p11d32.ReportPrint.UserLettersPath)
+    sFIle = FileSaveAsDlg("Save As Letter File", "Employee letters (*" & S_EMPLOYEE_LETTER_FILE_EXTENSION & ")|*" & S_EMPLOYEE_LETTER_FILE_EXTENSION, p11d32.ReportPrint.UserLettersPathActual)
     If Len(sFIle) = 0 Then
     Call OpenLetterFile(Not mb_Untitled, s_OldFileName, , , LM_OPENFILE)
     GoTo FileSaveAs_END
@@ -808,107 +554,10 @@ FileSaveAs_ERR:
   Resume FileSaveAs_END
   Resume
 End Function
-Private Function GetCursorAction(KeyCode As Integer) As CURSOR_ACTION
-  On Error GoTo GetCursorAction_ERR
-  
-  Call xSet("GetCursorAction")
-
-  If BD.EraseKeyPressed And BD.SelLength > 0 Then
-    GetCursorAction = CA_NONE
-    Exit Function
-  End If
-  
-  If Not BD.InShift Then
-    Select Case KeyCode
-      Case vbKeyLeft, vbKeyUp, vbKeyBack
-        GetCursorAction = CA_MOVE_LEFT
-      Case vbKeyRight, vbKeyDown, vbKeyDelete
-        GetCursorAction = CA_MOVE_RIGHT
-    End Select
-  Else
-    Select Case rtEmpLet.SelStart
-      Case BD.StartSelPos
-        If rtEmpLet.SelLength > 0 Then
-          GetCursorAction = CA_SELECT_RIGHT
-        End If
-      Case Is < BD.StartSelPos
-        GetCursorAction = CA_SELECT_LEFT
-    End Select
-  End If
-  
-GetCursorAction_END:
-  Call xReturn("GetCursorAction")
-  Exit Function
-GetCursorAction_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "Get Cursor Action", "Get Cursor Action", "Error getting the cursor action")
-  Resume GetCursorAction_END
-End Function
-Private Sub SetSelTextProperties(SCS As SEL_COLOR_SET)
-  On Error GoTo SetSelTextProperties_ERR
-  
-  Call xSet("SetSelTextProperties")
-
-  Select Case SCS
-    Case SCS_BLUE
-      rtEmpLet.SelItalic = True
-      rtEmpLet.SelBold = True
-      rtEmpLet.SelColor = vbBlue
-    Case SCS_NORMAL
-      rtEmpLet.SelItalic = False
-      rtEmpLet.SelBold = False
-      rtEmpLet.SelColor = vbBlack
-  End Select
-  
-SetSelTextProperties_END:
-  Call xReturn("SetSelTextProperties")
-  Exit Sub
-SetSelTextProperties_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "SetSelTextProperties", "Set SelText Properties", "Error setting the seltext font properties.")
-  Resume SetSelTextProperties_END
-End Sub
-
-Private Sub rtEmpLet_KeyDown(KeyCode As Integer, Shift As Integer)
-  m_dirty = True
-  If KeyCode = 221 Or KeyCode = 219 Then '{}
-    KeyCode = 0
-  End If
-  Call RecordKeyDown(KeyCode, Shift)
-  If rtEmpLet.SelLength = 0 Then Call SetSelTextProperties(SCS_NORMAL)
-End Sub
-
-Private Sub rtEmpLet_KeyUp(KeyCode As Integer, Shift As Integer)
- 
- Call SelCodes(KeyCode, GetCursorAction(KeyCode))
-End Sub
-
-Private Sub rtEmpLet_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
-  
-  If Button = vbRightButton Then
-    Call m_vbm.Popup(S_ELMC_MASTER, X, Y)
-  Else
-    Call RecordKeyDown(-1, 0)
-  End If
-End Sub
-
-Private Sub rtEmpLet_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
-  Dim lStartBrace As Long
-  
-  If rtEmpLet.SelLength = 0 Then
-    Call SelCodes(-1, CA_MOVE_LEFT)
-  Else
-    If InsideBrace(lStartBrace, 0, BD.LineTextCurrent, rtEmpLet.SelStart + 1) Then
-      rtEmpLet.SelLength = 0
-      rtEmpLet.SelStart = lStartBrace - 1
-    ElseIf InsideBrace(lStartBrace, 0, BD.LineTextCurrent, (rtEmpLet.SelStart + rtEmpLet.SelLength + 1)) Then
-      rtEmpLet.SelLength = 0
-      rtEmpLet.SelStart = lStartBrace - 1
-    End If
-  End If
-End Sub
 Private Sub SetFileType()
   On Error GoTo SetFileType_Err
   Call xSet("SetFileType")
-  If StrComp(p11d32.ReportPrint.EmployeeLetterPath, p11d32.ReportPrint.UserLettersPath, vbTextCompare) = 0 Then
+  If StrComp(p11d32.ReportPrint.EmployeeLetterPath, p11d32.ReportPrint.UserLettersPathActual, vbTextCompare) = 0 Then
     m_FileType = FIT_USER_DEFINED
   Else
     m_FileType = FIT_SYSTEM_DEFINED
@@ -924,4 +573,3 @@ SetFileType_Err:
   Call ErrorMessage(ERR_ERROR, Err, "SetFileType", "Error in SetFileType", "Undefined error.")
   Resume SetFileType_End
 End Sub
-

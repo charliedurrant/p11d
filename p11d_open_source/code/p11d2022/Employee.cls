@@ -85,6 +85,24 @@ Public Enum EmployeeItems
   ee_RelevantDaysForDailySharedVanCalc_db
   ee_NIInvalid
   ee_NIC_AdjustmentDeduct
+  
+  ee_BOX_A
+  [ee_BOX_FIRST_ITEM] = ee_BOX_A
+  ee_BOX_B
+  ee_BOX_C
+  ee_BOX_D
+  ee_BOX_E
+  ee_BOX_F
+  ee_BOX_G
+  ee_BOX_H
+  ee_BOX_I
+  ee_BOX_J
+  ee_BOX_K
+  ee_BOX_L
+  ee_BOX_M
+  ee_BOX_N
+  [ee_BOX_LAST_ITEM] = ee_BOX_N
+  
   ee_TotalBenefitsPotentiallySubjectToClass1A
   ee_LASTITEM = ee_TotalBenefitsPotentiallySubjectToClass1A
 
@@ -855,7 +873,6 @@ Private Function Employee_CalculateEx(ByVal benEmployee As IBenefitClass, ByVal 
     benEmployee.value(ITEM_BENEFIT) = benEmployee.value(ITEM_BENEFIT) + Employee_CalculateEx
     benEmployee.value(ITEM_VALUE) = benEmployee.value(ITEM_VALUE) + vValue
     benEmployee.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A) = benEmployee.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A) + ben.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A)
-    Debug.Print (benEmployee.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A))
        
     If ben.value(ITEM_NIC_CLASS1A_ABLE) Then
       If (ben.BenefitClass = BC_LIVING_ACCOMMODATION_D) Then
@@ -865,6 +882,12 @@ Private Function Employee_CalculateEx(ByVal benEmployee As IBenefitClass, ByVal 
       'this is the benefit that is subject ot 12.5%
       benEmployee.value(ITEM_NIC_CLASS1A_BENEFIT) = benEmployee.value(ITEM_NIC_CLASS1A_BENEFIT) + ben.value(ITEM_NIC_CLASS1A_BENEFIT)
       benEmployee.value(ITEM_CLASS1A_ADJUSTMENT) = benEmployee.value(ITEM_CLASS1A_ADJUSTMENT) + ben.value(ITEM_CLASS1A_ADJUSTMENT)
+    End If
+    
+    Dim boxIndex As EmployeeItems
+    boxIndex = BenefitToEmployeeBox(ben)
+    If (IsNumeric(Employee_CalculateEx)) And Employee_CalculateEx > 0 Then
+      benEmployee.value(boxIndex) = benEmployee.value(boxIndex) + Employee_CalculateEx
     End If
   End If
    
@@ -876,6 +899,11 @@ Employee_CalculateEx_ERR:
   benEmployee.value(ITEM_BENEFIT) = S_ERROR
   Resume Next
 End Function
+
+Private Function BenefitToEmployeeBox(ben As IBenefitClass) As EmployeeItems
+  BenefitToEmployeeBox = p11d32.Rates.BenClassTo(ben.BenefitClass, BCT_EMPLOYEE_BOX_ITEM)
+End Function
+
 Private Property Let IBenefitClass_CompanyDefined(ByVal NewValue As Boolean)
   ECASE ("CompanyDefined")
 End Property
@@ -968,6 +996,7 @@ End Function
 
 Private Sub IBenefitClass_SetCalcDefaults()
   Dim ben As IBenefitClass
+  Dim i As Long
   
   Set ben = Me
   'ben.value(ee_OneOrMoreSharedVanAvailable_db) = False REMOVED MY AM
@@ -979,7 +1008,9 @@ Private Sub IBenefitClass_SetCalcDefaults()
   ben.value(ITEM_ERROR) = ""
   ben.value(ee_TotalBenefitsPotentiallySubjectToClass1A) = 0
   ben.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A) = 0
-  
+  For i = ee_BOX_FIRST_ITEM To ee_BOX_LAST_ITEM
+    ben.value(i) = 0
+  Next
 End Sub
 
 Private Property Get IBenefitClass_value(ByVal Item As Long) As Variant

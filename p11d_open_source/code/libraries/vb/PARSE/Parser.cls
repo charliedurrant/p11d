@@ -173,7 +173,7 @@ ParseLine_Int_err:
   End If
 End Function
 
-Public Function ParseFile(FileName As String) As PARSESTATUS
+Private Function ParseFileOld(FileName As String) As PARSESTATUS
   Dim iFileNum  As Integer
   Dim sline As String, sline2 As String ' allow <cr> between tokens
   Dim LineNum As Long
@@ -185,6 +185,8 @@ Public Function ParseFile(FileName As String) As PARSESTATUS
   If m_ParseSettings Is Nothing Then Call Err.Raise(ERR_PARSESETTINGS, "ParseFile", "No ParseSettings defined")
   If Not FileExists(FileName) Then Call Err.Raise(ERR_PARSESETTINGS, "ParseFile", "File " & FileName & " does not exist")
   If m_parsestatus = PARSESTATUS_ABORT Then GoTo ParseFile_end
+  
+  
   
   iFileNum = FreeFile
   Open FileName For Input As iFileNum
@@ -206,7 +208,7 @@ Public Function ParseFile(FileName As String) As PARSESTATUS
   If Len(sline2) > 0 Then m_parsestatus = ParseLine_Int(sline2, LineNum)
   
 ParseFile_end:
-  ParseFile = m_parsestatus
+  ParseFileOld = m_parsestatus
   If iFileNum > 0 Then Close #iFileNum
   Call xReturn("ParseFile")
   Exit Function
@@ -216,6 +218,56 @@ ParseFile_err:
   Call ErrorMessage(ERR_ERROR + ERR_ALLOWIGNORE, Err, "ParseFile", "ERR_PARSEFILE", "Unable to parse file " & FileName)
   Resume ParseFile_end
 End Function
+Public Function ParseFile(FileName As String) As PARSESTATUS
+  Dim sline As String, sline2 As String ' allow <cr> between tokens
+  Dim LineNum As Long
+  Dim objStream As Stream
+  
+  On Error GoTo ParseFile_err
+  Call xSet("ParseFile")
+  
+  m_parsestatus = PARSESTATUS_OK
+  If m_ParseSettings Is Nothing Then Call Err.Raise(ERR_PARSESETTINGS, "ParseFile", "No ParseSettings defined")
+  If Not FileExists(FileName) Then Call Err.Raise(ERR_PARSESETTINGS, "ParseFile", "File " & FileName & " does not exist")
+  If m_parsestatus = PARSESTATUS_ABORT Then GoTo ParseFile_end
+  
+  Set objStream = New Stream
+  objStream.Charset = "utf-8"
+  objStream.Type = adTypeText
+  objStream.LineSeparator = adCRLF
+  Call objStream.Open
+  Call objStream.LoadFromFile(FileName)
+  
+  Do While (m_parsestatus <> PARSESTATUS_ABORT) And (Not objStream.EOS)
+    sline = objStream.ReadText(adReadLine)
+    LineNum = LineNum + 1
+    If m_Parsetype = PARSETYPE_LINE Then
+      sline = Trim$(sline)
+      If IsTokenLine(sline) Then
+        m_parsestatus = ParseLine_Int(sline2, LineNum - 1)
+        sline2 = sline
+      ElseIf Len(sline) > 0 Then
+        sline2 = sline2 & " " & sline
+      End If
+    Else
+      m_parsestatus = ParseLine_Int(sline, LineNum)
+    End If
+  Loop
+  If Len(sline2) > 0 Then m_parsestatus = ParseLine_Int(sline2, LineNum)
+  Call objStream.Close
+  
+ParseFile_end:
+  ParseFile = m_parsestatus
+  Set objStream = Nothing
+  Call xReturn("ParseFile")
+  Exit Function
+ParseFile_err:
+  m_parsestatus = PARSESTATUS_ABORT
+  Call ErrorMessage(ERR_ERROR + ERR_ALLOWIGNORE, Err, "ParseFile", "ERR_PARSEFILE", "Unable to parse file " & FileName)
+  Resume ParseFile_end
+  Resume
+End Function
+
 
 Private Sub ParseTokenLine(curParseObj As Variant, sline As String)
   Dim linelen As Long, pToken As IParseItem

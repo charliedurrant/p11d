@@ -1,3 +1,5 @@
 VBGROUP 5.0
 StartupProject=P11d2022.vbp
-Project=..\libraries\vb\REP\atc2rep.vbp
+Project=..\libraries\vb\IMP\atc2imp.vbp
+Project=..\libraries\vb\PARSE\atc2parse.vbp
+Project=..\libraries\vb\REPW\atc3repw.vbp

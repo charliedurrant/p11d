@@ -17,8 +17,8 @@ Begin VB.Form F_EmployeeLetter
       Tag             =   "EQUALISE"
       Top             =   45
       Width           =   7260
-      _extentx        =   4471
-      _extenty        =   3201
+      _ExtentX        =   4471
+      _ExtentY        =   3201
    End
    Begin atc2stat.TCSStatus sts 
       Align           =   2  'Align Bottom
@@ -247,10 +247,7 @@ Private Function OpenLetterFile(bFileCaption As Boolean, ByVal sPathAndFile As S
   Call FileExistsAndNotOpenExclusive(sPathAndFile)
   
   If lm = LM_OPENTEXT Then
-    ce.Text = GetFileText(sPathAndFile)
-
-    
-    'Call ColorCodes
+    ce.Text = TextFileLoad(sPathAndFile)
     Call SetFileType
     Call SetSave
   End If

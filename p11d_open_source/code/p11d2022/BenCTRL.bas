@@ -223,7 +223,7 @@ Public Function EnumEmployerFiles(ByVal sExtension As String, IENUME As IEnumEmp
   
   If IENUME Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "EnumEmployerFiles", "The IBaseNotofy is nothing.")
   
-  s = p11d32.WorkingDirectory & "*" & sExtension
+  s = p11d32.workingDirectory & "*" & sExtension
   
   Call IENUME.Count(CountFiles(s))  ' display number of employers
     
@@ -231,7 +231,7 @@ Public Function EnumEmployerFiles(ByVal sExtension As String, IENUME As IEnumEmp
   Do While Len(q) > 0
     IENUME.CurrentFile (q)
     Set empr = New Employer
-    If empr.Validate(p11d32.WorkingDirectory & q) Then
+    If empr.Validate(p11d32.workingDirectory & q) Then
       Call IENUME.Employer(empr)
       EnumEmployerFiles = EnumEmployerFiles + 1
     End If
@@ -1090,7 +1090,7 @@ Public Function CorrectBenValue(bc As BEN_CLASS, Item As Long, value As Variant)
   If (value = UNDATED) Then
     CorrectBenValue = value
   Else
-    v = GetTypedValue(value, p11d32.BenDataLinkDataType(bc, Item))
+    v = GetTypedValueDefault(value, p11d32.BenDataLinkDataType(bc, Item), value)
     If (Item = ITEM_MADEGOOD) Then
       If IsNumeric(v) Then
         If (v < 0) Then
@@ -1227,24 +1227,13 @@ Public Function IsOpRABenefitClass(ByVal bc As BEN_CLASS) As Boolean
   IsOpRABenefitClass = Not ((bc = BEN_CLASS.BC_EMPLOYEE_CAR_E Or bc = BEN_CLASS.BC_QUALIFYING_RELOCATION_J Or bc = BEN_CLASS.BC_NON_QUALIFYING_RELOCATION_N Or bc = BEN_CLASS.BC_PAYMENTS_ON_BEFALF_B Or bc = BEN_CLASS.BC_TAX_NOTIONAL_PAYMENTS_B))
   
 End Function
-Public Sub Class1AAdjustment(ByVal ben As IBenefitClass)
-  'error handler
-  'if ben is nothing
-  If ben.value(ITEM_MADEGOOD_IS_TAXDEDUCTED) Then ben.value(ITEM_CLASS1A_ADJUSTMENT) = ben.value(ITEM_MADEGOOD_NET)
-  
-End Sub
-
 Public Sub StandardWriteData(ben As IBenefitClass, rs As Recordset, Optional opraFields As Boolean = True)
-
   rs.Fields("MadeGoodIsTaxDeducted").value = ben.value(ITEM_MADEGOOD_IS_TAXDEDUCTED)
   If (Not p11d32.BringForward.Yes) Then
     If (opraFields) Then
       rs.Fields(S_DB_FIELD_OPRA_AMOUNT_FOREGONE).value = ben.value(ITEM_OPRA_AMOUNT_FOREGONE)
     End If
   End If
-  
-  
-  
 End Sub
 Public Function IRDescription(ben As IBenefitClass) As String
   Dim iBenITem As Long

@@ -130,7 +130,8 @@ Private Function ReadSpecs(ByVal gSheet As GoogleSheet) As Dictionary
 End Function
 Private Function MarkupGoogleSheetData(ByRef data As String) As String
   Dim ret As String
-  ret = Replace(data, Chr(10), Chr(13) & Chr(10))
+  ret = Replace(data, Chr(13), "")
+  ret = Replace(ret, Chr(10), Chr(13) & Chr(10))
   MarkupGoogleSheetData = ret
 End Function
 
@@ -143,7 +144,7 @@ Private Function CreateEmployer() As Employer
   
   Set empr = New Employer
   
-  Call empr.CreateEmployer(FullPath(p11d32.WorkingDirectory) & GuidNewEmployer & p11d32.AppYearShort & p11d32.Rates.FileExtensionCurrent)
+  Call empr.CreateEmployer(FullPath(p11d32.workingDirectory) & GuidNewEmployer & p11d32.AppYearShort & p11d32.Rates.FileExtensionCurrent)
   Call empr.OpenEmployer(False)
   Set ben = empr
   ben.value(employer_Name_db) = "Testing:" & Format$(Now, "MM/dd/yyyy hh::mm:ss")
@@ -209,7 +210,6 @@ On Error GoTo err_err
         reportPathAndFile = GetTempFilename
         reportDataPathAndFile = GetTempFilename
         Call TextFileSave(reportPathAndFile, testingTest.Spec.ReportSpec)
-        
         
         Call p11d32.ReportPrint.StartReportWizard(reportPathAndFile, REPORTW_PREPARE_EXPORT, reportDataPathAndFile)
         
@@ -280,7 +280,6 @@ Private Function ImportData(empr As Employer, sb As QString) As Boolean
   Dim importFilePath As String
   Dim specFilePath As String
   
-
   sb.Append (Title("Imports"))
   
   ImportData = False
@@ -308,7 +307,7 @@ Private Sub ImportFile(ByVal empr As Employer, ByVal dataPathAndFile As String, 
   Dim sql As SQLQUERIES_IMP
   Dim rs As Recordset
   Dim ic As ImportClass
-  Dim errorCount As Long
+  Dim ErrorCount As Long
   
 On Error GoTo err_err:
 
@@ -316,7 +315,7 @@ On Error GoTo err_err:
   Set ic.Workspace = p11d32.P11DWS
   Set ic.ErrorFilter = Me
   
-  Set atc2core.ErrorFilter = Me
+  Set ATC2CORE.ErrorFilter = Me
   
   m_importSheet = Sheet
   ic.RightTrimFields = True
@@ -327,28 +326,28 @@ On Error GoTo err_err:
   Set rs = empr.db.OpenRecordset(sql.Queries(importType))
   'cad import
   
-  errorCount = ic.ImportFile(rs)
+  ErrorCount = ic.ImportFile(rs)
   Call rs.Close
   Set rs = Nothing
-  If (errorCount < 0) Then
+  If (ErrorCount < 0) Then
     Call m_Errors.Add("Fatal error, no lines imported")
-  ElseIf errorCount = 0 Then
+  ElseIf ErrorCount = 0 Then
     Dim linesOk As Long
     Dim sqli As New SQLQUERIES_IMP
     Dim importName As String
     importName = sqli.Name(importType)
     Set p11d32.Importing.DbP11dFile = empr.db
-    Call p11d32.Importing.PostProcessEx(errorCount, linesOk, importName, importType)
+    Call p11d32.Importing.PostProcessEx(ErrorCount, linesOk, importName, importType)
   End If
     
 err_end:
   Set p11d32.Importing.DbP11dFile = Nothing
-  Set atc2core.ErrorFilter = Nothing
+  Set ATC2CORE.ErrorFilter = Nothing
   Set ic = Nothing
   Exit Sub
 err_err:
   Set p11d32.Importing.DbP11dFile = Nothing
-  Set atc2core.ErrorFilter = Nothing
+  Set ATC2CORE.ErrorFilter = Nothing
   Call m_Errors.Add(Err.Description)
   Call Err.Raise(Err.Number, Err.Source, Err.Description)
 End Sub

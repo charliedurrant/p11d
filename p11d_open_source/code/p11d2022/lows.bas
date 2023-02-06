@@ -106,56 +106,53 @@ Public Function TrimMaxLength(ByVal s As String, MaxLength As Long) As String
   End If
   TrimMaxLength = s
 End Function
-Public Function TextFileLoad(ByVal sPathAndFile As String) As String
-  Dim fr As TCSFileread
-  Dim s As String
+Public Function TextFileLoad(ByVal sPathAndFile As String, Optional ByVal charset As String = "utf-8") As String
+  Dim objStream As Stream
+  Dim strData As String
   
-  On Error GoTo err_err
-  Set fr = New TCSFileread
+On Error GoTo err_err
+
+  If (Not FileExists(sPathAndFile)) Then
+     Call Err.Raise(ERR_FILE_OPEN, "TextFileLoad", "Failed load the text file " & sPathAndFile & " as it does not exist")
+  End If
   
-  If Not fr.OpenFile(sPathAndFile) Then Call Err.Raise(ERR_FILE_OPEN, "TextFileLoad", "Failed to open file " & sPathAndFile)
-  Call fr.GetFile(s)
-  TextFileLoad = s
+  Set objStream = New Stream
+  objStream.charset = charset
+  Call objStream.Open
+  Call objStream.LoadFromFile(sPathAndFile)
   
+  
+  strData = objStream.ReadText()
+  Call objStream.Close
+  TextFileLoad = strData
   
 err_end:
+  Set objStream = Nothing
   Exit Function
 err_err:
+  Set objStream = Nothing
   Call Err.Raise(ERR_FILE_INVALID, ErrorSource(Err, "TextFileLoad"), Err.Description)
-  
+  Resume
 End Function
-
-Public Sub TextFileSave(ByVal sPathAndFile As String, ByRef sText As String)
-  Dim bClosing As Boolean
-  'Dim fs As FileSystemObject
-  'Dim ts As TextStream
-  Dim ifile As Long
+Public Sub TextFileSave(ByVal sPathAndFile As String, ByRef sText As String, Optional ByVal charset = "utf-8")
+  Dim objStream As Stream
   
   On Error GoTo err_err
+    
+  Set objStream = New Stream
+  objStream.charset = charset
+  Call objStream.Open
+  Call objStream.WriteText(sText, stWriteChar)
+  Call objStream.SaveToFile(sPathAndFile, adSaveCreateOverWrite)
   
-  ifile = 0
-  ifile = FreeFile
-  
-  Open sPathAndFile For Output As #ifile
-  Print #ifile, sText
-  bClosing = True
-  Close #ifile
-  ifile = 0
-  
-  'Set fs = New FileSystemObject
-  'Set ts = fs.CreateTextFile(sPathAndFile, True)
-  
-  'Call ts.Write(sText)
-  'bClosing = True
-  'Call ts.Close
-  'Set ts = Nothing
-  
+  Call objStream.Close
   
 err_end:
+  Set objStream = Nothing
   Exit Sub
 err_err:
-  If (Not bClosing) And (ifile <> 0) Then Close #ifile
-  Call Err.Raise(ERR_FILE_INVALID, ErrorSource(Err, "TextFileLoad"), Err.Description)
+  Set objStream = Nothing
+  Call Err.Raise(ERR_FILE_INVALID, ErrorSource(Err, "TextFileSave"), Err.Description)
   Resume
 End Sub
 
@@ -326,36 +323,6 @@ Public Function IsClientError(ErrNumber As Long) As Boolean
   If ErrNumber >= TCSCLIENT_ERROR And ErrNumber <= TCSCLIENT_ERROR_END Then IsClientError = True
 End Function
 
-Public Function GetFileText(ByVal sPathAndFile As String) As String
-  Dim FSR As TCSFileread
-  Dim s As String
-  
-  On Error GoTo GetFileText_ERR
-  
-  Call xSet("GetFileText")
-  
-  Set FSR = New TCSFileread
-  
-  
-  If Not FSR.OpenFile(sPathAndFile) Then
-    If Not FileExists(sPathAndFile) Then
-      Call Err.Raise(ERR_FILE_NOT_EXIST, "GetFileText", "The file " & sPathAndFile & " does not exist.")
-    Else
-      Call Err.Raise(ERR_FILE_OPEN, "GetFileText", "Can not open the file " & sPathAndFile & " check rights to file.")
-    End If
-  Else
-    Call FSR.GetFile(s)
-    GetFileText = s
-  End If
-  
-GetFileText_END:
-  Call xReturn("GetFileText")
-  Exit Function
-GetFileText_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "GetFileText", "Get File Text", "Error reading the file " & sPathAndFile & ".")
-  Resume GetFileText_END
-  Resume
-End Function
 
 
 Public Function Records(rs As Recordset) As Long

@@ -1122,7 +1122,7 @@ Private Function LetterFileSystem(ByVal sFileNoPathNoExtension As String) As Str
   s = FullPath(p11d32.ReportPrint.SystemLettersPath) & "system\" & sFileNoPathNoExtension & S_EMPLOYEE_LETTER_FILE_EXTENSION
   
   If Not FileExists(s, False) Then Call Err.Raise(ERR_FILE_NOT_EXIST, "SystemLetterFile", "The file " & s & " does not exist.")
-  LetterFileSystem = GetFileText(s)
+  LetterFileSystem = TextFileLoad(s)
   
   Exit Function
 LetterFileSystem_ERR:
@@ -1146,11 +1146,11 @@ Public Function StandardReportLetterFileText(ByVal pr As P11D_REPORTS) As String
       Case RPT_P46CAR
         s = LetterFileSystem("P46CAR")
       Case RPT_EMPLOYEE_LETTER
-        s = GetFileText(p11d32.ReportPrint.EmployeeLetterPathAndFile)
+        s = TextFileLoad(p11d32.ReportPrint.EmployeeLetterPathAndFile)
       Case RPT_EMPLOYEE_LETTER_EMAIL
-        s = GetFileText(p11d32.ReportPrint.EmployeeLetterPathAndFile)
+        s = TextFileLoad(p11d32.ReportPrint.EmployeeLetterPathAndFile)
       Case RPT_EMPLOYEE_LETTER_WORKING_PAPERS
-        s = GetFileText(p11d32.ReportPrint.EmployeeLetterPathAndFile)
+        s = TextFileLoad(p11d32.ReportPrint.EmployeeLetterPathAndFile)
       Case RPT_HMIT
         s = LetterFileSystem("P11D")
       Case RPT_HMIT_PLUS_WORKING_PAPERS
@@ -1826,17 +1826,17 @@ IEnumFiles_File_ERR:
 End Sub
 Public Sub EmailSettingsShow()
 
- On Error GoTo err_ERR
+ On Error GoTo err_err
   
   Call InitATCMAIL
   Call ATCMail.ShowOptions
   Call DestroyATCMAIL
 
-err_END:
+err_end:
   Exit Sub
-err_ERR:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "EmailSettingsShow", "EmailSettingsShow", "Failed to show the email settings")
-  Resume err_END
+  Resume err_end
 
 
 End Sub

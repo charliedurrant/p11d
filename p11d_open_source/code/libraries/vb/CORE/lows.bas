@@ -1,5 +1,10 @@
 Attribute VB_Name = "lows"
 Option Explicit
+Private Enum BOM
+  BOM_NONE
+  BOM_UTF16
+  BOM_UTF8
+End Enum
 
 
 Public Function logfunction3(ByVal ErrorDateTime As Date, ByVal ErrorNumber As Long, ErrorName As String, ErrorText As String, FunctionName As String, FileExt As String) As Boolean
@@ -98,11 +103,11 @@ fileexists_err:
   Resume fileexists_end
 End Function
 
-Public Function xStrPadEx(String1 As String, Pad As String, ByVal Length As Long, ByVal PadFront As Boolean) As String
+Public Function xStrPadEx(String1 As String, Pad As String, ByVal length As Long, ByVal PadFront As Boolean) As String
   Dim padlen As Long
   Dim s As String
     
-  padlen = Length - Len(String1)
+  padlen = length - Len(String1)
   If padlen > 0 Then
     s = String$(padlen, Pad)
     If PadFront Then
@@ -111,7 +116,7 @@ Public Function xStrPadEx(String1 As String, Pad As String, ByVal Length As Long
       xStrPadEx = String1 & s
     End If
   Else
-    xStrPadEx = left$(String1, Length)
+    xStrPadEx = left$(String1, length)
   End If
 End Function
 
@@ -327,4 +332,152 @@ process_dirs:
 #If DEBUGVER Then
   Call Tracer_XReturn("FindFilesEx")
 #End If
+End Function
+Private Function FileByteOrderMark(filePath As String) As BOM
+  Dim iFle As Long
+  Dim bb() As Byte
+  Dim i As Integer
+  Dim s As String
+  
+  iFle = FreeFile
+  Open filePath For Binary As iFle
+  
+  If LOF(iFle) = 0 Then
+      Close iFle
+      Exit Function
+  End If
+  
+  Get iFle, , i
+  Close iFle
+  
+  Select Case i
+    Case &HFEFF ' UTF16 file header.  First byte = FF, second byte = FE.
+      FileByteOrderMark = BOM_UTF16
+    Case &HBBEF
+      FileByteOrderMark = BOM_UTF8
+    Case Else
+      FileByteOrderMark = BOM_NONE
+  End Select
+End Function
+Public Function TextFileLinesEx(filePath As String, Optional ByVal charset As String = "", Optional ByVal lineDelimeter As String = vbCrLf) As String()
+   Dim fileContents As String
+   Dim lines() As String
+   
+   On Error GoTo err_err
+   
+   fileContents = TextFileLoadEx(filePath, charset)
+   lines = Split(fileContents, lineDelimeter)
+   TextFileLinesEx = lines
+    
+err_end:
+  Exit Function
+err_err:
+  Call Err.Raise(ERR_ERROR, ErrorSourceEx(Err, "TextFileLines"), Err.Description)
+End Function
+
+Public Function TextFileLoadEx(filePath As String, Optional ByVal charset As String = "") As String
+   Dim bm As BOM
+   Dim fr As TCSFileread
+   Dim fileContents As String
+    
+   On Error GoTo err_err
+   
+    If Not FileExistsEx(filePath, False, False) Then
+      Call Err.Raise(Err.Number, "TextFileLoad", "The file does not exist")
+    End If
+    
+    If (Len(charset) = 0) Then
+      bm = FileByteOrderMark(filePath)
+    
+      If (bm = BOM_NONE) Then
+        If IsUtf8(FileBytes(filePath)) Then
+          bm = BOM_UTF8
+        End If
+      End If
+      
+      Select Case bm
+        Case BOM_NONE
+          Set fr = New TCSFileread
+          Call fr.OpenFile(filePath)
+          Call fr.GetFile(fileContents)
+          Call fr.CloseFile
+        Case BOM_UTF16
+          fileContents = TextFileLoadWithAdoStream(filePath, "utf-16")
+        Case BOM_UTF8
+          fileContents = TextFileLoadWithAdoStream(filePath, "utf-8")
+        Case Else
+          Call Err.Raise(ERR_ERROR, "TextFileLoad", "unrecognised character set in file")
+      End Select
+      
+    Else
+      fileContents = TextFileLoadWithAdoStream(filePath, charset)
+    End If
+    
+    TextFileLoadEx = fileContents
+    
+err_end:
+  Set fr = Nothing
+  Exit Function
+err_err:
+  Set fr = Nothing
+  Call Err.Raise(ERR_ERROR, ErrorSourceEx(Err, "TextFileLoad"), Err.Description)
+  
+End Function
+Private Function TextFileLoadWithAdoStream(filePath As String, charset As String) As String
+  Dim objStream As Object
+  
+  'can't ref ado 2.6 due to compatability errors so late binfing
+  
+  Set objStream = CreateObject("ADODB.Stream")
+  objStream.charset = charset
+  Call objStream.Open
+  Call objStream.LoadFromFile(filePath)
+  TextFileLoadWithAdoStream = objStream.ReadText(-1) 'readall
+  Call objStream.Close
+  Set objStream = Nothing
+  
+End Function
+Private Function FileBytes(filePath As String) As Byte()
+  Dim fileNum As Integer
+  Dim bytes() As Byte
+
+  fileNum = FreeFile
+  Open filePath For Binary As fileNum
+  ReDim bytes(LOF(fileNum) - 1)
+  Get fileNum, , bytes
+  Close fileNum
+  
+  FileBytes = bytes
+End Function
+Private Function IsUtf8(ByRef Source() As Byte) As Boolean
+  Dim i As Long, lUBound As Long
+  Dim hexC2 As Byte, hexDB As Byte, hexBF As Byte, hex80 As Byte, hexE0 As Byte
+  Dim CurByte As Byte
+  
+  hexC2 = &HC2
+  hexDB = &HDB
+  hex80 = &H80
+  hexBF = &HBF
+  hexE0 = &HE0
+  
+  lUBound = UBound(Source)
+  
+  For i = 0 To lUBound - 1
+    CurByte = Source(i)
+    If CurByte >= hexC2 And CurByte <= hexDB Then
+      If (Source(i + 1) And hex80) Then
+        IsUtf8 = True
+        Exit For
+      End If
+    End If
+    If i + 2 <= lUBound Then
+      If CurByte >= hexE0 Then
+        If (Source(i + 1) And hex80) And (Source(i + 2) And hex80) Then
+          IsUtf8 = True
+          Exit For
+        End If
+      End If
+    End If
+  Next i
+    
 End Function

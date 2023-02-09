@@ -64,7 +64,7 @@ End Enum
 '*  MEGABYTES
 '*  GIGABYTES
 Public Enum MemoryUnit
-  BYTES
+  bytes
   MEGABYTES
   GIGABYTES
 End Enum
@@ -1067,11 +1067,11 @@ End Function
 '##V PadFront pad from front (default = false)
 '##RV The padded string
 '##C STF
-Public Function xStrPad(ByVal String1 As String, ByVal Pad As String, ByVal Length As Long, Optional ByVal PadFront As Boolean = False) As String
+Public Function xStrPad(ByVal String1 As String, ByVal Pad As String, ByVal length As Long, Optional ByVal PadFront As Boolean = False) As String
 #If DEBUGVER Then
   Call Tracer_XSet("xStrPad")
 #End If
-  xStrPad = xStrPadEx(String1, Pad, Length, PadFront)
+  xStrPad = xStrPadEx(String1, Pad, length, PadFront)
 #If DEBUGVER Then
   Call Tracer_XReturn("xStrPad")
 #End If
@@ -1091,19 +1091,19 @@ End Function
 '##RV Number of occurences of that string
 '##C STF
 Public Function CountChar(String1 As String, ByVal Char As String, Optional ByVal Compare As VbCompareMethod = vbBinaryCompare) As Long
-  Dim p0 As Long, p1 As Long, ilen As Long
+  Dim p0 As Long, p1 As Long, iLen As Long
   
 #If DEBUGVER Then
   Call Tracer_XSet("CountChar")
 #End If
-  ilen = Len(Char)
-  If ilen > 0 Then
+  iLen = Len(Char)
+  If iLen > 0 Then
     p0 = 1
     Do
       p1 = InStr(p0, String1, Char, Compare)
       If p1 > 0 Then
         CountChar = CountChar + 1
-        p0 = p1 + ilen
+        p0 = p1 + iLen
       End If
     Loop Until p1 = 0
   End If
@@ -1159,7 +1159,7 @@ End Sub
 '##C STF
 Public Function GetStringToken(String1 As String, ByVal Token As String, Optional ByVal TokenIndex As Long = 1, Optional ByVal TrimString As Boolean = False) As String
   Dim pos As Long
-  Dim lpos As Long
+  Dim lPos As Long
   Dim i As Long
   
   ' sort out apf tokenize XXX  vbTab YYY
@@ -1170,7 +1170,7 @@ Public Function GetStringToken(String1 As String, ByVal Token As String, Optiona
   
   pos = 0: i = 0
   Do
-    lpos = pos
+    lPos = pos
     pos = InStr(pos + 1, String1, Token, vbTextCompare)
     i = i + 1
   Loop Until (i = TokenIndex) Or (pos = 0)
@@ -1181,16 +1181,16 @@ Public Function GetStringToken(String1 As String, ByVal Token As String, Optiona
     End If
   End If
   
-  If lpos = 0 Then
+  If lPos = 0 Then
     If pos = 0 Then
       GetStringToken = String1
     Else
       GetStringToken = left$(String1, pos - 1)
     End If
   ElseIf pos = 0 Then
-    GetStringToken = right$(String1, Len(String1) - lpos)
+    GetStringToken = right$(String1, Len(String1) - lPos)
   ElseIf pos > 0 Then
-    GetStringToken = Mid$(String1, lpos + 1, pos - lpos - 1)
+    GetStringToken = Mid$(String1, lPos + 1, pos - lPos - 1)
   End If
   
   If TrimString Then GetStringToken = Trim$(GetStringToken)
@@ -1390,8 +1390,8 @@ shellprogram_err:
   Resume ShellProgram_end
 End Function
 '##C MF
-Public Function ShellOpenFile(ByVal FilePath As String, Optional ByVal WinStyle As VbAppWinStyle = vbNormalFocus) As Long
-  ShellOpenFile = ShellExecute(0, "open", FilePath, 0, "", WinStyle)
+Public Function ShellOpenFile(ByVal filePath As String, Optional ByVal WinStyle As VbAppWinStyle = vbNormalFocus) As Long
+  ShellOpenFile = ShellExecute(0, "open", filePath, 0, "", WinStyle)
 End Function
 
 '##D Write an entry to the ini file specified or of the current application ([AppExeName].INI) if none is specified
@@ -1575,7 +1575,7 @@ End Sub
 '##D GetCanonicalPathName return full UNC pathname
 '##V FilePath File Path
 '##C FNF
-Public Function GetCanonicalPathName(ByVal FilePath As String) As String
+Public Function GetCanonicalPathName(ByVal filePath As String) As String
   Dim sBuffer As String, sFileName As String
   Dim uncpath As String
   Dim lBufSiz As Long, retval As Long
@@ -1587,7 +1587,7 @@ On Error GoTo GetCanonicalPathName_err
   lBufSiz = 1024
   sBuffer = String$(lBufSiz, vbNullChar)
   sFileName = String$(lBufSiz, vbNullChar)
-  retval = GetFullPathName(FilePath, lBufSiz, sBuffer, sFileName)
+  retval = GetFullPathName(filePath, lBufSiz, sBuffer, sFileName)
   If retval <> 0 Then
     GetCanonicalPathName = RTrimChar(sBuffer, vbNullChar)
     If left$(GetCanonicalPathName, 2) <> "\\" Then
@@ -1614,7 +1614,7 @@ End Function
 '##V Free Free space on drive
 '##RV true if successful
 '##C SQF
-Public Function GetDiskSpace(ByVal DriveRootPath As String, Total As Single, Free As Single, Optional ByVal MemUnits As MemoryUnit = BYTES) As Boolean
+Public Function GetDiskSpace(ByVal DriveRootPath As String, Total As Single, Free As Single, Optional ByVal MemUnits As MemoryUnit = bytes) As Boolean
   Dim dUserFree As Double, dTotal As Double, dFree As Double
   
 #If DEBUGVER Then
@@ -2492,7 +2492,7 @@ End Function
 
 '##D Ends Application
 '##C MF
-Public Sub AppEnd()
+Public Sub Append()
   Call gTCSEventClass.AttemptEndApplication
 End Sub
 '##C TCSMF
@@ -2881,4 +2881,9 @@ End Property
 Public Property Set NotifyTCSPassword(NewValue As IBaseNotify)
   Set m_INotifyTCSPassword = NewValue
 End Property
-
+Public Function TextFileLoad(filePath As String, Optional ByVal charset As String = "") As String
+  TextFileLoad = lows.TextFileLoadEx(filePath, charset)
+End Function
+Public Function TextFileLines(filePath As String, Optional ByVal charset As String = "", Optional ByVal lineDelimeter As String = vbCrLf) As String()
+  TextFileLines = lows.TextFileLinesEx(filePath, charset, lineDelimeter)
+End Function

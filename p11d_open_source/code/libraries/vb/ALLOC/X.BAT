@@ -1,1 +1,1 @@
-powershell ..\x.ps1 atc2alloc
+powershell ..\x.ps1 atc3alloc

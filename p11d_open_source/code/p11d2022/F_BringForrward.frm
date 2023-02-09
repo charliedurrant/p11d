@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{770120E1-171A-436F-A3E0-4D51C1DCE486}#1.0#0"; "atc2stat.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form F_BringForward 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Bring Forward"
@@ -262,9 +262,9 @@ Public Sub SettingsToScreen()
   lvCurrentYearFiles.SmallIcons = MDIMain.imlTree
   lvPriorYearFiles.SmallIcons = MDIMain.imlTree
   
-  Me.Caption = "Bring forward for " & p11d32.AppYear & "/" & p11d32.AppYear + 1 & " files."   'RH
+  Me.caption = "Bring forward for " & p11d32.AppYear & "/" & p11d32.AppYear + 1 & " files."   'RH
   
-  lblEmployersIn = "Employers in " & p11d32.WorkingDirectory
+  lblEmployersIn = "Employers in " & p11d32.workingDirectory
   'add column headers
   Call lvPriorYearFiles.ColumnHeaders.Add(1, , F_Employers.LB.ColumnHeaders(ELVC_EMPLOYER_NAME))
   Call lvPriorYearFiles.ColumnHeaders.Add(2, , F_Employers.LB.ColumnHeaders(ELVC_FILE_NAME))
@@ -381,7 +381,7 @@ Private Sub Start()
   
   Call xSet("Start")
   
-  Call ChDir(p11d32.WorkingDirectory)
+  Call ChDir(p11d32.workingDirectory)
   
   p11d32.BringForward.YOE = YOE_PRIOR
   Call EnumEmployerFiles(p11d32.Rates.FileExtensionPrior, Me)

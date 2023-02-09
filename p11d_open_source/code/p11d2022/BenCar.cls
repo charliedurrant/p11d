@@ -257,7 +257,7 @@ Private Function CalculateFuelPercentage(ByVal ben As IBenefitClass) As Double
       Case CCFT_ELECTRIC
         ben.value(car_supplement) = 0#
       Case Else
-        Call err.Raise(ERR_CAR_CO2, "Calculate", "Unknown fuel type")
+        Call Err.Raise(ERR_CAR_CO2, "Calculate", "Unknown fuel type")
     End Select
 
     ben.value(car_FuelDontUseAmountForegone) = CO2CalcValue(ben) <= 75
@@ -350,14 +350,11 @@ Call xSet("CompanyCar_Calculate")
   
   'STANDARD_CAR START
   ben.value(car_Scaled) = ben.value(car_BenefitFullYear) 'WS2 M
-  ben.value(ITEM_VALUE_NON_OPRA) = ben.value(car_BenefitForThePeriodTheCarWasAvailable) 'WS2 Q
-  ben.value(ITEM_VALUE_NON_OPRA) = RoundDownEx(ben.value(ITEM_VALUE_NON_OPRA) / (ben.value(car_NumberOfUsers_db)), 0)
+  ben.value(ITEM_VALUE_NON_OPRA) = RoundDownEx(ben.value(car_BenefitForThePeriodTheCarWasAvailable) / (ben.value(car_NumberOfUsers_db)), 0)
   'STANDARD_CAR END
   
   ben.value(car_cardaysreduction) = ben.value(car_DeductionForUnavailabilityRoundUpNextWholeNumber) 'WS2 P
   
-  
-
   Dim bOpraCalc As Boolean 'WS2B
   
   ben.value(car_OPRAModifiedCashEquivalent) = ben.value(car_ModifiedCashEquivalentForTheYear)
@@ -406,7 +403,7 @@ err_end:
   
 err_err:
   IBenefitClass_CalculateBody = S_ERROR
-  ben.value(ITEM_ERROR) = err.Description
+  ben.value(ITEM_ERROR) = Err.Description
   Resume err_end
   Resume
 
@@ -451,7 +448,7 @@ Copy_END:
   Call xReturn("Copy")
   Exit Function
 Copy_ERR:
-  Call ErrorMessage(ERR_ERROR, err, "Copy", "Copy", "Error copying a company car benefit.")
+  Call ErrorMessage(ERR_ERROR, Err, "Copy", "Copy", "Error copying a company car benefit.")
   Resume Copy_ERR
 End Function
 
@@ -476,7 +473,7 @@ AddFuelBenefit_END:
   Call xReturn("AddFuelBenefit")
   Exit Sub
 AddFuelBenefit_ERR:
-  Call ErrorMessage(ERR_ERROR, err, "AddFuelBenefit", "Add Non Qualifying Relocation", "Error adding a fuel benefit with a company car benefit.")
+  Call ErrorMessage(ERR_ERROR, Err, "AddFuelBenefit", "Add Non Qualifying Relocation", "Error adding a fuel benefit with a company car benefit.")
   Resume AddFuelBenefit_END
   Resume
 End Sub
@@ -726,7 +723,7 @@ CAR_PRINTWK_End:
   Exit Function
 
 CAR_PRINTWK_Err:
-  Call ErrorMessage(ERR_ERROR, err, "CAR_PRINTWK", "CAR PRINT WK", "Error printing the company car working paper.")
+  Call ErrorMessage(ERR_ERROR, Err, "CAR_PRINTWK", "CAR PRINT WK", "Error printing the company car working paper.")
   Resume CAR_PRINTWK_End
   Resume
   
@@ -995,7 +992,7 @@ SetBenItemsInformation_end:
   Exit Sub
   
 SetBenItemsInformation_err:
-  Call ErrorMessage(ERR_ERROR, err, "SetBenItemsInformation", "Set Benefit Item Information", "Error setting benefit information")
+  Call ErrorMessage(ERR_ERROR, Err, "SetBenItemsInformation", "Set Benefit Item Information", "Error setting benefit information")
   Resume SetBenItemsInformation_end
 End Sub
 
@@ -1062,7 +1059,7 @@ End Sub
 
 Private Function CO2Percentage(ByVal ben As IBenefitClass) As Double
   Const MAX_CO2 As Long = 170
-  
+  Const DEFAULT_LOW_RATE As Long = 14
   Dim Rate As Long
   Dim fuelType As COMPANY_CAR_FUEL_TYPE
   Dim co2 As Long
@@ -1130,7 +1127,7 @@ Private Function CO2Percentage(ByVal ben As IBenefitClass) As Double
       Case Is < 51
         Select Case fuelType
           Case CCFT_ELECTRIC
-            Rate = 1
+            Rate = 2
           Case CCFT_HYBRID
             Select Case (electricRangeMiles)
               Case Is >= 130
@@ -1146,7 +1143,7 @@ Private Function CO2Percentage(ByVal ben As IBenefitClass) As Double
             End Select
           Case Else
            'rate unknown, this is not hybid or electric vehicles < 51 assume 14
-            Rate = 14
+            Rate = DEFAULT_LOW_RATE
         End Select
     End Select
   End If
@@ -1158,19 +1155,21 @@ Private Function CO2Percentage(ByVal ben As IBenefitClass) As Double
         Case Is >= 165
           Rate = Rate
         Case Is >= 51
-          Rate = Rate - 1
+          Rate = Rate
+          'Rate = Rate - 1
         Case Is < 51
           Select Case fuelType
             Case CCFT_HYBRID
-              Rate = Rate - 1
+              Rate = Rate
+              'Rate = Rate - 1
             Case Else
              'rate unknown, this is not hybid or electric vehicles < 51 assume 13
-              Rate = 13
+              Rate = DEFAULT_LOW_RATE
+              'Rate = 13
           End Select
       End Select
     End If
   End If
-  
   
   rateDouble = CDbl(Rate) / CDbl(100)
   CO2Percentage = rateDouble
@@ -1241,7 +1240,7 @@ Private Function FuelVATAnnualScaleCharge(ben As IBenefitClass)
     Case Is >= 225
       iFuelVATScaleAnnual = 2045
     Case Else
-      Call err.Raise(ERR_INVALIDID, "FuelVATAnnualScaleCharge", "Invalid CO2 value" & iCO2)
+      Call Err.Raise(ERR_INVALIDID, "FuelVATAnnualScaleCharge", "Invalid CO2 value" & iCO2)
   End Select
 
   FuelVATAnnualScaleCharge = iFuelVATScaleAnnual
@@ -1400,7 +1399,7 @@ CalculateFuelBen_End:
   Exit Sub
   
 CalculateFuelBen_Err:
-  Call err.Raise(ERR_CALCULATE_FUEL_BENEFITS, "CalculateFuelBen", "Error in Calculating Fuel Benefits")
+  Call Err.Raise(ERR_CALCULATE_FUEL_BENEFITS, "CalculateFuelBen", "Error in Calculating Fuel Benefits")
   Resume CalculateFuelBen_End
   Resume
 End Sub
@@ -1450,7 +1449,7 @@ SetHMIT_END:
   Call xReturn("SetHMIT")
   Exit Sub
 SetHMIT_ERR:
-  Call ErrorMessage(ERR_ERROR, err, "SetHMIT", "Set HMIT", "Error setting HMIT specific items in company car benefit calculate.")
+  Call ErrorMessage(ERR_ERROR, Err, "SetHMIT", "Set HMIT", "Error setting HMIT specific items in company car benefit calculate.")
   Resume SetHMIT_END
 End Sub
 
@@ -1577,7 +1576,7 @@ CompanyCar_readDB_End:
   Call xReturn("CompanyCar_readDB")
   Exit Function
 CompanyCar_readDB_Err:
-  Call ErrorMessage(ERR_ERROR, err, "CompanyCar_readDB", "ERR_CAR_READDB", "Unable to read the company car details.")
+  Call ErrorMessage(ERR_ERROR, Err, "CompanyCar_readDB", "ERR_CAR_READDB", "Unable to read the company car details.")
   Resume CompanyCar_readDB_End
   Resume
 End Function
@@ -1694,62 +1693,10 @@ CompanyCar_WriteDB_End:
 CompanyCar_WriteDB_Err:
   IBenefitClass_WriteDB = False
   Call ClearEdit(rs)
-  Call ErrorMessage(ERR_ERROR, err, "CompanyCar_WriteDB", "CompanyCar Write DB", "Error writing the company car to the database.")
+  Call ErrorMessage(ERR_ERROR, Err, "CompanyCar_WriteDB", "CompanyCar Write DB", "Error writing the company car to the database.")
   Resume CompanyCar_WriteDB_End
   Resume
 End Function
-
-' MP DB - T_CarMiles deleted
-'Public Function WriteMileage() As Long
-'  Dim Miles As MileDetail
-'  Dim rs As Recordset
-'  Dim l As Long
-'  Dim ben As IBenefitClass, benEmployee As IBenefitClass
-'
-'  On Error GoTo WriteMileage_Err
-'  Call xSet("WriteMileage")
-'
-'  Set ben = Me
-'  Set benEmployee = m_Parent
-'  Call m_Parent.Parent.db.Execute(sql.Queries(DELETE_CARMILES, ben.value(car_carkey)))
-'
-'  Set rs = m_Parent.Parent.db.OpenRecordset(sql.Queries(SELECT_CARMILES, ben.value(car_carkey)), dbOpenDynaset)
-'
-'  For l = 1 To mileage.Count
-'    Set Miles = mileage.Item(l)
-'    If Not Miles Is Nothing Then
-'      rs.AddNew
-'      If Len(Miles.MileItem) > 0 Then
-'        rs.Fields("Item").value = Miles.MileItem
-'      Else
-'        rs.Fields("Item").value = Null
-'      End If
-'      If Miles.MileDate <> UNDATED Then
-'        rs.Fields("MilesDate").value = Miles.MileDate
-'      Else
-'        rs.Fields("MilesDate").value = Null
-'      End If
-'      rs.Fields("Miles").value = Miles.MileAmount
-'      rs.Fields("CarKey").value = ben.value(car_carkey)
-'      rs.Fields("P_Num").value = benEmployee.value(ee_PersonnelNumber)
-'      rs.Fields(S_FIELD_CAR_REGISTRATION).value = ben.value(car_Registration)
-'      rs.Update
-'      WriteMileage = WriteMileage + 1
-'    End If
-'  Next
-'
-'WriteMileage_End:
-'  Set Miles = Nothing
-'  Set rs = Nothing
-'  Call xReturn("WriteMileage")
-'  Exit Function
-'
-'WriteMileage_Err:
-'  Call ErrorMessage(ERR_ERROR, Err, "WriteMileage", "Write Mileage", "Error writing the car mileage to the database.")
-'  Resume WriteMileage_End
-'  Resume
-'End Function
-
 Public Function IBenefitClass_DeleteDB() As Boolean
   Dim rs As Recordset
   Dim s As String
@@ -1770,7 +1717,7 @@ CompanyCar_DeleteDB_End:
   Call xReturn("CompanyCar_DeleteDB")
   Exit Function
 CompanyCar_DeleteDB_Err:
-  Call ErrorMessage(ERR_ERROR, err, "CompanyCar_DeleteDB", "Company Car Delete DB", "Error deleting a company car from the database.")
+  Call ErrorMessage(ERR_ERROR, Err, "CompanyCar_DeleteDB", "Company Car Delete DB", "Error deleting a company car from the database.")
   Resume CompanyCar_DeleteDB_End
   Resume
 End Function
@@ -1811,7 +1758,7 @@ SetP46CC_End:
   Exit Function
 
 SetP46CC_Err:
-  Call ErrorMessage(ERR_ERROR, err, "SetP46CC", "Set P46 CC", "Error setting the P46 car Engine size band.")
+  Call ErrorMessage(ERR_ERROR, Err, "SetP46CC", "Set P46 CC", "Error setting the P46 car Engine size band.")
   Resume SetP46CC_End
 End Function
 
@@ -1839,7 +1786,7 @@ Private Function CalculatePaymentForPrivateUse(DateFactor As Variant) As Variant
       Case 4
         vPayment = ben.value(car_MadeGood_db)
       Case Else
-        Call err.Raise(ERR_CAR_AMOUNT, "GetPayment", "Invalid payment frequency")
+        Call Err.Raise(ERR_CAR_AMOUNT, "GetPayment", "Invalid payment frequency")
     End Select
   End With
     

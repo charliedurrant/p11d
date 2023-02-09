@@ -19,7 +19,7 @@ Public Function LoadReportDetails(p As Parser, RepWiz As ReportWizard, FrmRepWiz
     Call FrmRepWiz.ClearAllFields
     For Each rFldTmp In RepFieldsTmp
       Set rFld = RepWiz.GetReportFieldFromKey(DataSet, rFldTmp.KeyString)
-      Set nod = FrmRepWiz.TrV_Fields.nodes(rFld.KeyString)
+      Set nod = FrmRepWiz.TrV_Fields.Nodes(rFld.KeyString)
       Call FrmRepWiz.TrV_Fields_NodeClick(nod)
       Call rFldTmp.Copy(rFld, False)
       Set rFld.DataSet = DataSet
@@ -59,8 +59,12 @@ Private Function CheckLoadValid(RepDataSets As DataSetCollection, RepDetails As 
   CheckLoadValid = True
   For Each Fld In RepFields
     Fld.Selected = False
-    If Not IsDataSetWithin(Fld.DataSetString, RepDataSets, dSet) Then Call Err.Raise(ERR_CHECKLOAD, "CheckLoadValid", "The data set " & Fld.DataSetString & " is not in the data collection.")
-    If Not InCollection(dSet.cFields, Fld.KeyString) Then Call Err.Raise(ERR_CHECKLOAD, "CheckLoadValid", "The field " & Fld.Name & " is not in the data set " & Fld.DataSetString & ".")
+    If Not IsDataSetWithin(Fld.DataSetString, RepDataSets, dSet) Then
+      Call Err.Raise(ERR_CHECKLOAD, "CheckLoadValid", "The data set '" & Fld.DataSetString & "' is not in the data collection.")
+    End If
+    If Not InCollection(dSet.cFields, Fld.KeyString) Then
+      Call Err.Raise(ERR_CHECKLOAD, "CheckLoadValid", "The field " & Fld.Name & " is not in the data set " & Fld.DataSetString & ".")
+    End If
     Fld.Selected = True
 next_dataset:
   Next Fld
@@ -85,6 +89,7 @@ CheckLoadValidity_Err:
   Call ErrorMessage(ERR_ERROR, Err, "CheckLoadValid", "Check report", "Error checking validity of report to be loaded")
   If Err.Number = ERR_CHECKLOAD Then Resume next_dataset
   Resume CheckLoadValidity_End
+  Resume
 End Function
 
 Private Function IsDataSetWithin(ByVal FindDataSetString As String, WithinDataSets As Object, DataSet As ReportDataSet) As Boolean

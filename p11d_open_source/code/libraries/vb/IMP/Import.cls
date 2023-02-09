@@ -496,10 +496,8 @@ Private Function ImportAny(ImportType As String, ByVal Dest As IMPORT_DESTTYPE, 
   Dim FileNextIdle As Long
   Dim ImportFileName As String
   Dim cols() As ImportSpec, MaxCols As Long
-  Dim rf As TCSFileread
   Dim buffer As String, linenum As Long, s As String
-  Dim FilePos As Long
-  Dim InMulti As Boolean, i As Long, lineindex As Long
+  Dim InMulti As Boolean, i As Long, lineIndex As Long
   Dim OldErrorFilter As IErrorFilter
   Dim RecordsUpdated As Long, RecordsAdded As Long
   ' correct back CD/MS Dim tPrg As TCSProgressBar
@@ -530,15 +528,19 @@ On Error GoTo ImportAny_err
   End Select
   Call CheckImportColumns(Dest = DEST_ARRAY, True)
   MaxCols = PrepareImport(rs, rsRDO, ImportFileName, cols)
-  
+    
+  Dim lines() As String
+  lines = TextFileLines(m_ImportFilePath)
+  Dim linesCount As Long
+  linesCount = UBound(lines)
   'Set up progress bar with values and find step value
-  Set rf = New TCSFileread
-  If Not rf.OpenFile(m_ImportFilePath) Then Err.Raise ERR_IMPORT, ImportType, "Unable to open file " & m_ImportFilePath
+  
+  
   If m_FooterCount > 0 Then
     If Dest = DEST_ARRAY Then
       MaxImportLine = MaxImportLine - m_FooterCount
     Else
-      MaxImportLine = rf.LineCount - m_FooterCount
+      MaxImportLine = linesCount - m_FooterCount
     End If
   End If
   If MaxImportLine <= 0 Then Err.Raise ERR_IMPORT, ImportType, "Import has no lines to import"
@@ -561,14 +563,17 @@ On Error GoTo ImportAny_err
     Set tPrg = PB
     tPrg.Min = 0
     tPrg.Value = 0
-    tPrg.Max = rf.LineCount
+    tPrg.Max = linesCount
     If Len(tPrg.Caption) = 0 Then tPrg.Caption = "Importing Line"
     tPrg.Indicator = ValueOfMax
   End If
   
   If Not m_ErrorFilter Is Nothing And Not m_TestImport Then Set ATC2CORE.ErrorFilter = m_ErrorFilter
-  linenum = 0: lineindex = 0
-  Do While rf.GetLine(buffer)
+  linenum = 0: lineIndex = 0
+  
+  Dim linesIndex As Long
+  For linesIndex = LBound(lines) To UBound(lines)
+     buffer = lines(linesIndex)
     linenum = linenum + 1
     If linenum <= m_HeaderCount Then
       If linenum = 1 Then
@@ -579,7 +584,7 @@ On Error GoTo ImportAny_err
       GoTo NextLine
     End If
     If linenum > MaxImportLine Then
-      If Dest = DEST_ARRAY Then Exit Do
+      If Dest = DEST_ARRAY Then Exit For
       If linenum = (MaxImportLine + 1) Then
         m_Footer = buffer
       Else
@@ -615,9 +620,9 @@ process_multi:
                   GoTo NextLine
                 End If
       Case DEST_ARRAY
-                lineindex = lineindex + 1
+                lineIndex = lineIndex + 1
                 For i = 1 To MaxCols
-                  Values(lineindex, i) = cols(i).Value
+                  Values(lineIndex, i) = cols(i).Value
                 Next i
       Case Else
                 Err.Raise ERR_IMPORT, ImportType, "Destination invalid - not able to add record"
@@ -625,10 +630,8 @@ process_multi:
     
     If InMulti Then GoTo process_multi
     
-    FilePos = rf.CurrentPos
-    If FilePos > FileNextIdle Then
+    If (linenum Mod 1000) = 0 Then
       If Dest = DEST_RECORDSET Then DBEngine.Idle
-      FileNextIdle = FilePos + (8192& * 8)
     End If
     
 NextLine:
@@ -640,7 +643,7 @@ NextLine:
       Next i
     End If
     If m_ProcessingLinesInError < 0 Then GoTo ImportAny_end
-  Loop
+  Next
  
 ImportAny_end:
   If m_ProcessingLinesInError = 0 Then

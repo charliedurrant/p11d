@@ -1154,20 +1154,22 @@ Private Function CO2Percentage(ByVal ben As IBenefitClass) As Double
   End If
   
   'adjust to WLTP rates
+  
   If (UseWLTPCo2Rates(ben)) Then
     If (fuelType <> CCFT_ELECTRIC) And co2 Then
       Select Case co2
         Case Is >= 165
           Rate = Rate
         Case Is >= 51
-          Rate = Rate - 1
+          Rate = Rate
+          'Rate = Rate - 1
         Case Is < 51
           Select Case fuelType
             Case CCFT_HYBRID
-              Rate = Rate - 1
+              Rate = Rate 'Rate = Rate - 1
             Case Else
              'rate unknown, this is not hybid or electric vehicles < 51 assume 13
-              Rate = 13
+              Rate = 14
           End Select
       End Select
     End If

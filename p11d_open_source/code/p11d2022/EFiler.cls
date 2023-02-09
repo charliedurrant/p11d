@@ -415,12 +415,9 @@ DEFAULT:
     End If
 
     
-    
-
     sTempFileName = abatecrt.GetTempFilename()
     Call xmlDoc.Save(sTempFileName)
     xmlWithEncoding = TextFileLoad(sTempFileName)
-    
     
     
     ''final namespace alterations, what an absolute mess, dues to MSxml6
@@ -1039,7 +1036,7 @@ Private Function ProcessSubmission(ByRef SubmissionID As String, Optional ByVal 
     If mTimeOut > -1 And mTimeOut < CurrentTime - StartTime Then
       ' open frmtimeOut here and give users the choice to continue or cancel submission
       Set frm = New frmTimeOut 'create a new instance of form
-      frm.lblMessage.Caption = "The submission has reached the pre-defined time out period. Please press retry if you would like to continue polling for the next " & mTimeOut / 1000 & " seconds"
+      frm.lblMessage.caption = "The submission has reached the pre-defined time out period. Please press retry if you would like to continue polling for the next " & mTimeOut / 1000 & " seconds"
       frm.Show vbModal
       Retry = frm.Retry
       If Retry Then
@@ -2380,8 +2377,8 @@ Private Function TidyExistingSubmissions(ByVal EntityID As String, Optional ByVa
   Set rs = DA.StalledSubmissions("EntityID = " & StrSQL(EntityID), "SubmissionDate", True)
   If Not (rs.BOF And rs.EOF) Then
     Set frm = New frmTimeOut
-    frm.Caption = "Unresolved Submission"
-    frm.lblMessage.Caption = "There is an existing submission which has not been resolved." & vbCrLf & vbCrLf & "Press 'Continue' to attempt to resolve it automatically, else press 'Cancel' to resolve it later."
+    frm.caption = "Unresolved Submission"
+    frm.lblMessage.caption = "There is an existing submission which has not been resolved." & vbCrLf & vbCrLf & "Press 'Continue' to attempt to resolve it automatically, else press 'Cancel' to resolve it later."
     frm.Show vbModal
     Retry = frm.Retry
     If Retry Then

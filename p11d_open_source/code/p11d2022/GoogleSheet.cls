@@ -23,7 +23,7 @@ Public Function Initialise(ByVal ID As String) As Boolean
   Dim csvData As String
   Dim Count As Long
   
-On Error GoTo err_err:
+On Error GoTo Err_Err:
 
   m_iD = ID
   AccessToken = ""
@@ -31,9 +31,9 @@ On Error GoTo err_err:
   Count = m_sheetJson.Item("sheets").Count()
   Initialise = True
   
-err_end:
+Err_End:
   Exit Function
-err_err:
+Err_Err:
   m_iD = ""
   Exit Function
   
@@ -62,7 +62,7 @@ Private Function SheetJson() As Object
   Dim jsonString As String
   Dim ret As Object
   
-On Error GoTo err_err
+On Error GoTo Err_Err
 
   url = "https://sheets.googleapis.com/v4/spreadsheets/" & m_iD & "?key=" & API_KEY
   jsonString = UrlContentsAsString(url)
@@ -70,9 +70,9 @@ On Error GoTo err_err
   
   
   Set SheetJson = ret
-err_end:
+Err_End:
   Exit Function
-err_err:
+Err_Err:
   Call Err.Raise(ERR_ERROR, "SheetJson", Err.Description)
   
   
@@ -101,7 +101,7 @@ Public Sub SheetAsCsvToFile(ByVal sheetName As String, ByVal filePath)
   If Not SheetAsCsvEx(sheetName, csvData) Then
     Call Err.Raise(ERR_TESTING, "SheetAsCsv", "The sheet does not exist or it is not publically available")
   End If
-  Call TextFileSave(filePath, csvData)
+  Call TextFileSave(filePath, csvData, "utf-8")
   
 End Sub
 

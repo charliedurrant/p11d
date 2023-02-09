@@ -150,3 +150,6 @@ Public Function Queries(QueryID As QUERY_NAMES_TRANSFER, ParamArray P()) As Stri
   Call xReturn("Queries")
 End Function
 
+Private Sub Class_Initialize()
+
+End Sub

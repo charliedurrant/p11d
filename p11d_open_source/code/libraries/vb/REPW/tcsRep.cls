@@ -557,9 +557,6 @@ Public Function SelectItem(ByVal Key As String, ByVal bSelectItem As Boolean) As
   On Error GoTo SelectItem_Err
   SelectItem = SELECTITEM_ERROR
   If IsValidSelection(Key) Then
-    'Call SplitKey(DataSet, FieldName, Key)
-    'Set DSet = GetDataSet(DataSet)
-    'Set rFld = DSet.Fields(Key)
     Set rFld = GetReportFieldFromKey(dSet, Key)
     rFld.Selected = Not bSelectItem
     If rFld.Selected Then

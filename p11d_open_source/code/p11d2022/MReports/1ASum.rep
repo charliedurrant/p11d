@@ -34,5 +34,5 @@
 (DataSetName=EMPLOYERS)(Name=Adjustments to add)(DataType=2)(FieldName=Additions)(Alignment=1)(Font=HeadingFont,Arial,12,0,False,False,False,False)(Font=DataFont,Arial,12,0,False,False,False,False)(Format="£#,##0;£(#,##0)")
 (DataSetName=EMPLOYERS)(Name=Adjustments to deduct)(DataType=2)(FieldName=Deductions)(Alignment=1)(Font=HeadingFont,Arial,12,0,False,False,False,False)(Font=DataFont,Arial,12,0,False,False,False,False)(Format="£#,##0;£(#,##0)")
 (DataSetName=EMPLOYERS)(Name=Class1A benefit)(DataType=2)(FieldName=Class 1A~benefits)(Alignment=1)(Font=HeadingFont,Arial,12,0,False,False,False,False)(Font=DataFont,Arial,12,0,False,False,False,False)(Format="£#,##0;£(#,##0)")
-(DataSetName=EMPLOYERS)(Name=Class 1A NIC)(DataType=3)(FieldName=Class 1A NIC~@ 13.8%)(Alignment=1)(Font=HeadingFont,Arial,12,0,False,False,False,False)(Font=DataFont,Arial,12,0,False,False,False,False)(Format="£#,##0.00;£(#,##0.00)")(SUMTYPE=1)
+(DataSetName=EMPLOYERS)(Name=Class 1A NIC)(DataType=3)(FieldName=Class 1A NIC)(Alignment=1)(Font=HeadingFont,Arial,12,0,False,False,False,False)(Font=DataFont,Arial,12,0,False,False,False,False)(Format="£#,##0.00;£(#,##0.00)")(SUMTYPE=1)
 

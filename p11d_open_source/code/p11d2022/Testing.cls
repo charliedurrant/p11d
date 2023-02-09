@@ -68,7 +68,7 @@ Public Sub Init(ByVal gSheet As GoogleSheet)
   Dim Item As String
   Dim csv As csvParser
   
-On Error GoTo err_err
+On Error GoTo Err_Err
   Set m_Errors = New StringList
   Set m_gsheet = gSheet
   Set m_testingTests = New ObjectList
@@ -101,9 +101,9 @@ On Error GoTo err_err
     
   Next
   
-err_end:
+Err_End:
   Exit Sub
-err_err:
+Err_Err:
   Call Err.Raise(ERR_ERROR, "Testing.Init", Err.Description)
   Resume
 End Sub
@@ -144,7 +144,7 @@ Private Function CreateEmployer() As Employer
   
   Set empr = New Employer
   
-  Call empr.CreateEmployer(FullPath(p11d32.workingDirectory) & GuidNewEmployer & p11d32.AppYearShort & p11d32.Rates.FileExtensionCurrent)
+  Call empr.CreateEmployer(FullPath(p11d32.WorkingDirectory) & GuidNewEmployer & p11d32.AppYearShort & p11d32.Rates.FileExtensionCurrent)
   Call empr.OpenEmployer(False)
   Set ben = empr
   ben.value(employer_Name_db) = "Testing:" & Format$(Now, "MM/dd/yyyy hh::mm:ss")
@@ -183,7 +183,7 @@ Public Function Run(ByRef results As String) As Boolean
   Set sb = New QString
   Set empr = Nothing
   Run = True
-On Error GoTo err_err
+On Error GoTo Err_Err
     
   oldEcmployeeeScope = p11d32.ReportPrint.EmployeeSelection
   p11d32.ReportPrint.EmployeeSelection = ES_ALL
@@ -193,7 +193,7 @@ On Error GoTo err_err
   
   'import the data
   If ImportData(empr, sb) Then 'errors
-    GoTo err_end
+    GoTo Err_End
   End If
   
   Call p11d32.LoadEmployer(empr, True, True, False)
@@ -250,7 +250,7 @@ On Error GoTo err_err
     Run = False
   End If
   
-err_end:
+Err_End:
   p11d32.ReportPrint.EmployeeSelection = oldEcmployeeeScope
   Call p11d32.StartScreen
   
@@ -267,11 +267,11 @@ err_end:
   
   results = LTrim$(sb.bstr)
   Exit Function
-err_err:
+Err_Err:
   
   Call sb.Append(Err.Description)
   Call ErrorMessage(ERR_TESTING, Err, "Run", "Testing", Err.Description)
-  Resume err_end
+  Resume Err_End
   Resume
 End Function
 Private Function ImportData(empr As Employer, sb As QString) As Boolean
@@ -309,7 +309,7 @@ Private Sub ImportFile(ByVal empr As Employer, ByVal dataPathAndFile As String, 
   Dim ic As ImportClass
   Dim ErrorCount As Long
   
-On Error GoTo err_err:
+On Error GoTo Err_Err:
 
   Set ic = New ImportClass
   Set ic.Workspace = p11d32.P11DWS
@@ -340,12 +340,12 @@ On Error GoTo err_err:
     Call p11d32.Importing.PostProcessEx(ErrorCount, linesOk, importName, importType)
   End If
     
-err_end:
+Err_End:
   Set p11d32.Importing.DbP11dFile = Nothing
   Set ATC2CORE.ErrorFilter = Nothing
   Set ic = Nothing
   Exit Sub
-err_err:
+Err_Err:
   Set p11d32.Importing.DbP11dFile = Nothing
   Set ATC2CORE.ErrorFilter = Nothing
   Call m_Errors.Add(Err.Description)

@@ -24,6 +24,16 @@ Begin VB.Form F_PayeOnline
       Width           =   9135
       _ExtentX        =   16113
       _ExtentY        =   873
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   -2147483630
    End
    Begin VB.CheckBox chkCheckSubmissionAllowed 
       Caption         =   "Check submission allowed"
@@ -228,7 +238,7 @@ Begin VB.Form F_PayeOnline
       Skew            =   0
       PictureOffsetTop=   0
       PictureOffsetLeft=   0
-      Enabled         =   -1  'True
+      Enabled         =   0   'False
       Increment       =   1
       TextAlignment   =   0
    End

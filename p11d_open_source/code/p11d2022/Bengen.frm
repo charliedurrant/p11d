@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "atc2vtext.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form F_Other 
    Caption         =   " "
    ClientHeight    =   5685
@@ -744,14 +744,14 @@ Private Sub SetClassCaption(ben As IBenefitClass)
   If Not ben Is Nothing Then
     Set other = ben
     If Not other.Accommodation Is Nothing Then
-      lblFullDescription.Caption = p11d32.Rates.BenClassTo(m_BenClass, BCT_FORM_CAPTION) & " (Accommodation expenses)"
+      lblFullDescription.caption = p11d32.Rates.BenClassTo(m_BenClass, BCT_FORM_CAPTION) & " (Accommodation expenses)"
     ElseIf Not other.Loan Is Nothing Then
-      lblFullDescription.Caption = p11d32.Rates.BenClassTo(m_BenClass, BCT_FORM_CAPTION) & " (Loan amount waived)"
+      lblFullDescription.caption = p11d32.Rates.BenClassTo(m_BenClass, BCT_FORM_CAPTION) & " (Loan amount waived)"
     Else
-      lblFullDescription.Caption = sBasicCaption
+      lblFullDescription.caption = sBasicCaption
     End If
   Else
-    lblFullDescription.Caption = sBasicCaption
+    lblFullDescription.caption = sBasicCaption
   End If
   
   cboIRDesc2.Clear

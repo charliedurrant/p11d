@@ -27,8 +27,8 @@ Begin VB.Form F_f12_Settings
       TabCaption(0)   =   "User Ini File"
       TabPicture(0)   =   "F_f112_settings.frx":0000
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "rtUserInitFile"
-      Tab(0).Control(1)=   "lblUserIni"
+      Tab(0).Control(0)=   "lblUserIni"
+      Tab(0).Control(1)=   "rtUserInitFile"
       Tab(0).ControlCount=   2
       TabCaption(1)   =   "Global Ini File"
       TabPicture(1)   =   "F_f112_settings.frx":001C
@@ -47,6 +47,7 @@ Begin VB.Form F_f12_Settings
          _ExtentX        =   8837
          _ExtentY        =   6932
          _Version        =   393217
+         Enabled         =   -1  'True
          ScrollBars      =   3
          TextRTF         =   $"F_f112_settings.frx":0038
       End
@@ -59,6 +60,7 @@ Begin VB.Form F_f12_Settings
          _ExtentX        =   8837
          _ExtentY        =   7011
          _Version        =   393217
+         Enabled         =   -1  'True
          ScrollBars      =   3
          TextRTF         =   $"F_f112_settings.frx":00C3
       End
@@ -90,7 +92,7 @@ Option Explicit
 Private Sub Form_Load()
   Dim s As String
   
-  On Error GoTo err_Err
+  On Error GoTo err_err
   
   lblUserIni = p11d32.IniPathAndFile
   rtUserInitFile.Text = TextFileLoad(p11d32.IniPathAndFile)
@@ -101,12 +103,11 @@ Private Sub Form_Load()
   End If
   lblGlobalIniFile = p11d32.IniPathAndFileGlobal
   rtGlobalIni.Text = s
-  
-  
-err_End:
+    
+err_end:
   Exit Sub
-err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "Load", "Load", Err.Description)
-  Resume err_End
+  Resume err_end
 End Sub
 

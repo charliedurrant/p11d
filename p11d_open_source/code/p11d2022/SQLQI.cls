@@ -351,7 +351,7 @@ Private Function QueriesEx(ByVal QueryID As QUERY_NAMES_IMP, params() As Variant
       If NameOnly Then
         QueriesEx = "Shared vans"
       Else
-        QueriesEx = "SELECT DISTINCTROW T_BenVan.P_Num AS " & S_IMP_PNUM_ALIAS & ", T_BenVan.Item AS Description, T_BenVan.AvailFrom AS [Available from],T_BenVan.AvailTo AS [Available to], T_BenVan.Unavail AS [Days unavailable], T_BenVan.PrivateContrib AS [Private contribution],T_BenVan.RegistrationDate as [Registration Date] ,T_BenVan.MadeGoodIsTaxDeducted as [Amount is tax deducted], T_BenVan.fuel_available as [Was fuel available?] " & _
+        QueriesEx = "SELECT DISTINCTROW T_BenVan.P_Num AS " & S_IMP_PNUM_ALIAS & ", T_BenVan.Item AS Description, T_BenVan.AvailFrom AS [Available from],T_BenVan.AvailTo AS [Available to], T_BenVan.Unavail AS [Days unavailable], T_BenVan.PrivateContrib AS [Private contribution],T_BenVan.RegistrationDate as [Registration Date] ,T_BenVan.MadeGoodIsTaxDeducted as [Amount is tax deducted], T_BenVan.fuel_available as [Was fuel available?], T_BenVan.is_electric as [Electric?] " & _
                   "From T_BenVan WHERE ((T_BenVan.P_Num=" & StrSQL(S_SHAREDVAN_KEY) & "));"
       End If
       
@@ -405,7 +405,7 @@ QueriesEx_END:
   Call xReturn("Queries")
   Exit Function
 QueriesEx_ERR:
-  Call ErrorMessage(ERR_ERROR, err, "QueriesEx", "Queries Ex", "Error getting the query string for an import, query id = " & QueryID & ".")
+  Call ErrorMessage(ERR_ERROR, Err, "QueriesEx", "Queries Ex", "Error getting the query string for an import, query id = " & QueryID & ".")
   Resume QueriesEx_END
   Resume
 End Function

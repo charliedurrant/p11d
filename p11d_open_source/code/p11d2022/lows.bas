@@ -106,47 +106,25 @@ Public Function TrimMaxLength(ByVal s As String, MaxLength As Long) As String
   End If
   TrimMaxLength = s
 End Function
-Public Function TextFileLoad(ByVal sPathAndFile As String, Optional ByVal charset As String = "utf-8") As String
-  Dim objStream As Stream
-  Dim strData As String
-  
-On Error GoTo err_err
-
-  If (Not FileExists(sPathAndFile)) Then
-     Call Err.Raise(ERR_FILE_OPEN, "TextFileLoad", "Failed load the text file " & sPathAndFile & " as it does not exist")
-  End If
-  
-  Set objStream = New Stream
-  objStream.charset = charset
-  Call objStream.Open
-  Call objStream.LoadFromFile(sPathAndFile)
-  
-  
-  strData = objStream.ReadText()
-  Call objStream.Close
-  TextFileLoad = strData
-  
-err_end:
-  Set objStream = Nothing
-  Exit Function
-err_err:
-  Set objStream = Nothing
-  Call Err.Raise(ERR_FILE_INVALID, ErrorSource(Err, "TextFileLoad"), Err.Description)
-  Resume
+Public Function TextFileLoad(ByVal sPathAndFile As String, Optional ByVal charset As String = "") As String
+  TextFileLoad = CoreClass.TextFileLoad(sPathAndFile, charset)
 End Function
-Public Sub TextFileSave(ByVal sPathAndFile As String, ByRef sText As String, Optional ByVal charset = "utf-8")
+Public Sub TextFileSave(ByVal sPathAndFile As String, ByRef sText As String, Optional ByVal charset = "")
   Dim objStream As Stream
   
   On Error GoTo err_err
     
-  Set objStream = New Stream
-  objStream.charset = charset
-  Call objStream.Open
-  Call objStream.WriteText(sText, stWriteChar)
-  Call objStream.SaveToFile(sPathAndFile, adSaveCreateOverWrite)
-  
-  Call objStream.Close
-  
+  If (Len(charset) = 0) Then
+    Call TextFileSaveOld(sPathAndFile, sText)
+  Else
+    Set objStream = New Stream
+    objStream.charset = charset
+    Call objStream.Open
+    Call objStream.WriteText(sText, stWriteChar)
+    Call objStream.SaveToFile(sPathAndFile, adSaveCreateOverWrite)
+    Call objStream.Close
+  End If
+
 err_end:
   Set objStream = Nothing
   Exit Sub
@@ -155,7 +133,39 @@ err_err:
   Call Err.Raise(ERR_FILE_INVALID, ErrorSource(Err, "TextFileSave"), Err.Description)
   Resume
 End Sub
-
+Private Sub TextFileSaveOld(ByVal sPathAndFile As String, ByRef sText As String)
+  Dim bClosing As Boolean
+  'Dim fs As FileSystemObject
+  'Dim ts As TextStream
+  Dim ifile As Long
+  
+  On Error GoTo err_err
+  
+  ifile = 0
+  ifile = FreeFile
+  
+  Open sPathAndFile For Output As #ifile
+  Print #ifile, sText
+  bClosing = True
+  Close #ifile
+  ifile = 0
+  
+  'Set fs = New FileSystemObject
+  'Set ts = fs.CreateTextFile(sPathAndFile, True)
+  
+  'Call ts.Write(sText)
+  'bClosing = True
+  'Call ts.Close
+  'Set ts = Nothing
+  
+  
+err_end:
+  Exit Sub
+err_err:
+  If (Not bClosing) And (ifile <> 0) Then Close #ifile
+  Call Err.Raise(ERR_FILE_INVALID, ErrorSource(Err, "TextFileLoad"), Err.Description)
+  Resume
+End Sub
 Public Function GuidNewEmployer() As String
   GuidNewEmployer = (Replace$(Replace$(Replace$(GenerateGUID, "{", ""), "}", ""), "-", ""))
 End Function
@@ -566,10 +576,8 @@ On Error GoTo err_err
     Else
       LVI.Text = s(0)
     End If
-    
     LVI.Tag = s(1)
   Next
-  
   
 err_end:
   Exit Sub
@@ -846,7 +854,7 @@ GridIsNotTaxDate_Err:
   Resume GridIsNotTaxDate_End
 End Function
 
-Public Function GridIsNotNumericOrLong(ValidateMessage As String, vNumber As Variant, ByVal ObejctListIndex As Long) As Boolean
+Public Function GridIsNotNumericOrLong(ValidateMessage As String, vNumber As Variant, ByVal ObejctListIndex As Long, Optional ByVal allowNegative As Boolean = True) As Boolean
   '// returns the column index that is invalid
   On Error GoTo GridIsNotNumericOrLong_Err
   
@@ -861,6 +869,9 @@ Public Function GridIsNotNumericOrLong(ValidateMessage As String, vNumber As Var
     Else
       If vNumber > L_MAX_LONG Then
         ValidateMessage = "The value is greater than " & CStr(L_MAX_LONG) & "."
+        GridIsNotNumericOrLong = True
+      ElseIf vNumber < 0 Then
+        ValidateMessage = "The value is less than 0, only positive numbers are allowed"
         GridIsNotNumericOrLong = True
       End If
     End If
@@ -1518,7 +1529,7 @@ End Function
 
 Public Function SetupOpraInput(lbl As Label, textBox As ValText, Optional ByVal sLabelAddtionalText As String = "")
   
-  lbl.Caption = S_UDM_OPRA_AMOUNT_FOREGONE & sLabelAddtionalText
+  lbl.caption = S_UDM_OPRA_AMOUNT_FOREGONE & sLabelAddtionalText
   
   lbl.ToolTipText = S_UDM_OPRA_AMOUNT_FOREGONE_HELP
   textBox.TXTAlign = TXT_RIGHT
@@ -1553,7 +1564,7 @@ Public Function UrlContentsAsString(ByVal sURL As String) As String
   
       fileAndPath = GetTempFilename
       Call UrlDownload(sURL, fileAndPath)
-      UrlContentsAsString = TextFileLoad(fileAndPath)
+      UrlContentsAsString = TextFileLoad(fileAndPath, "utf-8")
     
 err_end:
     If (Len(fileAndPath) > 0) Then
@@ -1568,27 +1579,26 @@ err_err:
     
 End Function
 Public Function UrlDownload(ByVal url As String, ByVal fileAndPath As String) As Boolean
-    Dim oStream As ADODB.Stream
     Dim WinHttpReq As Object
+    Dim oStream As ADODB.Stream
     
     UrlDownload = False
 
-    Const HTTPREQUEST_SETCREDENTIALS_FOR_SERVER = 0
-    
-    
     Set WinHttpReq = CreateObject("WinHttp.WinHttpRequest.5.1")
     WinHttpReq.Open "GET", url, False
     WinHttpReq.send
-  
+    
     Set oStream = New ADODB.Stream
   
     oStream.Open
-    oStream.Type = 1
+    oStream.Type = adTypeBinary
     oStream.Write WinHttpReq.responseBody
     oStream.SaveToFile fileAndPath, 2
     oStream.Close
 
     UrlDownload = True
+  
+    
 End Function
 Sub DownloadFile(url, Path)
 

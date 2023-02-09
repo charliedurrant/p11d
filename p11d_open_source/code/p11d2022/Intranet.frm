@@ -20,6 +20,16 @@ Begin VB.Form F_Intranet
       Width           =   6615
       _ExtentX        =   11668
       _ExtentY        =   1085
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   -2147483630
    End
    Begin MSComDlg.CommonDialog cdlg 
       Left            =   5550
@@ -241,7 +251,7 @@ Begin VB.Form F_Intranet
       Skew            =   0
       PictureOffsetTop=   0
       PictureOffsetLeft=   0
-      Enabled         =   0   'False
+      Enabled         =   -1  'True
       Increment       =   1
       TextAlignment   =   0
    End

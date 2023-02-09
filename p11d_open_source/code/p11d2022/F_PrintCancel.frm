@@ -50,7 +50,7 @@ Begin VB.Form F_PrintCancel
       Skew            =   0
       PictureOffsetTop=   0
       PictureOffsetLeft=   0
-      Enabled         =   -1  'True
+      Enabled         =   0   'False
       Increment       =   1
       TextAlignment   =   2
    End
@@ -323,9 +323,6 @@ Private Function IReporter_Notify(rep As atc2rep.Reporter, notificationType As a
         shellString = pdfPrintPath & " " & tempFileName
         
         Call ShellProgram(shellString, vbHide, True)
-        
-        'Set oShell = CreateObject("WSCript.shell")
-        'oShell.Run "cmd /C " & pdfPrintPath & " " & tempFileName, 0, True
         Call xKill(tempFileName)
       End If
       IReporter_Notify = True

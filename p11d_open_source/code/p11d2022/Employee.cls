@@ -86,22 +86,56 @@ Public Enum EmployeeItems
   ee_NIInvalid
   ee_NIC_AdjustmentDeduct
   
-  ee_BOX_A
-  [ee_BOX_FIRST_ITEM] = ee_BOX_A
-  ee_BOX_B
-  ee_BOX_C
-  ee_BOX_D
-  ee_BOX_E
-  ee_BOX_F
-  ee_BOX_G
-  ee_BOX_H
-  ee_BOX_I
-  ee_BOX_J
-  ee_BOX_K
-  ee_BOX_L
-  ee_BOX_M
-  ee_BOX_N
-  [ee_BOX_LAST_ITEM] = ee_BOX_N
+  ee_BOX_P11DB_NICABLE_A
+  [ee_BOX_P11DB_NICABLE_FIRST_ITEM] = ee_BOX_P11DB_NICABLE_A
+  ee_BOX_P11DB_NICABLE_B
+  ee_BOX_P11DB_NICABLE_C
+  ee_BOX_P11DB_NICABLE_D
+  ee_BOX_P11DB_NICABLE_E
+  ee_BOX_P11DB_NICABLE_F
+  ee_BOX_P11DB_NICABLE_G
+  ee_BOX_P11DB_NICABLE_H
+  ee_BOX_P11DB_NICABLE_I
+  ee_BOX_P11DB_NICABLE_J
+  ee_BOX_P11DB_NICABLE_K
+  ee_BOX_P11DB_NICABLE_L
+  ee_BOX_P11DB_NICABLE_M
+  ee_BOX_P11DB_NICABLE_N
+  [ee_BOX_P11DB_NICABLE_LAST_ITEM] = ee_BOX_P11DB_NICABLE_N
+  
+  ee_BOX_A_P11DB_ADDITIONS
+  [ee_BOX_P11DB_ADDITIONS_FIRST_ITEM] = ee_BOX_A_P11DB_ADDITIONS
+  ee_BOX_B_P11DB_ADDITIONS
+  ee_BOX_C_P11DB_ADDITIONS
+  ee_BOX_D_P11DB_ADDITIONS
+  ee_BOX_E_P11DB_ADDITIONS
+  ee_BOX_F_P11DB_ADDITIONS
+  ee_BOX_G_P11DB_ADDITIONS
+  ee_BOX_H_P11DB_ADDITIONS
+  ee_BOX_I_P11DB_ADDITIONS
+  ee_BOX_J_P11DB_ADDITIONS
+  ee_BOX_K_P11DB_ADDITIONS
+  ee_BOX_L_P11DB_ADDITIONS
+  ee_BOX_M_P11DB_ADDITIONS
+  ee_BOX_N_P11DB_ADDITIONS
+  [ee_BOX_P11DB_ADDITIONS_LAST_ITEM] = ee_BOX_N_P11DB_ADDITIONS
+  
+   ee_BOX_A_P11DB_DEDUCTIONS
+  [ee_BOX_P11DB_DEDUCTIONS_FIRST_ITEM] = ee_BOX_A_P11DB_DEDUCTIONS
+  ee_BOX_B_P11DB_DEDUCTIONS
+  ee_BOX_C_P11DB_DEDUCTIONS
+  ee_BOX_D_P11DB_DEDUCTIONS
+  ee_BOX_E_P11DB_DEDUCTIONS
+  ee_BOX_F_P11DB_DEDUCTIONS
+  ee_BOX_G_P11DB_DEDUCTIONS
+  ee_BOX_H_P11DB_DEDUCTIONS
+  ee_BOX_I_P11DB_DEDUCTIONS
+  ee_BOX_J_P11DB_DEDUCTIONS
+  ee_BOX_K_P11DB_DEDUCTIONS
+  ee_BOX_L_P11DB_DEDUCTIONS
+  ee_BOX_M_P11DB_DEDUCTIONS
+  ee_BOX_N_P11DB_DEDUCTIONS
+  [ee_BOX_P11DB_DEDUCTIONS_LAST_ITEM] = ee_BOX_N_P11DB_DEDUCTIONS
   
   ee_TotalBenefitsPotentiallySubjectToClass1A
   ee_LASTITEM = ee_TotalBenefitsPotentiallySubjectToClass1A
@@ -840,11 +874,12 @@ Private Function IBenefitClass_CalculateBody() As Variant
     End If
   Next
   
-  Dim a As Long
+  'cad p11db
+  'Dim a As Long
   
-  a = benEmployee.value(ee_NIC_BENEFIT_SUBJECT_TO_CLASS1A) - benEmployee.value(ITEM_CLASS1A_ADJUSTMENT)
-  a = benEmployee.value(ee_TotalBenefitsPotentiallySubjectToClass1A) - a
-  benEmployee.value(ee_NIC_AdjustmentDeduct) = a
+  'a = benEmployee.value(ee_NIC_BENEFIT_SUBJECT_TO_CLASS1A) - benEmployee.value(ITEM_CLASS1A_ADJUSTMENT)
+  'a = benEmployee.value(ee_TotalBenefitsPotentiallySubjectToClass1A) - a
+  'benEmployee.value(ee_NIC_AdjustmentDeduct) = a
   
 Employee_Calculate_END:
   IBenefitClass_CalculateBody = benEmployee.value(ITEM_BENEFIT)
@@ -861,7 +896,11 @@ End Function
 Private Function Employee_CalculateEx(ByVal benEmployee As IBenefitClass, ByVal ben As IBenefitClass)
   Dim bc As BEN_CLASS
   Dim vBenefit As Variant
+  Dim vBenefitNotSubjectToClass1A As Variant
+  Dim vBenefitNicAdjustment As Variant
   Dim vValue As Variant
+  Dim boxIndex As EmployeeItems
+  
   On Error GoTo Employee_CalculateEx_ERR
   Call xSet("Employee_CalculateEx")
 
@@ -874,23 +913,46 @@ Private Function Employee_CalculateEx(ByVal benEmployee As IBenefitClass, ByVal 
     benEmployee.value(ITEM_VALUE) = benEmployee.value(ITEM_VALUE) + vValue
     benEmployee.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A) = benEmployee.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A) + ben.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A)
        
+    If (ben.BenefitClass = BC_LIVING_ACCOMMODATION_D) Then
+      vBenefit = ben.value(accom_temp_nic_calc_benefit)
+    End If
+       
     If ben.value(ITEM_NIC_CLASS1A_ABLE) Then
-      If (ben.BenefitClass = BC_LIVING_ACCOMMODATION_D) Then
-        vBenefit = ben.value(accom_temp_nic_calc_benefit)
-      End If
+      
       benEmployee.value(ee_TotalBenefitsPotentiallySubjectToClass1A) = benEmployee.value(ee_TotalBenefitsPotentiallySubjectToClass1A) + vBenefit
+      
       'this is the benefit that is subject ot 12.5%
       benEmployee.value(ITEM_NIC_CLASS1A_BENEFIT) = benEmployee.value(ITEM_NIC_CLASS1A_BENEFIT) + ben.value(ITEM_NIC_CLASS1A_BENEFIT)
       benEmployee.value(ITEM_CLASS1A_ADJUSTMENT) = benEmployee.value(ITEM_CLASS1A_ADJUSTMENT) + ben.value(ITEM_CLASS1A_ADJUSTMENT)
+      
+      'class 1a additions by benefit
+      vBenefitNicAdjustment = ben.value(ITEM_CLASS1A_ADJUSTMENT)
+      If (vBenefitNicAdjustment <> 0) Then
+        boxIndex = BenefitToEmployeeBoxAdditions(ben)
+        benEmployee.value(boxIndex) = benEmployee.value(boxIndex) + vBenefitNicAdjustment
+      End If
+    
+      If (IsNumeric(vBenefit)) And vBenefit <> 0 Then
+        boxIndex = BenefitToEmployeeBox(ben)
+        benEmployee.value(boxIndex) = benEmployee.value(boxIndex) + vBenefit
+      End If
+      
+      'class1a deductions by benefit
+      If benEmployee.value(ee_Class1AEmployeeIsNotSubjectTo_db) Then
+        benEmployee.value(ee_NIC_AdjustmentDeduct) = benEmployee.value(ee_NIC_AdjustmentDeduct) + vBenefit
+        boxIndex = BenefitToEmployeeBoxDeductions(ben)
+        benEmployee.value(boxIndex) = benEmployee.value(boxIndex) + vBenefit
+      End If
+    Else
+      
     End If
     
-    Dim boxIndex As EmployeeItems
-    boxIndex = BenefitToEmployeeBox(ben)
-    If (IsNumeric(Employee_CalculateEx)) And Employee_CalculateEx > 0 Then
-      benEmployee.value(boxIndex) = benEmployee.value(boxIndex) + Employee_CalculateEx
-    End If
+    
+    
+      
+    
+    
   End If
-   
    
 Employee_CalculateEx_END:
   Call xSet("Employee_CalculateEx")
@@ -898,10 +960,17 @@ Employee_CalculateEx_END:
 Employee_CalculateEx_ERR:
   benEmployee.value(ITEM_BENEFIT) = S_ERROR
   Resume Next
+  Resume
 End Function
 
 Private Function BenefitToEmployeeBox(ben As IBenefitClass) As EmployeeItems
   BenefitToEmployeeBox = p11d32.Rates.BenClassTo(ben.BenefitClass, BCT_EMPLOYEE_BOX_ITEM)
+End Function
+Private Function BenefitToEmployeeBoxAdditions(ben As IBenefitClass) As EmployeeItems
+  BenefitToEmployeeBoxAdditions = p11d32.Rates.BenClassTo(ben.BenefitClass, BCT_EMPLOYEE_BOX_ITEM_P11DB_ADDITIONS)
+End Function
+Private Function BenefitToEmployeeBoxDeductions(ben As IBenefitClass) As EmployeeItems
+  BenefitToEmployeeBoxDeductions = p11d32.Rates.BenClassTo(ben.BenefitClass, BCT_EMPLOYEE_BOX_ITEM_P11DB_DEDUCTIONS)
 End Function
 
 Private Property Let IBenefitClass_CompanyDefined(ByVal NewValue As Boolean)
@@ -1008,9 +1077,20 @@ Private Sub IBenefitClass_SetCalcDefaults()
   ben.value(ITEM_ERROR) = ""
   ben.value(ee_TotalBenefitsPotentiallySubjectToClass1A) = 0
   ben.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A) = 0
-  For i = ee_BOX_FIRST_ITEM To ee_BOX_LAST_ITEM
+  
+  For i = ee_BOX_P11DB_NICABLE_FIRST_ITEM To ee_BOX_P11DB_NICABLE_LAST_ITEM
     ben.value(i) = 0
   Next
+  
+  For i = ee_BOX_P11DB_ADDITIONS_FIRST_ITEM To ee_BOX_P11DB_ADDITIONS_LAST_ITEM
+    ben.value(i) = 0
+  Next
+  
+  For i = ee_BOX_P11DB_DEDUCTIONS_FIRST_ITEM To ee_BOX_P11DB_DEDUCTIONS_LAST_ITEM
+    ben.value(i) = 0
+  Next
+  
+  ben.value(ee_NIC_AdjustmentDeduct) = 0
 End Sub
 
 Private Property Get IBenefitClass_value(ByVal Item As Long) As Variant

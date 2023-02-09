@@ -31,15 +31,15 @@ Begin VB.Form F_PrintOptions
       TabCaption(0)   =   "HMIT"
       TabPicture(0)   =   "F_PrintOptions.frx":0000
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "fmeHMITSections"
+      Tab(0).Control(0)=   "fraReportTotalValue"
       Tab(0).Control(1)=   "fmeHMITSectionChoice"
-      Tab(0).Control(2)=   "fraReportTotalValue"
+      Tab(0).Control(2)=   "fmeHMITSections"
       Tab(0).ControlCount=   3
       TabCaption(1)   =   "Employee Letter"
       TabPicture(1)   =   "F_PrintOptions.frx":001C
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "fraEmployeeLetter"
-      Tab(1).Control(1)=   "fraLetters"
+      Tab(1).Control(0)=   "fraLetters"
+      Tab(1).Control(1)=   "fraEmployeeLetter"
       Tab(1).ControlCount=   2
       TabCaption(2)   =   "Other"
       TabPicture(2)   =   "F_PrintOptions.frx":0038
@@ -137,15 +137,6 @@ Begin VB.Form F_PrintOptions
             TabIndex        =   71
             Top             =   960
             Width           =   6615
-            Begin VB.TextBox txtCustomExportFileName 
-               BackColor       =   &H8000000F&
-               Height          =   375
-               Left            =   120
-               TabIndex        =   80
-               Text            =   "Text1"
-               Top             =   960
-               Width           =   5535
-            End
             Begin VB.CommandButton cmdEditCustomExportFileName 
                Caption         =   "Edit"
                Height          =   375
@@ -180,6 +171,15 @@ Begin VB.Form F_PrintOptions
                TabIndex        =   72
                Top             =   260
                Width           =   1575
+            End
+            Begin VB.Label txtCustomExportFileName 
+               BorderStyle     =   1  'Fixed Single
+               Caption         =   "Label2"
+               Height          =   360
+               Left            =   135
+               TabIndex        =   80
+               Top             =   945
+               Width           =   5535
             End
             Begin VB.Label lblCustomFileName 
                Caption         =   "Custom export file name"
@@ -812,17 +812,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
-
-
-
-
-
-
 Option Explicit
 Private m_LastSelectedNode As node
 Private m_NodeCount As Long
@@ -919,9 +908,9 @@ Private Sub chkTimeStamp_Click()
 End Sub
 
 Private Sub cmdEditCustomExportFileName_Click()
-  F_PrintOptionsExportCustomFileName.Text = txtCustomExportFileName.Text
+  F_PrintOptionsExportCustomFileName.Text = txtCustomExportFileName.caption
   If F_PrintOptionsExportCustomFileName.ShowDialog(Me) = vbOK Then
-    txtCustomExportFileName.Text = F_PrintOptionsExportCustomFileName.Text
+    txtCustomExportFileName.caption = F_PrintOptionsExportCustomFileName.Text
   End If
   Unload F_PrintOptionsExportCustomFileName
 End Sub
@@ -963,8 +952,8 @@ Private Sub EmployeeLetterFontToLabel()
   lblEmployeeLetterFont.Font.Name = p11d32.ReportPrint.EmployeeLetterFontName
   lblEmployeeLetterFont.Font.size = p11d32.ReportPrint.EmployeeLetterFontSize
   lblEmployeeLetterFont = p11d32.ReportPrint.EmployeeLetterFontName & "," & p11d32.ReportPrint.EmployeeLetterFontSize
-  lblEmployeeLetterFont.ToolTipText = lblEmployeeLetterFont.Caption
-  cmdEmployeeLetterFont.ToolTipText = lblEmployeeLetterFont.Caption
+  lblEmployeeLetterFont.ToolTipText = lblEmployeeLetterFont.caption
+  cmdEmployeeLetterFont.ToolTipText = lblEmployeeLetterFont.caption
 EmployeeLetterFontToLabel_END:
   Call xReturn("EmployeeLetterFontToLabel")
   Exit Sub
@@ -1168,6 +1157,10 @@ Private Sub DefaultLetterSelection()
   
 End Sub
 
+Private Sub Label2_Click()
+
+End Sub
+
 Private Sub optChkBeforePrint_Click(Index As Integer)
     Select Case Index
     Case -1
@@ -1332,7 +1325,7 @@ Private Sub tvwLetters_NodeClick(ByVal node As MSComctlLib.node)
 End Sub
 
 Private Sub txtCustomExportFileName_Change()
-  p11d32.ReportPrint.ExportEmployeeFileNameCustom = txtCustomExportFileName.Text
+  p11d32.ReportPrint.ExportEmployeeFileNameCustom = txtCustomExportFileName.caption
 End Sub
 
 Private Sub txtEmailSubject_Validate(Cancel As Boolean)

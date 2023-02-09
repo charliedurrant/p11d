@@ -208,6 +208,8 @@ Public Function LastFixLevel(lYear As Long) As Long
       LastFixLevel = 116
     Case 21
       LastFixLevel = 117
+    Case 22
+      LastFixLevel = 118
     Case Else
       Call ECASE("Invalid year in LastFixLevel.")
   End Select
@@ -223,7 +225,7 @@ Public Function EnumEmployerFiles(ByVal sExtension As String, IENUME As IEnumEmp
   
   If IENUME Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "EnumEmployerFiles", "The IBaseNotofy is nothing.")
   
-  s = p11d32.workingDirectory & "*" & sExtension
+  s = p11d32.WorkingDirectory & "*" & sExtension
   
   Call IENUME.Count(CountFiles(s))  ' display number of employers
     
@@ -231,7 +233,7 @@ Public Function EnumEmployerFiles(ByVal sExtension As String, IENUME As IEnumEmp
   Do While Len(q) > 0
     IENUME.CurrentFile (q)
     Set empr = New Employer
-    If empr.Validate(p11d32.workingDirectory & q) Then
+    If empr.Validate(p11d32.WorkingDirectory & q) Then
       Call IENUME.Employer(empr)
       EnumEmployerFiles = EnumEmployerFiles + 1
     End If
@@ -274,12 +276,12 @@ CopyBenData_ERR:
   Resume CopyBenData_END
   Resume
 End Function
-Private Function ObjectListIndexExist(OL As ObjectList, ByVal lIndex As Long) As Boolean
+Private Function ObjectListIndexExist(ol As ObjectList, ByVal lIndex As Long) As Boolean
   Dim o As Object
   
   On Error GoTo ObjectListIndexExist_ERR
   
-  Set o = OL(lIndex)
+  Set o = ol(lIndex)
   ObjectListIndexExist = True
 ObjectListIndexExist_END:
   Exit Function
@@ -922,7 +924,11 @@ TRY_AGAIN:
   If benX Is Nothing Then Call Err.Raise(ERR_PARENT_IS_NOTHING, "GetParentFromBenefit", "The benefits parent is nothing at " & l & " levels up the tree.")
   Select Case GPFB
     Case GPBF_EMPLOYEE
-      Set ee = benX
+      If (TypeName(benX) = "Employee") Then
+        Set ee = benX
+      Else
+        GoTo TRY_AGAIN
+      End If
       Set GetParentFromBenefit = benX
     Case GPBF_EMPLOYER
       Set er = benX
@@ -1313,7 +1319,6 @@ Public Sub BenCalcNIC(ben As IBenefitClass, Optional INCV As BASE_ITEMS = ITEM_B
   If benEmployee Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "BenCalcNIC", "No Employee exists")
   If Not benEmployee.value(ee_Class1AEmployeeIsNotSubjectTo_db) Then
     'this is assigning the whole benefit to the be that which is subject to class 1A
-    ben.value(INCV) = ben.value(IB)
     d = p11d32.Rates.value(carNICRate)
     'ben.value(INCB) = ben.value(IB) * d
     If ben.value(IMGITD) Then

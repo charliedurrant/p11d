@@ -21,10 +21,18 @@ Begin VB.Form F_Print
       TabIndex        =   35
       Top             =   5880
       Width           =   7335
-      _extentx        =   12938
-      _extenty        =   873
-      font            =   "F_Print.frx":0000
-      forecolor       =   -2147483630
+      _ExtentX        =   12938
+      _ExtentY        =   873
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   -2147483630
    End
    Begin VB.CommandButton cmdReportWizard 
       Caption         =   "&Wizard"
@@ -50,7 +58,7 @@ Begin VB.Form F_Print
       Height          =   1155
       Left            =   5445
       TabIndex        =   11
-      ToolTipText     =   $"F_Print.frx":002C
+      ToolTipText     =   $"F_Print.frx":0000
       Top             =   45
       Width           =   1965
       Begin VB.PictureBox pctFrame3 
@@ -170,7 +178,7 @@ Begin VB.Form F_Print
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            MouseIcon       =   "F_Print.frx":00B8
+            MouseIcon       =   "F_Print.frx":008C
             Text            =   ""
             TypeOfData      =   2
             Maximum         =   "05/04/1999"
@@ -195,7 +203,7 @@ Begin VB.Form F_Print
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            MouseIcon       =   "F_Print.frx":00D4
+            MouseIcon       =   "F_Print.frx":00A8
             Text            =   ""
             TypeOfData      =   2
             Maximum         =   "05/04/1999"
@@ -322,9 +330,9 @@ Begin VB.Form F_Print
       Width           =   5325
       Begin VB.ComboBox cmbPrinter 
          Height          =   315
-         ItemData        =   "F_Print.frx":00F0
+         ItemData        =   "F_Print.frx":00C4
          Left            =   240
-         List            =   "F_Print.frx":00F2
+         List            =   "F_Print.frx":00C6
          Style           =   2  'Dropdown List
          TabIndex        =   34
          Top             =   240
@@ -724,7 +732,7 @@ Private Sub optQuarter_Click(Index As Integer)
           
           Call p11d32.Rates.GetP46QuarterStartEnd(dQuarterStart, dQuarterEnd, i + 1)
           If DateInRange(dNow, dQuarterStart, dQuarterEnd) Then lCurrentQuarterIndex = i
-          optQuarter(i).Caption = "Quarter " & CStr(i + 1) & " (" & DateValReadToScreen(dQuarterStart) & " - " & DateValReadToScreen(dQuarterEnd) & ")"
+          optQuarter(i).caption = "Quarter " & CStr(i + 1) & " (" & DateValReadToScreen(dQuarterStart) & " - " & DateValReadToScreen(dQuarterEnd) & ")"
         End If
         If p11d32.ReportPrint.P46Range = i Then
           optQuarter(i) = True

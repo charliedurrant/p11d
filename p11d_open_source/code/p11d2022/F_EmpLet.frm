@@ -265,14 +265,14 @@ Private Function OpenLetterFile(bFileCaption As Boolean, ByVal sPathAndFile As S
   p11d32.ReportPrint.EmployeeLetterFile = sFIle & sExt
   p11d32.ReportPrint.EmployeeLetterPath = sPath
   
-  Panel.Caption = p11d32.ReportPrint.EmployeeLetterPathAndFile
-  Me.Caption = "Employee Letter - "
+  Panel.caption = p11d32.ReportPrint.EmployeeLetterPathAndFile
+  Me.caption = "Employee Letter - "
   If bFileCaption Then
-    Me.Caption = Me.Caption + p11d32.ReportPrint.EmployeeLetterFile
+    Me.caption = Me.caption + p11d32.ReportPrint.EmployeeLetterFile
     mb_Untitled = False
     'If ReadOnly(sPathAndFile) Then
     If ReadOnly(sPathAndFile) Or (m_FileType <> FIT_USER_DEFINED) Then
-      Me.Caption = Me.Caption & " [Read Only]"
+      Me.caption = Me.caption & " [Read Only]"
       mb_ReadOnly = True
       Call CloseFile
     Else
@@ -281,7 +281,7 @@ Private Function OpenLetterFile(bFileCaption As Boolean, ByVal sPathAndFile As S
     End If
   Else
     'JN has sorted
-    Me.Caption = Me.Caption & S_UNTITLED
+    Me.caption = Me.caption & S_UNTITLED
     mb_ReadOnly = False
     Call CloseFile
     mb_Untitled = True
@@ -325,7 +325,7 @@ Private Function ChangeFile(ByVal bFileCaption As Boolean, ByVal sNewPathAndFile
       If MsgBox(sMsg, vbQuestion Or vbOKCancel, "Change File") = vbOK Then
       Close m_EmployeeLetterFileNumber
       ChangeFile = True
-      Panel.Caption = ""
+      Panel.caption = ""
       ce.Text = ""
       ce.Dirty = False
     Else
@@ -335,7 +335,7 @@ Private Function ChangeFile(ByVal bFileCaption As Boolean, ByVal sNewPathAndFile
   Else
     Close m_EmployeeLetterFileNumber
     ce.Text = ""
-    Panel.Caption = ""
+    Panel.caption = ""
     ce.Dirty = False
     ChangeFile = True
   End If

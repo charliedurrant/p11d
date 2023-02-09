@@ -36,6 +36,9 @@ Public OLCurrentEmployers As ObjectList
 Public OLPriorEmployers As ObjectList
 
 Public YOE As Long
+Public Property Get AppYearBringingForward() As Long
+  AppYearBringingForward = p11d32.AppYear - 1
+End Property
 
 Private Function IErrorFilter_FilterErrorMessage(ByVal Username As String, ByVal DateTime As Date, ByVal ErrorNumber As Long, ByVal ErrorName As String, ByVal ErrorText As String, ByVal SourceFunction As String) As Boolean
 
@@ -97,18 +100,19 @@ TRY_AGAIN:
     sNewFileName = F_Input.ValText.Text & p11d32.Rates.FileExtensionCurrent
     
     'check that it does not already exist
-    If FileExists(FullPath(p11d32.WorkingDirectory) & sNewFileName) Then Call Err.Raise(ERR_FILE_EXISTS, "GetFiles", "The file " & sNewFileName & " already exists, please choose another name or, choose the file from the current year files.")
+    If FileExists(FullPath(p11d32.workingDirectory) & sNewFileName) Then Call Err.Raise(ERR_FILE_EXISTS, "GetFiles", "The file " & sNewFileName & " already exists, please choose another name or, choose the file from the current year files.")
     
     Set DestinationEmployer = New Employer
     'create a new file
-    F_BringForward.P.Caption = "Creating file " & sNewFileName
+    F_BringForward.P.caption = "Creating file " & sNewFileName
     Call SetCursor
-    If Not DestinationEmployer.CreateEmployer(p11d32.WorkingDirectory & sNewFileName) Then Call Err.Raise(ERR_NO_EMPLOYER, "GetFiles", "Failed to create employer.")
+    If Not DestinationEmployer.CreateEmployer(p11d32.workingDirectory & sNewFileName) Then Call Err.Raise(ERR_NO_EMPLOYER, "GetFiles", "Failed to create employer.")
     
     Call p11d32.LoadEmployer(DestinationEmployer, False, True, True)
+        
     Set eyDst = DestinationEmployer
     Call CopyBenData(DestinationEmployer, eySrc)
-    eyDst.value(employer_PathAndFile) = p11d32.WorkingDirectory & sNewFileName
+    eyDst.value(employer_PathAndFile) = p11d32.workingDirectory & sNewFileName
     'if change here change below
     eyDst.value(employer_Year) = p11d32.AppYearShort
     Call eyDst.WriteDB
@@ -123,7 +127,7 @@ TRY_AGAIN:
     If BringForwardType = BFT_OVERWRITE Then
       'we are simply deleting the employer and recreating it with the old employer data, saves queries to delete data from tables
       Set eyDst = DestinationEmployer
-      F_BringForward.P.Caption = "Recreating file " & eyDst.value(employer_FileName)
+      F_BringForward.P.caption = "Recreating file " & eyDst.value(employer_FileName)
       Set tempEy = New Employer
       Call CopyBenData(tempEy, DestinationEmployer)
       
@@ -137,8 +141,6 @@ TRY_AGAIN:
     End If
   End If
   
-  
-  
   GetDestination = True
   
 GetDestination_END:
@@ -146,7 +148,7 @@ GetDestination_END:
   Call p11d32.LoadEmployer(SourceEmployer, False, False, True)
   Call ClearCursor
   Set F_Input = Nothing
-  F_BringForward.P.Caption = ""
+  F_BringForward.P.caption = ""
   Call xReturn("GetDestination")
   Exit Function
 GetDestination_ERR:
@@ -176,11 +178,19 @@ Private Sub AllApartFromEmployees(DestinationEmployer As Employer, SourceEmploye
   If Me.CDCs Then Call SourceEmployer.WriteCDCs
   
   If Me.SharedVans Then
-    'apf Call DestinationEmployer.db.Execute(sql.Queries(DELETE_CDB_EMPLOYEE_BENEFITS))
     Set ben = SourceEmployer.SharedVans
     Set ben.Parent = DestinationEmployer
     Call ben.WriteDB
   End If
+  
+  If (p11d32.BringForward.AppYearBringingForward = 2021) Then
+    Call SourceEmployer.AddDefaultP11DbAdjustments
+  Else
+    Call SourceEmployer.ClearP11DbAdjustmentsValues
+  End If
+  
+  Call SourceEmployer.WriteP11DbAdjustments
+  
   
   Set SourceEmployer.db = dbTemp
     
@@ -291,10 +301,10 @@ Public Sub ConvertToCurrentYear()
   Dim bEdited As Boolean
   Dim i As Long
   
-  On Error GoTo err_Err
+  On Error GoTo err_err
   
   'copy the file to next year
-  If Not GetSourceFiles(SourceEmployers) Then GoTo err_End
+  If Not GetSourceFiles(SourceEmployers) Then GoTo err_end
   Set fso = New FileSystemObject
   Call SetCursor
   Call p11d32.LoadEmployer(Nothing)
@@ -304,15 +314,15 @@ Public Sub ConvertToCurrentYear()
     sNewFileName = benEmployer.value(employer_FileName)
     p0 = InStr(1, sNewFileName, ".mdb", vbTextCompare)
     s = Left(sNewFileName, p0 - 1)
-    sNewFileName = p11d32.WorkingDirectory & Left$(s, Len(s) - Len(p11d32.AppYearShortLastYear)) & p11d32.AppYearShort & ".mdb"
+    sNewFileName = p11d32.workingDirectory & Left$(s, Len(s) - Len(p11d32.AppYearShortLastYear)) & p11d32.AppYearShort & ".mdb"
     If (FileExists(sNewFileName)) Then
       Call fso.DeleteFile(sNewFileName, True)
     End If
     
     Set DestinationEmployer = New Employer
-    If Not DestinationEmployer.CreateEmployer(sNewFileName, p11d32.WorkingDirectory & benEmployer.value(employer_FileName)) Then Call Err.Raise(ERR_NO_EMPLOYER, "GetFiles", "Failed to create employer.")
+    If Not DestinationEmployer.CreateEmployer(sNewFileName, p11d32.workingDirectory & benEmployer.value(employer_FileName)) Then Call Err.Raise(ERR_NO_EMPLOYER, "GetFiles", "Failed to create employer.")
     
-    If Not p11d32.LoadEmployer(DestinationEmployer, False, False, True) Then GoTo err_End
+    If Not p11d32.LoadEmployer(DestinationEmployer, False, False, True) Then GoTo err_end
     DestinationEmployer.db.Execute ("UPDATE ID set Fixlevel = " & (LastFixLevel(p11d32.AppYearShortLastYear) + 1))
     'update the fix level to itself + 1
     For Each td In DestinationEmployer.db.TableDefs
@@ -356,10 +366,10 @@ NEXT_FIELD:
     Set DestinationEmployer.db = Nothing
   Next
   Call p11d32.LoadEmployers
-err_End:
+err_end:
   Call ClearCursor
   Exit Sub
-err_Err:
+err_err:
   If Not DestinationEmployer Is Nothing Then
     If Not DestinationEmployer.db Is Nothing Then
       Call DestinationEmployer.db.Close
@@ -368,7 +378,7 @@ err_Err:
     
   End If
   Call ErrorMessage(ERR_ERROR, Err, "CovertToCurrentYear", "Convert To Current Year", Err.Description)
-  Resume err_End
+  Resume err_end
   Resume
 End Sub
 Public Sub ProcessFiles()
@@ -433,7 +443,7 @@ Public Sub ProcessFiles()
     Call SetCursor
     Call AllApartFromEmployees(DestinationEmployer, SourceEmployer)
     
-    F_BringForward.P.Caption = "Analysing file " & ey.value(employer_FileName)
+    F_BringForward.P.caption = "Analysing file " & ey.value(employer_FileName)
     Call F_BringForward.sts.StartPrg(SourceEmployer.employees.Count, "Employee", ValueOfMax)
     
     For j = 1 To SourceEmployer.employees.Count
@@ -459,10 +469,10 @@ Public Sub ProcessFiles()
       Call F_BringForward.sts.StopPrg
     Else
       If NewFilesForAll Then Call CleanUpEmployer(DestinationEmployer)
-      F_BringForward.P.Caption = ""
+      F_BringForward.P.caption = ""
       prg.Indicator = TCSPROG.None
       prg.TextAlignment = Align_Centre
-      prg.Caption = "Finished bring forward"
+      prg.caption = "Finished bring forward"
     End If
     
     
@@ -519,7 +529,7 @@ WriteEmployee_ERR:
   'Resume
 End Sub
 Private Sub UpdateEmployerListViewItem(benEY As IBenefitClass, YOE As YEAR_OF_EMPLOYER, Optional li As ListItem)
-  Dim OL As ObjectList
+  Dim ol As ObjectList
   Dim lv As ListView
   Dim benTemp As IBenefitClass
 On Error GoTo UpdateEmployerListViewItem_ERR
@@ -531,14 +541,14 @@ On Error GoTo UpdateEmployerListViewItem_ERR
   If li Is Nothing Then
     Select Case YOE
       Case YEAR_OF_EMPLOYER.YOE_CURRENT
-        Set OL = Me.OLCurrentEmployers
+        Set ol = Me.OLCurrentEmployers
         Set lv = F_BringForward.lvCurrentYearFiles
       Case YEAR_OF_EMPLOYER.YOE_PRIOR
-        Set OL = Me.OLPriorEmployers
+        Set ol = Me.OLPriorEmployers
         Set lv = F_BringForward.lvPriorYearFiles
     End Select
     
-    Set li = lv.listitems(OL.ItemIndex(benEY))
+    Set li = lv.listitems(ol.ItemIndex(benEY))
     If li Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "UpdateEmployerListViewItem", "The list item is nothing.")
     GoTo UPDATE_LI
   Else

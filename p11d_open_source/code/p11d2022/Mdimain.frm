@@ -721,6 +721,9 @@ Begin VB.MDIForm MDIMain
       Begin VB.Menu mnuEmployerMileageSchemes 
          Caption         =   "Com&pany mileage schemes"
       End
+      Begin VB.Menu mnuP11Db 
+         Caption         =   "&P11D(b)"
+      End
       Begin VB.Menu mnuEmployerSharedVans 
          Caption         =   "&Shared vans"
       End
@@ -1869,6 +1872,10 @@ End Sub
 
 Private Sub mnuOtherButtonVans_Click()
   Call BenScreenSwitch(BC_NONSHAREDVANS_G)
+End Sub
+
+Private Sub mnuP11Db_Click()
+  Call p11d32.CurrentEmployer.EditP11Db
 End Sub
 
 Private Sub mnuPAYEOnline_Click()

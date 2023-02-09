@@ -357,7 +357,7 @@ BenefitToScreen_Err:
 End Function
 
 Private Property Get IBenefitForm2_lv() As MSComctlLib.IListView
-  Set IBenefitForm2_lv = LB
+  Set IBenefitForm2_lv = lb
 End Property
 
 Private Function IBenefitForm2_RemoveBenefit(ByVal BenefitIndex As Long) As Boolean
@@ -403,12 +403,12 @@ Private Sub Form_Load()
   If Not (mclsResize.InitResize(Me, L_DES_HEIGHT, L_DES_WIDTH, DESIGN, , , MDIMain)) Then
     Err.Raise ERR_Application
   End If
-  lblYear.Caption = p11d32.AppYear
+  lblYear.caption = p11d32.AppYear
   
   lblJuneRelease.Visible = p11d32.JuneRelease
   fbWorkingDirectory.ForeColor = lblTitle.ForeColor
         
-  lblTitle.Caption = app.companyName & " " & S_TELEPHONE
+  lblTitle.caption = app.companyName & " " & S_TELEPHONE
     
 End Sub
 Private Sub Form_Resize()
@@ -439,17 +439,17 @@ Private Sub L_Title_Click()
 End Sub
 
 Private Sub lb_ColumnClick(ByVal ColumnHeader As MSComctlLib.ColumnHeader)
-  Call SetSortOrder(LB, ColumnHeader)
+  Call SetSortOrder(lb, ColumnHeader)
 End Sub
 Private Sub lb_DblClick()
-  If Not LB.SelectedItem Is Nothing Then Call ToolBarButton(TBR_EMPLOYEESCREEN, LB.SelectedItem.Tag)
+  If Not lb.SelectedItem Is Nothing Then Call ToolBarButton(TBR_EMPLOYEESCREEN, lb.SelectedItem.Tag)
     
 End Sub
 Private Sub lb_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
   Dim li As ListItem
   
   If Button And vbRightButton Then
-    Set li = LB.HitTest(X, Y)
+    Set li = lb.HitTest(X, Y)
     If Not li Is Nothing Then
       Call p11d32.EditEmployer(li.Tag)
     End If

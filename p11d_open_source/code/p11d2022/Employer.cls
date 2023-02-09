@@ -123,13 +123,13 @@ Public Enum Employer_ITEMS
   employer_IRTelephoneNumber_db
   employer_IRYourReference_db
   employer_IRAccountsOfficeReference_db
-  employer_AddClass1AAmounts_db
-  employer_AddClass1ADescription_db
-  employer_deductClass1AAmounts_db
+  employer_addClass1ADescription_db
   employer_deductClass1ADescription_db
   employer_GUID_db
-  employer_NIC_AdjustmentAdd
-  employer_NIC_AdjustmentDeduct
+  employer_NIC_AdjustmentAddTotal
+  employer_NIC_AdjustmentDeductTotal
+  employer_NIC_AdjustmentAddUserEntered
+  employer_NIC_AdjustmentDeductUserEntered
 
   employer_Year
   employer_TreatEmployeeCarsAsUnderApprovedFPCS_db
@@ -161,23 +161,59 @@ Public Enum Employer_ITEMS
   employer_PayeOnlineP46Q4SubmissionStatus
 
 
-  employer_BOX_A
-  [employer_BOX_FIRST_ITEM] = employer_BOX_A
-  employer_BOX_b
-  employer_BOX_c
-  employer_BOX_D
-  employer_BOX_E
-  employer_BOX_F
-  employer_BOX_G
-  employer_BOX_H
-  employer_BOX_I
-  employer_BOX_J
-  employer_BOX_K
-  employer_BOX_L
-  employer_BOX_M
-  employer_BOX_N
-  [employer_BOX_LAST_ITEM] = employer_BOX_N
-
+  employer_BOX_P11DB_NICABLE_A
+  [employer_BOX_P11DB_NICABLE_FIRST_ITEM] = employer_BOX_P11DB_NICABLE_A
+  employer_BOX_P11DB_NICABLE_P11DB_NICABLE_B
+  employer_BOX_P11DB_NICABLE_c
+  employer_BOX_P11DB_NICABLE_D
+  employer_BOX_P11DB_NICABLE_E
+  employer_BOX_P11DB_NICABLE_F
+  employer_BOX_P11DB_NICABLE_G
+  employer_BOX_P11DB_NICABLE_H
+  employer_BOX_P11DB_NICABLE_I
+  employer_BOX_P11DB_NICABLE_J
+  employer_BOX_P11DB_NICABLE_K
+  employer_BOX_P11DB_NICABLE_L
+  employer_BOX_P11DB_NICABLE_M
+  employer_BOX_P11DB_NICABLE_N
+  [employer_BOX_P11DB_NICABLE_LAST_ITEM] = employer_BOX_P11DB_NICABLE_N
+  
+  employer_BOX_A_P11DB_ADDITIONS
+  [employer_BOX_P11DB_ADDITIONS_FIRST_ITEM] = employer_BOX_A_P11DB_ADDITIONS
+  employer_BOX_B_P11DB_ADDITIONS
+  employer_BOX_C_P11DB_ADDITIONS
+  employer_BOX_D_P11DB_ADDITIONS
+  employer_BOX_E_P11DB_ADDITIONS
+  employer_BOX_F_P11DB_ADDITIONS
+  employer_BOX_G_P11DB_ADDITIONS
+  employer_BOX_H_P11DB_ADDITIONS
+  employer_BOX_I_P11DB_ADDITIONS
+  employer_BOX_J_P11DB_ADDITIONS
+  employer_BOX_K_P11DB_ADDITIONS
+  employer_BOX_L_P11DB_ADDITIONS
+  employer_BOX_M_P11DB_ADDITIONS
+  employer_BOX_N_P11DB_ADDITIONS
+  [employer_BOX_P11DB_ADDITIONS_LAST_ITEM] = employer_BOX_N_P11DB_ADDITIONS
+  
+  
+  employer_BOX_A_P11DB_DEDUCTIONS
+  [employer_BOX_P11DB_DEDUCTIONS_FIRST_ITEM] = employer_BOX_A_P11DB_DEDUCTIONS
+  employer_BOX_B_P11DB_DEDUCTIONS
+  employer_BOX_C_P11DB_DEDUCTIONS
+  employer_BOX_D_P11DB_DEDUCTIONS
+  employer_BOX_E_P11DB_DEDUCTIONS
+  employer_BOX_F_P11DB_DEDUCTIONS
+  employer_BOX_G_P11DB_DEDUCTIONS
+  employer_BOX_H_P11DB_DEDUCTIONS
+  employer_BOX_I_P11DB_DEDUCTIONS
+  employer_BOX_J_P11DB_DEDUCTIONS
+  employer_BOX_K_P11DB_DEDUCTIONS
+  employer_BOX_L_P11DB_DEDUCTIONS
+  employer_BOX_M_P11DB_DEDUCTIONS
+  employer_BOX_N_P11DB_DEDUCTIONS
+  [employer_BOX_P11DB_DEDUCTIONS_LAST_ITEM] = employer_BOX_N_P11DB_DEDUCTIONS
+  
+  
   employer_TotalBenefitsPotentiallySubjectToClass1A
   
   employer_LAST_ITEM = employer_TotalBenefitsPotentiallySubjectToClass1A
@@ -209,6 +245,38 @@ Public CopyBenIndex As Long
 Public CopyBenClass As BEN_CLASS
 Public CopyBenCut As Boolean
 Public CDCs As ObjectList
+Public m_P11DbAdditions As ObjectList
+Public m_P11DbDeductions As ObjectList
+
+Public Property Set P11DbAdditions(ByVal value As ObjectList)
+ Set m_P11DbAdditions = value
+End Property
+Public Property Get P11DbAdditions() As ObjectList
+ Set P11DbAdditions = m_P11DbAdditions
+End Property
+Public Property Set P11DbDeductions(ByVal value As ObjectList)
+ Set m_P11DbDeductions = value
+End Property
+Public Property Get P11DbDeductions() As ObjectList
+ Set P11DbDeductions = m_P11DbDeductions
+End Property
+Public Sub ClearP11DbAdjustmentsValues()
+  Call ClearP11DbAdjustmentsValuesEx(P11DbAdditions)
+  Call ClearP11DbAdjustmentsValuesEx(P11DbDeductions)
+End Sub
+Private Sub ClearP11DbAdjustmentsValuesEx(ol As ObjectList)
+  Dim i As Long
+  Dim adjustment As P11DbAdjustment
+  
+  For i = 1 To ol.Count
+    Set adjustment = ol(i)
+    adjustment.value = 0
+  Next
+  
+  
+End Sub
+
+
 Public Sub RepairAndCompact()
   Dim ben As IBenefitClass
   
@@ -562,7 +630,99 @@ WriteCDCs_Err:
   Resume WriteCDCs_End
   Resume
 End Function
+Public Sub ReadP11DbAdjustments()
+  Dim rs As Recordset
+  Dim adjustment As P11DbAdjustment
+  Dim isAddition As Boolean
+  Dim i As Long
+  On Error GoTo err_err
+  Call xSet("ReadP11DbAdjustments")
+  
+  If (p11d32.BringForward.Yes And p11d32.BringForward.AppYearBringingForward < 2022) Then
+    Exit Sub
+  End If
+  
+  
+  Call P11DbAdditions.RemoveAll
+  Call P11DbDeductions.RemoveAll
+  
+  If db Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "ReadP11DbAdjustments", "The database is nothing.")
+  
+  Set rs = db.OpenRecordset(sql.Queries(SELECT_P11DB_ADJUSTEMNTS), dbOpenForwardOnly, dbFailOnError)
+  While Not rs.EOF
+    i = i + 1
+    Set adjustment = New P11DbAdjustment
+    adjustment.caption = IsNullEx(rs.Fields("Caption").value, CStr(i))
+    adjustment.value = IsNullEx(rs.Fields("Value").value, 0)
+    isAddition = rs.Fields("Addition")
+    If (isAddition) Then
+      Call P11DbAdditions.Add(adjustment)
+    Else
+      Call P11DbDeductions.Add(adjustment)
+    End If
+    Call rs.MoveNext
+  Wend
+  
+  If (p11d32.BringForward.Yes) Then
+    ClearP11DbAdjustmentsValues
+  End If
+  
+err_end:
+  Call xReturn("ReadP11DbAdjustments")
+  Exit Sub
+err_err:
+  Call ErrorMessage(ERR_ERROR, Err, "ReadP11DbAdjustments", "Read P11DbAdjustments", "Error reading the P11D(b) adjustments from the database.")
+  Resume err_end
+  Resume
+End Sub
+Public Sub AddDefaultP11DbAdjustments()
+  Dim adjustment As P11DbAdjustment
+  
+  Set adjustment = New P11DbAdjustment
+  adjustment.caption = "Add Class 1A NIC due on termination payments"
+  Call P11DbAdditions.Add(adjustment)
+  
+End Sub
+Public Sub WriteP11DbAdjustments()
+  Dim rs As Recordset
+  
+  On Error GoTo err_err
+  Call xSet("WriteP11DbAdjustments")
+  
+  If db Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "WriteP11DbAdjustments", "The database is nothing.")
+  
+  Call db.Execute(sql.Queries(DELETE_P11DB_ADJUSTMENTS))
+  
+  Set rs = Me.db.OpenRecordset(sql.Queries(SELECT_P11DB_ADJUSTEMNTS), dbOpenDynaset, dbFailOnError)
+  
+  Call WriteP11DbAdjustmentsList(rs, Me.P11DbAdditions, True)
+  Call WriteP11DbAdjustmentsList(rs, Me.P11DbDeductions, False)
+    
+  
+err_end:
+  Set rs = Nothing
+  Call xReturn("WriteFPCS")
+  Exit Sub
 
+err_err:
+  Call ErrorMessage(ERR_ERROR, Err, "WriteP11DbAdjustments", "Write FPCS", "Error writing the car scheme to the database.")
+  Resume err_end
+  Resume
+End Sub
+Private Sub WriteP11DbAdjustmentsList(rs As Recordset, Data As ObjectList, addition As Boolean)
+  Dim i As Long
+  Dim P11DbAdjustment As P11DbAdjustment
+  
+  Call Data.Compact
+  For i = 1 To Data.Count
+    Set P11DbAdjustment = Data(i)
+    Call rs.AddNew
+    rs.Fields("Addition").value = addition
+    rs.Fields("Caption").value = P11DbAdjustment.caption
+    rs.Fields("Value").value = P11DbAdjustment.value
+    Call rs.Update
+  Next
+End Sub
 Public Function ReadFPCS() As Long
   Dim bFirstOne As Boolean
   Dim rs As Recordset
@@ -686,7 +846,76 @@ EditCDC_ERR:
   Resume EditCDC_END
   Resume
 End Function
-
+Public Sub EditP11Db()
+  Dim ben As IBenefitClass
+  
+On Error GoTo err_err
+  
+  Call xSet("EditP11Db")
+  
+  If Not MoveMenuUpdateEmployee Then GoTo err_end
+  
+  Set ben = Me
+  
+  
+  F_P11Db.IRAddressLine1 = ben.value(employer_IRAddressLine1_db)
+  F_P11Db.IRAddressLine2 = ben.value(employer_IRAddressLine2_db)
+  F_P11Db.IRAddressLine3 = ben.value(employer_IRAddressLine3_db)
+  F_P11Db.IRAddressLine4 = ben.value(employer_IRAddressLine4_db)
+  F_P11Db.IRPostCode = ben.value(employer_IRPostcode_db)
+  F_P11Db.IRTelephoneNumber = ben.value(employer_IRTelephoneNumber_db)
+  F_P11Db.IRYourReference = ben.value(employer_IRYourReference_db)
+  F_P11Db.IRTaxOfficeNumber = ben.value(employer_IRTaxOffice_db)
+  F_P11Db.IRAccountsOfficeReference = ben.value(employer_IRAccountsOfficeReference_db)
+  
+  F_P11Db.DeductClass1ADescription = ben.value(employer_deductClass1ADescription_db)
+  F_P11Db.AddClass1ADescription = ben.value(employer_addClass1ADescription_db)
+  
+  F_P11Db.EerDeclSect2Chk1 = ben.value(employer_EerDeclSect2Chk1_db)
+  F_P11Db.EerDeclSect2Chk2 = ben.value(employer_EerDeclSect2Chk2_db)
+  F_P11Db.EerDeclSect2Chk3 = ben.value(employer_EerDeclSect2Chk3_db)
+  
+  Set F_P11Db.Additions = Me.P11DbAdditions
+  Set F_P11Db.Deductions = Me.P11DbDeductions
+    
+  If F_P11Db.ShowDialog(MDIMain) = vbOK Then
+    ben.value(employer_IRAccountsOfficeReference_db) = F_P11Db.IRAccountsOfficeReference
+    ben.value(employer_IRAddressLine1_db) = F_P11Db.IRAddressLine1
+    ben.value(employer_IRAddressLine2_db) = F_P11Db.IRAddressLine2
+    ben.value(employer_IRAddressLine3_db) = F_P11Db.IRAddressLine3
+    ben.value(employer_IRAddressLine4_db) = F_P11Db.IRAddressLine4
+    ben.value(employer_IRPostcode_db) = F_P11Db.IRPostCode
+    ben.value(employer_IRTelephoneNumber_db) = F_P11Db.IRTelephoneNumber
+    ben.value(employer_IRTaxOffice_db) = F_P11Db.IRTaxOfficeNumber
+    ben.value(employer_IRYourReference_db) = F_P11Db.IRYourReference
+    ben.value(employer_IRAccountsOfficeReference_db) = F_P11Db.IRAccountsOfficeReference
+    
+    ben.value(employer_deductClass1ADescription_db) = F_P11Db.DeductClass1ADescription
+    ben.value(employer_addClass1ADescription_db) = F_P11Db.AddClass1ADescription
+      
+    ben.value(employer_EerDeclSect2Chk1_db) = F_P11Db.chkEerDeclSect2Chk1
+    ben.value(employer_EerDeclSect2Chk2_db) = F_P11Db.chkEerDeclSect2Chk2
+    ben.value(employer_EerDeclSect2Chk3_db) = F_P11Db.chkEerDeclSect2Chk3
+      
+            
+    Call ben.WriteDB
+    Call Me.WriteP11DbAdjustments
+    ben.Dirty = True
+  End If
+  
+err_end:
+  Set F_P11Db.Deductions = Nothing
+  Set F_P11Db.Additions = Nothing
+    
+  Unload F_P11Db
+  Set F_P11Db = Nothing
+  Call xReturn("EditP11Db")
+  Exit Sub
+err_err:
+  Call ErrorMessage(ERR_ERROR, Err, "EditP11Db", "Edit P11D(b)", "Error editing the P11D(b) details.")
+  Resume err_end
+  Resume
+End Sub
 Public Function EditSharedVans() As Boolean
   Dim PreviousCurrentForm As Form
   Dim ibf As IBenefitForm2
@@ -764,8 +993,6 @@ FindEmployee_ERR:
   Call ErrorMessage(ERR_ERROR, Err, "FindEmployee", "Find Employee", "Error - could not finding employee" & sPNum)
   Resume
 End Function
-
-
 Public Function LoadEmployees(Optional bToScreen As Boolean = True) As Long
   Dim emp As Employee
   Dim ben As IBenefitClass, benEmployer As IBenefitClass
@@ -921,7 +1148,7 @@ Private Sub RunAllFixes(ByVal RunUpdateFixes As Boolean)
       prg.Max = p11d32.TemplateFixlevel
       prg.value = i
       prg.Indicator = ValueOfMax
-      prg.Caption = "Running update fix"
+      prg.caption = "Running update fix"
       Call RunFixes(i, True)
     Next i
   End If
@@ -931,7 +1158,7 @@ Private Sub RunAllFixes(ByVal RunUpdateFixes As Boolean)
       prg.Min = ben.value(employer_FixLevel_db) + 1
       prg.Max = p11d32.TemplateFixlevel
       prg.Indicator = ValueOfMax
-      prg.Caption = "Run structural fix"
+      prg.caption = "Run structural fix"
       prg.value = i
       Call RunFixes(i, False)
     Next i
@@ -1208,7 +1435,7 @@ Private Sub SyncDB()
   If (Not m_dbfile Is Nothing) Then
     Call m_dbfile.Close
   End If
-  Set m_dbfile = InitDB(p11d32.P11DWS, sFileName, sFileName, , True)     'open exclusive
+  Set db = InitDB(p11d32.P11DWS, sFileName, sFileName, , True)     'open exclusive
   dbName = m_dbfile.Name
   If m_dbfile Is Nothing Then Call Err.Raise(ERR_DB_IS_NOTHING, "SyncDB", "Unable to open " & dbName)
   
@@ -1218,8 +1445,8 @@ Private Sub SyncDB()
   Call DBEngine.Idle(dbFreeLocks + dbRefreshCache)
   m_dbfile.Close
   
-  Set m_dbfile = Nothing
-  Set m_dbfile = InitDB(p11d32.P11DWS, dbName, dbName)
+  Set db = Nothing
+  Set db = InitDB(p11d32.P11DWS, dbName, dbName)
   
 SyncDB_end:
   Call SetPanel2("")
@@ -1250,7 +1477,7 @@ Public Function EmployeeScreen() As Boolean
     Set ee = Nothing
     Call UpdateBenefitFromTags
     If p11d32.CurrentEmployer.CurrentEmployee Is p11d32.CurrentEmployer.CDBEmployee Then
-      If (Not CurrentForm Is F_Employers) And F_Employees.LB.listitems.Count > 0 Then
+      If (Not CurrentForm Is F_Employers) And F_Employees.lb.listitems.Count > 0 Then
         Set ee = employees(GetEmployeeIndexFromSelectedEmployee)
       End If
     End If
@@ -1307,6 +1534,7 @@ Private Function IBenefitClass_Calculate() As Variant
   Dim ey As IBenefitClass
   Dim iEmployeesDeductions As Long
   Dim dNIC As Double
+  
   Call xSet("Employer_Calculate")
   
   On Error GoTo Employer_Calculate_ERR
@@ -1322,25 +1550,40 @@ Private Function IBenefitClass_Calculate() As Variant
        IBenefitClass_Calculate = IBenefitClass_Calculate + ee.Calculate
        ey.value(ITEM_BENEFIT) = ey.value(ITEM_BENEFIT) + ee.value(ITEM_BENEFIT)
        ey.value(ITEM_NIC_CLASS1A_BENEFIT) = ey.value(ITEM_NIC_CLASS1A_BENEFIT) + ee.value(ITEM_NIC_CLASS1A_BENEFIT)
+       
        ey.value(ITEM_CLASS1A_ADJUSTMENT) = ey.value(ITEM_CLASS1A_ADJUSTMENT) + ee.value(ITEM_CLASS1A_ADJUSTMENT)
+       
        ey.value(employer_TotalBenefitsPotentiallySubjectToClass1A) = ey.value(employer_TotalBenefitsPotentiallySubjectToClass1A) + ee.value(ee_TotalBenefitsPotentiallySubjectToClass1A)
        ey.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A) = ey.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A) + ee.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A)
        iEmployeesDeductions = iEmployeesDeductions + ee.value(ee_NIC_AdjustmentDeduct)
        
-       For eeBoxIndex = [ee_BOX_FIRST_ITEM] To [ee_BOX_LAST_ITEM]
-         eyBoxIndex = employer_BOX_FIRST_ITEM + (eeBoxIndex - ee_BOX_FIRST_ITEM)
+       For eeBoxIndex = [ee_BOX_P11DB_NICABLE_FIRST_ITEM] To [ee_BOX_P11DB_NICABLE_LAST_ITEM]
+         eyBoxIndex = employer_BOX_P11DB_NICABLE_FIRST_ITEM + (eeBoxIndex - ee_BOX_P11DB_NICABLE_FIRST_ITEM)
          ey.value(eyBoxIndex) = ey.value(eyBoxIndex) + ee.value(eeBoxIndex)
        Next
               
+       For eeBoxIndex = ee_BOX_P11DB_ADDITIONS_FIRST_ITEM To ee_BOX_P11DB_ADDITIONS_LAST_ITEM
+         eyBoxIndex = employer_BOX_P11DB_ADDITIONS_FIRST_ITEM + (eeBoxIndex - ee_BOX_P11DB_ADDITIONS_FIRST_ITEM)
+         ey.value(eyBoxIndex) = ey.value(eyBoxIndex) + ee.value(eeBoxIndex)
+       Next
        
+       For eeBoxIndex = ee_BOX_P11DB_DEDUCTIONS_FIRST_ITEM To ee_BOX_P11DB_DEDUCTIONS_LAST_ITEM
+         eyBoxIndex = employer_BOX_P11DB_DEDUCTIONS_FIRST_ITEM + (eeBoxIndex - ee_BOX_P11DB_DEDUCTIONS_FIRST_ITEM)
+         ey.value(eyBoxIndex) = ey.value(eyBoxIndex) + ee.value(eeBoxIndex)
+       Next
+              
        'should ITEM_NIC_CLASS1A_BENEFIT be the class1a on the benefit after additions ? probably
     End If
   Next
   
-  ey.value(employer_NIC_AdjustmentAdd) = ey.value(employer_AddClass1AAmounts_db) + ey.value(ITEM_CLASS1A_ADJUSTMENT)
-  ey.value(employer_NIC_AdjustmentDeduct) = Max(0, ey.value(employer_deductClass1AAmounts_db) + iEmployeesDeductions)
   
-  ey.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A) = Max(0, ey.value(employer_TotalBenefitsPotentiallySubjectToClass1A) + ey.value(employer_NIC_AdjustmentAdd) - ey.value(employer_NIC_AdjustmentDeduct))
+  ey.value(employer_NIC_AdjustmentAddUserEntered) = Me.P11DbAdjustmentsSum(Me.P11DbAdditions)
+  ey.value(employer_NIC_AdjustmentDeductUserEntered) = Me.P11DbAdjustmentsSum(Me.P11DbDeductions)
+  
+  ey.value(employer_NIC_AdjustmentAddTotal) = ey.value(employer_NIC_AdjustmentAddUserEntered) + ey.value(ITEM_CLASS1A_ADJUSTMENT)
+  ey.value(employer_NIC_AdjustmentDeductTotal) = ey.value(employer_NIC_AdjustmentDeductUserEntered) + iEmployeesDeductions
+  
+  ey.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A) = Max(0, ey.value(employer_TotalBenefitsPotentiallySubjectToClass1A) + ey.value(employer_NIC_AdjustmentAddTotal) - ey.value(employer_NIC_AdjustmentDeductTotal))
   
   'see P11D electronic business rules for crazy rounding
   dNIC = p11d32.Rates.value(carNICRate) * ey.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A)
@@ -1355,7 +1598,20 @@ Employer_Calculate_ERR:
   IBenefitClass_Calculate = S_ERROR
   Resume Employer_Calculate_END
 End Function
-
+Public Function P11DbAdjustmentsSum(Adjustments As ObjectList) As Long
+  Dim i As Long
+  Dim adjustment As P11DbAdjustment
+  Dim ret As Long
+  
+  ret = 0
+  For i = 1 To Adjustments.Count
+    Set adjustment = Adjustments(i)
+    ret = ret + adjustment.value
+  Next
+  
+  P11DbAdjustmentsSum = ret
+  
+End Function
 Private Property Let IBenefitClass_CompanyDefined(ByVal RHS As Boolean)
 End Property
 
@@ -1384,8 +1640,14 @@ Private Sub Class_Initialize()
   employees.Increment = 500
   Set FPCSchemes = New ObjectList
   Set SharedVans = New SharedVans
+  
   Set SharedVans.IBenefitClass_Parent = Me
   Set CDCs = New ObjectList
+  
+  Set m_P11DbAdditions = New ObjectList
+  Set m_P11DbDeductions = New ObjectList
+  
+  
   Call IBenefitClass_SetBenItemsInformation
 End Sub
 Public Function ValidatePersonnelNumber(vNewNumber As Variant, Optional bRaiseError As Boolean = False) As Boolean
@@ -1574,25 +1836,25 @@ EditCompanyDefinedBenefits_Err:
 End Function
 
 
-Public Function GetEmployees(OL As ObjectList) As Boolean
+Public Function GetEmployees(ol As ObjectList) As Boolean
   Dim i As Long
   Dim li As ListItem
   
   On Error GoTo GetEmployees_Err
   Call xSet("GetEmployees")
 
-  Set OL = New ObjectList
+  Set ol = New ObjectList
   
-  With F_Employees.LB
+  With F_Employees.lb
     For i = 1 To .listitems.Count
       Set li = .listitems(i)
       If p11d32.EmployeeSelectedForPrint(employees(li.Tag), Me) Then
-        Call OL.Add(employees(li.Tag))
+        Call ol.Add(employees(li.Tag))
       End If
     Next
   End With
   
-  GetEmployees = OL.Count
+  GetEmployees = ol.Count
   
 GetEmployees_End:
   Call xReturn("GetEmployees")
@@ -1629,7 +1891,7 @@ Public Function ValidateEx(ByVal sPathAndFile As String, ByVal bCloseDB As Boole
   
   If FileExists(ben.value(employer_PathAndFile)) Then
     ben.value(employer_FileIsOpenBySomeOneElse) = IsFileOpen(ben.value(employer_PathAndFile))
-    Set m_dbfile = InitDB(p11d32.P11DWS, ben.value(employer_PathAndFile), "P11D Employer Database", , bOpenExclusive, bShowErrors)
+    Set db = InitDB(p11d32.P11DWS, ben.value(employer_PathAndFile), "P11D Employer Database", , bOpenExclusive, bShowErrors)
   End If
   
   If m_dbfile Is Nothing Then
@@ -1647,7 +1909,7 @@ Public Function ValidateEx(ByVal sPathAndFile As String, ByVal bCloseDB As Boole
   
 Validate_end:
   If bCloseDB Then
-    Set m_dbfile = Nothing
+    Set db = Nothing
     ben.value(employer_FileIsOpenBySomeOneElse) = False
   End If
   Call xReturn("Validate")
@@ -1674,21 +1936,28 @@ Public Function CreateEmployer(ByVal sPathAndFile As String, Optional ByVal sFil
   If Len(sFileToCopy) = 0 Then sFileToCopy = p11d32.TemplateFile(Nothing)
   If Not FileCopyEx(sFileToCopy, sPathAndFile) Then Err.Raise 70, "CreateEmployer", "Unable to copy master database " & p11d32.TemplateFile(Nothing) & "."
   
-  Set m_dbfile = InitDB(p11d32.P11DWS, sPathAndFile, "P11D Employer Database", sql.Queries(SELECT_ID), , False)
-  If m_dbfile Is Nothing Then Err.Raise ERR_CREATEEMPLOYER, "CreateEmployer", "Unable to open the employer file " & sPathAndFile
-  Set rs = m_dbfile.OpenRecordset(sql.Queries(SELECT_ID), dbOpenDynaset, dbFailOnError)
+  Set db = InitDB(p11d32.P11DWS, sPathAndFile, "P11D Employer Database", sql.Queries(SELECT_ID), , False)
+  If db Is Nothing Then Err.Raise ERR_CREATEEMPLOYER, "CreateEmployer", "Unable to open the employer file " & sPathAndFile
+  Set rs = db.OpenRecordset(sql.Queries(SELECT_ID), dbOpenDynaset, dbFailOnError)
   rs.Edit ' new file
    rs.Fields("Application").value = p11d32.Rates.ApplicationType
    rs.Fields("AppVersion").value = GetStatic("Version")
   rs.Update
   Set ben = Me
+  
+  If (Not p11d32.BringForward.Yes) Then
+    Call AddDefaultP11DbAdjustments
+    Call WriteP11DbAdjustments
+  End If
+  
+  
   ben.value(employer_PathAndFile) = sPathAndFile
   CreateEmployer = True
   
 CreateEmployer_End:
   Set rs = Nothing
-  Set m_dbfile = Nothing
-  Call RegisterDB(m_dbfile)
+  Set db = Nothing
+  Call RegisterDB(db)
   Call xReturn("CreateEmployer")
   Exit Function
 
@@ -1876,6 +2145,9 @@ Private Sub IBenefitClass_Kill()
   Set m_rsEmpployeesRecordset = Nothing
   Set CDBEmployee = Nothing
   
+  Call P11DbAdditions.RemoveAll
+  Call P11DbDeductions.RemoveAll
+  
   Call employees.RemoveAll
   
   For i = 1 To TBL_LASTITEM
@@ -1889,8 +2161,8 @@ Private Sub IBenefitClass_Kill()
     FPCSchemes.RemoveAll
     ' shared vans
     Call SharedVans.Vans.RemoveAll
-    m_dbfile.Close
-    Set m_dbfile = Nothing  ' close current employer when loading next
+    db.Close
+    Set db = Nothing  ' close current employer when loading next
   End If
   Call RegisterDB(Nothing)
   
@@ -2007,17 +2279,13 @@ Private Function IBenefitClass_ReadDB() As Long
   Call FieldPresentToBen(ben, employer_IRTelephoneNumber_db, rs, "IRTelephoneNumber")
   Call FieldPresentToBen(ben, employer_IRYourReference_db, rs, "IRYourReference")
   Call FieldPresentToBen(ben, employer_IRAccountsOfficeReference_db, rs, "IRAccountsOfficeReference")
-  Call FieldPresentToBen(ben, employer_AddClass1AAmounts_db, rs, "AddClass1AAmount")
-  Call FieldPresentToBen(ben, employer_deductClass1AAmounts_db, rs, "DeductClass1AAmount")
-  Call FieldPresentToBen(ben, employer_AddClass1ADescription_db, rs, "AddClass1ADescription")
+  Call FieldPresentToBen(ben, employer_addClass1ADescription_db, rs, "AddClass1ADescription")
   Call FieldPresentToBen(ben, employer_deductClass1ADescription_db, rs, "DeductClass1ADescription")
   
   Call FieldPresentToBen(ben, employer_PassWord_db, rs, "PassWord")
   Call FieldPresentToBen(ben, employer_EmployeeResponseDate_db, rs, "EmployeeResponseDate")
   Call FieldPresentToBen(ben, employer_TreatEmployeeCarsAsUnderApprovedFPCS_db, rs, "TreatEmployeeCarsAsUnderApprovedFPCS", True)
   If Len(ben.value(employer_EmployeeResponseDate_db)) = 0 Then ben.value(employer_EmployeeResponseDate_db) = p11d32.Rates.value(EmpLetEmployeeResponseDate)
-  If Len(ben.value(employer_AddClass1AAmounts_db)) = 0 Then ben.value(employer_AddClass1AAmounts_db) = 0
-  If Len(ben.value(employer_deductClass1AAmounts_db)) = 0 Then ben.value(employer_deductClass1AAmounts_db) = 0
   
   Call FieldPresentToBenEx(ben, employer_GroupCode1Alias_db, rs, "GroupCode1Alias", S_GROUP_CODE1)
   Call FieldPresentToBenEx(ben, employer_GroupCode2Alias_db, rs, "GroupCode2Alias", S_GROUP_CODE2)
@@ -2301,17 +2569,15 @@ Private Sub IBenefitClass_SetBenItemsInformation()
   p11d32.BenDataLinkDataType(bc, employer_IRYourReference_db) = TYPE_STR
   p11d32.BenDataLinkDataType(bc, employer_IRAccountsOfficeReference_db) = TYPE_STR
 
-  p11d32.BenDataLinkDataType(bc, employer_AddClass1AAmounts_db) = TYPE_LONG
-  p11d32.BenDataLinkDataType(bc, employer_AddClass1ADescription_db) = TYPE_STR
-  p11d32.BenDataLinkDataType(bc, employer_deductClass1AAmounts_db) = TYPE_LONG
+  p11d32.BenDataLinkDataType(bc, employer_addClass1ADescription_db) = TYPE_STR
   p11d32.BenDataLinkDataType(bc, employer_deductClass1ADescription_db) = TYPE_STR
   p11d32.BenDataLinkDataType(bc, employer_contactnumber_db) = TYPE_STR
   p11d32.BenDataLinkDataType(bc, employer_Benefit) = TYPE_LONG
   p11d32.BenDataLinkDataType(bc, ITEM_BENEFIT_SUBJECT_TO_CLASS1A) = TYPE_LONG
   p11d32.BenDataLinkDataType(bc, ITEM_NIC_CLASS1A_BENEFIT) = TYPE_DOUBLE
   p11d32.BenDataLinkDataType(bc, employer_Class1A_Adjustment) = TYPE_LONG
-  p11d32.BenDataLinkDataType(bc, employer_NIC_AdjustmentAdd) = TYPE_LONG
-  p11d32.BenDataLinkDataType(bc, employer_NIC_AdjustmentDeduct) = TYPE_LONG
+  p11d32.BenDataLinkDataType(bc, employer_NIC_AdjustmentAddTotal) = TYPE_LONG
+  p11d32.BenDataLinkDataType(bc, employer_NIC_AdjustmentDeductTotal) = TYPE_LONG
   
   p11d32.BenDataLinkDataType(bc, employer_EerDeclSect2Chk1_db) = TYPE_BOOL
   p11d32.BenDataLinkDataType(bc, employer_EerDeclSect2Chk2_db) = TYPE_BOOL
@@ -2340,8 +2606,8 @@ Private Sub IBenefitClass_SetBenItemsInformation()
   p11d32.BenDataLinkUDMDescription(bc, employer_TotalBenefitsPotentiallySubjectToClass1A) = S_UDM_BENEFITS_POTENTIALLY_SUBJECT_TO_CLASS1A
   
   p11d32.BenDataLinkUDMDescription(bc, employer_Benefit) = "Benefits"
-  p11d32.BenDataLinkUDMDescription(bc, employer_NIC_AdjustmentAdd) = "Adjustments to add"
-  p11d32.BenDataLinkUDMDescription(bc, employer_NIC_AdjustmentDeduct) = "Adjustments to deduct"
+  p11d32.BenDataLinkUDMDescription(bc, employer_NIC_AdjustmentAddTotal) = "Adjustments to add"
+  p11d32.BenDataLinkUDMDescription(bc, employer_NIC_AdjustmentDeductTotal) = "Adjustments to deduct"
    
     
     
@@ -2372,7 +2638,14 @@ Private Sub IBenefitClass_SetCalcDefaults()
   ben.value(employer_TotalBenefitsPotentiallySubjectToClass1A) = 0
   ben.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A) = 0
   
-  For i = [employer_BOX_FIRST_ITEM] To [employer_BOX_LAST_ITEM]
+  For i = [employer_BOX_P11DB_NICABLE_FIRST_ITEM] To [employer_BOX_P11DB_NICABLE_LAST_ITEM]
+    ben.value(i) = 0
+  Next
+  For i = employer_BOX_P11DB_ADDITIONS_FIRST_ITEM To employer_BOX_P11DB_ADDITIONS_LAST_ITEM
+    ben.value(i) = 0
+  Next
+  
+  For i = employer_BOX_P11DB_DEDUCTIONS_FIRST_ITEM To employer_BOX_P11DB_DEDUCTIONS_LAST_ITEM
     ben.value(i) = 0
   Next
 End Sub
@@ -2456,15 +2729,11 @@ Private Function IBenefitClass_WriteDB() As Boolean
     
     'only use this function when new fields have to into the employer table
     If p11d32.BringForward.Yes Then
-      rs.Fields("AddClass1AAmount").value = 0
       rs.Fields("AddClass1ADescription").value = ""
-      rs.Fields("DeductClass1AAmount").value = 0
       rs.Fields("DeductClass1ADescription").value = ""
     Else
       rs.Fields("EmployeeResponseDate").value = ben.value(employer_EmployeeResponseDate_db)
-      rs.Fields("AddClass1AAmount").value = .value(employer_AddClass1AAmounts_db)
-      rs.Fields("AddClass1ADescription").value = .value(employer_AddClass1ADescription_db)
-      rs.Fields("DeductClass1AAmount").value = .value(employer_deductClass1AAmounts_db)
+      rs.Fields("AddClass1ADescription").value = .value(employer_addClass1ADescription_db)
       rs.Fields("DeductClass1ADescription").value = .value(employer_deductClass1ADescription_db)
       rs.Fields("CheapTaxableLoansAllNon").value = .value(employer_CheapTaxableLoansAllNon_db)
     End If
@@ -2486,14 +2755,17 @@ Private Function IBenefitClass_WriteDB() As Boolean
       rs.Fields("PayeOnlineP46Q2SubmissionDate").value = .value(employer_PayeOnlineP46Q2SubmissionDate)
       rs.Fields("PayeOnlineP46Q3SubmissionDate").value = .value(employer_PayeOnlineP46Q3SubmissionDate)
       rs.Fields("PayeOnlineP46Q4SubmissionDate").value = .value(employer_PayeOnlineP46Q4SubmissionDate)
+      
     End If
 
     Call BenValueToFieldPresent(ben, employer_GroupCode3Alias_db, rs, "GroupCode3Alias")
     
+  
   End With
   
   
   rs.Update
+  
     
   IBenefitClass_WriteDB = True
 WriteDB_End:
@@ -2546,7 +2818,7 @@ Public Sub FindCompanyCar()
         rs.MoveNext
       Loop
       If MsgBox(rs.RecordCount & " employee(s) found with company car registration of " & sCarReg & vbCrLf & vbCrLf & sEmployees & vbCrLf & vbCrLf & "Do you wish to go to " & sFirstEmployee & "?", vbYesNo, "Results") = vbYes Then
-        Set lv = F_Employees.LB
+        Set lv = F_Employees.lb
         For i = 1 To lv.listitems.Count
           Set li = lv.listitems(i)
           Set ben = employees(li.Tag)
@@ -2647,7 +2919,7 @@ Public Function TransferEmployees() As Long
   F_Transfer.lv.listitems.Clear
   Set F_Transfer.LastListItem = Nothing
   Set F_Transfer.lv.SmallIcons = MDIMain.imlTree
-  F_Transfer.prg.Caption = ""
+  F_Transfer.prg.caption = ""
   F_Transfer.prg.value = F_Transfer.prg.Min
   F_Transfer.prg.Indicator = None
   

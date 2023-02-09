@@ -147,7 +147,7 @@ Private Sub IBaseNotify_Notify(ByVal Current As Long, ByVal Max As Long, ByVal M
     
   If Current = -1 And Max = -1 Then
     If ((Not ByPassLocalSchemaCheck) Or IsRunningInIDE()) Then
-      m_Prg.Caption = "Validating data against local schema"
+      m_Prg.caption = "Validating data against local schema"
       If (Me.Type_Selected = POT_P46 And Not p11d32.JuneRelease) Then
         Call ValidateXMLToRevenueLocal(Message, p11d32.SystemPAYEOnlineEXBPriorXSDPath)
       Else
@@ -157,7 +157,7 @@ Private Sub IBaseNotify_Notify(ByVal Current As Long, ByVal Max As Long, ByVal M
   Else
     If (m_Prg.value = m_Prg.Max) Then
       m_Prg.value = m_Prg.Min
-      m_Prg.Caption = Message
+      m_Prg.caption = Message
     Else
       Call m_Prg.StepCaption(Message)
     End If
@@ -278,7 +278,7 @@ Public Sub Start()
   
   Call EmployersToListView
   
-  F_PayeOnline.Caption = "PAYE Online " & p11d32.AppYear & "/" & p11d32.AppYear + 1   'RH
+  F_PayeOnline.caption = "PAYE Online " & p11d32.AppYear & "/" & p11d32.AppYear + 1   'RH
   Call p11d32.Help.ShowForm(F_PayeOnline, vbModal)
   
 Start_END:
@@ -425,7 +425,7 @@ Public Sub CreatePAYEFiles(ByVal prgEmployee As TCSProgressBar, ByVal lblFile As
   m_Prg.Visible = True
   m_Prg.value = m_Prg.Min
   m_Prg.Indicator = None
-  m_Prg.Caption = ""
+  m_Prg.caption = ""
       
    m_Entity_ID = ""
    m_Entity_Name = ""
@@ -565,7 +565,7 @@ NEXT_EMPLOYER:
     
     If (lEmployeesWritten > 0) Or (Type_Selected = POT_P11DB_ONLY) Then
       
-      m_Prg.Caption = "Completed Paye Online " & lEmployeesWritten & " employees written."
+      m_Prg.caption = "Completed Paye Online " & lEmployeesWritten & " employees written."
       m_Prg.Indicator = None
 ERR_ERRORS:
       If (ErrorCount > 0) And (AtLeastOneError) Then
@@ -728,7 +728,7 @@ Public Function Submit_EfilerCom(ef As EFiler, XML_doc As DOMDocument60, Respons
     Call Err.Raise(ERR_ERROR, "Submit_EfilerCom", "Cannot find PAYEOnline.mdb")
   End If
   
-  m_Prg.Caption = "Completed"
+  m_Prg.caption = "Completed"
   
 Submit_EfilerCom_END:
   Submit_EfilerCom = sSubmissionID
@@ -736,7 +736,7 @@ Submit_EfilerCom_END:
   Call xReturn("Submit_EfilerCom")
   Exit Function
 Submit_EfilerCom_ERR:
-  m_Prg.Caption = "Error"
+  m_Prg.caption = "Error"
   Call ErrorMessage(ERR_ERROR, Err, "Submit_EfilerCom", "Submit_EfilerCom", "Error while submitting document in PAYE Online.")
   Resume Submit_EfilerCom_END
   Resume
@@ -858,11 +858,11 @@ CheckPAYEEmployerDetails_ERR:
   Resume
 End Function
 Private Function EmployeeHasp46Cars(ByVal ee As Employee)
-  Dim OL As ObjectList
+  Dim ol As ObjectList
   
   Call ee.LoadBenefits(TBL_COMPANY_CARS, False, False)
-  Call ee.GetP46Cars(OL, p11d32.PAYEonline.P46DateFrom, p11d32.PAYEonline.P46DateTo, True)
-  If OL.Count Then
+  Call ee.GetP46Cars(ol, p11d32.PAYEonline.P46DateFrom, p11d32.PAYEonline.P46DateTo, True)
+  If ol.Count Then
     EmployeeHasp46Cars = True
   End If
 
@@ -1154,7 +1154,7 @@ ValidateP46Car_ERR:
   Resume
 
 End Sub
-Private Function ProceedWithEmployee(ee As Employee, Optional OL As ObjectList) As Boolean
+Private Function ProceedWithEmployee(ee As Employee, Optional ol As ObjectList) As Boolean
   Dim benEE As IBenefitClass
   
   ProceedWithEmployee = False
@@ -1175,7 +1175,7 @@ Private Function ProceedWithEmployee(ee As Employee, Optional OL As ObjectList) 
       End If
     End If
   Else
-    If (p11d32.PAYEonline.Type_Selected = POT_P46) And (Not (ee.GetP46Cars(OL, p11d32.PAYEonline.P46DateFrom, p11d32.PAYEonline.P46DateTo, True))) Then
+    If (p11d32.PAYEonline.Type_Selected = POT_P46) And (Not (ee.GetP46Cars(ol, p11d32.PAYEonline.P46DateFrom, p11d32.PAYEonline.P46DateTo, True))) Then
       ProceedWithEmployee = False
     Else
       ProceedWithEmployee = True
@@ -1184,7 +1184,7 @@ Private Function ProceedWithEmployee(ee As Employee, Optional OL As ObjectList) 
   
 End Function
 Private Function EmployeeIsReportable(ByVal ee As Employee)
-  Dim OL As ObjectList
+  Dim ol As ObjectList
   If p11d32.PAYEonline.Type_Selected = POT_P46 Then
     EmployeeIsReportable = EmployeeHasp46Cars(ee)
   Else
@@ -1209,7 +1209,7 @@ Private Function ValidateEmployees(ey As Employer, lEmployeesWithInvalidNI As Lo
   Dim iAnyCars As Integer
   Dim sTxt As String, lNum As Long
   Dim mycar As CompanyCar
-  Dim OL As ObjectList
+  Dim ol As ObjectList
   
     
   On Error GoTo ValidateEmployees_err
@@ -1234,7 +1234,7 @@ Private Function ValidateEmployees(ey As Employer, lEmployeesWithInvalidNI As Lo
     
     Call m_Prg.StepCaption("Validating employee:" & ee.FullName)
     
-    If Not ProceedWithEmployee(ee, OL) Then
+    If Not ProceedWithEmployee(ee, ol) Then
       GoTo NEXT_EMPLOYEE
     End If
     
@@ -1318,8 +1318,8 @@ Private Function ValidateEmployees(ey As Employer, lEmployeesWithInvalidNI As Lo
             
       Case POT_P46
         'validate cars data
-        For j = 1 To OL.Count
-          Set mycar = OL.Item(j)
+        For j = 1 To ol.Count
+          Set mycar = ol.Item(j)
           
           Call ValidateP46Car(mycar)
         Next
@@ -1333,7 +1333,7 @@ NEXT_EMPLOYEE:
   
 ValidateEmployees_end:
   m_Prg.value = 0
-  m_Prg.Caption = ""
+  m_Prg.caption = ""
   m_Prg.Indicator = None
   Set ee = Nothing
   Call xReturn("ValidateEmployees")
@@ -1515,10 +1515,10 @@ Private Function ValidateEmployers(ef As EFiler, Employers As ObjectList) As Boo
         'Apply Magnetic Media validation checks
         'P11Db checks
         Call benEmployer.Calculate 'employees are already calced in Validate Employees
-        If (benEmployer.value(employer_NIC_AdjustmentAdd) > 0 Or benEmployer.value(employer_NIC_AdjustmentDeduct) > 0) Then
+        If (benEmployer.value(employer_NIC_AdjustmentAddUserEntered) > 0 Or benEmployer.value(employer_NIC_AdjustmentDeductUserEntered) > 0) Then
           If iAdjustmentsCount = 0 Then
             sDeductDesc = benEmployer.value(employer_deductClass1ADescription_db)
-            sAddDesc = benEmployer.value(employer_AddClass1ADescription_db)
+            sAddDesc = benEmployer.value(employer_addClass1ADescription_db)
           End If
           iAdjustmentsCount = iAdjustmentsCount + 1
         End If
@@ -1530,7 +1530,7 @@ Private Function ValidateEmployers(ef As EFiler, Employers As ObjectList) As Boo
           Call Err.Raise(ERR_PAYE_INVALID_FIELD, , "P11D(b) deductions description field cannot be longer than 35 characters in length.")
           AtLeastOneError = True
         End If
-        If Len(benEmployer.value(employer_AddClass1ADescription_db)) > 35 Then
+        If Len(benEmployer.value(employer_addClass1ADescription_db)) > 35 Then
           Call Err.Raise(ERR_PAYE_INVALID_FIELD, , "P11D(b) additions description field cannot be longer than 35 characters in length.")
           AtLeastOneError = True
         End If
@@ -2388,10 +2388,9 @@ Private Sub CreatePAYEEmployerHead(node_p11d_record_count As IXMLDOMNode, node_p
     Call ben.Calculate
     
     benefitsPotentiallyFor1A = benefitsPotentiallyFor1A + ben.value(employer_TotalBenefitsPotentiallySubjectToClass1A)
-    add1A = add1A + ben.value(employer_NIC_AdjustmentAdd)
-    deduct1A = deduct1A + ben.value(employer_NIC_AdjustmentDeduct)
+    add1A = add1A + ben.value(employer_NIC_AdjustmentAddTotal)
+    deduct1A = deduct1A + ben.value(employer_NIC_AdjustmentDeductTotal)
     bAdjustments = bAdjustments Or deduct1A Or add1A
-    
     dNIC = dNIC + ben.value(ITEM_NIC_CLASS1A_BENEFIT)
     benefit1A = benefit1A + ben.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A)
   Next
@@ -2417,10 +2416,10 @@ Private Sub CreatePAYEEmployerHead(node_p11d_record_count As IXMLDOMNode, node_p
       Set node_adjustments = PAYEAddXMLChild(XML_doc, node_class_contributions, "", "Adjustments", "")
         Call PAYEAddXMLChild(XML_doc, node_adjustments, "", "TotalBenefit", GetXMLAmount(benefitsPotentiallyFor1A))
         Set node_adjustments_due = PAYEAddXMLChild(XML_doc, node_adjustments, "", "AmountDue", "")
-          Call PAYEAddXMLChild(XML_doc, node_adjustments_due, "", "Description", MarkUpField(P11DbAdditionsDescription(benEyFirst, CLng(add1A)), "NONE"), , , L_MAX_LONG_STANDARD_FIELD_LENGTH)
+          Call PAYEAddXMLChild(XML_doc, node_adjustments_due, "", "Description", MarkUpField(P11DbAdditionsDescription(benEyFirst), "NONE"), , , L_MAX_LONG_STANDARD_FIELD_LENGTH)
           Call PAYEAddXMLChild(XML_doc, node_adjustments_due, "", "Adjustment", GetXMLAmount(add1A))
         Set node_adjustments_not_due = PAYEAddXMLChild(XML_doc, node_adjustments, "", "AmountNotDue", "")
-          Call PAYEAddXMLChild(XML_doc, node_adjustments_not_due, "", "Description", MarkUpField(P11DbDeductionsDescription(benEyFirst, CLng(deduct1A)), "NONE"), , , L_MAX_LONG_STANDARD_FIELD_LENGTH)
+          Call PAYEAddXMLChild(XML_doc, node_adjustments_not_due, "", "Description", MarkUpField(P11DbDeductionsDescription(benEyFirst), "NONE"), , , L_MAX_LONG_STANDARD_FIELD_LENGTH)
           Call PAYEAddXMLChild(XML_doc, node_adjustments_not_due, "", "Adjustment", GetXMLAmount(deduct1A))
       
         Call PAYEAddXMLChild(XML_doc, node_adjustments, "", "Total", GetXMLAmount(benefit1A))

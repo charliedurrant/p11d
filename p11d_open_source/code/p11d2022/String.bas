@@ -64,3 +64,36 @@ Public Function CsvField(ByVal value As String) As String
   End If
   CsvField = value
 End Function
+Public Function UpperCaseFirstLetter(ByRef value As String)
+  UpperCaseFirstLetter = CaseFirstLetter(value, False)
+End Function
+
+Public Function LowerCaseFirstLetter(ByRef value As String)
+   LowerCaseFirstLetter = CaseFirstLetter(value, False)
+End Function
+Private Function CaseFirstLetter(ByRef value As String, ByVal upper As Boolean)
+  Dim iLen As Long
+  Dim firstLetter As String
+  
+  iLen = Len(value)
+
+  If iLen > 1 Then
+    firstLetter = Left$(value, 1)
+    If (upper) Then
+      firstLetter = UCASE$(firstLetter)
+    Else
+      firstLetter = LCase$(firstLetter)
+    End If
+    CaseFirstLetter = firstLetter & Mid$(value, 2)
+  ElseIf (iLen = 1) Then
+    If (upper) Then
+      CaseFirstLetter = UCASE(value)
+    Else
+      CaseFirstLetter = LCase(value)
+    End If
+  Else
+    CaseFirstLetter = value
+  End If
+End Function
+
+

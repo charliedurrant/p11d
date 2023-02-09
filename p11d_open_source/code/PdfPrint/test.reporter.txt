@@ -1,0 +1,360 @@
+﻿9,False
+9,False
+0,
+8,
+4,{LEFTMARGIN=0}
+4,"{FONT=Arial,11,n}"
+4,{LEFTMARGIN=0}
+8,"{x=0}{Arial=8,i}P11D(2023)(Substitute)(support) - 1 Benefit subject to PAYE()"
+4,{BEGINSECTION}
+4,"{Arial=12,bi}{X=3}{LEFT}{X=52}P11D EXPENSES AND BENEFITS  2022/2023{Arial=10,b}
+{x=3}HM Revenue
+{Arial=13,b}{x=3}& Customs"
+4,"
+{PUSHY}"
+4,"{yrel=0}{x=3}{Arial=8,nb}{FORERGB=8224125}Make sure your entries are clear on both sides of the form."
+4,"{yrel=0}{y=2}{FILLRGB=14803425}{x=48}{BOX=50,5.5,F}{RESETCOLORS}{X=49}{YREL=5}{Arial=9,nb}Note to employer
+{YREL=4}{Arial=8,n}{x=49}Fill in this return for a director or an employee for the year to 5 April 2023.
+{x=49}Send all your P11Ds and one P11D(b) to your HMRC office by 6 July 2023.
+{x=49}Don't include payrolled benefits on the P11D. See www.gov.uk/guidance
+{x=49}/paying-your-employees-expenses-and-benefits-through-your-payroll"
+4,{POP}
+4,"{yrel=1000}{y=8}{FILLRGB=12632256}{x=48}{BOX=50,4.5,F}{RESETCOLORS}{X=49}{YREL=5}{Arial=9,b}Note to employee
+{YREL=4}{Arial=8,n}{x=49}Keep this form in a safe place, You'll need it to complete your 2022 to 2023
+{x=49}tax return if you get one. The box numberings on this form are the same as
+{x=49}on the 'Employment' page of the tax return"
+4,"{x=3}{y=5}{Arial=3,n}
+{x=3}{Arial=7,n}Employer name
+{Times=10,bi}{x=3}{WBTEXTBOXL=38,1.4, 1 }
+{x=3}{Arial=3,n}
+{x=3}{Arial=7,n}Employer PAYE reference
+{Times=10,bi}{x=3}{WBTEXTBOXL=25,1.4, 123/e12344 }
+{Arial=3,n}
+{x=3}{Arial=7,n}Employee name
+{Times=10,bi}{x=3}{WBTEXTBOXL=38,1.4, Surname: 1 Benefit subject to PAYE }
+{Arial=3,n}
+{Arial=7,n}{Times=10,bi}{x=3}{WBTEXTBOXL=38,1.4, First name(s):  }{x=44}{Arial=7,n}If a director tick here {Wingdings=12,nb}{WBTEXTBOXL=3,1.4, }{Arial=7,n}{x=60}Date of birth {Arial=7,i}in figures (if known){Arial=7,n}{Times=10,bi}{x=78.5}{WBTEXTBOXR=18,1.4,  }
+{x=3}{Arial=3,n}
+{x=3}{Arial=7,n}Works number / department{x=40}National Insurance number
+{Times=10,bi}{x=3}{WBTEXTBOXL=23,1.4, X }{Times=10,bi}{x=40}{WBTEXTBOXR=21,1.4,  }{x=78}{Arial=7,n}Gender M - Male F - Female{Times=10,bi}{x=94}{WBTEXTBOXL=2,1.4,  }"
+4,"
+
+
+"
+4,{x=3}{LINE=94}
+4,"{x=3}{Arial=7,nb}Employers pay Class 1A National Insurance contributions on most benefits. These are shown in boxes which have a [1A] indicator
+
+"
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,"{Arial=10,nb}{x=3}{BWTEXTBOX=3,1.4,A}{x=7}{XREL=100}{YREL=50}{Arial=8,nb}Assets transferred (cars, property, goods or other assets)"
+4,"{Arial=6,n}{x=52}Cost/market value{Arial=6,n}{x=65}Amount made good{Arial=6,n}{x=84}Cash equivalent
+{Arial=6,n}{x=52}or amount foregone{Arial=6,n}{x=65}or from which tax deducted{Arial=6,n}{x=84}or relevant amount
+"
+4,"{Times=10,bi}{x=26}{WBTEXTBOXL=22,1.4,  }{Times=10,bi}{x=50}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,13}{Arial=9,nb}{x=94}{BWTEXTBOX=2,1.4,1A}{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=11,B}{x=62.19}-{Arial=11,B}{x=76}={Arial=7,n}{x=8}{YREL=100}{x=8}Description of asset{YREL=-100}{Arial=6,n}
+
+
+"
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,"{Arial=10,nb}{x=3}{BWTEXTBOX=3,1.4,B}{x=4}{XREL=100}{YREL=50}{Arial=8,nb}{x=8}Payments made on behalf of employee
+
+{Times=10,bi}{x=23}{WBTEXTBOXL=52,1.6,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,15}{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=7,n}{x=8}{YREL=100}Description of payment{YREL=-100}{Arial=6,n}
+
+
+{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,15}"
+4,"{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=7,n}{x=8}{YREL=100}Tax on notional payments made during the year not borne by employee within 90 days of 05/04/2023{YREL=-100}{Arial=6,n}
+
+
+"
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,"{Arial=10,nb}{x=3}{BWTEXTBOX=3,1.4,C}{x=7}{XREL=100}{YREL=50}{Arial=8,nb}Vouchers and credit cards"
+4,"{Arial=6,n}{x=52}Gross amount{Arial=6,n}{x=65}Amount made good{Arial=6,n}{x=84}Cash equivalent
+{Arial=6,n}{x=52}or amount foregone{Arial=6,n}{x=65}or from which tax deducted{Arial=6,n}{x=84}or relevant amount
+"
+4,"{Times=10,bi}{x=50}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,12}{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=11,B}{x=62.19}-{Arial=11,B}{x=76}={Arial=7,n}{x=8}{YREL=100}{x=8}Value of vouchers and payments made using credit cards or tokens
+{x=8}{Arial=6,ni} (for qualifying childcare vouchers read the P11D Guide){YREL=-100}{Arial=6,n}
+
+
+"
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,"{Arial=10,nb}{x=3}{BWTEXTBOX=3,1.4,D}{x=7}{XREL=100}{YREL=50}{Arial=8,nb}Living accommodation"
+4,"{Arial=6,n}{x=52}{Arial=6,n}{x=65}{Arial=6,n}{x=84}Cash equivalent
+{Arial=6,n}{x=52}{Arial=6,n}{x=65}{Arial=6,n}{x=84}or relevant amount
+"
+4,"{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=9,nb}{x=94}{BWTEXTBOX=2,1.4,1A}{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,14}{Arial=7,n}{x=8}{YREL=100}{x=8}Cash equivalent or relevant amount of accommodation provided for the employee, or his/her family or household.
+{x=8}Exceptions do not apply if using optional renumeration arrangements{Arial=6,ni} (read P11D Guide){YREL=-100}{Arial=6,n}
+
+
+"
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,"{Arial=10,nb}{x=3}{BWTEXTBOX=3,1.4,E}{x=7}{XREL=100}{YREL=50}{Arial=8,nb}Mileage allowance payments not taxed at source"
+4,"{Arial=6,n}{x=52}{Arial=6,n}{x=65}{Arial=6,n}{x=84}
+{Arial=6,n}{x=52}{Arial=6,n}{x=65}{Arial=6,n}{x=84}Taxable amount
+"
+4,"{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,12}{Arial=7,n}{x=8}{YREL=100}{x=8}Enter the mileage allowances in excess of the exempt amounts only where you have been unable to tax
+{x=8}this under PAYE. The exceptions do not apply if using optional renumeration arrangements{Arial=6,ni}(read P11D Guide){YREL=-100}{Arial=6,n}
+
+
+"
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,"{Arial=10,nb}{x=3}{BWTEXTBOX=3,1.4,F}{x=7}{XREL=100}{YREL=50}{Arial=8,nb}Cars and car fuel {Arial=6,ni}If more than two cars were made available, either at the same time or in succession, please give details on a separate sheet
+"
+4,"
+{Arial=6,n}{x=35}Car 1{Arial=6,n}{x=66}Car 2
+"
+4,"{Times=10,bi}{x=33}{WBTEXTBOXL=30,1.4,   }{Times=10,bi}{x=64}{WBTEXTBOXL=30,1.4,   }{Arial=7,n}{x=8}{YREL=100}{x=6}Make and Model{YREL=-100}{Arial=6,n}
+
+
+"
+4,"{Times=10,bi}{x=33}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=64}{WBTEXTBOXR=12,1.4,  }{Arial=7,n}{x=8}{YREL=100}{x=6}Date first registered{YREL=-100}{Arial=6,n}
+
+
+"
+4,"{x=6}{Arial=7,n}Approved CO2 emissions figure for cars {Times=10,bi}{x=33}{WBTEXTBOXR=12,1.4, g/km }{x=47}{Wingdings=12,nb}{WBTEXTBOXL=3,1.4, }{x=51}{Arial=6,ni}See P11D Guide for{Times=10,bi}{x=64}{WBTEXTBOXR=12,1.4, g/km }{x=79}{Wingdings=12,nb}{WBTEXTBOXL=3,1.4, }{x=83}{Arial=6,ni}See P11D Guide for
+{x=6}{Arial=7,n}registered on or after 1 January 1998 {Arial=6,ni}Tick{Arial=7,n}{x=51}{Arial=6,ni}details of cars that have{x=83}{Arial=6,ni}details of cars that have
+{x=6}{Arial=6,ni}box if the car does not have an approved CO2 figure{x=51}{Arial=6,ni}no approved CO2 figure {x=83}{Arial=6,ni}no approved CO2 figure {Arial=6,n}
+
+"
+4,"{x=6}{Arial=7,n}Approved zero emissions mileage if hybrid's{Times=10,bi}{x=33}{WBTEXTBOXR=12,1.4,  miles }{Times=10,bi}{x=64}{WBTEXTBOXR=12,1.4,  miles }{Arial=6,n}
+{x=6}{Arial=7,n}CO2 emissions is between 1-50 (inclusive){Arial=6,n}
+
+"
+4,"{Times=10,bi}{x=33}{WBTEXTBOXR=12,1.4, cc }{Times=10,bi}{x=64}{WBTEXTBOXR=12,1.4, cc }{Arial=7,n}{x=8}{YREL=100}{x=6}Engine size{YREL=-100}{Arial=6,n}
+
+
+"
+4,"{Times=10,bi}{x=33}{WBTEXTBOXR=6,1.4,  }{Times=10,bi}{x=64}{WBTEXTBOXR=6,1.4,  }{x=6}{Arial=7,n}Type of fuel or power used {Arial=6,ni}Please use the key{Arial=7,n}
+{x=6}{Arial=6,i}letter shown in the P11D Guide
+
+"
+4,"{Times=10,bi}{x=36}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=51}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=67}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=6,n}{x=33}From{Arial=6,n}{x=49}To{Arial=6,n}{x=64}From{Arial=6,n}{x=80}To{x=6}{Arial=7,n}Dates car was available{Arial=6,ni} Do not complete the
+{x=6}{Arial=6,ni}'From' box if the car was available on 05/04/2022
+{x=6}{Arial=6,ni}or the 'To' box if it continued to be
+{x=6}available on 06/04/2023
+
+"
+4,"{Times=10,bi}{x=33}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=64}{WBTEXTBOXR=12,1.4,  }{x=6}{Arial=7,n}List price of car {Arial=6,ni}Including car and standard
+{x=6}{Arial=6,ni}accessories only: if there is no list price, or if it is a{Arial=7,n}
+{x=6}{Arial=6,ni}classic car, employers see booklet 480
+{x=6}{Arial=6,ni}
+
+"
+4,"{Times=10,bi}{x=33}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=64}{WBTEXTBOXR=12,1.4,  }{x=6}{Arial=7,n}Accessories {Arial=6,ni}All non-standard accessories,
+{x=6}{Arial=6,ni}see P11D Guide
+
+"
+4,"{Times=10,bi}{x=33}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=64}{WBTEXTBOXR=12,1.4,  }{x=6}{Arial=7,n}Capital contributions (maximum £5,000) the
+{x=6}employee made towards the cost of car or
+{x=6}accessories
+
+"
+4,"{Times=10,bi}{x=33}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=64}{WBTEXTBOXR=12,1.4,  }{x=6}{Arial=7,n}Amount paid by employee for private use of
+{x=6}the car
+
+"
+4,"{Times=10,bi}{x=33}{WBTEXTBOXR=12,1.4,  }"
+4,"{x=47}{Wingdings=12,nb}{WBTEXTBOXL=3,1.4, }"
+4,"{Times=10,bi}{x=64}{WBTEXTBOXR=12,1.4,  }"
+4,"{x=79}{Wingdings=12,nb}{WBTEXTBOXL=3,1.4, }"
+4,"{x=6}{Arial=7,n}Date free fuel was withdrawn
+"
+4,"{x=6}{Arial=6,ni}Tick if reinstated in year (see P11D Guide)
+
+"
+4,"{Times=10,bi}{x=33}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=64}{WBTEXTBOXR=12,1.4,  }{x=6}{Arial=7,n}Cash equivalent or relevant amount
+{x=6}{Arial=7,n}for each car
+
+"
+4,"{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,9}{Arial=9,nb}{x=94}{BWTEXTBOX=2,1.4,1A}{x=6}{Arial=8,nb}Total cash equivalent or relevant amount of all cars made available in 2022/2023
+
+"
+4,"{Times=10,bi}{x=33}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=64}{WBTEXTBOXR=12,1.4,  }{x=6}{Arial=7,n}Cash equivalent or amount foregone in
+{x=6}{Arial=7,n}respect of fuel for each car
+
+"
+4,"{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,10}{Arial=9,nb}{x=94}{BWTEXTBOX=2,1.4,1A}{x=6}{Arial=8,nb}Total cash equivalent or amount foregone in respect of fuel for all cars made available in 
+{x=6}{Arial=8,nb}2022/2023
+
+
+
+
+
+
+"
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,"{Arial=10,nb}{x=3}{BWTEXTBOX=3,1.4,G}{x=7}{XREL=100}{YREL=50}{Arial=8,nb}Vans and van fuel
+"
+4,"{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=9,nb}{x=94}{BWTEXTBOX=2,1.4,1A}{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,9}{Arial=7,n}{x=8}{YREL=100}{x=8}Total cash equivalent or amount foregone in respect of all vans made available in 2022/2023{YREL=-100}{Arial=6,n}
+
+
+"
+4,"{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=9,nb}{x=94}{BWTEXTBOX=2,1.4,1A}{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,10}{Arial=7,n}{x=8}{YREL=100}{x=8}Total cash equivalent or amount foregone of fuel for all vans made available in 2022/2023{YREL=-100}{Arial=6,n}
+
+
+"
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,"{Arial=10,nb}{x=3}{BWTEXTBOX=3,1.4,H}{x=7}{XREL=100}{YREL=50}{Arial=8,nb}Interest-free and low interest loans
+
+"
+4,"{Arial=7,ni}{x=8}If the total amount outstanding on all loans does not exceed £10,000 at any time in the year, there is no need to complete this section
+{Arial=7,ni}{x=8}unless the load is provided under an optional renumeration arrangement when the threshold does not apply"
+4,"
+{Arial=6,n}{x=65}Loan 1{Arial=6,n}{x=84}Loan 2
+
+"
+4,"{Times=10,bi}{x=63}{WBTEXTBOXR=6,1.4,  }{Times=10,bi}{x=82}{WBTEXTBOXR=6,1.4,  }{x=8}{Arial=7,n}Number of joint borrowers {Arial=7,ni} (if applicable){Arial=7,n}
+
+
+"
+4,"{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{x=8}{Arial=7,n}Amount outstanding at 05 April 2022 or at date loan was made if later
+
+
+"
+4,"{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{x=8}{Arial=7,n}Amount outstanding at 05 April 2023 or at date loan was discharged if earlier
+
+
+"
+4,"{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{x=8}{Arial=7,n}Maximum amount outstanding at any time in the year
+
+
+"
+4,"{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{x=8}{Arial=7,n}Total amount of interest paid by the borrower in 2022/2023{Arial=6,i}     - enter 'NIL' if none was paid{Arial=7}
+
+
+"
+4,"{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{x=8}{Arial=7,n}Date loan was made in 2022/2023 (if applicable)
+
+
+"
+4,"{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{x=8}{Arial=7,n}Date loan was discharged in 2022/2023 (if applicable)
+
+
+"
+4,"{Arial=10,nb}{x=59}{BWTEXTBOX=4,1.4,15}{Arial=9,nb}{x=75}{BWTEXTBOX=2,1.4,1A}{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,15}{Arial=9,nb}{x=94}{BWTEXTBOX=2,1.4,1A}{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{x=8}{Arial=7,n}Cash equivalent or relevant amount of loans after deducting any interest paid
+{x=8}{Arial=7,n}by the borrower
+
+"
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,"{Arial=10,nb}{x=3}{BWTEXTBOX=3,1.4,I}{x=7}{XREL=100}{YREL=50}{Arial=8,nb}Private medical treatment or insurance"
+4,"{Arial=6,n}{x=52}Cost to you{Arial=6,n}{x=65}Amount made good{Arial=6,n}{x=84}Cash equivalent
+{Arial=6,n}{x=52}or amount foregone{Arial=6,n}{x=65}or from which tax deducted{Arial=6,n}{x=84}or relevant amount
+"
+4,"{Times=10,bi}{x=50}{WBTEXTBOXR=12,1.4, ""£80"" }{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4, ""£0"" }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,11}{Arial=9,nb}{x=94}{BWTEXTBOX=2,1.4,1A}{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4, ""£80"" }{Arial=11,B}{x=62.19}-{Arial=11,B}{x=76}={Arial=7,n}{x=8}{YREL=100}{x=8}Private medical treatment or insurance{YREL=-100}{Arial=6,n}
+
+
+"
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,"{Arial=10,nb}{x=3}{BWTEXTBOX=3,1.4,J}{x=7}{XREL=100}{YREL=50}{Arial=8,nb}Qualifying relocation expenses payments and benefits
+"
+4,"{x=8}{Arial=8,ni}Non-qualifying benefits and expenses go in sections M and N below
+"
+4,"{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=9,nb}{x=94}{BWTEXTBOX=2,1.4,1A}{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,15}{Arial=7,n}{x=8}{YREL=100}Excess over £8,000 of all qualifying relocation expenses payments and benefits for each move{YREL=-100}{Arial=6,n}
+
+
+"
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,"{Arial=10,nb}{x=3}{BWTEXTBOX=3,1.4,K}{x=7}{XREL=100}{YREL=50}{Arial=8,nb}Services supplied"
+4,"{Arial=6,n}{x=52}Cost to you{Arial=6,n}{x=65}Amount made good{Arial=6,n}{x=84}Cash equivalent
+{Arial=6,n}{x=52}or amount foregone{Arial=6,n}{x=65}or from which tax deducted{Arial=6,n}{x=84}or relevant amount
+"
+4,"{Times=10,bi}{x=50}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,15}{Arial=9,nb}{x=94}{BWTEXTBOX=2,1.4,1A}{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=11,B}{x=62.19}-{Arial=11,B}{x=76}={Arial=7,n}{x=8}{YREL=100}{x=8}Services supplied to the employee{YREL=-100}{Arial=6,n}
+
+
+"
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,"{Arial=10,nb}{x=3}{BWTEXTBOX=3,1.4,L}{x=7}{XREL=100}{YREL=50}{Arial=8,nb}Assets placed at the employee's disposal"
+4,"{Arial=6,n}{x=52}Cost of the benefit{Arial=6,n}{x=65}Amount made good or{Arial=6,n}{x=84}Cash equivalent
+{Arial=6,n}{x=52}or amount foregone{Arial=6,n}{x=65}from which tax deducted{Arial=6,n}{x=84}or relevant amount
+"
+4,"{Times=10,bi}{x=26}{WBTEXTBOXL=22,1.4,  }{Times=10,bi}{x=50}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,13}{Arial=9,nb}{x=94}{BWTEXTBOX=2,1.4,1A}{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=11,B}{x=62.19}-{Arial=11,B}{x=76}={Arial=7,n}{x=8}{YREL=100}{x=8}Description of asset{YREL=-100}{Arial=6,n}
+
+
+"
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,"{Arial=10,nb}{x=3}{BWTEXTBOX=3,1.4,M}{x=7}{XREL=100}{YREL=50}{Arial=8,nb}Other items (including subscriptions and professional fees)"
+4,"{Arial=6,n}{x=52}Cost to you{Arial=6,n}{x=65}Amount made good{Arial=6,n}{x=84}Cash equivalent
+{Arial=6,n}{x=52}or amount foregone{Arial=6,n}{x=65}or from which tax deducted{Arial=6,n}{x=84}or relevant amount
+"
+4,"{Times=10,bi}{x=26}{WBTEXTBOXL=22,1.4,  }{Times=10,bi}{x=50}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,15}{Arial=9,nb}{x=94}{BWTEXTBOX=2,1.4,1A}{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=11,B}{x=62.19}-{Arial=11,B}{x=76}={Arial=7,n}{x=8}{YREL=100}{x=8}Description of other items{YREL=-100}{Arial=6,n}
+
+
+"
+4,"{Times=10,bi}{x=26}{WBTEXTBOXL=22,1.4,  }{Times=10,bi}{x=50}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,15}{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=11,B}{x=62.19}-{Arial=11,B}{x=76}={Arial=7,n}{x=8}{YREL=100}{x=8}Description of other items{YREL=-100}{Arial=6,n}
+
+
+"
+4,"{Arial=6,n}{x=52}{Arial=6,n}{x=65}{Arial=6,n}{x=84}
+{Arial=6,n}{x=52}{Arial=6,n}{x=65}{Arial=6,n}{x=84}Tax Paid
+"
+4,"{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,15}{Arial=7,n}{x=8}{YREL=100}{x=8}Income Tax paid but not deducted from director's remuneration{YREL=-100}{Arial=6,n}
+
+
+"
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,"{Arial=10,nb}{x=3}{BWTEXTBOX=3,1.4,N}{x=7}{XREL=100}{YREL=50}{Arial=8,nb}{x=8}Expenses payments made on behalf of the employee"
+4,"{Arial=6,n}{x=52}Cost to you{Arial=6,n}{x=65}Amount made good{Arial=6,n}{x=84}Taxable payment
+{Arial=6,n}{x=52}or amount foregone{Arial=6,n}{x=65}or from which tax deducted{Arial=6,n}{x=84}or relevant amount
+"
+4,"{Times=10,bi}{x=50}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,16}{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=11,B}{x=62.19}-{Arial=11,B}{x=76}={Arial=7,n}{x=8}{YREL=100}{x=8}Travelling and subsistence payments - Cost to you or amount
+{x=8}foregone{Arial=6,ni} (Except mileage allowance payments for employee's own car - see section E){YREL=-100}{Arial=6,n}
+
+
+"
+4,"{Times=10,bi}{x=50}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,16}{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=11,B}{x=62.19}-{Arial=11,B}{x=76}={Arial=7,n}{x=8}{PUSH}{x=45}{Wingdings=12,nb}{WBTEXTBOXL=3,1.4, }{POP}{Arial=7,n}Entertainment {Arial=7,i}(trading organisations read P11D Guide and
+{x=8}{Arial=7,n}{Arial=7,i}then enter a tick or a cross as appropriate here){Arial=7,n}{Arial=7}
+
+"
+4,"{Times=10,bi}{x=50}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,16}{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=11,B}{x=62.19}-{Arial=11,B}{x=76}={Arial=7,n}{x=8}{YREL=100}{x=8}Payments for use of home telephone{YREL=-100}{Arial=6,n}
+
+
+"
+4,"{Times=10,bi}{x=50}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,16}{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=11,B}{x=62.19}-{Arial=11,B}{x=76}={Arial=7,n}{x=8}{YREL=100}{x=8}Non-qualifying relocation expenses {Arial=6,ni} (those not shown in sections J or M){Arial=7,b}{YREL=-100}{Arial=6,n}
+
+
+"
+4,"{Times=10,bi}{x=26}{WBTEXTBOXL=22,1.4,  }{Times=10,bi}{x=50}{WBTEXTBOXR=12,1.4,  }{Times=10,bi}{x=63}{WBTEXTBOXR=12,1.4,  }{Arial=10,nb}{x=78}{BWTEXTBOX=4,1.4,16}{Times=10,bi}{x=82}{WBTEXTBOXR=12,1.4,  }{Arial=11,B}{x=62.19}-{Arial=11,B}{x=76}={Arial=7,n}{x=8}{YREL=100}{x=8}Description of other expenses{YREL=-100}{Arial=6,n}
+
+
+"
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,{ENDSECTION}
+4,{BEGINSECTION}
+4,{x=3}{LINE=94}
+4,{ENDSECTION}
+4,"{FONT=Arial,11,n}"
+4,{LEFTMARGIN=0}
+4,{LEFTMARGIN=0}
+5,
+6,C:\dump\p11d.pdf

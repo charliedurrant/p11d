@@ -6,6 +6,15 @@ Option Explicit
 ' tel 0207 438 4264
 
 Private Const S_LIGHTGREY As String = "12632256"
+Private Const S_P11DB_SHORT_CAPTION_BOX_A As String = "total benefits liable to Class 1A NICs from forms P11D"
+Public Const S_P11DB_ADDITIONS_BOX_B As String = "Add any amounts not included in box A on which Class 1A NICs are due"
+Public Const S_P11DB_DEDUCTIONS_BOX_C As String = "Deduct any amounts included in box A on which Class 1A NICs are not due"
+Private Const S_P11DB_TOTAL_BOX_D As String = "Total of benefits on which Class 1A NICs are due"
+Private Const S_P11DB_MUTIPLY_BY_NIC_RATE_BOX_E As String = "Multiply by Class 1A NICs rate"
+Private Const S_P11DB_CLASS_1A_PAYABLE_BOX_F As String = "Class 1A NICs payable"
+Private Const S_P11DB_AMOUNTS_TAXED_THROUGH_PAYROLL As String = "Amounts taxed through payroll"
+Private Const S_P11DB_EMPLOYEES_NOT_SUBJECT_TO_CLASS_1A As String = "Employees not subject to Class 1A"
+
 
 Private Const L_HMIT_COL_1 As Long = 50
 Private Const L_HMIT_COL_2 As Long = 63
@@ -274,7 +283,7 @@ Public Sub WKTblOtherTypeTableWithDates(rep As Reporter, ByVal sCol1Caption As S
 End Sub
 
 
-Public Function WKOut(rep As Reporter, OutputType As WKOUT_TYPE, Optional OutputText As Variant, Optional OutputValue As Variant, Optional OutPutRef As Variant, Optional bCurrency As Boolean = False, Optional bNegative As Boolean = False) As Boolean
+Public Function WKOut(ByVal rep As Reporter, ByVal OutputType As WKOUT_TYPE, Optional ByVal OutputText As Variant, Optional ByVal OutputValue As Variant, Optional ByVal OutPutRef As Variant, Optional ByVal bCurrency As Boolean = False, Optional ByVal bNegative As Boolean = False) As Boolean
   On Error GoTo WKOut_ERR
   
   Call xSet("WKOut")
@@ -1533,16 +1542,20 @@ Report_PrintedEmployees_ERR:
   Resume Report_PrintedEmployees_END
   Resume
 End Function
-Public Function P11DbAdditionsDescription(benEmployer As IBenefitClass, Optional lAdjustment As Long = 0) As String
-  If ((benEmployer.value(employer_NIC_AdjustmentAdd) + lAdjustment) > 0) And (benEmployer.value(employer_AddClass1AAmounts_db) = 0) Then
-    P11DbAdditionsDescription = "Amounts taxed through payroll"
+Public Function P11DbAdditionsDescription(benEmployer As IBenefitClass) As String
+  If (benEmployer.value(employer_NIC_AdjustmentAddTotal) = 0) Then
+    P11DbAdditionsDescription = ""
+  ElseIf (benEmployer.value(employer_NIC_AdjustmentAddUserEntered) = 0) And (Len(benEmployer.value(employer_addClass1ADescription_db)) = 0) Then
+    P11DbAdditionsDescription = S_P11DB_AMOUNTS_TAXED_THROUGH_PAYROLL
   Else
-    P11DbAdditionsDescription = benEmployer.value(employer_AddClass1ADescription_db)
+    P11DbAdditionsDescription = benEmployer.value(employer_addClass1ADescription_db)
   End If
 End Function
-Public Function P11DbDeductionsDescription(benEmployer As IBenefitClass, Optional lAdjustment As Long = 0) As String
-  If ((benEmployer.value(employer_NIC_AdjustmentDeduct) + lAdjustment) > 0) And (benEmployer.value(employer_deductClass1AAmounts_db) = 0) Then
-    P11DbDeductionsDescription = "Employees not subject to Class 1A"
+Public Function P11DbDeductionsDescription(benEmployer As IBenefitClass) As String
+  If (benEmployer.value(employer_NIC_AdjustmentDeductTotal) = 0) Then
+    P11DbDeductionsDescription = ""
+  ElseIf (benEmployer.value(employer_NIC_AdjustmentDeductUserEntered) = 0) And (Len(benEmployer.value(employer_deductClass1ADescription_db)) = 0) Then
+    P11DbDeductionsDescription = S_P11DB_EMPLOYEES_NOT_SUBJECT_TO_CLASS_1A
   Else
     P11DbDeductionsDescription = benEmployer.value(employer_deductClass1ADescription_db)
   End If
@@ -1550,8 +1563,6 @@ End Function
 Private Function Report_P11db_NIC_Rate_Formatted() As String
   Report_P11db_NIC_Rate_Formatted = (p11d32.Rates.value(carNICRate) * 100) & "%"
 End Function
-
-
 Public Function Report_P11db(rep As Reporter, benEmployer As IBenefitClass)
   Dim add1A As Long
   Dim deduct1A As Long
@@ -1569,8 +1580,8 @@ Public Function Report_P11db(rep As Reporter, benEmployer As IBenefitClass)
     
   sNICPErcentage = Report_P11db_NIC_Rate_Formatted()
   sNICDue = FormatWNRPT(benEmployer.value(ITEM_NIC_CLASS1A_BENEFIT), , , True)
-  add1A = benEmployer.value(employer_NIC_AdjustmentAdd)
-  deduct1A = benEmployer.value(employer_NIC_AdjustmentDeduct)
+  add1A = benEmployer.value(employer_NIC_AdjustmentAddTotal)
+  deduct1A = benEmployer.value(employer_NIC_AdjustmentDeductTotal)
   bPrintAdjustmentValues = (add1A > 0) Or (deduct1A > 0)
   sBenefitsPotentiallyWithClass1A = FormatWNRPT(benEmployer.value(employer_TotalBenefitsPotentiallySubjectToClass1A))
   rep.PageFooter = HMITFooter(S_P11D_B, , , True)
@@ -1629,7 +1640,7 @@ Public Function Report_P11db(rep As Reporter, benEmployer As IBenefitClass)
     rep.Out (OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH + 1, L_HMIT_STANDARDBOX_HEIGHT, sBenefitsPotentiallyWithClass1A) & _
              FillBox(L_HMIT_COL_3 + 1, 3, L_HMIT_STANDARDBOX_HEIGHT, "A") & _
              FillBoxNIC(L_HMIT_COL_5 + 1, 2, L_HMIT_STANDARDBOX_HEIGHT, "1A") & _
-             "{Arial=9,n}{x=7}Enter the total benefits liable to Class 1A NICs from forms P11D, (this is the total of the Class 1A" & vbCrLf & _
+             "{Arial=9,n}{x=7}Enter the " & S_P11DB_SHORT_CAPTION_BOX_A & ", (this is the total of the Class 1A" & vbCrLf & _
              "{Arial=9,n}{x=7}NICs boxes on forms P11D) and/or the total benefits that have been taxed through your payroll." & vbCrLf & _
              "{Arial=9,n}{x=7}There's a quick guide to working out whether Class 1A NICs are due in Part 2 of the CWG5" & vbCrLf & _
              "{x=7}if you're not sure" & vbCrLf & vbCrLf)
@@ -1642,14 +1653,14 @@ Public Function Report_P11db(rep As Reporter, benEmployer As IBenefitClass)
     'box b + c
     Call rep.Out(OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH + 1, L_HMIT_STANDARDBOX_HEIGHT, sNICPErcentage) & _
                 FillBox(L_HMIT_COL_3 + 1, 3, L_HMIT_STANDARDBOX_HEIGHT, "B") & _
-                "{Arial=9,n}{x=7}Multiply by Class 1A NICs rate" & vbCrLf & vbCrLf & _
+                "{Arial=9,n}{x=7}" & S_P11DB_MUTIPLY_BY_NIC_RATE_BOX_E & vbCrLf & vbCrLf & _
                 "{Arial=7,n}{x=79}box A x rate in box B" & vbCrLf)
     Call rep.Out(OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH + 1, L_HMIT_STANDARDBOX_HEIGHT, IIf(bPrintAdjustmentValues, "", sNICDue)))
     
     
     Call rep.Out(FillBox(L_HMIT_COL_3 + 1, 3, L_HMIT_STANDARDBOX_HEIGHT, "C") & _
                 FillBoxNIC(L_HMIT_COL_5 + 1, 2, L_HMIT_STANDARDBOX_HEIGHT, "1A") & _
-                "{Arial=9,nb}{x=7}Class 1A NICs payable{Arial=9,n} (Don't fill this in if you're making an adjustment in Section 4.)" & vbCrLf)
+                "{Arial=9,nb}{x=7}" & S_P11DB_CLASS_1A_PAYABLE_BOX_F & "{Arial=9,n} (Don't fill this in if you're making an adjustment in Section 4.)" & vbCrLf)
   
   
     
@@ -1744,7 +1755,7 @@ Call BoxBulletText(rep, "4", "{Arial=10,bn}Adjustments to Class 1A NICs" & vbCrL
            "{Arial=9,n}{x=7}Enter the total benefits liable to Class 1A NICs from Section 1, box A overleaf." & vbCrLf & vbCrLf & vbCrLf)  'km
 
 'box A
-Call rep.Out(HMITBullet(7) & "{Arial=9,n}{x=9}Add any amounts not included in box A on which Class 1A NICs are due" & vbCrLf & _
+Call rep.Out(HMITBullet(7) & "{Arial=9,n}{x=9}" & S_P11DB_ADDITIONS_BOX_B & vbCrLf & _
             "{Arial=7,n}{x=79}Amount to be added" & vbCrLf & _
             OutLineBoxL(25, 50, L_HMIT_STANDARDBOX_HEIGHT, P11DbAdditionsDescription(benEmployer)) & _
             OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH + 1, L_HMIT_STANDARDBOX_HEIGHT, FormatWNRPT(add1A)) & _
@@ -1752,7 +1763,7 @@ Call rep.Out(HMITBullet(7) & "{Arial=9,n}{x=9}Add any amounts not included in bo
             FillBoxNIC(L_HMIT_COL_5 + 1, 2, L_HMIT_STANDARDBOX_HEIGHT, "1A") & _
             "{Arial=9,n}{x=9}Brief description" & vbCrLf & vbCrLf & vbCrLf)
             
-Call rep.Out(HMITBullet(7) & "{Arial=9,n}{x=9}Deduct any amounts included in box A on which Class 1A NICs are" & "{Arial=9,b} not" & "{Arial=9,n} due " & vbCrLf & _
+Call rep.Out(HMITBullet(7) & "{Arial=9,n}{x=9}" & S_P11DB_DEDUCTIONS_BOX_C & vbCrLf & _
             "{Arial=7,n}{x=79}Amount to be deducted" & vbCrLf & _
             OutLineBoxL(25, 50, L_HMIT_STANDARDBOX_HEIGHT, P11DbDeductionsDescription(benEmployer)) & _
             OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH + 1, L_HMIT_STANDARDBOX_HEIGHT, IIf(bPrintAdjustmentValues, FormatWNRPT(deduct1A), "")) & _
@@ -1764,17 +1775,17 @@ Call rep.Out("{Arial=7,n}{x=79}box A + box B minus box C" & vbCrLf & _
              OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH + 1, L_HMIT_STANDARDBOX_HEIGHT, IIf(bPrintAdjustmentValues, FormatWNRPT(benEmployer.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A)), "")) & _
              FillBox(L_HMIT_COL_3 + 1, 3, L_HMIT_STANDARDBOX_HEIGHT, "D") & _
              FillBoxNIC(L_HMIT_COL_5 + 1, 2, L_HMIT_STANDARDBOX_HEIGHT, "1A") & _
-             "{Arial=9,nb}{x=7}Total of benefits on which Class 1A NICs are due" & vbCrLf & vbCrLf & vbCrLf & vbCrLf)
+             "{Arial=9,nb}{x=7}" & S_P11DB_TOTAL_BOX_D & vbCrLf & vbCrLf & vbCrLf & vbCrLf)
           
 
   Call rep.Out(OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH + 1, L_HMIT_STANDARDBOX_HEIGHT, sNICPErcentage) & _
                 FillBox(L_HMIT_COL_3 + 1, 3, L_HMIT_STANDARDBOX_HEIGHT, "E") & _
-                "{Arial=9,n}{x=7}Multiply by Class 1A NICs rate" & vbCrLf & vbCrLf & vbCrLf)
+                "{Arial=9,n}{x=7}" & S_P11DB_MUTIPLY_BY_NIC_RATE_BOX_E & vbCrLf & vbCrLf & vbCrLf)
   Call rep.Out("{Arial=7,n}{x=79}box D x rate in box E" & vbCrLf & _
                 OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH + 1, L_HMIT_STANDARDBOX_HEIGHT, IIf(bPrintAdjustmentValues, sNICDue, "")) & _
                 FillBox(L_HMIT_COL_3 + 1, 3, L_HMIT_STANDARDBOX_HEIGHT, "F") & _
                 FillBoxNIC(L_HMIT_COL_5 + 1, 2, L_HMIT_STANDARDBOX_HEIGHT, "1A") & _
-                "{Arial=9,nb}{x=7}Class 1A NICs payable" & vbCrLf & vbCrLf & vbCrLf)
+                "{Arial=9,nb}{x=7}" & S_P11DB_CLASS_1A_PAYABLE_BOX_F & vbCrLf & vbCrLf & vbCrLf)
 
 Report_P11db = True
 
@@ -1888,42 +1899,42 @@ Private Sub RepOutCrLf(rep As Reporter, formattedText As String, Optional crLFXO
   s = Replace$(formattedText, "\n", sReplace)
   Call rep.Out(s)
 End Sub
-Private Sub P46CaptionCol2(rep As Reporter, Caption As String, Optional Font As String = "{Arial=10,n}")
-  Call P46Caption(rep, Caption, L_P46_COL_2_X + 1, Font)
+Private Sub P46CaptionCol2(rep As Reporter, caption As String, Optional Font As String = "{Arial=10,n}")
+  Call P46Caption(rep, caption, L_P46_COL_2_X + 1, Font)
 End Sub
-Private Sub P46CaptionCol1(rep As Reporter, Caption As String, Optional Font As String = "{Arial=10,n}")
-  Call P46Caption(rep, Caption, L_P46_COL_1_X + 1, Font)
+Private Sub P46CaptionCol1(rep As Reporter, caption As String, Optional Font As String = "{Arial=10,n}")
+  Call P46Caption(rep, caption, L_P46_COL_1_X + 1, Font)
 End Sub
-Private Sub P46TickRowCol1(rep As Reporter, Caption As String, value As Boolean)
-  Call P46TickRow(rep, L_P46_COL_1_X + 1, Caption, value)
+Private Sub P46TickRowCol1(rep As Reporter, caption As String, value As Boolean)
+  Call P46TickRow(rep, L_P46_COL_1_X + 1, caption, value)
 End Sub
 
-Private Sub P46TickRowCol2(rep As Reporter, Caption As String, value As Boolean)
-  Call P46TickRow(rep, L_P46_COL_2_X + 1, Caption, value)
+Private Sub P46TickRowCol2(rep As Reporter, caption As String, value As Boolean)
+  Call P46TickRow(rep, L_P46_COL_2_X + 1, caption, value)
 End Sub
-Private Sub P46TickRow(rep As Reporter, xoffset As Long, Caption As String, value As Boolean)
+Private Sub P46TickRow(rep As Reporter, xoffset As Long, caption As String, value As Boolean)
   Call rep.Out("{x=" & (xoffset + 41) & "}")
   rep.Out (TickOut(value))
   Call rep.Out("{x=" & (xoffset) & "}")
-  Call P46Caption(rep, Caption, xoffset)
+  Call P46Caption(rep, caption, xoffset)
 End Sub
 
-Private Sub P46Caption(rep As Reporter, Caption As String, xoffset As Long, Optional Font As String = "{Arial=10,n}")
-  If (Len(Caption) > 0) Then
-    Call RepOutCrLf(rep, Font & "{x=" & xoffset & "}" & Caption & vbCrLf & "{Arial=6,n}" & vbCrLf, xoffset)
+Private Sub P46Caption(rep As Reporter, caption As String, xoffset As Long, Optional Font As String = "{Arial=10,n}")
+  If (Len(caption) > 0) Then
+    Call RepOutCrLf(rep, Font & "{x=" & xoffset & "}" & caption & vbCrLf & "{Arial=6,n}" & vbCrLf, xoffset)
   End If
 End Sub
-Private Sub P46InputBoxFullColumnLength(rep As Reporter, Caption As String, value As String, xoffset As Long, Optional height As Single = L_HMIT_STANDARDBOX_HEIGHT)
-  Call P46Caption(rep, Caption, xoffset)
+Private Sub P46InputBoxFullColumnLength(rep As Reporter, caption As String, value As String, xoffset As Long, Optional height As Single = L_HMIT_STANDARDBOX_HEIGHT)
+  Call P46Caption(rep, caption, xoffset)
   
   Call rep.Out(OutLineBoxL(xoffset, 45, height, value))
   Call rep.Out("{Arial=10,n}" & vbCrLf & "{Arial=6,n}" & vbCrLf & "{Arial=10,n}")
 End Sub
-Private Sub P46InputBoxFullColumnLengthCol1(rep As Reporter, Caption As String, value As String, Optional height As Single = L_HMIT_STANDARDBOX_HEIGHT)
-  Call P46InputBoxFullColumnLength(rep, Caption, value, L_P46_COL_1_X + 1, height)
+Private Sub P46InputBoxFullColumnLengthCol1(rep As Reporter, caption As String, value As String, Optional height As Single = L_HMIT_STANDARDBOX_HEIGHT)
+  Call P46InputBoxFullColumnLength(rep, caption, value, L_P46_COL_1_X + 1, height)
 End Sub
-Private Sub P46InputBoxFullColumnLengthCol2(rep As Reporter, Caption As String, value As String, Optional height As Single = L_HMIT_STANDARDBOX_HEIGHT)
-  Call P46InputBoxFullColumnLength(rep, Caption, value, L_P46_COL_2_X + 1, height)
+Private Sub P46InputBoxFullColumnLengthCol2(rep As Reporter, caption As String, value As String, Optional height As Single = L_HMIT_STANDARDBOX_HEIGHT)
+  Call P46InputBoxFullColumnLength(rep, caption, value, L_P46_COL_2_X + 1, height)
 End Sub
 Private Sub P46BackgroundBox(rep As Reporter, Title As String, xoffset As Long, width As Long, height As Double)
   'Call RepOutCrLf(rep, "{x=" & xoffset & "}{FillRGB=15790320}{BOX=" & width & "," & height & ", F}{FillRGB=" & RGB(255, 255, 255) & "}")
@@ -1947,9 +1958,9 @@ Private Sub P462TickOut(rep As Reporter, xoffset As Long, caption1 As String, va
   Call rep.Out("{x=" & (xoffset + 43) & "}" & TickOut(value2))
   Call P46Caption(rep, caption1 & "{x=" & (xoffset + 21) & "}" & caption2, xoffset + 1)
 End Sub
-Private Sub P46FuelTypeLine(rep As Reporter, Caption As String, fuelChar As String)
+Private Sub P46FuelTypeLine(rep As Reporter, caption As String, fuelChar As String)
   Call RepOutCrLf(rep, "{x=" & (L_P46_COL_1_X + 43) & "}" & " {Arial=10,b}" & fuelChar & "{Arial=10,n}" & HMITBullet(L_P46_COL_1_X + 1))
-  Call P46CaptionCol1(rep, "  " & Caption)
+  Call P46CaptionCol1(rep, "  " & caption)
 End Sub
 
 Public Function Report_P46CarBeforeApril2018(rep As Reporter, ee As Employee, dDateFrom As Date, dDateTo As Date) As Boolean
@@ -2342,297 +2353,6 @@ Report_P46Car_err:
   Resume
       
 End Function
-
-
-'Public Function Report_P46CarApril2002Onwards(rep As Reporter, ee As Employee, dDateFrom As Date, dDateTo As Date) As Boolean
-'  Dim P46Cars As ObjectList
-'  Dim p46car As IBenefitClass
-'  Dim i As Long, ben As IBenefitClass
-'  Dim benEmployer As IBenefitClass
-'  Dim bCarDetails  As Boolean, bFuelNoMadeGood As Boolean
-'  On Error GoTo Report_P46Car_err
-'  Call xSet("Report_P46Car")
-'
-'  Set benEmployer = p11d32.CurrentEmployer
-'
-'  If ee Is Nothing Then Call Err.Raise(ERR_NO_EMPLOYEE, "Report_P46Car", "The employee is nothing can not print the P46 car return.")
-'  If Not ee.GetP46Cars(P46Cars, dDateFrom, dDateTo) Then GoTo Report_P46Car_end
-'
-'  'IK 17/06/2003 getting the total number of cars. Search lNumCars to see usage
-'  Dim CompanyCars As ObjectList
-'  Set CompanyCars = BenefitsOfType(ee, BC_COMPANY_CARS_F)
-'  Dim lNumCars As Long
-'  lNumCars = CompanyCars.Count
-'  Set CompanyCars = Nothing
-'
-'
-'  rep.PageFooter = HMITFooter("P46(Car)(New)", ee, False)
-'
-'  Set ben = ee
-'
-'  For i = 1 To P46Cars.Count
-'    Set p46car = P46Cars(i)
-'    With p46car
-'
-''Pre part 1
-'         Call rep.Out("{BEGINSECTION}")
-'
-'        'if statement and "Draft" added by IK. 23/05/2003
-'         Call rep.Out(vbCrLf & "{x=51}{Arial=14,b}Car provided for the private use" & vbCrLf & _
-'                    "{Arial=13,b}{x=3}HM Revenue" & "{Arial=14,b}{x=53}of an employee or a director" & vbCrLf & _
-'                    "{Arial=16,b}{x=3}&Customs" & vbCrLf)
-'
-'          If p11d32.ReportPrint.DraftReportsp46 Then
-'              Call rep.Out("{Arial=16,b}{x=30}DRAFT" & vbCrLf)
-'          End If
-'
-'         'km added 11/06/02
-'         Call rep.Out(vbCrLf & "{x=3}{Arial=14,b}Use from April 2002 onwards" & vbCrLf & vbCrLf)
-'
-'         Call rep.Out("{x=3}{BOX=46,18}" & "{x=51}{BOX=46,12}" & _
-'                      "{Arial=9,nb}" & vbCrLf & "{x=4}Employer's name" & "{x=52}Employee's or Director's name" & "{Arial=7}" & vbCrLf & vbCrLf & _
-'                      OutLineBoxL(4, 44, L_HMIT_STANDARDBOX_HEIGHT, benEmployer.Name) & OutLineBoxL(52, 44, L_HMIT_STANDARDBOX_HEIGHT, ee.FullName) & vbCrLf & vbCrLf & vbCrLf & _
-'                      "{Arial=9,nb}{x=4}Employer's phone number" & "{x=52}Employee's or Director's National Insurance number" & "{Arial=7}" & vbCrLf & vbCrLf & _
-'                      OutLineBoxL(4, 44, L_HMIT_STANDARDBOX_HEIGHT, benEmployer.value(employer_contactnumber_db)) & OutLineBoxL(52, 30, L_HMIT_STANDARDBOX_HEIGHT, ben.value(ee_NINumber_db)) & vbCrLf & vbCrLf & vbCrLf & _
-'                      "{Arial=9,nb}{x=4}Employer reference number" & "{Arial=7}" & vbCrLf & vbCrLf & _
-'                      OutLineBoxL(4, 44, L_HMIT_STANDARDBOX_HEIGHT, benEmployer.value(employer_Payeref_db)) & vbCrLf & vbCrLf & vbCrLf & vbCrLf & vbCrLf & vbCrLf)
-'
-'         'only print this start
-'         Call rep.Out("{Arial=11,n}{x=3}You must complete this form if there is a change that affects car benefits for an employee earning at" & vbCrLf & _
-'                      "{x=3}the rate of £8,500 a year or more or a director for whom a car is made available for private use." & vbCrLf & _
-'                      "{x=3}Complete and return this form within 28 days of the end of the quarter to " & Format$(p11d32.Rates.value(P46Quarter1End), "d mmmm") & ", " & Format$(p11d32.Rates.value(P46Quarter2End), "d mmmm") & ", " & Format$(p11d32.Rates.value(P46Quarter3End), "d mmmm") & vbCrLf & _
-'                      "{x=3}or " & Format$(p11d32.Rates.value(P46Quarter4End), "d mmmm") & " in which the change takes place.  Part 1, below, shows the changes that you must report" & vbCrLf & _
-'                      "{x=3}on this form." & vbCrLf & vbCrLf & vbCrLf)
-'         'km - commented out 10/06/02
-'                      '"{x=3}Because many cars first provided to employees in " & p11d32.Rates.value(TaxFormYear) & " will still be in place in " & p11d32.Rates.value(TaxFormYearNext) & ", please" & vbCrLf & _
-'                      '"{x=3}include information that will help us to get your employees' tax codes right for the new car benefits" & vbCrLf & _
-'                      '"{x=3}system that begins on 6 April 2002." & vbCrLf & vbCrLf & vbCrLf)
-'
-'         'part 1
-'         'only print this end
-'         Call rep.Out("{PUSHY}")
-'         Call rep.Out("{x=3}{BOX=46,49}" & "{x=51}{BOX=46,49}" & _
-'                     "{Arial=10,bn}{x=3}{BWTEXTBOXl=46,2, Part 1}" & vbCrLf & vbCrLf)
-'
-'         Call rep.Out("{Arial=8,ni}{x=4}1 to 5 below: {Wingdings=12,nb}")
-'         'reporter PROBLEM
-'         Call rep.Out("{WBTEXTBOXL=0,0,ü}" & "{Arial=8,ni}{x=15}whichever applies" & vbCrLf & vbCrLf & vbCrLf & _
-'                     "{Arial=10,n}{x=4}1" & "{x=6}We provided the employee or director with" & "{x=44}" & TickOut(p46car.value(car_P46FirstProvidedWithCar)) & "{Arial=10,n}" & vbCrLf & _
-'                     "{Arial=10,n}{x=6}a first car, which is available for private use." & vbCrLf & vbCrLf & vbCrLf & _
-'                     "{x=4}2" & "{x=6}We replaced a car provided to the" & "{x=44}" & TickOut(p46car.value(car_P46CarProvidedReplaced)) & "{Arial=10,n}" & vbCrLf & _
-'                     "{Arial=10,n}{x=6}employee or director by another car," & vbCrLf & _
-'                     "{x=6}which is available for private use." & vbCrLf & vbCrLf & _
-'                     HMITBullet(6) & "{Arial=10,n}{x=8}If the employee has more than one car" & vbCrLf & _
-'                     "{x=8}available for private use, please give" & vbCrLf & _
-'                     "{x=8}details of the car that has been replaced" & vbCrLf & vbCrLf & _
-'                     OutLineBoxL(14, 34, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46CarProvidedReplaced), .value(car_CarReplacedMake_db), "")) & _
-'                     "{Arial=10,n}{x=8}Make" & vbCrLf & vbCrLf & vbCrLf & _
-'                     OutLineBoxL(14, 34, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46CarProvidedReplaced), .value(car_CarReplacedModel_db), "")) & _
-'                     "{Arial=10,n}{x=8}Model" & vbCrLf & vbCrLf & vbCrLf & _
-'                     OutLineBoxL(18, 12, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46CarProvidedReplaced) And .value(car_CarReplacedEngineSize_db) <> 0, .value(car_CarReplacedEngineSize_db), "")) & _
-'                     "{Arial=10,n}{x=8}Engine size" & "{x=31}cc" & vbCrLf & vbCrLf & vbCrLf & vbCrLf & _
-'                     "{Arial=10,n}{x=4}3" & "{x=6}We provided the employee or director" & "{x=44}" & TickOut(p46car.value(car_P46SecondCar)) & "{Arial=10,n}" & vbCrLf & _
-'                     "{Arial=10,n}{x=6}with a second or further car, which is" & vbCrLf & _
-'                     "{Arial=10,n}{x=6}available for private use." & vbCrLf & vbCrLf & vbCrLf & _
-'                     "{Arial=10,n}{x=4}4" & "{x=6}The employee has started to earn at" & "{x=44}" & TickOut(False) & "{Arial=10,n}" & vbCrLf & _
-'                     "{Arial=10,n}{x=6}the rate of £8,500 a year or more or" & vbCrLf & _
-'                     "{Arial=10,n}{x=6}has become a director.")
-'
-'         Call rep.Out("{POP}")
-'
-'         'km 11/06/02
-''         Call rep.Out(vbCrLf & HMITBullet(52) & "{Arial=10,n}{x=54}If you have ticked box 1, 2, 3, or 4 in Part 1," & vbCrLf & _
-''                     "{x=54}please show the expected level of" & "{Arial=10,nb} yearly" & vbCrLf & _
-''                     "{Arial=10,n}{x=54}business mileage for this car" & vbCrLf & vbCrLf & _
-''                     HMITBullet(54) & "{Arial=10,n}{x=56}less than 2,500" & "{x=78}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement), False, .value(car_P46lowMiles))) & vbCrLf & vbCrLf & _
-''                     HMITBullet(54) & "{Arial=10,n}{x=56}2,500 - 17,999" & "{x=78}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement), False, .value(car_P46MediumMiles))) & vbCrLf & vbCrLf & _
-''                     HMITBullet(54) & "{Arial=10,n}{x=56}18,000 or more" & "{x=78}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement), False, .value(car_P46HighMiles))) & vbCrLf & vbCrLf)
-'                     'mileage description not const since text differs from form
-'
-'         Call rep.Out("{Arial=10,n}{x=52}5" & "{x=54}We have withdrawn a car provided to" & vbCrLf & _
-'                     "{Arial=10,n}{x=54}the employee or director and have not" & vbCrLf & _
-'                     "{Arial=10,n}{x=54}replaced it." & "{x=92}" & TickOut(p46car.value(car_P46WithdrawnWithoutReplacement)) & vbCrLf & vbCrLf & vbCrLf & _
-'                     OutLineBoxR(70, 26, L_HMIT_STANDARDBOX_HEIGHT, IIf(p46car.value(car_P46WithdrawnWithoutReplacement), .value(Car_AvailableTo_db), "")) & _
-'                     HMITBullet(54) & "{Arial=10,n}{x=56}Date withdrawn" & vbCrLf & vbCrLf & vbCrLf & _
-'                     HMITBullet(54) & "{Arial=10,n}{x=56}Please give details of the car withdrawn" & vbCrLf & vbCrLf & _
-'                     OutLineBoxL(62, 34, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46WithdrawnWithoutReplacement), .value(car_Make_db), "")) & _
-'                     "{Arial=10,n}{x=56}Make" & vbCrLf & vbCrLf & vbCrLf & _
-'                     OutLineBoxL(62, 34, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46WithdrawnWithoutReplacement), .value(car_Model_db), "")) & _
-'                     "{Arial=10,n}{x=56}Model" & vbCrLf & vbCrLf & vbCrLf & _
-'                     OutLineBoxL(66, 16, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46WithdrawnWithoutReplacement) And .value(car_enginesize_db) <> 0, .value(car_enginesize_db), "")) & _
-'                     "{Arial=10,n}{x=56}Engine size" & "{x=83}cc" & vbCrLf & vbCrLf & vbCrLf & vbCrLf & _
-'                     "{Arial=10,n}{x=58}If you have ticked box 5, there is no" & vbCrLf & _
-'                     "{x=58}need to complete Parts 2, 3, 4, and 5." & vbCrLf & _
-'                     "{x=58}Go straight to the Declaration at the" & vbCrLf & _
-'                     "{x=58}bottom of the next page." & vbCrLf & vbCrLf & vbCrLf & vbCrLf & vbCrLf & vbCrLf & vbCrLf & vbCrLf & vbCrLf & vbCrLf & vbCrLf & vbCrLf & vbCrLf & vbCrLf & _
-'                     "{Arial=9,ni}{x=84}Please turn over")
-'
-'         Call rep.Out("{ENDSECTION}")
-'         Call rep.Out("{NEWPAGE}")
-'
-'      'part 2
-'         Call rep.Out("{BEGINSECTION}")
-'         Call rep.Out("{PUSHY}")
-'         'AM Trim fix, old line 4 was OutLineBoxL(16, 32, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46WithdrawnWithoutReplacement), "", (.value(car_Make) & " " & .value(car_Model))))
-'         Call rep.Out(vbCrLf & "{x=3}{BOX=46,96}" & "{x=51}{BOX=46,96}" & _
-'                     FillBoxHeader(3, 46, 2, " Part 2  Details of the car provided:") & "{Arial=7,n}" & vbCrLf & vbCrLf & _
-'                     FillBoxHeader(3, 46, 2, "             ""make, model and fuel type""") & vbCrLf & vbCrLf & _
-'                     OutLineBoxL(16, 32, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46WithdrawnWithoutReplacement), "", HMITCarMakeAndModel(p46car))) & _
-'                     HMITBullet(4) & "{Arial=10,n}{x=6}Make and" & vbCrLf & _
-'                     "{Arial=10,n}{x=6}Model" & vbCrLf & vbCrLf & _
-'                     OutLineBoxR(16, 12, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46WithdrawnWithoutReplacement), "", .value(car_enginesize_db))) & _
-'                     HMITBullet(4) & "{Arial=10,n}{x=6}Engine size" & "{x=29}cc" & vbCrLf & vbCrLf & vbCrLf & _
-'                     HMITBullet(4) & "{Arial=10,n}{x=6}Please" & "{x=12}{Wingdings=12,nb}{WBTEXTBOXL=0,0,ü}" & "{x=14}{Arial=10,n} one of these boxes to show the" & vbCrLf & _
-'                     "{x=6}category into which the engine size falls" & vbCrLf & vbCrLf & _
-'                     "{Arial=10,n}{x=6}-" & "{x=8}up to 1400cc" & "{x=21}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement), "", .value(car_P46LowCC))) & "{Arial=10,n}{x=27}-" & "{x=29}2001cc or more" & "{x=45}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement), "", .value(car_P46HighCC))) & vbCrLf & vbCrLf & _
-'                     "{Arial=10,n}{x=6}-" & "{x=8}1401 - 2000cc" & "{x=21}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement), "", .value(car_P46MediumCC))) & "{Arial=10,n}{x=27}-" & "{x=29}no engine size" & "{x=45}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement), "", .value(car_P46NoCC))) & vbCrLf & _
-'                     "{Arial=8,ni}{x=27}(for example, electric car)" & vbCrLf & vbCrLf)
-'
-'         Call rep.Out(OutLineBoxR(22, 26, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46WithdrawnWithoutReplacement), "", .value(car_Registrationdate_db))) & _
-'                     HMITBullet(4) & "{Arial=10,n}{x=6}Date first" & vbCrLf & _
-'                     "{x=6}registered" & vbCrLf & vbCrLf & _
-'                     HMITBullet(4) & "{Arial=10,n}{x=6}Type of fuel or power used" & vbCrLf & vbCrLf & _
-'                     "{Arial=9,ni}{x=8}Type" & "{x=41}Key letter" & vbCrLf & vbCrLf & _
-'                     "{Arial=10,n}{x=6}-" & "{x=8}Petrol" & "{x=43}P" & vbCrLf & vbCrLf & _
-'                     "{Arial=10,n}{x=6}-" & "{x=8}Diesel" & "{x=43}D" & vbCrLf & vbCrLf & _
-'                     "{Arial=10,n}{x=6}-" & "{x=8}Euro IV emissions standard diesel" & "{x=43}L" & vbCrLf & _
-'                     "{Arial=9,ni}{x=8}See car registration form" & vbCrLf & vbCrLf & _
-'                     "{Arial=10,bn}{x=6}Alternative fuel/power types" & vbCrLf & _
-'                     "{Arial=10,n}{x=6}-" & "{x=8}Hybrid electric" & vbCrLf & _
-'                     "{Arial=9,ni}{x=8}A hybrid electric car combines a petrol" & vbCrLf & _
-'                     "{Arial=9,ni}{x=8}engine with an electric motor." & "{Arial=10,n}{x=43}H" & vbCrLf & vbCrLf & _
-'                     "{Arial=10,n}{x=6}-" & "{x=8}Electricity only" & "{x=43}E" & vbCrLf & vbCrLf & _
-'                     "{Arial=10,n}{x=6}-" & "{x=8}Bi-fuel" & vbCrLf & _
-'                     "{Arial=9,ni}{x=8}For a gas and petrol car that had an" & vbCrLf & _
-'                     "{Arial=9,ni}{x=8}approved CO" & "{PUSHY}{Arial=6,n}" & vbCrLf & "{x=17} (2) " & "{POP}{Arial=9,ni}{x=19}emissions figure for" & "{Arial=10,bi} gas" & vbCrLf & _
-'                     "{Arial=9,ni}{x=8}at first registration." & "{Arial=9,n}{x=43}B" & vbCrLf & vbCrLf & _
-'                     "{Arial=10,n}{x=6}-" & "{x=8}Conversion or older bi-fuel" & vbCrLf & _
-'                     "{Arial=9,ni}{x=8}For a gas and petrol car that only had" & vbCrLf & _
-'                     "{Arial=9,ni}{x=8}an approved CO" & "{PUSHY}{Arial=6,n}" & vbCrLf & "{x=20}(2) " & "{POP}{Arial=9,ni}{x=21}emissions figure for" & vbCrLf & _
-'                     "{Arial=9,bi}{x=8}petrol" & "{Arial=9,ni} at first registration." & "{Arial=10,n}{x=43}C" & vbCrLf & vbCrLf & vbCrLf)
-'
-'         Call rep.Out(OutLineBoxL(42, 3, 2, IIf(.value(car_P46WithdrawnWithoutReplacement), "", IIf(.value(car_p46FuelType_db) = 1, "D", .value(car_p46FuelTypeString)))) & "{Arial=10,n}{x=6}Enter the appropriate key letter" & vbCrLf & _
-'                      "{Arial=10,n}{x=6}(one of the above) in this box for" & vbCrLf & _
-'                       "{Arial=10,n}{x=6}the type of fuel or power used" & vbCrLf & vbCrLf & _
-'                      "{Arial=10,n}{x=4}If you think that the car uses a type of fuel" & vbCrLf & _
-'                      "{Arial=10,n}{x=4}that is not mentioned here, please contact" & vbCrLf & _
-'                      "{Arial=10,n}{x=4}your HM Revenue & Customs office." & vbCrLf & vbCrLf)
-'
-'         'km 14/06/02 - fouryearsold date should be hardcoded to 01/01/98
-'         'part 3
-''         AM fix
-''         Call rep.Out(FillBoxHeader(3, 46, L_HMIT_STANDARDBOX_HEIGHT, " Part 3  Carbon dioxide (CO  ) emissions") & "{Arial=6}" & vbCrLf & _
-''                      "{Arial=6,nb}{x=25}{BWTEXTBOXL=0,0,  2}" & vbCrLf & vbCrLf & vbCrLf & _
-''                      HMITBullet(4) & "{Arial=10,n}{x=6}If the car was first registered on or after" & vbCrLf & _
-''                      "{Arial=10,nb}{x=6}1 January 1998" & "{Arial=10,n}, give details of the " & "{Arial=10,nb}approved" & vbCrLf & _
-''                      "{Arial=10,n}{x=6}CO" & "{PUSHY}{Arial=6,n}" & vbCrLf & "{x=9}2 " & "{POP}{Arial=10,n}{x=10}emissions figure at the date of first" & vbCrLf & _
-''                      "{Arial=10,n}{x=6}registration" & vbCrLf & vbCrLf & _
-''                      OutLineBoxR(6, 8, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46WithdrawnWithoutReplacement) Or .value(car_p46CarbonDioxide) = 0 Or Year(.value(car_Registrationdate)) < 1998 Or .value(car_p46NoApprovedCO2Figure), "", .value(car_p46CarbonDioxide))) & "{Arial=10,n}{x=15}grams of CO" & "{PUSHY}{Arial=6,n}" & vbCrLf & "{x=25}2 " & "{POP}{Arial=10,n}{x=26}per kilometre" & vbCrLf & vbCrLf & _
-''                      HMITBullet(4) & "{Arial=10,n}{x=6}If you have not filled in a figure for approved" & vbCrLf & _
-''                      "{Arial=10,n}{x=6}CO" & "{PUSHY}{Arial=6,n}" & vbCrLf & "{x=9}2 " & "{POP}{Arial=10,n}{x=10}emissions, please show the reason" & vbCrLf & vbCrLf & _
-''                      "{x=46}{Wingdings=12,nb}{WBTEXTBOXL=0,0,ü }" & vbCrLf & _
-''                      "{Arial=10,n}{x=6}-" & "{x=8}Car was first registered before 1998" & "{x=45}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement), "", (IIf(Year(.value(car_Registrationdate)) < 1998, True, False)))) & vbCrLf & vbCrLf & _
-''                      "{Arial=10,n}{x=6}-" & "{x=8}1998 or later car for which there is no" & "{x=45}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement) Or Year(.value(car_Registrationdate)) < 1998, "", .value(car_p46NoApprovedCO2Figure))) & "{Arial=10,n}" & vbCrLf & _
-''                      "{Arial=10,n}{x=8}approved CO" & "{PUSHY}{Arial=6,n}" & vbCrLf & "{x=18}2 " & "{POP}{Arial=10,n}{x=19} emissions figure" & "{Arial=12,n}" & vbCrLf & _
-''                      "{Arial=8,ni}{x=8}(for example, some personal imports from" & vbCrLf & _
-''                      "{Arial=8,ni}{x=8}outside the European Community)" & vbCrLf)
-'
-'         Call rep.Out(FillBoxHeader(3, 46, L_HMIT_STANDARDBOX_HEIGHT, " Part 3  Carbon dioxide (CO  ) emissions") & "{Arial=6}" & vbCrLf & _
-'                      "{Arial=6,nb}{x=25}{BWTEXTBOXL=0,0,  (2)}" & vbCrLf & vbCrLf & vbCrLf & _
-'                      HMITBullet(4) & "{Arial=10,n}{x=6}If the car was first registered on or after" & vbCrLf & _
-'                      "{Arial=10,nb}{x=6}1 January 1998" & "{Arial=10,n}, give details of the " & "{Arial=10,nb}approved" & vbCrLf & _
-'                      "{Arial=10,n}{x=6}CO" & "{PUSHY}{Arial=6,n}" & vbCrLf & "{x=9}(2) " & "{POP}{Arial=10,n}{x=10}emissions figure at the date of first" & vbCrLf & _
-'                      "{Arial=10,n}{x=6}registration" & vbCrLf & vbCrLf & _
-'                      OutLineBoxR(6, 8, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46WithdrawnWithoutReplacement) Or .value(car_p46CarbonDioxide_db) = 0 Or Year(.value(car_Registrationdate_db)) < 1998 Or .value(car_p46NoApprovedCO2Figure_db) Or .value(car_p46FuelTypeString) = "E", "", .value(car_p46CarbonDioxide_db))) & "{Arial=10,n}{x=15}grams of CO" & "{PUSHY}{Arial=6,n}" & vbCrLf & "{x=25}(2) " & "{POP}{Arial=10,n}{x=26}per kilometre" & vbCrLf & vbCrLf & _
-'                      HMITBullet(4) & "{Arial=10,n}{x=6}If you have not filled in a figure for approved" & vbCrLf & _
-'                      "{Arial=10,n}{x=6}CO" & "{PUSHY}{Arial=6,n}" & vbCrLf & "{x=9}(2) " & "{POP}{Arial=10,n}{x=10}emissions, please show the reason" & vbCrLf & vbCrLf & vbCrLf & _
-'                      "{Arial=10,n}{x=6}-" & "{x=8}Car was first registered before 1998" & "{x=45}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement), "", (IIf(Year(.value(car_Registrationdate_db)) < 1998, True, False)))) & vbCrLf & vbCrLf & _
-'                      "{Arial=10,n}{x=6}-" & "{x=8}1998 or later car for which there is no" & "{x=45}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement) Or Year(.value(car_Registrationdate_db)) < 1998, "", .value(car_p46NoApprovedCO2Figure_db))) & "{Arial=10,n}" & vbCrLf & _
-'                      "{Arial=10,n}{x=8}approved CO" & "{PUSHY}{Arial=6,n}" & vbCrLf & "{x=18}(2) " & "{POP}{Arial=10,n}{x=19} emissions figure" & "{Arial=12,n}" & vbCrLf & _
-'                      "{Arial=8,ni}{x=8}(for example, some personal imports from" & vbCrLf & _
-'                      "{Arial=8,ni}{x=8}outside the European Community)" & vbCrLf)
-'
-'
-'         'part 4
-'         Call rep.Out("{POP}")
-'         Call rep.Out(vbCrLf & FillBoxHeader(51, 46, 2, " Part 4  Details of car provided:") & "{Arial=7,n}" & vbCrLf & vbCrLf & _
-'                     FillBoxHeader(51, 46, 2, "             price and employee contributions") & vbCrLf & vbCrLf)
-'
-'         Call rep.Out(HMITBullet(52) & "{Arial=10,n}{x=54}Price of the car " & "{Arial=9,ni}(not the price actually paid, but" & vbCrLf & _
-'                      "{Arial=9,ni}{x=54}the price for tax purposes - normally the list price at" & vbCrLf & _
-'                      "{Arial=9,ni}{x=54}the date of first registration)" & "{Arial=7,n}" & vbCrLf & _
-'                      OutLineBoxR(80, 16, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46WithdrawnWithoutReplacement), "", (FormatWN(.value(car_ListPrice_db))))) & "{Arial=8,n}" & vbCrLf & vbCrLf & vbCrLf & _
-'                      HMITBullet(52) & "{Arial=10,n}{x=54}Price of accessories not included in the price" & vbCrLf & _
-'                      "{x=54}of the car" & "{Arial=7,n}" & vbCrLf & _
-'                      OutLineBoxR(80, 16, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46WithdrawnWithoutReplacement), "", (FormatWN(.value(car_Accessories))))) & "{Arial=8,n}" & vbCrLf & vbCrLf & vbCrLf & _
-'                      HMITBullet(52) & "{Arial=10,n}{x=54}Date the car was first made available to" & vbCrLf & _
-'                      "{x=54}the employee" & "{Arial=7}" & vbCrLf & _
-'                      OutLineBoxR(70, 26, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46WithdrawnWithoutReplacement), "", .value(Car_AvailableFrom_db))) & "{Arial=8,n}" & vbCrLf & vbCrLf & vbCrLf & _
-'                      HMITBullet(52) & "{Arial=10,n}{x=54}Capital contribution (if any) made by the" & vbCrLf & _
-'                      "{x=54}employee towards the cost of the car and" & vbCrLf & _
-'                      "{x=54}for accessories" & "{Arial=7,n}" & vbCrLf & _
-'                      OutLineBoxR(80, 16, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46WithdrawnWithoutReplacement), "", (FormatWN(.value(car_capitalcontribution_db))))) & "{Arial=8,n}" & vbCrLf & vbCrLf & vbCrLf & _
-'                      HMITBullet(52) & "{Arial=10,n}{x=54}Sum that the employee is required to pay (if any)" & vbCrLf & _
-'                      "{x=54}for private use of the car" & "{Arial=7}" & vbCrLf & _
-'                      OutLineBoxR(80, 16, L_HMIT_STANDARDBOX_HEIGHT, IIf(.value(car_P46WithdrawnWithoutReplacement), "", (FormatWN(.value(car_MadeGood_db))))) & "{Arial=8,n}" & vbCrLf & vbCrLf & vbCrLf)
-'
-''AM Fix         Call rep.Out("{Arial=10,n}{x=54}-" & "{x=56}a week" & "{x=68}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement) Or .value(car_MadeGood) = 0, "", (IIf(.value(car_p46PaymentFrequency) = 3, True, False)))) & "{Arial=10,n}{x=77}-" & "{x=79}a quarter" & "{x=90}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement) Or .value(car_MadeGood) = 0, "", (IIf(.value(car_p46PaymentFrequency) = 1, True, False)))) & vbCrLf & vbCrLf & _
-'                      "{Arial=10,n}{x=54}-" & "{x=56}a month" & "{x=68}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement) Or .value(car_MadeGood) = 0, "", (IIf(.value(car_p46PaymentFrequency) = 2, True, False)))) & "{Arial=10,n}{x=77}-" & "{x=79}a year" & "{x=90}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement) Or .value(car_MadeGood) = 0, "", (IIf(.value(car_p46PaymentFrequency) = 0 Or .value(car_p46PaymentFrequency) = 4, True, False)))) & vbCrLf & vbCrLf)
-'
-'
-'
-'         'bp46PAymentFrequency = IIf(.value(car_P46WithdrawnWithoutReplacement) Or .value(car_MadeGood_db) = 0, "", (IIf(.value(car_p46PaymentFrequency_db) = 3, True, False)))
-'         Call rep.Out("{Arial=10,n}{x=54}-" & "{x=56}a week" & "{x=68}" & P46PaymentFrequencyTickOut(p46car, P46PF_WEEKLY))
-'         Call rep.Out("{Arial=10,n}{x=77}-" & "{x=79}a quarter" & "{x=90}" & P46PaymentFrequencyTickOut(p46car, P46PF_QUARTERLY))
-'         Call rep.Out(vbCrLf & vbCrLf)
-'         Call rep.Out("{Arial=10,n}{x=54}-" & "{x=56}a month" & "{x=68}" & P46PaymentFrequencyTickOut(p46car, P46PF_MONTHLY))
-'         Call rep.Out("{Arial=10,n}{x=77}-" & "{x=79}a year" & "{x=90}" & TickOut(P46PaymentFrequencyEx(p46car, P46PF_ANNUALLY) Or P46PaymentFrequencyEx(p46car, P46PF_ACTUAL)))
-'         Call rep.Out(vbCrLf & vbCrLf)
-'
-'         'part 5
-'         Call rep.Out(vbCrLf & FillBoxHeader(51, 46, L_HMIT_STANDARDBOX_HEIGHT, " Part 5  Fuel for private use") & vbCrLf & vbCrLf)
-'
-'         Call rep.Out(HMITBullet(52) & "{Arial=10,n}{x=54}Is fuel for private use provided with this car?" & vbCrLf & _
-'                      "{Arial=9,ni}{x=54}Tick 'Yes' if the employee is provided with any fuel at all" & vbCrLf & _
-'                      "{Arial=9,ni}{x=54}for private use, including any combination of petrol and" & vbCrLf & _
-'                      "{Arial=9,ni}{x=54}gas, or the provision of petrol for a hybrid electric car." & vbCrLf & _
-'                      "{Arial=9,ni}{x=54}Do" & "{Arial=9,bi} not" & "{Arial=9,ni} tick 'Yes' if only electricity is provided." & vbCrLf & vbCrLf & _
-'                      "{Arial=10,n}{x=54}Yes" & "{x=59}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement) Or .value(car_p46FuelType_db) = CCFT_ELECTRIC, "", .value(car_privatefuel_db))) & _
-'                      "{Arial=10,n}{x=70}No" & "{x=75}" & TickOut(IIf(.value(car_P46WithdrawnWithoutReplacement), "", (Not .value(car_privatefuel_db) Or (.value(car_privatefuel_db) And .value(car_p46FuelType_db) = CCFT_ELECTRIC)))) & vbCrLf & vbCrLf & _
-'                      "{Arial=10,n}{x=54}If yes, must the employee pay for all fuel used for" & vbCrLf & _
-'                      "{Arial=10,n}{x=54}private motoring" & "{Arial=10,nb} and" & "{Arial=10,n} do you expect them to" & vbCrLf & _
-'                      "{Arial=10,n}{x=54}continue to do so?" & vbCrLf & vbCrLf & _
-'                      "{Arial=10,n}{x=54}Yes" & "{x=59}" & TickOut(IIf(.value(car_privatefuel_db), (IIf(.value(car_P46WithdrawnWithoutReplacement), "", .value(car_requiredmakegood_db))), "")) & _
-'                      "{Arial=10,n}{x=70}No" & "{x=75}" & TickOut(IIf(.value(car_privatefuel_db), (IIf(.value(car_P46WithdrawnWithoutReplacement), "", (Not .value(car_requiredmakegood_db)))), "")) & vbCrLf & vbCrLf & vbCrLf & vbCrLf)
-'
-'         'declaration
-'         Call rep.Out(FillBoxHeader(51, 46, L_HMIT_STANDARDBOX_HEIGHT, " Declaration") & vbCrLf & vbCrLf & _
-'                      "{Arial=10,n}{x=52}I declare that the information I have given is correct" & vbCrLf & _
-'                      "{Arial=10,n}{x=52}according to the best of my knowledge and belief." & vbCrLf & vbCrLf & _
-'                      OutLineBoxL(60, 36, 4, "") & vbCrLf & "{Arial=10,n}{x=52}Signature" & vbCrLf & vbCrLf & vbCrLf & _
-'                      OutLineBoxL(64, 32, L_HMIT_STANDARDBOX_HEIGHT, "") & "{Arial=10,n}{x=52}Capacity in" & vbCrLf & "{x=52}which signed" & vbCrLf & vbCrLf & _
-'                      OutLineBoxL(64, 26, L_HMIT_STANDARDBOX_HEIGHT, "") & "{Arial=10,n}{x=52}Date")
-'
-'         Call rep.Out("{ENDSECTION}")
-'         Call rep.Out("{NEWPAGE}")
-'
-'    End With
-'  Next
-'
-'
-'  Report_P46CarApril2002Onwards = True
-'Report_P46Car_end:
-'  Call xReturn("Report_P46Car")
-'  Exit Function
-'
-'Report_P46Car_err:
-'  Call ErrorMessage(ERR_ERROR + ERR_ALLOWIGNORE, Err, "Report_P46Car", "P46 Car Report", "Error printing P46 Car...")
-'  Resume Report_P46Car_end
-'  Resume
-'
-'End Function
-
-
 Private Sub HMITSectionL(rep As Reporter, ee As Employee, BenArr() As BEN_CLASS)
   'same as HMITAssetsTransferredType but for value = 0 with Computer Related = true need to not include if effect of £500 deminimuns makes 0
   'came in 1999/2000
@@ -3920,6 +3640,8 @@ Public Sub Report_P11Db_Reconciliation(rep As Reporter, ey As Employer)
   Dim benEY As IBenefitClass
   Dim vTotalBenfitsExClass1 As Variant
   Dim vTotalBenfitsClass1 As Variant
+  Dim vTotalBenefits As Variant
+  
   
   Const S_SUB_ITEM_MARKER As String = " - "
   
@@ -3934,101 +3656,152 @@ On Error GoTo err_err
 'section p11d benfits
   Call WKOut(rep, WK_SECTION_BREAK)
   
-  Call P11Db_ReconciliationSubHeading(rep, "Total P11D benefits reported")
+  Call P11Db_ReconciliationSubHeading(rep, UpperCaseFirstLetter(S_P11DB_SHORT_CAPTION_BOX_A))
   
-  Call WKTblColXOffsets(L_WK_OTHER_TABLE_COL1, 12, L_WK_OTHER_TABLE_COL4)
+  Call P11Db_ReconciliationAdjustmentsColOffsets
   
-  Call WKTblColFormats("ib", "ib", "irb")
-  Call WKTableHeadings(rep, "P11D box", "Class 1A NIC benefits:", "£")
-  Call WKTblColFormats("n", "n", "rn")
+  
+  Call WKTblColFormats("ib", "ib", "irb", "irb")
+  Call WKTableHeadings(rep, "P11D box", "Class 1A NIC benefits:", "", "£")
+  Call WKTblColFormats("n", "n", "rn", "rn")
   
   Dim HMITSection As HMIT_SECTIONS
   
-  
-  vTotalBenfitsExClass1 = 0
+  vTotalBenefits = 0
   For HMITSection = HMIT_SECTIONS.HMIT_FIRST_ITEM To HMIT_SECTIONS.HMIT_LAST_ITEM
-    If (HMITSection <> HMIT_N) Then
-      vTotalBenfitsExClass1 = vTotalBenfitsExClass1 + P11Db_ReconciliationTableLineP11DBox(rep, benEY, HMITSection)
-    End If
+    vTotalBenefits = vTotalBenefits + P11Db_ReconciliationTableLineP11DBox(rep, benEY, HMITSection, HMIT_SECTION_EMPLOYER_BENEFIT_ITEM_P11D_NICABLE)
   Next
   
-  Call WKOut(rep, WK_ITEM_Total, "", vTotalBenfitsExClass1, , False)
+  Call WKOut(rep, WK_ITEM_Total, "", vTotalBenefits, , False)
   
-  Call rep.Out(vbCrLf)
-  Call WKTblColFormats("n", "ib", "n")
-  Call WKTableHeadings(rep, "", "Less class 1 NIC benefits:", "")
-  
-  Call WKTblColFormats("n", "n", "rn")
-  
-  vTotalBenfitsClass1 = P11Db_ReconciliationTableLineP11DBox(rep, benEY, HMIT_N, True)
-  
-  Call WKOut(rep, WK_ITEM_Total, "", vTotalBenfitsExClass1 - vTotalBenfitsClass1, , False)
   
   Call WKOut(rep, WK_SECTION_BREAK)
-  
   
   
 'section p11db
   Call P11Db_ReconciliationSubHeading(rep, S_P11D_B)
   
-  Call WKTblColFormats("nib", "nib", "nirb")
-  Call WKTableHeadings(rep, S_P11D_B & "~box", "Caption", "£")
-  Call WKTblColFormats("n", "n", "rn")
-  Call WKTableRow(rep, "A", "Total benefits from P11Ds", FormatWNNoCurrency(benEY.value(employer_TotalBenefitsPotentiallySubjectToClass1A)))
+'A
+  Call WKTblColFormats("nib", "nib", "nirb", "nirb")
+  Call WKTableHeadings(rep, S_P11D_B & "~box", "Caption", "£", "£")
+  Call WKTblColFormats("n", "n", "rn", "rn")
+  Call WKTableRow(rep, "A", UpperCaseFirstLetter(S_P11DB_SHORT_CAPTION_BOX_A), "", FormatWNNoCurrency(benEY.value(employer_TotalBenefitsPotentiallySubjectToClass1A)))
   Call WKTableBlankRow(rep)
-  Call WKTableRow(rep, "B", "Amounts not included in P11Ds", "")
+'B
+
+  Call WKTableRow(rep, "B", S_P11DB_ADDITIONS_BOX_B, "", "")
   Call WKTableBlankRow(rep)
-  Call WKTableRow(rep, "", S_SUB_ITEM_MARKER & "Add formally payrolled benefits", FormatWNNoCurrency(0))
-  Call WKTableRow(rep, "", S_SUB_ITEM_MARKER & "Less payrolled benefits for exmployees not subject to UK NIC", FormatWNNoCurrency(1, True))
-  Call WKTableRow(rep, "", S_SUB_ITEM_MARKER & "Add Class 1A NIC due on termination payments", FormatWNNoCurrency(15))
-  Call WKTableRow(rep, "", S_SUB_ITEM_MARKER & "Add Class 1A NIC due on sporting awards", FormatWNNoCurrency(10))
-  'addd user defined entries
+  'benefits payrolled, made good subject to PAYE
+  vTotalBenfitsExClass1 = 0
+  For HMITSection = HMIT_SECTIONS.HMIT_FIRST_ITEM To HMIT_SECTIONS.HMIT_LAST_ITEM
+    Call P11Db_ReconciliationTableLineP11DBox(rep, benEY, HMITSection, HMIT_SECTION_EMPLOYER_BENEFIT_ITEM_P11DB_ADDITIONS, False, True, , 3)
+  Next
+  
+  Call P11Db_ReconciliationAdjustments(ey, rep, ey.P11DbAdditions, False)
+  Call WKTableRow(rep, "", "", "", FormatWNNoCurrency(benEY.value(employer_NIC_AdjustmentAddTotal)))
+  
+'C
   Call WKTableBlankRow(rep)
-  Call WKTableRow(rep, "C", "Less amounts on which Class 1A NIC not due ", "")
+  Call WKTableRow(rep, "C", S_P11DB_DEDUCTIONS_BOX_C, "", "")
+   
   Call WKTableBlankRow(rep)
-  Call WKTableRow(rep, "", S_SUB_ITEM_MARKER & "Employees not subject to NIC for the full tax year", FormatWNNoCurrency(10, True))
-  Call WKTableRow(rep, "", S_SUB_ITEM_MARKER & "Employees not subject to NIC for part of the tax year", FormatWNNoCurrency(10, True))
-  'addd user defined entries
+  For HMITSection = HMIT_SECTIONS.HMIT_FIRST_ITEM To HMIT_SECTIONS.HMIT_LAST_ITEM
+    Call P11Db_ReconciliationTableLineP11DBox(rep, benEY, HMITSection, HMIT_SECTION_EMPLOYER_BENEFIT_ITEM_P11DB_DEDUCTIONS, True, True, , 3)
+  Next
+  
+  Call P11Db_ReconciliationAdjustments(ey, rep, ey.P11DbDeductions, True)
+  Call WKTableRow(rep, "", "", "", FormatWNNoCurrency(-1 * benEY.value(employer_NIC_AdjustmentDeductTotal)))
+'D
+  Call WKTableBlankRow(rep)
+  
+  Call WKTableRow(rep, "D", S_P11DB_TOTAL_BOX_D & " (minimum 0)", "", "")
+  Call WKOut(rep, WK_ITEM_Total, "", benEY.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A), , False)
+  'FormatWNNoCurrency(benEY.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A)
   
   Call WKTableBlankRow(rep)
-  Call WKTableRow(rep, "D", "Total Amounts subject to Class 1A NIC", FormatWNNoCurrency(benEY.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A)))
+'E
+  Call WKTableRow(rep, "E", S_P11DB_MUTIPLY_BY_NIC_RATE_BOX_E, "", "x " & Report_P11db_NIC_Rate_Formatted())
   Call WKTableBlankRow(rep)
-  Call WKTableRow(rep, "E", "Multilpy by Class 1A NIC rate", "x " & Report_P11db_NIC_Rate_Formatted())
-  Call WKTableBlankRow(rep)
-  Call WKTableRow(rep, "F", "Class 1A NIC payable", FormatWNNoCurrency(benEY.value(ITEM_NIC_CLASS1A_BENEFIT), , True))
+'F
+  Call WKTableRow(rep, "F", S_P11DB_CLASS_1A_PAYABLE_BOX_F, "", FormatWNNoCurrency(benEY.value(ITEM_NIC_CLASS1A_BENEFIT), , True))
   Call WKOut(rep, WK_SECTION_BREAK)
-  'Call WKTableBlankRow(rep)
     
 err_end:
   Exit Sub
 err_err:
   Call ErrorMessage(ERR_ERROR, Err, "P11DbReconciliation", "P11DbReconciliation", "Error printing the P11db reconciliation")
   Resume err_end
+  Resume
+End Sub
+Private Sub P11Db_ReconciliationAdjustmentsColOffsets()
+  Call WKTblColXOffsets(L_WK_OTHER_TABLE_COL1, 12, L_WK_OTHER_TABLE_COL3, L_WK_OTHER_TABLE_COL4)
+
+End Sub
+Private Sub P11Db_ReconciliationAdjustments(ey As Employer, rep As Reporter, Adjustments As ObjectList, negative As Boolean)
+  Dim i As Long
+  Dim adjustment As P11DbAdjustment
+  
+  If ey.P11DbAdjustmentsSum(Adjustments) = 0 Then
+    Exit Sub
+  End If
+  
+  'Call WKTableBlankRow(rep)
+'  Call WKTableRow(rep, "", Title, "", "")
+'  Call WKTableBlankRow(rep)
+  
+  For i = 1 To Adjustments.Count
+    Set adjustment = Adjustments(i)
+    Call WKTableRow(rep, "", adjustment.caption, FormatWNNoCurrency(adjustment.value, negative), "")
+  Next
+  
 End Sub
 Private Sub P11Db_ReconciliationSubHeading(rep As Reporter, subHeading As String)
   Call WKTblColXOffsets(0)
   Call WKTblColFormats("lb")
   Call WKTableHeadings(rep, subHeading)
-  
-  Call WKTblColXOffsets(L_WK_OTHER_TABLE_COL1, 12, L_WK_OTHER_TABLE_COL4)
+  Call P11Db_ReconciliationAdjustmentsColOffsets
 End Sub
 
-Function P11Db_ReconciliationTableLineP11DBox(rep As Reporter, benEY As IBenefitClass, HMITSection As HMIT_SECTIONS, Optional ByVal negate As Boolean = False) As Variant
+Function P11Db_ReconciliationTableLineP11DBox(rep As Reporter, benEY As IBenefitClass, HMITSection As HMIT_SECTIONS, sectionValue As HMIT_SECTION_VALUE, Optional ByVal negate As Boolean = False, Optional ByVal boxAndNameInColummn2 As Boolean = False, Optional ByVal repOut As Boolean = True, Optional ByVal valueColumn As Long = 4) As Variant
 
   Dim boxString As String
   Dim boxName As String
   Dim boxValue As String
   Dim eeItem As EmployeeItems
+  Dim v As Variant
+  Dim captionAddition As String
   
-  eeItem = p11d32.Rates.HMITSectionToValue(HMITSection, HMIT_SECTION_EMPLOYER_BENEFIT_ITEM)
+  eeItem = p11d32.Rates.HMITSectionToValue(HMITSection, sectionValue)
   
   
-  boxString = p11d32.Rates.HMITSectionToValue(HMITSection, HMIT_SECTION_BOX_LETTER)
-  boxName = p11d32.Rates.HMITSectionToValue(HMITSection, HMIT_SECTION_DESCRIPTION)
+  If sectionValue = HMIT_SECTION_EMPLOYER_BENEFIT_ITEM_P11DB_ADDITIONS Then
+    captionAddition = ":" & LowerCaseFirstLetter(S_P11DB_AMOUNTS_TAXED_THROUGH_PAYROLL)
+  ElseIf sectionValue = HMIT_SECTION_EMPLOYER_BENEFIT_ITEM_P11DB_DEDUCTIONS Then
+    captionAddition = ": " & LowerCaseFirstLetter(S_P11DB_EMPLOYEES_NOT_SUBJECT_TO_CLASS_1A)
+  End If
   
-  P11Db_ReconciliationTableLineP11DBox = benEY.value(eeItem)
-  boxValue = FormatWNNoCurrency(benEY.value(eeItem), negate)
-  Call WKTableRow(rep, boxString, boxName, boxValue)
+  v = benEY.value(eeItem)
+  If IsNumeric(v) And v <> 0 Then
+    If (repOut) Then
+      If (boxAndNameInColummn2) Then
+        boxName = p11d32.Rates.HMITSectionToValue(HMITSection, HMIT_SECTION_BOX_AND_DESCRIPTION)
+      Else
+        boxString = p11d32.Rates.HMITSectionToValue(HMITSection, HMIT_SECTION_BOX_LETTER)
+        boxName = p11d32.Rates.HMITSectionToValue(HMITSection, HMIT_SECTION_DESCRIPTION)
+      End If
+      boxName = boxName & captionAddition
+      boxValue = FormatWNNoCurrency(benEY.value(eeItem), negate)
+      If (valueColumn = 3) Then
+        Call WKTableRow(rep, boxString, boxName, boxValue, "")
+      Else
+        Call WKTableRow(rep, boxString, boxName, "", boxValue)
+      End If
+    End If
+    P11Db_ReconciliationTableLineP11DBox = v
+  Else
+    P11Db_ReconciliationTableLineP11DBox = 0
+  End If
+    
   
 End Function
 

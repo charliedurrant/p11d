@@ -201,7 +201,7 @@ Public Sub SettingsToScreen()
   Call ben.Kill
     
   chkImportTracking.value = BoolToChkBox(p11d32.Importing.Tracking)
-  lblCurrentEmployer.Caption = ""
+  lblCurrentEmployer.caption = ""
   
   sEmployer = "'" & ben.Name & "'"
   m_EmployerFileName = ben.value(employer_FileName)

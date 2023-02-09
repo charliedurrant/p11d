@@ -684,10 +684,12 @@ End Function
 
 Public Function AddUBGRDStandardColumn(UBGRD As Object, lIndex As Long, sngWidth As Single, sCaption As String, sNumberFormat As String) As TrueDBGrid60.column
   Dim c As TrueDBGrid60.column
+  Dim u As UBGRD
   
   On Error GoTo AddUBGRDStandardColumn_Err
   Call xSet("AddUBGRDStandardColumn")
 
+  
   Set c = UBGRD.Columns.Add(lIndex)
     
   With c
@@ -707,9 +709,8 @@ AddUBGRDStandardColumn_End:
   Call xReturn("AddUBGRDStandardColumn")
   Exit Function
 AddUBGRDStandardColumn_Err:
-  AddUBGRDStandardColumn = Nothing
+  Set AddUBGRDStandardColumn = Nothing
   Call ErrorMessage(ERR_ERROR, Err, "AddUBGRDStandardColumn", "Add UBGRD Standard Column", "Error adding a standard formated column to a ubgrd.")
-  
   Resume AddUBGRDStandardColumn_End
   Resume
 End Function

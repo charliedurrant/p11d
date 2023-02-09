@@ -218,7 +218,9 @@ Public Enum HMIT_SECTION_VALUE
   HMIT_SECTION_BOX_LETTER
   HMIT_SECTION_DESCRIPTION
   HMIT_SECTION_BOX_AND_DESCRIPTION
-  HMIT_SECTION_EMPLOYER_BENEFIT_ITEM
+  HMIT_SECTION_EMPLOYER_BENEFIT_ITEM_P11D_NICABLE
+  HMIT_SECTION_EMPLOYER_BENEFIT_ITEM_P11DB_ADDITIONS
+  HMIT_SECTION_EMPLOYER_BENEFIT_ITEM_P11DB_DEDUCTIONS
 End Enum
   
 
@@ -1226,12 +1228,12 @@ Private Sub WaitForPRN(sReportName As String, ByVal ee As Employee, sPRNPathAndF
   lValue = prg.value
   lMax = prg.Max
   lIndicator = prg.Indicator
-  sCaption = prg.Caption
+  sCaption = prg.caption
   lAlignment = prg.TextAlignment
   
   prg.Max = PRNLoopLength
   prg.Min = 0
-  prg.Caption = "Waiting for printer to create: " & "'" & sPRNPathAndFilePerDriver & "'"
+  prg.caption = "Waiting for printer to create: " & "'" & sPRNPathAndFilePerDriver & "'"
   prg.Indicator = None
   prg.TextAlignment = ALIGN_LEFT
   
@@ -1263,7 +1265,7 @@ WaitForPRN_END:
   If Not prg Is Nothing Then
     prg.Max = lMax
     prg.value = lValue
-    prg.Caption = sCaption
+    prg.caption = sCaption
     prg.Indicator = lIndicator
     prg.TextAlignment = lAlignment
   End If
@@ -1769,7 +1771,7 @@ Public Function IsMasterLetterFile(sPathAndFile As String) As Boolean
   
   Call xSet("IsMasterLetterFile")
   
-  If StrComp(sPathAndFile, p11d32.workingDirectory & S_SYSTEMDIR_LETTERS & p11d32.LetterFile & S_EMPLOYEE_LETTER_FILE_EXTENSION, vbTextCompare) = 0 Then
+  If StrComp(sPathAndFile, p11d32.WorkingDirectory & S_SYSTEMDIR_LETTERS & p11d32.LetterFile & S_EMPLOYEE_LETTER_FILE_EXTENSION, vbTextCompare) = 0 Then
     IsMasterLetterFile = True
   End If
   
@@ -1826,17 +1828,17 @@ IEnumFiles_File_ERR:
 End Sub
 Public Sub EmailSettingsShow()
 
- On Error GoTo err_err
+ On Error GoTo Err_Err
   
   Call InitATCMAIL
   Call ATCMail.ShowOptions
   Call DestroyATCMAIL
 
-err_end:
+Err_End:
   Exit Sub
-err_err:
+Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "EmailSettingsShow", "EmailSettingsShow", "Failed to show the email settings")
-  Resume err_end
+  Resume Err_End
 
 
 End Sub

@@ -1116,6 +1116,10 @@ Public Function LoadEmployer(clsER As Employer, Optional bEmployeeScreen As Bool
     Call ibc.ReadDB
     Call CurrentEmployer.ReadFPCS
     Call CurrentEmployer.ReadCDCs
+    Call CurrentEmployer.ReadP11DbAdjustments
+    
+    
+    
 'MP DB confirm removal - not needed for any purpose?
 '    Call CurrentEmployer.FindAccomExpenses
     If udm Is Nothing Then Set udm = New udm
@@ -1406,11 +1410,13 @@ Public Function EditEmployer(ByVal lEmployerIndex As Long) As Long
   
   If lEmployerIndex > 0 Then
     Set empr = Employers(lEmployerIndex)
-    If Not empr.PassWordOK() Then GoTo EditEmployer_End
     
+    If Not empr.PassWordOK() Then GoTo EditEmployer_End
     
     Set ben = empr
     If ben.value(employer_FixLevel_db) < p11d32.TemplateFixlevel Then Call Err.Raise(ERR_FIX_LEVEL_LOW, "EditEmployer", "The fix level is to low to edit employer, please open the employer first, fixlevel = " & ben.value(employer_FixLevel_db))
+    
+    
     F_EmployerDetails.TxtBx(0).Text = ben.Name
     F_EmployerDetails.TxtBx(1).Text = ben.value(employer_Payeref_db)
     F_EmployerDetails.TxtBx(2).Text = Left$(ben.value(employer_FileName), Len(ben.value(employer_FileName)) - 6)
@@ -1421,9 +1427,6 @@ Public Function EditEmployer(ByVal lEmployerIndex As Long) As Long
     F_EmployerDetails.chkbx(0) = BoolToChkBox(ben.value(employer_CT_db))
     F_EmployerDetails.chkbx(1) = BoolToChkBox(ben.value(employer_TreatEmployeeCarsAsUnderApprovedFPCS_db))
     F_EmployerDetails.chkbx(2) = BoolToChkBox(ben.value(employer_CheapTaxableLoansAllNon_db))
-    F_EmployerDetails.chkbx(3) = BoolToChkBox(ben.value(employer_EerDeclSect2Chk1_db))
-    F_EmployerDetails.chkbx(4) = BoolToChkBox(ben.value(employer_EerDeclSect2Chk2_db))
-    F_EmployerDetails.chkbx(5) = BoolToChkBox(ben.value(employer_EerDeclSect2Chk3_db))
     
     F_EmployerDetails.TxtBx(6).Text = ben.value(employer_AddressLine1_db)
     F_EmployerDetails.TxtBx(7).Text = ben.value(employer_AddressLine2_db)
@@ -1432,19 +1435,6 @@ Public Function EditEmployer(ByVal lEmployerIndex As Long) As Long
     F_EmployerDetails.TxtBx(10).Text = ben.value(employer_AddressPostCode_db)
     F_EmployerDetails.TxtBx(11).Text = ben.value(employer_SubmitterRef_db)
     F_EmployerDetails.TxtBx(12).Text = ben.value(employer_SubmitterName_db)
-    F_EmployerDetails.TxtBx(14).Text = ben.value(employer_AddClass1AAmounts_db)
-    F_EmployerDetails.TxtBx(15).Text = ben.value(employer_AddClass1ADescription_db)
-    F_EmployerDetails.TxtBx(16).Text = ben.value(employer_deductClass1AAmounts_db)
-    F_EmployerDetails.TxtBx(17).Text = ben.value(employer_deductClass1ADescription_db)
-    F_EmployerDetails.TxtBx(18).Text = ben.value(employer_IRTaxOffice_db)
-    F_EmployerDetails.TxtBx(19).Text = ben.value(employer_IRAddressLine1_db)
-    F_EmployerDetails.TxtBx(20).Text = ben.value(employer_IRAddressLine2_db)
-    F_EmployerDetails.TxtBx(21).Text = ben.value(employer_IRAddressLine3_db)
-    F_EmployerDetails.TxtBx(22).Text = ben.value(employer_IRAddressLine4_db)
-    F_EmployerDetails.TxtBx(23).Text = ben.value(employer_IRPostcode_db)
-    F_EmployerDetails.TxtBx(24).Text = ben.value(employer_IRTelephoneNumber_db)
-    F_EmployerDetails.TxtBx(25).Text = ben.value(employer_IRYourReference_db)
-    F_EmployerDetails.TxtBx(26).Text = ben.value(employer_IRAccountsOfficeReference_db)
     F_EmployerDetails.TxtBx(27).Text = ben.value(employer_PayeOnlineID_db)
     F_EmployerDetails.TxtBx(28).Text = ben.value(employer_PayeOnlinePwd_db)
     F_EmployerDetails.TxtBx(29).Text = ben.value(employer_PayeOnlineUser_db)
@@ -1452,9 +1442,6 @@ Public Function EditEmployer(ByVal lEmployerIndex As Long) As Long
     F_EmployerDetails.TxtBx(31).Text = ben.value(employer_GroupCode1Alias_db)
     F_EmployerDetails.TxtBx(32).Text = ben.value(employer_GroupCode2Alias_db)
     F_EmployerDetails.TxtBx(33).Text = ben.value(employer_GroupCode3Alias_db)
-    
-    
-    
   Else
     Set empr = New Employer
     Set ben = empr
@@ -1471,7 +1458,7 @@ retryedit:
 '  F_EmployerDetails.Show vbModal
   Call p11d32.Help.ShowForm(F_EmployerDetails, vbModal)
   
-  If F_EmployerDetails.m_ok = False Then GoTo EditEmployer_End
+  If F_EmployerDetails.m_OK = False Then GoTo EditEmployer_End
   
   If lEmployerIndex <= 0 Then If Not empr.CreateEmployer(p11d32.workingDirectory & F_EmployerDetails.TxtBx(2).Text & Rates.FileExtensionCurrent) Then GoTo retryedit
   
@@ -1496,31 +1483,8 @@ retryedit:
   ben.value(employer_PayeOnlinePwd_db) = F_EmployerDetails.TxtBx(28).Text
   ben.value(employer_PayeOnlineUser_db) = F_EmployerDetails.TxtBx(29).Text
   ben.value(employer_PayeOnlineEmail_db) = F_EmployerDetails.TxtBx(30).Text
-  ben.value(employer_AddClass1AAmounts_db) = F_EmployerDetails.TxtBx(14).Text
-  ben.value(employer_AddClass1ADescription_db) = F_EmployerDetails.TxtBx(15).Text
-  ben.value(employer_deductClass1AAmounts_db) = F_EmployerDetails.TxtBx(16).Text
-  ben.value(employer_deductClass1ADescription_db) = F_EmployerDetails.TxtBx(17).Text
   ben.value(employer_EmployeeResponseDate_db) = ScreenToDateVal(F_EmployerDetails.TxtBx(13).Text, STDV_STRING)
   ben.value(employer_TreatEmployeeCarsAsUnderApprovedFPCS_db) = ChkBoxToBool(F_EmployerDetails.chkbx(1))
-    
-  ben.value(employer_EerDeclSect2Chk1_db) = ChkBoxToBool(F_EmployerDetails.chkbx(3))
-  ben.value(employer_EerDeclSect2Chk2_db) = ChkBoxToBool(F_EmployerDetails.chkbx(4))
-  ben.value(employer_EerDeclSect2Chk3_db) = ChkBoxToBool(F_EmployerDetails.chkbx(5))
-    
-  ben.value(employer_IRTaxOffice_db) = F_EmployerDetails.TxtBx(18).Text
-  ben.value(employer_IRAddressLine1_db) = F_EmployerDetails.TxtBx(19).Text
-  ben.value(employer_IRAddressLine2_db) = F_EmployerDetails.TxtBx(20).Text
-  ben.value(employer_IRAddressLine3_db) = F_EmployerDetails.TxtBx(21).Text
-  ben.value(employer_IRAddressLine4_db) = F_EmployerDetails.TxtBx(22).Text
-  ben.value(employer_IRPostcode_db) = F_EmployerDetails.TxtBx(23).Text
-  
-  ben.value(employer_IRAddressLine2_db) = F_EmployerDetails.TxtBx(20).Text
-  ben.value(employer_IRAddressLine3_db) = F_EmployerDetails.TxtBx(21).Text
-  ben.value(employer_IRAddressLine4_db) = F_EmployerDetails.TxtBx(22).Text
-  
-  ben.value(employer_IRTelephoneNumber_db) = F_EmployerDetails.TxtBx(24).Text
-  ben.value(employer_IRYourReference_db) = F_EmployerDetails.TxtBx(25).Text
-  ben.value(employer_IRAccountsOfficeReference_db) = F_EmployerDetails.TxtBx(26).Text
     
   ben.value(employer_GroupCode1Alias_db) = F_EmployerDetails.TxtBx(31).Text
   ben.value(employer_GroupCode2Alias_db) = F_EmployerDetails.TxtBx(32).Text
@@ -1590,6 +1554,7 @@ End Sub
 Public Property Get AppYear() As Long
   AppYear = m_AppYear
 End Property
+
 Public Property Get Beta() As Boolean
   Beta = False
 End Property

@@ -471,7 +471,7 @@ Private Sub btnBack_Click()
   btnBack.Enabled = False
   cmdPrint.Visible = False
   btnNext.Enabled = ChecksSelected(tvwChecks)
-  btnNext.Caption = "&Next"
+  btnNext.caption = "&Next"
 End Sub
 Private Sub btnRefresh_Click()
   Call RefreshChecks
@@ -576,17 +576,17 @@ Private Function ValidateDataFields() As String
   If dtgCheckWizard.DataChanged Then
     For i = 0 To dtgCheckWizard.Columns.Count - 1
       If dtgCheckWizard.Columns(i).Visible And Not dtgCheckWizard.Columns(i).Locked Then
-        Select Case dtgCheckWizard.Columns(i).Caption
+        Select Case dtgCheckWizard.Columns(i).caption
           
           Case p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableFrom_db), p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableTo_db)
             If Not DateWithinTaxYear(CStr(dtgCheckWizard.Columns(i).value)) Then
-              sMessage = sMessage & dtgCheckWizard.Columns(i).Caption & _
+              sMessage = sMessage & dtgCheckWizard.Columns(i).caption & _
                         "Should be between " & CStr(p11d32.Rates.value(TaxYearStart)) & _
                         " and " & CStr(p11d32.Rates.value(TaxYearEnd)) & vbCrLf
             End If
           Case p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, car_Registrationdate_db)
             If Not DateWithinTaxYear(CStr(dtgCheckWizard.Columns(i).value), True) Then
-              sMessage = sMessage & dtgCheckWizard.Columns(i).Caption & " Invalid Date" & vbCrLf
+              sMessage = sMessage & dtgCheckWizard.Columns(i).caption & " Invalid Date" & vbCrLf
             End If
         End Select
       End If
@@ -781,25 +781,25 @@ End Sub
 Private Sub Form_Load()
   Dim ben As IBenefitClass
   On Error GoTo err_err
-  lblInfo.Caption = ""
-  lblResults.Caption = ""
-  lblStatus.Caption = ""
-  Me.Caption = S_DATA_CHECKER_WIZARD_NAME
+  lblInfo.caption = ""
+  lblResults.caption = ""
+  lblStatus.caption = ""
+  Me.caption = S_DATA_CHECKER_WIZARD_NAME
   dbCoCarChecker.DatabaseName = m_ey.db.Name
-  lblEeName.Caption = ""
+  lblEeName.caption = ""
   If Not m_ey Is Nothing Then
     Set ben = m_ey
-   lblResults.Caption = "Analyse results for " & ben.value(ITEM_DESC)
+   lblResults.caption = "Analyse results for " & ben.value(ITEM_DESC)
   End If
     
-  lblCheckType.Caption = "No check selected"
+  lblCheckType.caption = "No check selected"
   Call FillOrderByComboBox
   tvwCheckResults.ImageList = MDIMain.imlTree
   Call imgCheckBox.ListImages.Add(1, , MDIMain.imlTree.ListImages(IMG_INFO).Picture)
   Call imgCheckBox.ListImages.Add(2, , MDIMain.imlTree.ListImages(IMG_UNSELECTED).Picture)
   Call imgCheckBox.ListImages.Add(3, , MDIMain.imlTree.ListImages(IMG_SELECTED).Picture)
   Me.tabCheckWizard.tab = 0
-  btnNext.Caption = "&Next"
+  btnNext.caption = "&Next"
   btnBack.Enabled = False
   With dtgCheckWizard
     .Left = ctlOverlappingCars.Left
@@ -844,11 +844,11 @@ Public Function CheckBeforePrint(ey As Employer, TempOL As ObjectList, ByVal rt 
   tabCheckWizard.tab = 1
   btnNext.Enabled = True
   If (rt = PREPARE_REPORT) Then
-    btnNext.Caption = "&Preview"
+    btnNext.caption = "&Preview"
   ElseIf rt = PRINT_REPORT Then
-    btnNext.Caption = "&Print"
+    btnNext.caption = "&Print"
   Else
-    btnNext.Caption = "&Continue"
+    btnNext.caption = "&Continue"
   End If
   btnBack.Visible = False
   
@@ -930,9 +930,9 @@ Private Sub FillCheckTreeview(iChecksSelected As Long)
   If (Not nFirst Is Nothing) Then
     nFirst.Selected = True
     Call tvwChecks_NodeClick(nFirst)
-    lblDescription.Caption = CheckListCaption(nFirst.Tag, CMT_ALERT_MESSAGE_DESCRIPTION)
+    lblDescription.caption = CheckListCaption(nFirst.Tag, CMT_ALERT_MESSAGE_DESCRIPTION)
   Else
-    lblDescription.Caption = ""
+    lblDescription.caption = ""
   End If
 
 
@@ -1056,15 +1056,15 @@ End Function
 Private Sub btnNext_Click()
   On Error GoTo btnNext_ERR
       
-  If btnNext.Caption = "&Next" Then
+  If btnNext.caption = "&Next" Then
     If ChecksSelected(tvwChecks) = True Then
       tvwCheckResults.nodes.Clear
       Set m_tnNodeSelected = Nothing
       Call DoChecks
       tabCheckWizard.tab = 1
       btnBack.Enabled = True
-      btnNext.Caption = "&Finish"
-      btnCancel.Caption = "&Cancel"
+      btnNext.caption = "&Finish"
+      btnCancel.caption = "&Cancel"
       Call SelectFirstCheck
       
     Else
@@ -1098,7 +1098,7 @@ Private Sub DoChecks()
   Call m_NodesOL.RemoveAll
   
   lblStatus.Visible = True
-  lblStatus.Caption = "Starting checks"
+  lblStatus.caption = "Starting checks"
   lblStatus.Refresh
   
   'Company car checks
@@ -1251,7 +1251,7 @@ Private Sub EmployeeChecks(lChecks As Long)
   
   On Error GoTo EmployeeChecks_ERR
   
-  lblStatus.Caption = "Calculating Employee checks..."
+  lblStatus.caption = "Calculating Employee checks..."
   lblStatus.Refresh
   For i = 1 To m_TempOL.Count
     Set ee = m_TempOL(i)
@@ -1377,7 +1377,7 @@ Private Sub ChangeNodeDisplay(cob As CHECKORDERBY)
   Next
   If Not m_tnNodeSelected Is Nothing Then
   
-    lblEeName.Caption = m_tnNodeSelected.Text
+    lblEeName.caption = m_tnNodeSelected.Text
   End If
 err_end:
   Exit Sub
@@ -1417,7 +1417,7 @@ Private Sub RunCompanyCarChecker(ByVal iCheck As CHECKS)
   'No Records returned so leave function
   If Records(rs) = 0 Then GoTo err_end
   
-  lblStatus.Caption = "Calculating " & CheckListCaption(iCheck, CMT_TREEVIEW_NODE_TITLE) & "..."
+  lblStatus.caption = "Calculating " & CheckListCaption(iCheck, CMT_TREEVIEW_NODE_TITLE) & "..."
   lblStatus.Refresh
   
   
@@ -1515,32 +1515,32 @@ Private Sub FormatGrid()
   Select Case m_CheckType
     Case CK_CC_AVAILDATES
       dtgCheckWizard.Columns(0).Visible = False
-      dtgCheckWizard.Columns(1).Caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, car_Registration_db)
+      dtgCheckWizard.Columns(1).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, car_Registration_db)
       Call LockColumn(1)
-      dtgCheckWizard.Columns(2).Caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableFrom_db)
-      dtgCheckWizard.Columns(3).Caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableTo_db)
+      dtgCheckWizard.Columns(2).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableFrom_db)
+      dtgCheckWizard.Columns(3).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableTo_db)
       
     Case CK_CC_REGDATES
       dtgCheckWizard.Columns(0).Visible = True
       Call LockColumn(0)
-      dtgCheckWizard.Columns(0).Caption = p11d32.BenDataLinkUDMDisplayName(BC_EMPLOYEE, ee_PersonnelNumber_db)
+      dtgCheckWizard.Columns(0).caption = p11d32.BenDataLinkUDMDisplayName(BC_EMPLOYEE, ee_PersonnelNumber_db)
       
-      dtgCheckWizard.Columns(1).Caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, car_Registration_db)
+      dtgCheckWizard.Columns(1).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, car_Registration_db)
       Call LockColumn(1)
       
-      dtgCheckWizard.Columns(2).Caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableFrom_db)
+      dtgCheckWizard.Columns(2).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableFrom_db)
        
-      dtgCheckWizard.Columns(3).Caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableTo_db)
-      dtgCheckWizard.Columns(4).Caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, car_Registrationdate_db)
+      dtgCheckWizard.Columns(3).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableTo_db)
+      dtgCheckWizard.Columns(4).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, car_Registrationdate_db)
       
     Case CK_CC_EE_AVAILDATES
       
       dtgCheckWizard.Columns(S_FIELD_CAR_REGISTRATION).Locked = True
       dtgCheckWizard.Columns(0).Visible = False
-      dtgCheckWizard.Columns(1).Caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, car_Registration_db)
+      dtgCheckWizard.Columns(1).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, car_Registration_db)
       Call LockColumn(1)
-      dtgCheckWizard.Columns(2).Caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableFrom_db)
-      dtgCheckWizard.Columns(3).Caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableTo_db)
+      dtgCheckWizard.Columns(2).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableFrom_db)
+      dtgCheckWizard.Columns(3).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableTo_db)
       'dtgCheckWizard.Columns(4).Caption = p11d32.BenDataLinkUDMDisplayName(BC_EMPLOYEE, ee_joined_db)
       
       Call LockColumn(4)
@@ -1549,7 +1549,7 @@ Private Sub FormatGrid()
       
     Case CK_EC_NI
       dtgCheckWizard.Columns(0).Visible = False
-      dtgCheckWizard.Columns(1).Caption = p11d32.BenDataLinkUDMDisplayName(BC_EMPLOYEE, ee_NINumber_db)
+      dtgCheckWizard.Columns(1).caption = p11d32.BenDataLinkUDMDisplayName(BC_EMPLOYEE, ee_NINumber_db)
     Case Else
       ECASE "Unknown checktype"
   End Select
@@ -1848,14 +1848,14 @@ Private Sub ChangeCheck(node As node)
     
     If iCheckType = CK_CC_SEQUENTIAL_NOT_MARKED_AS_REPLACED Then
       pctInfo.Visible = True
-      lblInfo.Caption = "Drag the end of a bar for a car to the start of another cars' bar to mark it as replaced. To delete a link press the - button to the right of the car, this clears the replacement flag. Only sequential cars can be linked. To change the dates for a car change the dates in the boxes."
+      lblInfo.caption = "Drag the end of a bar for a car to the start of another cars' bar to mark it as replaced. To delete a link press the - button to the right of the car, this clears the replacement flag. Only sequential cars can be linked. To change the dates for a car change the dates in the boxes."
     Else
       pctInfo.Visible = False
     End If
     
     
-    lblCheckType.Caption = CheckListCaption(iCheckType, CMT_LIST_ITEM)
-    lblEeName.Caption = node.Text
+    lblCheckType.caption = CheckListCaption(iCheckType, CMT_LIST_ITEM)
+    lblEeName.caption = node.Text
     Set m_tnNodeSelected = tvwCheckResults.SelectedItem
   Else
     If Not IsChildSelected(tvwCheckResults, node) Then
@@ -1935,7 +1935,7 @@ Private Sub tvwChecks_MouseMove(Button As Integer, Shift As Integer, X As Single
   Set n = tvwChecks.HitTest(X, Y)
   If Not n Is Nothing Then
     If IsNumeric(n.Tag) Then
-      lblDescription.Caption = CheckListCaption(n.Tag, CMT_ALERT_MESSAGE_DESCRIPTION)
+      lblDescription.caption = CheckListCaption(n.Tag, CMT_ALERT_MESSAGE_DESCRIPTION)
     End If
     
   End If

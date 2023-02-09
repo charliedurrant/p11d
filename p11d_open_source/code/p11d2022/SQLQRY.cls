@@ -149,6 +149,8 @@ Public Enum QUERY_NAMES
   SELECT_PAYEONLINE_SUBMISSION_ERRORS
   SELECT_PAYEONLINE_VALIDATION_ERRORS
   DELETE_PAYEONLINE_VALIDATION_ERRORS
+  SELECT_P11DB_ADJUSTEMNTS
+  DELETE_P11DB_ADJUSTMENTS
 'MP DB  FIND_ACCOM_EXPENSES
 'MP DB  DELETE_ACCOM_EXPENSES
   
@@ -190,6 +192,8 @@ Public Function Queries(QueryID As QUERY_NAMES, ParamArray P()) As String
       Queries = "SELECT * FROM T_BENEECAR"
     Case SELECT_FPCS_EECARS
       Queries = "SELECT DISTINCTROW T_BenEeCar.P_Num,T_BenEeCar.FPCS From T_BenEeCar WHERE ((T_BenEeCar.FPCS=" & StrSQL(P(i)) & "));"
+    Case SELECT_P11DB_ADJUSTEMNTS
+      Queries = "SELECT T_P11dbAdjustments.Addition,T_P11dbAdjustments.Caption,T_P11dbAdjustments.Value From T_P11dbAdjustments;"
     Case SELECT_OTHERS
       Queries = "SELECT * FROM T_BENOTHER where class <> " & StrSQL(S_SHARES_M)
     Case SELECT_VANS
@@ -314,6 +318,8 @@ Public Function Queries(QueryID As QUERY_NAMES, ParamArray P()) As String
 '      Queries = "Delete * FROM T_CDC where CDCKey = 1"
     Case SELECT_FPCS
       Queries = "SELECT * FROM T_CDRNEW ORDER BY FPCS"
+    Case DELETE_P11DB_ADJUSTMENTS
+      Queries = "DELETE * FROM T_P11DBAdjustments"
     Case DELETE_ER_FPCS
       Queries = "DELETE * FROM T_CDRNEW"
     Case SELECT_IR_FPCS
@@ -501,7 +507,7 @@ Function CCarCheckGapsInCarUsage(sOrderBy As String) As String
   
   Dim sql As String
   Dim dtYearEnd As Date
-  On Error GoTo err_err
+  On Error GoTo err_Err
   
   
   
@@ -594,10 +600,10 @@ Function CCarCheckGapsInCarUsage(sOrderBy As String) As String
   
   CCarCheckGapsInCarUsage = sql
 
-err_end:
+err_End:
   Exit Function
-err_err:
-  Call ErrorMessage(err.Number, err, "CCarCheckGapsInCarUsage", "CCarCheckGapsInCarUsage", err.Description)
+err_Err:
+  Call ErrorMessage(Err.Number, Err, "CCarCheckGapsInCarUsage", "CCarCheckGapsInCarUsage", Err.Description)
 End Function
 
 

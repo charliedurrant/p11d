@@ -14,6 +14,7 @@ Attribute VB_Exposed = False
 Option Explicit
 Implements IProcessImport
 Implements IErrorFilter
+Implements IImportWizard
 
 Private m_dbP11dFile As Database
 Private m_dbError As Database
@@ -91,7 +92,7 @@ Public Sub Zip(ByVal ben As IBenefitClass, sDestFilename As String)
   Dim Zip As cZip
   Call ben.Kill
   Set Zip = New cZip
-  Zip.BasePath = p11d32.workingDirectory
+  Zip.BasePath = p11d32.WorkingDirectory
   Zip.AddFileSpec (ben.value(employer_FileName))
   Zip.RecurseSubDirs = False
   Zip.ZipFile = sDestFilename
@@ -146,7 +147,7 @@ Public Sub InitImport()
       sDestFilename = sTrackingDescription & "_" & sGuid & "_"
       sDestFilename = sDestFilename & Year(dt) & Format$(Month(dt), "0#") & Format$(Day(dt), "0#") & Format$(Hour(dt), "0#") & Format$(Minute(dt), "0#") & Format$(Second(dt), "0#")
       sDestFilename = Me.TrackingPathActual & sDestFilename & S_FILE_EXTENSION_BAK
-      sSourceFileName = p11d32.workingDirectory & ben.value(employer_FileName)
+      sSourceFileName = p11d32.WorkingDirectory & ben.value(employer_FileName)
       Call Me.Zip(ben, sDestFilename)
       
     End If
@@ -169,6 +170,8 @@ Public Sub InitImport()
       Set ic.ErrorFilter = Me
       ic.RightTrimFields = True
       Set m_iw = ic.ImportWizard
+      Set m_iw.Interface = Me
+      
       m_iw.AllowMultipleImports = True
       If Not ImportWizardSettings Then Exit Do
       m_iw.StartWizard
@@ -604,6 +607,18 @@ Private Function IErrorFilter_ViewAvailable() As Boolean
   IErrorFilter_ViewAvailable = True
 End Function
 
+Private Function IImportWizard_GetRecentSpecs(ByVal importDataSet As String) As Collection
+  Dim c As Collection
+  
+  Set c = New Collection
+  
+  Call c.Add("C:\dump\p11d_data\employees.imp")
+  Set IImportWizard_GetRecentSpecs = c
+End Function
+Private Sub IImportWizard_ImportCompleted(ByVal importDataSet As String, ByVal specPathAndFile As String)
+  
+End Sub
+
 Private Function IProcessImport_PostProcess(ic As ImportClass, RollBack As Boolean, linesOk As Long, AddedRecordCount As Long, UpdatedRecordCount As Long) As Long
   Dim rs As Recordset
   Dim ErrorCount As Long, lTag As QUERY_NAMES_IMP, sImport As String
@@ -720,8 +735,8 @@ Private Function ImportWizardSettings() As Boolean
     Call .AddFileExtension("All files (*.*)", "*.*")
   
     .AutoOpenSourceFile = True
-    .SourcePath = p11d32.workingDirectory
-    .SpecPath = p11d32.workingDirectory
+    .SourcePath = p11d32.WorkingDirectory
+    .SpecPath = p11d32.WorkingDirectory
     .TitlePrefix = GetStatic("ApplicationName") & " Importer  -  "
     .AllowChangeUpdateType = True
   End With

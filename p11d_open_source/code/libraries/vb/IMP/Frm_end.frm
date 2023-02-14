@@ -249,6 +249,10 @@ Option Explicit
 Private m_ImpWiz As ImportWizard
 Implements IImportForm
 
+Private Sub IImportForm_Entering(ByVal forward As Boolean)
+
+End Sub
+
 Private Sub Cmd_ErrPrint_Click()
   Call m_ImpWiz.ImpParent.ErrorFilter.PrintErrors
 End Sub
@@ -271,11 +275,11 @@ End Property
 
 Private Sub Cmd_Back_Click()
   Call m_ImpWiz.ReCalc_Link
-  Call SwitchForm(Me, TCSIMP_LINK)
+  Call SwitchForm(Me, TCSIMP_LINK, False)
 End Sub
 
 Private Sub Cmd_Cancel_Click()
-  Call SwitchForm(Me, TCSIMP_CANCEL)
+  Call SwitchForm(Me, TCSIMP_CANCEL, True)
 End Sub
 
 Private Sub Cmd_Import_Click()
@@ -296,6 +300,6 @@ End Sub
 
 Private Sub Cmd_Another_Click()
   m_ImpWiz.ImportAnother = True
-  Call SwitchForm(Me, TCSIMP_CANCEL)
+  Call SwitchForm(Me, TCSIMP_CANCEL, True)
 End Sub
 

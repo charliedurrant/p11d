@@ -1171,7 +1171,7 @@ On Error GoTo clsEvent_DebugMenuItem_err
         Case UCASE$(S_MNU_F12_UPDATE_LIST_ITEM)
           If IsBenefitForm(CurrentForm) Then
             Set ibf = CurrentForm
-            Call ibf.UpdateBenefitListViewItem(ibf.lv.SelectedItem, ibf.benefit)
+            Call ibf.UpdateBenefitListViewItem(ibf.lv.SelectedItem, ibf.Benefit)
           End If
         Case UCASE$(S_MNU_F12_SHOWEMPLOYERS_FIX_LEVEL)
           Call FixLevelShowFunction(LEF_LISTVIEW_COLUMN, Not p11d32.FixLevelsShow)
@@ -1953,7 +1953,7 @@ Public Sub LoadRecentWorkingDirectories()
   
   Set sl = p11d32.RecentWorkingDirectories.MenuEntries
   For i = 1 To p11d32.RecentWorkingDirectories.Max
-    If (i > sl.Count) Then
+    If (i > sl.count) Then
       mnuRecentWorkingDirectory(i).Visible = False
     Else
       mnuRecentWorkingDirectory(i).Visible = True
@@ -2190,7 +2190,7 @@ Public Sub NavigateBarUpdate(emp As IBenefitClass)
     txtReference = emp.value(ee_PersonnelNumber_db)
     Set ibf = F_Employees
     If Not ibf.lv.SelectedItem Is Nothing Then
-      lEmployeeListIndexCount = ibf.lv.listitems.Count
+      lEmployeeListIndexCount = ibf.lv.listitems.count
       lEmployeeListIndex = ibf.lv.SelectedItem.Index
       txtEmployeeOfTotal.Text = lEmployeeListIndex & " of " & lEmployeeListIndexCount
       If lEmployeeListIndexCount > 1 Then

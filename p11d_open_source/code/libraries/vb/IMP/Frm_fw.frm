@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomct2.ocx"
+Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form Frm_FW 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Fixed Width Source File"
@@ -159,6 +159,10 @@ Option Explicit
 Private m_ImpWiz As ImportWizard
 Implements IImportForm
 
+Private Sub IImportForm_Entering(ByVal forward As Boolean)
+
+End Sub
+
 Private Sub Form_Load()
   Lbl_Instruct = "This screen lets you set field widths (column breaks)." & vbCrLf & vbCrLf & vbCrLf & _
                      "Vertical lines signify column breaks." & vbCrLf & vbCrLf & _
@@ -183,11 +187,11 @@ End Property
 
 Private Sub Cmd_Back_Click()
   Call m_ImpWiz.ReCalc_Src(Nothing)
-  Call SwitchForm(Me, TCSIMP_SOURCE)
+  Call SwitchForm(Me, TCSIMP_SOURCE, False)
 End Sub
 
 Private Sub Cmd_Cancel_Click()
-  Call SwitchForm(Me, TCSIMP_CANCEL)
+  Call SwitchForm(Me, TCSIMP_CANCEL, False)
 End Sub
 
 Private Sub Cmd_Clear_Click()
@@ -199,7 +203,7 @@ End Sub
 Private Sub Cmd_Next_Click()
   Call m_ImpWiz.ReCalc_FW2(Me, False)
   Call m_ImpWiz.ReCalc_Misc(False)
-  Call SwitchForm(Me, TCSIMP_MISC)
+  Call SwitchForm(Me, TCSIMP_MISC, True)
 End Sub
 
 Private Sub Txt_Omit_LostFocus(Index As Integer)

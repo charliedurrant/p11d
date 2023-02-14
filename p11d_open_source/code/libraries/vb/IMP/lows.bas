@@ -1,12 +1,15 @@
 Attribute VB_Name = "lows"
 Option Explicit
 
-Public Sub SwitchForm(iFrm As IImportForm, Dest As IMPORT_GOTOFORM)
+Public Sub SwitchForm(iFrm As IImportForm, Dest As IMPORT_GOTOFORM, ByVal forward As Boolean)
   Dim frm As Form
   
   iFrm.ImpWiz.GotoForm = Dest
   Set frm = iFrm
   frm.Visible = False
+  If (Dest <> TCSIMP_CANCEL) Then
+    Call iFrm.Entering(forward)
+  End If
 End Sub
 
 Public Sub OmitLines(txtOmitH As TextBox, txtOmitF As TextBox, TakeFieldNamesFrom As Long, MaxLines As Long)
@@ -92,15 +95,15 @@ End Sub
 Public Function addcriteriaequal(ispec As ImportSpec) As String
    addcriteriaequal = "([" & ispec.DestField & "] = "
    If ispec.vartype = TYPE_BOOL Then
-     addcriteriaequal = addcriteriaequal & Format$(ispec.Value, "True/False")
+     addcriteriaequal = addcriteriaequal & Format$(ispec.value, "True/False")
    ElseIf (ispec.vartype = TYPE_DOUBLE) Or (ispec.vartype = TYPE_LONG) Then
      'CAD P11D numsql
-     addcriteriaequal = addcriteriaequal & NumSQL(ispec.Value)
+     addcriteriaequal = addcriteriaequal & NumSQL(ispec.value)
    ElseIf ispec.vartype = TYPE_DATE Then
-     addcriteriaequal = addcriteriaequal & DateSQL(ispec.Value)
+     addcriteriaequal = addcriteriaequal & DateSQL(ispec.value)
    ElseIf ispec.vartype = TYPE_STR Then
      'cad P11d, str sql
-     addcriteriaequal = addcriteriaequal & StrSQL(ispec.Value)
+     addcriteriaequal = addcriteriaequal & StrSQL(ispec.value)
    Else
      Call ECASE("Import AddCriteria - Unknown datatype")
    End If

@@ -711,7 +711,7 @@ Public Function ValidateNI(ByVal ni As String, ByVal bAllowTemporaryNumbers As B
   ElseIf RegExMatch(ni, "^[0-9]{2}[A-Z]{1}[0-9]{5}$") Then
     'expat ni, ref https://www.litrg.org.uk/tax-guides/migrants/national-insurance-migrants/how-do-i-get-national-insurance-number
     ValidateNI = TWO_NUMBER
-  ElseIf RegExMatch(ni, "^[A-Z]{2}[0-9]{6}[A-Z]{1}$") And Not RegExMatch(ni, "^[B][G].*$|^[G][B].*$|^[K][N].*$|^[N][K].*$|^[N][T].*$|^[T][N].*$|^[Z][Z].*$|^[DFIQUV].*$|^.[DFIQUV].*$|^.[O].*$") Then
+  ElseIf RegExMatch(ni, "^[A-Z]{2}[0-9]{6}[ABCD\s]$") And Not RegExMatch(ni, "^[B][G].*$|^[G][B].*$|^[K][N].*$|^[N][K].*$|^[N][T].*$|^[T][N].*$|^[Z][Z].*$|^[DFIQUV].*$|^.[DFIQUV].*$|^.[O].*$") Then
     ValidateNI = STANDARD
   End If
 

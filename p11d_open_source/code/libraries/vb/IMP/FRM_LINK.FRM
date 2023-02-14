@@ -162,6 +162,10 @@ Public InScroll As Boolean
 
 Implements IImportForm
 
+Private Sub IImportForm_Entering(ByVal forward As Boolean)
+
+End Sub
+
 Private Sub Cbo_Link_DragDrop(Source As Control, x As Single, y As Single)
   Call FlG_Source_DragDrop(Source, x, y)
 End Sub
@@ -244,16 +248,16 @@ Private Sub Cbo_Link_Click()
 End Sub
 Private Sub Cmd_Back_Click()
   Call m_ImpWiz.ReCalc_Misc(False)
-  Call SwitchForm(Me, TCSIMP_MISC)
+  Call SwitchForm(Me, TCSIMP_MISC, False)
 End Sub
 
 Private Sub Cmd_Cancel_Click()
-  Call SwitchForm(Me, TCSIMP_CANCEL)
+  Call SwitchForm(Me, TCSIMP_CANCEL, False)
 End Sub
 
 Private Sub Cmd_Finish_Click()
   Call m_ImpWiz.ReCalc_End
-  Call SwitchForm(Me, TCSIMP_END)
+  Call SwitchForm(Me, TCSIMP_END, True)
 End Sub
 
 Private Sub Cmd_ShowLinked_Click()

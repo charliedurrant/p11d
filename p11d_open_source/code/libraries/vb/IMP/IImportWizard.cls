@@ -6,25 +6,18 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "IImportForm"
+Attribute VB_Name = "IImportWizard"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 Option Explicit
 
-Public Property Get FormType() As IMPORT_GOTOFORM
+'collection of paths
+Public Function GetRecentSpecs(ByVal importDataSet As String) As Collection
 
-End Property
-
-Public Property Get ImpWiz() As ImportWizard
-
-End Property
-
-Public Property Set ImpWiz(NewValue As ImportWizard)
-
-End Property
-Public Sub Entering(ByVal forward As Boolean)
+End Function
+Public Sub ImportCompleted(ByVal importDataSet As String, ByVal specPathAndFile As String)
 
 End Sub
 

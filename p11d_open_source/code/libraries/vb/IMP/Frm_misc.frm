@@ -377,14 +377,18 @@ Option Explicit
 Private m_ImpWiz As ImportWizard
 Implements IImportForm
 
+Private Sub IImportForm_Entering(ByVal forward As Boolean)
+
+End Sub
+
 Private Sub Cbo_DateDLim_Click()
   Chk_4FigYear.Visible = (Cbo_DateDLim.Text = "{None}")
 End Sub
 
 'MPSMarch2
 Private Sub Chk_Factor_Click()
-  Lbl_Factor.Enabled = -Chk_Factor.Value
-  Txt_Factor.Enabled = -Chk_Factor.Value
+  Lbl_Factor.Enabled = -Chk_Factor.value
+  Txt_Factor.Enabled = -Chk_Factor.value
 End Sub
 
 Private Sub FlG_Source_SelChange()
@@ -473,15 +477,15 @@ End Sub
 Private Sub Cmd_Back_Click()
   If m_ImpWiz.ImpParent.ImportType = IMPORT_DELIMITED Then
     Call m_ImpWiz.ReCalc_DLim(False)
-    Call SwitchForm(Me, TCSIMP_DLIM)
+    Call SwitchForm(Me, TCSIMP_DLIM, False)
   Else
     Call m_ImpWiz.ReCalc_FW2(Nothing, False)
-    Call SwitchForm(Me, TCSIMP_FW)
+    Call SwitchForm(Me, TCSIMP_FW, False)
   End If
 End Sub
 
 Private Sub Cmd_Cancel_Click()
-  Call SwitchForm(Me, TCSIMP_CANCEL)
+  Call SwitchForm(Me, TCSIMP_CANCEL, False)
 End Sub
 
 Private Sub mnuCopyField_Click()
@@ -532,7 +536,7 @@ End Sub
 
 Private Sub Cmd_Next_Click()
   Call m_ImpWiz.ReCalc_Link
-  Call SwitchForm(Me, TCSIMP_LINK)
+  Call SwitchForm(Me, TCSIMP_LINK, True)
 End Sub
 
 Private Sub mnuSeparate_Click()
@@ -541,7 +545,7 @@ End Sub
 
 Private Sub Cmd_Static_Click()
   Call m_ImpWiz.SetStatic(Me.FlG_Source.Coldata(Me.FlG_Source.ColSel), Me.Txt_Static.Text)
-  If Opt_Static(1).Value Then Call m_ImpWiz.SetSpecialFieldKey(FlG_Source.Coldata(Me.FlG_Source.ColSel), Cbo_Static.ItemData(Cbo_Static.ListIndex)) 'MPSMarch2
+  If Opt_Static(1).value Then Call m_ImpWiz.SetSpecialFieldKey(FlG_Source.Coldata(Me.FlG_Source.ColSel), Cbo_Static.ItemData(Cbo_Static.ListIndex)) 'MPSMarch2
   Me.Fra_Static.Visible = False
   Me.FlG_Source.Enabled = True
   Me.Cmd_Cancel.Enabled = True

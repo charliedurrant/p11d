@@ -169,11 +169,15 @@ End Sub
 Private Sub Cmd_SeeContents_Click()
   m_ImpWiz.DestPreviewRecLimit = 1000000000
   Set m_ImpWiz.CurrentDest = Nothing
-  If Not m_ImpWiz.ReCalc_Dest Then Call SwitchForm(Me, TCSIMP_CANCEL)
+  If Not m_ImpWiz.ReCalc_Dest Then Call SwitchForm(Me, TCSIMP_CANCEL, True)
 End Sub
 
 Private Sub Command1_Click()
   MsgBox CStr(m_ImpWiz.ImpParent.UpdateType)
+End Sub
+
+Private Sub IImportForm_Entering(ByVal forward As Boolean)
+   
 End Sub
 
 Private Property Get IImportForm_FormType() As IMPORT_GOTOFORM
@@ -196,19 +200,19 @@ Private Sub Cbo_Table_Click()
   inTableClick = True
   If Not m_ImpWiz.CurrentDest Is Nothing Then
     If StrComp(Cbo_Table.Text, m_ImpWiz.CurrentDest.DisplayName, vbTextCompare) <> 0 Then
-      If Not m_ImpWiz.ReCalc_Dest Then Call SwitchForm(Me, TCSIMP_CANCEL)
+      If Not m_ImpWiz.ReCalc_Dest Then Call SwitchForm(Me, TCSIMP_CANCEL, True)
     End If
   End If
   inTableClick = False
 End Sub
 
 Private Sub Cmd_Cancel_Click()
-  Call SwitchForm(Me, TCSIMP_CANCEL)
+  Call SwitchForm(Me, TCSIMP_CANCEL, True)
 End Sub
 
 Private Sub Cmd_Next_Click()
   Call m_ImpWiz.ReCalc_Src(Nothing)
-  Call SwitchForm(Me, TCSIMP_SOURCE)
+  Call SwitchForm(Me, TCSIMP_SOURCE, True)
 End Sub
 
 Private Sub Opt_Update_Click(Index As Integer)

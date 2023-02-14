@@ -89,6 +89,7 @@ Private m_ShowSimpleLinkView As Boolean
 Private m_UseSpec As Boolean  'MPSMarch
 Private m_GotoSourceScreen As Boolean
 Private m_SavedSpec As Boolean
+Private m_IImportWizard As IImportWizard
 
 Public Property Get SavedSpec() As Boolean
   SavedSpec = m_SavedSpec
@@ -152,8 +153,8 @@ Public Property Let TitlePrefix(ByVal NewValue As String)
   m_TitlePrefix = NewValue
 End Property
 
-Public Property Let AllowChangeUpdateType(Value As Boolean)
-  m_AllowChangeUpdateType = Value
+Public Property Let AllowChangeUpdateType(value As Boolean)
+  m_AllowChangeUpdateType = value
 End Property
 
 Public Property Get AllowChangeUpdateType() As Boolean
@@ -269,11 +270,11 @@ Public Property Let SourceFile(ByVal NewValue As String)
   m_SourceFile = NewValue
 End Property
 
-Public Property Get SpecFile() As String
-  SpecFile = m_SpecFile
+Public Property Get specFile() As String
+  specFile = m_SpecFile
 End Property
 
-Public Property Let SpecFile(ByVal NewValue As String)
+Public Property Let specFile(ByVal NewValue As String)
   m_SpecFile = NewValue
 End Property
 
@@ -409,11 +410,16 @@ Public Sub StartWizard()
       
       If (m_DestRecSets.Count = 1) And GotoForm = TCSIMP_DEST And (Not Started) Then
         'Frm_Source.Cmd_Back.Visible = False  'User should be able to go back to see existing recordset contents
-        Frm_Dest.Cmd_Next.Value = True
+        Frm_Dest.Cmd_Next.value = True
         GotoForm = TCSIMP_SOURCE
       Else
         Set frm = m_ImportForms.Item(CStr(GotoForm))
+        Dim importForm As IImportForm
+        Set importForm = frm
+        Call importForm.Entering(True)
         frm.Show vbModal
+        
+        
       End If
       Started = True
     Loop
@@ -820,10 +826,28 @@ OpenSQLspecifiedRS_Err:
   Call ErrorMessage(ERR_ERROR, Err, "OpenSQLspecifiedRS", "OpenSQL import destination", "Error opening SQL destination specified by: " & vbCrLf & SQL)
   Resume OpenSQLspecifiedRS_End
 End Function
-
+Private Sub LoadRecentSpecs(FrmSrc As Frm_Source)
+  Dim c As Collection
+  Dim path As String
+  Dim i As Long
+  Dim lvi As ListItem
+  
+  
+  If (Not Interface Is Nothing) Then
+    
+    Set c = Interface.GetRecentSpecs("")
+    'remove any specs not in the list
+    For i = 1 To c.Count
+      path = c(i)
+      Set lvi = FrmSrc.listViewRecentSpecs.ListItems.Add(, , path)
+      lvi.ToolTipText = path
+      
+    Next
+  End If
+End Sub
 Friend Function ReCalc_Src(frmSrcObj As Object) As Boolean
   Dim FrmSrc As Frm_Source
-  Dim Path As String, File As String, Ext As String
+  Dim path As String, File As String, Ext As String
   Dim i As Long, j As Long
 
   On Error GoTo ReCalc_Src_Err
@@ -835,18 +859,23 @@ Friend Function ReCalc_Src(frmSrcObj As Object) As Boolean
   FrmSrc.Caption = m_TitlePrefix & "Source Data File"
   
   If ImpParent.ImportType = IMPORT_DELIMITED Then
-    FrmSrc.Opt_Format(0).Value = True
+    FrmSrc.Opt_Format(0).value = True
   Else
-    FrmSrc.Opt_Format(1).Value = True
+    FrmSrc.Opt_Format(1).value = True
   End If
   If Len(m_SourceFile) > 0 Then
     If m_NumLines = 0 Then Call FileInfo
+    
     FrmSrc.Lbl_SourceInst.Caption = "Data will be imported from the file shown below."
-    Call SplitPath(m_SourceFile, Path, File, Ext)
+    Call LoadRecentSpecs(FrmSrc)
+    Call SplitPath(m_SourceFile, path, File, Ext)
     File = File & Ext
     'FrmSrc.Lbl_SourcePath.Caption = Path & vbCrLf & File
+    
     FrmSrc.Lbl_SourcePath.Caption = m_SourceFile
     FrmSrc.Lbl_SourcePath.Visible = True
+        
+    
     If m_AllowSourceChange Then
       FrmSrc.Lbl_SourceInst = FrmSrc.Lbl_SourceInst & vbCrLf & "Press the Open button to select a different file."
       FrmSrc.Cmd_OpenSource.Visible = True
@@ -886,6 +915,7 @@ ReCalc_Src_End:
 ReCalc_Src_Err:
   Call ErrorMessage(ERR_ERROR, Err, "ReCalc_Src", "Recalc of Source Form", "Error in Source Form recalc.")
   Resume ReCalc_Src_End
+  Resume
 End Function
 
 Public Sub OpenSourceFile(frmSrcObj As Object)
@@ -1169,7 +1199,7 @@ Friend Function CopyColumn(ByVal FieldKey As Long) As Boolean
   frmMisc.FlG_Source.RowSel = frmMisc.FlG_Source.Rows - 1
   Call ReCalc_Misc(False)
   frmMisc.Cbo_Static.Text = frmMisc.Cbo_Static.List(0) 'MPSMarch2
-  frmMisc.Opt_Static(0).Value = True  'MPSMarch2
+  frmMisc.Opt_Static(0).value = True  'MPSMarch2
   frmMisc.Txt_Static.SetFocus 'MPSMarch2 - Moved from above
   
 CopyColumn_End:
@@ -1357,7 +1387,7 @@ SaveSpec_Err:
   Resume SaveSpec_End
 End Sub
 
-Friend Sub LoadSpec(Optional ByVal SpecFile As String)
+Friend Sub LoadSpec(Optional ByVal specFile As String)
   Dim i As Long, j As Long
   Dim FrmSrc As Frm_Source
   Dim frmdlim As Frm_DLim
@@ -1372,11 +1402,11 @@ Friend Sub LoadSpec(Optional ByVal SpecFile As String)
   Set FrmSrc = m_ImportForms.Item(CStr(TCSIMP_SOURCE))
   Set frmlink = m_ImportForms.Item(CStr(TCSIMP_LINK))
  
-  If Len(SpecFile) = 0 Then SpecFile = FileOpenDlg("Choose a Specification File to Open", "Specification Files (*.imp)|*.imp|All Files (*.*)|*.*", m_SpecPath)
-  If Len(SpecFile) > 0 Then
-    Call SplitPath(SpecFile, m_SpecPath)
-    m_SpecFile = SpecFile 'MPSMarch
-    If ImpParent.InitImport(m_SourceFile, [_IMPORT_UNDEFINED], SpecFile, ImpParent.UpdateType) Then
+  If Len(specFile) = 0 Then specFile = FileOpenDlg("Choose a Specification File to Open", "Specification Files (*.imp)|*.imp|All Files (*.*)|*.*", m_SpecPath)
+  If Len(specFile) > 0 Then
+    Call SplitPath(specFile, m_SpecPath)
+    m_SpecFile = specFile 'MPSMarch
+    If ImpParent.InitImport(m_SourceFile, [_IMPORT_UNDEFINED], specFile, ImpParent.UpdateType) Then
       mDisableRecalc = True
       If ImpParent.TakeFieldNamesFromLine >= 1 And ImpParent.TakeFieldNamesFromLine <= m_NumLines Then
         frmdlim.Txt_FieldNames.Text = Trim$(CStr(ImpParent.TakeFieldNamesFromLine))
@@ -1385,14 +1415,14 @@ Friend Sub LoadSpec(Optional ByVal SpecFile As String)
       End If
       'cad
       If ImpParent.AddZeroLengthStringValues Then
-        frmdlim.chkAllowZeroLengthStringValues.Value = vbChecked
+        frmdlim.chkAllowZeroLengthStringValues.value = vbChecked
       Else
-        frmdlim.chkAllowZeroLengthStringValues.Value = vbUnchecked
+        frmdlim.chkAllowZeroLengthStringValues.value = vbUnchecked
       End If
       If ImpParent.TakeFieldNamesFromLine > 0 Then
-        frmdlim.Chk_FieldNames.Value = vbChecked
+        frmdlim.Chk_FieldNames.value = vbChecked
       Else
-        frmdlim.Chk_FieldNames.Value = vbUnchecked
+        frmdlim.Chk_FieldNames.value = vbUnchecked
       End If
       If ImpParent.HeaderCount + ImpParent.FooterCount < m_NumLines Then
         frmdlim.Txt_Omit(0).Text = Trim$(CStr(ImpParent.HeaderCount))
@@ -1470,7 +1500,9 @@ Friend Sub LoadSpec(Optional ByVal SpecFile As String)
         Call ECASE("Fixed Width specification file not yet implemented!")
         m_SpecLoadedOK = False
       End If
-      If m_SpecLoadedOK Then Call SwitchForm(FrmSrc, TCSIMP_LINK)
+      If m_SpecLoadedOK Then
+        Call SwitchForm(FrmSrc, TCSIMP_LINK, True)
+      End If
     End If
   End If
 
@@ -1481,7 +1513,7 @@ LoadSpec_End:
   Exit Sub
 
 LoadSpec_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "LoadSpec", "Load specification", "Error loading specification file " & SpecFile)
+  Call ErrorMessage(ERR_ERROR, Err, "LoadSpec", "Load specification", "Error loading specification file " & specFile)
   Resume LoadSpec_End
   Resume
 End Sub
@@ -1736,8 +1768,8 @@ ReCalc_Link2_Err:
   Resume ReCalc_Link2_End
 End Sub
 
-Friend Sub SetStatic(colnum As Long, Value As String)
-  m_FieldSpecs(colnum).actionparam = Value
+Friend Sub SetStatic(colnum As Long, value As String)
+  m_FieldSpecs(colnum).actionparam = value
 End Sub
 
 'MPSMarch2
@@ -2296,7 +2328,7 @@ Friend Sub FormatField()
     s = m_FieldSpecs(ColNo).actionparam
     If m_FieldSpecs(ColNo).varaction = CONVERT_FIXEDDATE Then
       frmMisc.Cbo_DateDLim = "{None}"
-      frmMisc.Chk_4FigYear.Value = -(InStr(s, "YYYY") > 0)
+      frmMisc.Chk_4FigYear.value = -(InStr(s, "YYYY") > 0)
       s = ReplaceChar(s, "YYYY", "Y")
       s = ReplaceChar(s, "YY", "Y")
       s = ReplaceChar(s, "MM", "M")
@@ -2386,7 +2418,7 @@ Friend Sub FormatFieldOK()
         s = .Cbo_Date.Text
         s = ReplaceChar(s, "D", "DD")
         s = ReplaceChar(s, "M", "MM")
-        If .Chk_4FigYear.Value = vbChecked Then
+        If .Chk_4FigYear.value = vbChecked Then
           s = ReplaceChar(s, "Y", "YYYY")
         Else
           s = ReplaceChar(s, "Y", "YY")
@@ -2428,7 +2460,7 @@ Friend Sub FormatFieldOK()
     
     'MPSMarch2
     If .Cbo_Type = DataTypeName(TYPE_LONG) Or .Cbo_Type = DataTypeName(TYPE_DOUBLE) Then
-      If .Chk_Factor.Value = vbChecked Then
+      If .Chk_Factor.value = vbChecked Then
         m_FieldSpecs(ColNo).varaction = ACTION_FACTOR
         If .Cbo_Type = DataTypeName(TYPE_LONG) Then
           m_FieldSpecs(ColNo).actionparam = CLng(.Txt_Factor)
@@ -2550,18 +2582,18 @@ End Sub
 
 '* IF MoveCols is allowed this function must remember ColData after update
 ' APF MPSPHD
-Private Sub SetFlexRowCol(flx As MSFlexGrid, rctype As SET_ROWCOLTYPE, Value As Long, FixedValue As Long)
-  If (Value <= 0) Or (FixedValue <= 0) Then
+Private Sub SetFlexRowCol(flx As MSFlexGrid, rctype As SET_ROWCOLTYPE, value As Long, FixedValue As Long)
+  If (value <= 0) Or (FixedValue <= 0) Then
     If rctype = SET_ROW Then
       flx.Rows = 0
     ElseIf rctype = SET_COLUMN Then
       flx.cols = 0
     End If
   End If
-  If Value > 0 Then
-    If FixedValue > Value Then
+  If value > 0 Then
+    If FixedValue > value Then
       FixedValue = 1
-      If Value = 1 Then FixedValue = 0
+      If value = 1 Then FixedValue = 0
     End If
     If FixedValue > 0 Then
       If rctype = SET_ROW Then
@@ -2573,9 +2605,9 @@ Private Sub SetFlexRowCol(flx As MSFlexGrid, rctype As SET_ROWCOLTYPE, Value As 
       End If
     End If
     If rctype = SET_ROW Then
-      flx.Rows = Value
+      flx.Rows = value
     ElseIf rctype = SET_COLUMN Then
-      flx.cols = Value
+      flx.cols = value
     End If
   End If
 End Sub
@@ -2615,12 +2647,12 @@ Private Sub ResetFlexGrids()
 End Sub
 
 'apf fix errors
-Public Function AddDefaultStaticLink(ByVal Name As String, ByVal FieldName As String, ByVal DataType As DATABASE_FIELD_TYPES, ByVal Value As Variant, Optional GridFieldName As String = "") As Boolean
+Public Function AddDefaultStaticLink(ByVal Name As String, ByVal FieldName As String, ByVal DataType As DATABASE_FIELD_TYPES, ByVal value As Variant, Optional GridFieldName As String = "") As Boolean
   On Error GoTo AddDefaultStaticLink_Err
   Call xSet("AddDefaultStaticLink")
   AddDefaultStaticLink = False
-  If AddStaticLink(Name, FieldName, DataType, Value, GridFieldName) Then
-    AddDefaultStaticLink = AddDefaultValue(Name, FieldName, DataType, Value)
+  If AddStaticLink(Name, FieldName, DataType, value, GridFieldName) Then
+    AddDefaultStaticLink = AddDefaultValue(Name, FieldName, DataType, value)
     Call AddRequiredField(Name, FieldName)
   End If
   
@@ -2629,12 +2661,12 @@ AddDefaultStaticLink_End:
   Exit Function
 
 AddDefaultStaticLink_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "AddDefaultStaticLink", "Add default static link", "Error trying to add default static '" & Value & "' to recordset '" & Name & "'.")
+  Call ErrorMessage(ERR_ERROR, Err, "AddDefaultStaticLink", "Add default static link", "Error trying to add default static '" & value & "' to recordset '" & Name & "'.")
   Resume AddDefaultStaticLink_End
 End Function
 
 
-Public Function AddStaticLink(ByVal Name As String, ByVal FieldName As String, ByVal DataType As DATABASE_FIELD_TYPES, ByVal Value As Variant, Optional GridFieldName As String = "", Optional ByVal Hide As Boolean = False) As Boolean
+Public Function AddStaticLink(ByVal Name As String, ByVal FieldName As String, ByVal DataType As DATABASE_FIELD_TYPES, ByVal value As Variant, Optional GridFieldName As String = "", Optional ByVal Hide As Boolean = False) As Boolean
   Dim DefStatic As DefaultStatic
   Dim drs As DestRecordSet
   
@@ -2646,7 +2678,7 @@ Public Function AddStaticLink(ByVal Name As String, ByVal FieldName As String, B
   DefStatic.DestField = FieldName
   DefStatic.FieldName = GridFieldName
   DefStatic.CopyFieldName = ""
-  DefStatic.Value = Value
+  DefStatic.value = value
   DefStatic.DataType = DataType
   If Hide And (Len(FieldName) = 0) Then Call Err.Raise(ERR_DEFSTATIC, "AddDefaultStatic", "Cannot hide an unlinked field")
  
@@ -2659,11 +2691,11 @@ AddStaticLink_End:
   Exit Function
 
 AddStaticLink_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "AddStaticLink", "Add default static link", "Error trying to add default static '" & Value & "' to recordset '" & Name & "'.")
+  Call ErrorMessage(ERR_ERROR, Err, "AddStaticLink", "Add default static link", "Error trying to add default static '" & value & "' to recordset '" & Name & "'.")
   Resume AddStaticLink_End
 End Function
 
-Public Function AddDefaultStatic(ByVal Name As String, ByVal DataType As DATABASE_FIELD_TYPES, Value As Variant, Optional ByVal FieldName As String) As Boolean
+Public Function AddDefaultStatic(ByVal Name As String, ByVal DataType As DATABASE_FIELD_TYPES, value As Variant, Optional ByVal FieldName As String) As Boolean
   Dim DefStatic As DefaultStatic
   Dim drs As DestRecordSet
   
@@ -2673,7 +2705,7 @@ Public Function AddDefaultStatic(ByVal Name As String, ByVal DataType As DATABAS
   Set drs = m_DestRecSets.Item(Name)
   Set DefStatic = New DefaultStatic
   DefStatic.CopyFieldName = ""
-  DefStatic.Value = Value
+  DefStatic.value = value
   DefStatic.DataType = DataType
   DefStatic.FieldName = FieldName
   Call drs.DefaultStatics.Add(DefStatic)
@@ -2684,7 +2716,7 @@ AddDefaultStatic_End:
   Exit Function
 
 AddDefaultStatic_Err:
-  Call ErrorMessage(ERR_ERROR, Err, "AddDefaultStatic", "Add Static value", "Error trying to add default static '" & Value & "' to recordset '" & Name & "'.")
+  Call ErrorMessage(ERR_ERROR, Err, "AddDefaultStatic", "Add Static value", "Error trying to add default static '" & value & "' to recordset '" & Name & "'.")
   Resume AddDefaultStatic_End
 End Function
 
@@ -2713,7 +2745,7 @@ Private Sub AddInDefaultStatics(FormName As String)
         isp.vartype = DefStatic.DataType
         isp.FldName = DefStatic.FieldName
         isp.Hide = False
-        isp.actionparam = DefStatic.Value
+        isp.actionparam = DefStatic.value
         isp.DestField = ""
         For i = 1 To frmlink.FlG_DestInfo.Rows - 1
           If StrComp(frmlink.FlG_DestInfo.TextMatrix(i, 0), DefStatic.DestField, vbTextCompare) = 0 Then
@@ -2815,7 +2847,7 @@ Private Function RecordsToGrid(msg As MSFlexGrid, rs As Recordset, MaxLines As L
     Do
       l = l + 1
       For m = 0 To rs.Fields.Count - 1
-       .TextMatrix(l, m) = "" & rs.Fields(m).Value
+       .TextMatrix(l, m) = "" & rs.Fields(m).value
       Next m
 NEXT_RECORD:
       If Not rs.EOF Then rs.MoveNext
@@ -3057,7 +3089,7 @@ AddInDefaultCopiedFields_Err:
   Resume AddInDefaultCopiedFields_End
 End Sub
 
-Public Function AddConstraint(ByVal Name As String, ByVal FieldName As String, DataType As DATABASE_FIELD_TYPES, ByVal ImportConstraint As IMPORT_CONSTRAINT, ByVal Value As Variant) As Boolean
+Public Function AddConstraint(ByVal Name As String, ByVal FieldName As String, DataType As DATABASE_FIELD_TYPES, ByVal ImportConstraint As IMPORT_CONSTRAINT, ByVal value As Variant) As Boolean
   Dim drs As DestRecordSet, drstemp As DestRecordSet
   Dim Con As DefaultConstraint, AddIn As Boolean
   
@@ -3065,7 +3097,7 @@ Public Function AddConstraint(ByVal Name As String, ByVal FieldName As String, D
   Call xSet("AddConstraint")
   AddConstraint = False
   Set drs = m_DestRecSets.Item(Name)
-  If IsMissing(Value) Then Call Err.Raise(ERR_ADDCONSTRAINT, "AddConstraint", "Attempt to add constraint wihout Value.")
+  If IsMissing(value) Then Call Err.Raise(ERR_ADDCONSTRAINT, "AddConstraint", "Attempt to add constraint wihout Value.")
   If InCollection(drs.Constraints, FieldName) Then
     Set Con = drs.Constraints.Item(FieldName)
     AddIn = False
@@ -3076,19 +3108,19 @@ Public Function AddConstraint(ByVal Name As String, ByVal FieldName As String, D
   Select Case ImportConstraint
     Case CONSTRAINT_MIN
       If (Con.Constraint And CONSTRAINT_MIN) = CONSTRAINT_MIN Then Call Err.Raise(ERR_ADDCONSTRAINT, "AddConstraint", "Min constraint is already set.")
-      Con.minvalue = Value
+      Con.minvalue = value
     Case CONSTRAINT_MAX
       If (Con.Constraint And CONSTRAINT_MAX) = CONSTRAINT_MAX Then Call Err.Raise(ERR_ADDCONSTRAINT, "AddConstraint", "Max constraint is already set.")
-      Con.maxvalue = Value
+      Con.maxvalue = value
     Case CONSTRAINT_MASK
       If (Con.Constraint And CONSTRAINT_MASK) = CONSTRAINT_MASK Then Call Err.Raise(ERR_ADDCONSTRAINT, "AddConstraint", "Mask constraint is already set.")
-      Con.Mask = Value
+      Con.Mask = value
     Case CONSTRAINT_INLIST
       If (Con.Constraint And CONSTRAINT_EXCLUDELIST) = CONSTRAINT_EXCLUDELIST Then Call Err.Raise(ERR_ADDCONSTRAINT, "AddConstraint", "Exclude List constraint is already set. Cannot set include list constraint.")
-      Call Con.ConstraintList.Add(CStr(Value)) 'apf check stringlist change
+      Call Con.ConstraintList.Add(CStr(value)) 'apf check stringlist change
     Case CONSTRAINT_EXCLUDELIST
       If (Con.Constraint And CONSTRAINT_INLIST) = CONSTRAINT_INLIST Then Call Err.Raise(ERR_ADDCONSTRAINT, "AddConstraint", "Include List constraint is already set. Cannot set exclude list constraint.")
-      Call Con.ConstraintList.Add(CStr(Value))
+      Call Con.ConstraintList.Add(CStr(value))
     Case CONSTRAINT_IGNORE_CONVERSIONERRORS
     Case Else
       Call ECASE("AddContraint - unrecognised constraint: " & CStr(ImportConstraint))
@@ -3180,7 +3212,7 @@ AddRequiredField_Err:
   Resume AddRequiredField_End
 End Function
 
-Public Function AddDefaultValue(ByVal Name As String, ByVal FieldName As String, ByVal DataType As DATABASE_FIELD_TYPES, Value As Variant, Optional NonNullValue As Variant) As Boolean
+Public Function AddDefaultValue(ByVal Name As String, ByVal FieldName As String, ByVal DataType As DATABASE_FIELD_TYPES, value As Variant, Optional NonNullValue As Variant) As Boolean
   Dim dType As DATABASE_FIELD_TYPES
   Dim drs As DestRecordSet, drstemp As DestRecordSet
   Dim DVal As DefaultValue
@@ -3192,7 +3224,7 @@ Public Function AddDefaultValue(ByVal Name As String, ByVal FieldName As String,
   Set drs = m_DestRecSets.Item(Name)
   Set DVal = New DefaultValue
   DVal.DestField = FieldName
-  DVal.Value = Value
+  DVal.value = value
   If Not IsMissing(NonNullValue) Then DVal.NonNullValue = NonNullValue
   Call drs.DefaultValues.Add(DVal)
   AddDefaultValue = True
@@ -3220,7 +3252,7 @@ Private Function AddInDefaultValues(FormName As String) As Boolean
     If Len(isp.DestField) > 0 Then
       For Each DVal In CurrentDest.DefaultValues
         If StrComp(DVal.DestField, isp.DestField, vbTextCompare) = 0 Then
-          isp.DefaultValue = DVal.Value
+          isp.DefaultValue = DVal.value
           isp.DefaultNonNullValue = DVal.NonNullValue
           Exit For
         End If
@@ -3251,7 +3283,7 @@ Friend Sub DisplayFactorFormatting()
   Set frmMisc = m_ImportForms.Item(CStr(TCSIMP_MISC))
   ColNo = GetColIndex(frmMisc.FlG_Source.Coldata(frmMisc.FlG_Source.Col))
   
-  frmMisc.Chk_Factor.Value = -(m_FieldSpecs(ColNo).varaction = ACTION_FACTOR)
+  frmMisc.Chk_Factor.value = -(m_FieldSpecs(ColNo).varaction = ACTION_FACTOR)
   frmMisc.Lbl_Factor.Enabled = (m_FieldSpecs(ColNo).varaction = ACTION_FACTOR) And (frmMisc.Fra_Format.Enabled)
   frmMisc.Txt_Factor.Enabled = (m_FieldSpecs(ColNo).varaction = ACTION_FACTOR) And (frmMisc.Fra_Format.Enabled)
   If (m_FieldSpecs(ColNo).varaction = ACTION_FACTOR) Then
@@ -3264,18 +3296,25 @@ End Sub
 'imp unfortunately uses the alias in the saved file ! ! !  doh
 Public Function AddFieldDisplayName(ByVal Name As String, ByVal FieldName As String, ByVal DisplayName As String)
   Dim drs As DestRecordSet
-  On Error GoTo err_Err
+  On Error GoTo err_err
   Call xSet("AddFieldDisplayName")
   Set drs = m_DestRecSets(Name)
   
   Call drs.FieldDisplayNames.Add(DisplayName, FieldName)
   
-err_End:
+err_end:
   Call xReturn("AddFieldDisplayName")
   Exit Function
 
-err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "AddFieldDisplayName", "Add Field DisplayName", "Error trying to add a field '" & FieldName & "' dispaly name '" & DisplayName & "'")
-  Resume err_End
+  Resume err_end
 End Function
+
+Public Property Get Interface() As IImportWizard
+  Set Interface = m_IImportWizard
+End Property
+Public Property Set Interface(ByVal value As IImportWizard)
+  Set m_IImportWizard = value
+End Property
 

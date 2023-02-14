@@ -343,7 +343,7 @@ Private Function QueriesEx(ByVal QueryID As QUERY_NAMES_IMP, params() As Variant
       If NameOnly Then
         QueriesEx = "Non shared vans"
       Else
-        QueriesEx = "SELECT DISTINCTROW T_BenVan.P_Num AS " & S_IMP_PNUM_ALIAS & ", T_BenVan.Item AS Description, T_BenVan.AvailFrom AS [Available from],T_BenVan.AvailTo AS [Available to], T_BenVan.Unavail AS [Days unavailable], T_BenVan.PrivateContrib AS [Private contribution],T_BenVan.RegistrationDate as [Registration Date] ,T_BenVan.MadeGoodIsTaxDeducted as [Amount is tax deducted], T_BenVan.BusReqOnly as [Mainly available for business travel only?], T_BenVan.CommuterUse as [Substantially available for Ordinary Commuting only?], T_BenVan.fuel_available as [Was fuel available?]" & _
+        QueriesEx = "SELECT DISTINCTROW T_BenVan.P_Num AS " & S_IMP_PNUM_ALIAS & ", T_BenVan.Item AS Description, T_BenVan.AvailFrom AS [Available from],T_BenVan.AvailTo AS [Available to], T_BenVan.Unavail AS [Days unavailable], T_BenVan.PrivateContrib AS [Private contribution],T_BenVan.RegistrationDate as [Registration Date] ,T_BenVan.MadeGoodIsTaxDeducted as [Amount is tax deducted], T_BenVan.BusReqOnly as [Mainly available for business travel only?], T_BenVan.CommuterUse as [Substantially available for Ordinary Commuting only?], T_BenVan.fuel_available as [Was fuel available?], T_BenVan.is_electric as [Is the van electric?]" & _
                   "From T_BenVan WHERE ((T_BenVan.P_Num<>" & StrSQL(S_SHAREDVAN_KEY) & "));"
       End If
     
@@ -351,7 +351,7 @@ Private Function QueriesEx(ByVal QueryID As QUERY_NAMES_IMP, params() As Variant
       If NameOnly Then
         QueriesEx = "Shared vans"
       Else
-        QueriesEx = "SELECT DISTINCTROW T_BenVan.P_Num AS " & S_IMP_PNUM_ALIAS & ", T_BenVan.Item AS Description, T_BenVan.AvailFrom AS [Available from],T_BenVan.AvailTo AS [Available to], T_BenVan.Unavail AS [Days unavailable], T_BenVan.PrivateContrib AS [Private contribution],T_BenVan.RegistrationDate as [Registration Date] ,T_BenVan.MadeGoodIsTaxDeducted as [Amount is tax deducted], T_BenVan.fuel_available as [Was fuel available?], T_BenVan.is_electric as [Electric?] " & _
+        QueriesEx = "SELECT DISTINCTROW T_BenVan.P_Num AS " & S_IMP_PNUM_ALIAS & ", T_BenVan.Item AS Description, T_BenVan.AvailFrom AS [Available from],T_BenVan.AvailTo AS [Available to], T_BenVan.Unavail AS [Days unavailable], T_BenVan.PrivateContrib AS [Private contribution],T_BenVan.RegistrationDate as [Registration Date] ,T_BenVan.MadeGoodIsTaxDeducted as [Amount is tax deducted], T_BenVan.fuel_available as [Was fuel available?], T_BenVan.is_electric as [Is the van electric?] " & _
                   "From T_BenVan WHERE ((T_BenVan.P_Num=" & StrSQL(S_SHAREDVAN_KEY) & "));"
       End If
       

@@ -494,6 +494,7 @@ CheckDuplicateNINumbers_ERR:
     Call ErrorMessage(ERR_ERROR, Err, "CheckDuplicateNINumbers", FilterMessageTitle(), "Error determining if too many invalid NI numbers.")
   End If
   Resume CheckDuplicateNINumbers_END
+  Resume
 End Sub
 
 Public Function FilterMessageTitle(Optional EmployerName As Variant, Optional EmployeeName As Variant, Optional HMITSectionString As Variant, Optional BenefitName As Variant, Optional BenfitFormCaption As Variant) As String
@@ -580,7 +581,7 @@ Public Function IsHyphenStrEx(s As String, ByVal CharPos As Long) As Boolean
   IsHyphenStrEx = (l = 45)
   
 End Function
-Public Function SumBenefit(ByRef Description As Variant, ByRef value As Variant, ByRef MadeGood As Variant, ByRef benefit As Variant, ey As IBenefitClass, ee As Employee, benefits As ObjectList, BenArr() As BEN_CLASS, Optional IRDesc As Variant) As Boolean
+Public Function SumBenefit(ByRef Description As Variant, ByRef value As Variant, ByRef MadeGood As Variant, ByRef Benefit As Variant, ey As IBenefitClass, ee As Employee, benefits As ObjectList, BenArr() As BEN_CLASS, Optional IRDesc As Variant) As Boolean
   Dim ben As IBenefitClass
   Dim i As Long, j As Long
   Dim lError As Long
@@ -594,11 +595,11 @@ Public Function SumBenefit(ByRef Description As Variant, ByRef value As Variant,
   j = 0
   value = 0
   MadeGood = 0
-  benefit = 0
+  Benefit = 0
   Description = ""
   IRDesc = ""
   
-  For i = 1 To benefits.Count
+  For i = 1 To benefits.count
     Set ben = benefits(i)
     If Not (ben Is Nothing) Then
       bc = ben.BenefitClass
@@ -607,7 +608,7 @@ Public Function SumBenefit(ByRef Description As Variant, ByRef value As Variant,
         sBenefitFormCaption = p11d32.Rates.BenClassTo(bc, BCT_FORM_CAPTION)
         If CheckBen(ey, ee, ben) Then
           
-          Call SumBenefitEx(j, value, MadeGood, benefit, Description, IRDesc, ben, OT_MAGENTIC_MEDIA)
+          Call SumBenefitEx(j, value, MadeGood, Benefit, Description, IRDesc, ben, OT_MAGENTIC_MEDIA)
         End If
       End If
      Set ben = Nothing
@@ -630,18 +631,18 @@ SumBenefit_Err:
   Description = S_ERROR
   value = S_ERROR
   MadeGood = S_ERROR
-  benefit = S_ERROR
+  Benefit = S_ERROR
   Resume SumBenefit_End
   Resume
 End Function
 
-Private Sub SumBenefitEx(jCount As Long, value As Variant, MadeGood As Variant, benefit As Variant, Description As Variant, IRDescription As Variant, ByVal ben As IBenefitClass, ByVal ot As OUTPUT_TYPE)
+Private Sub SumBenefitEx(jCount As Long, value As Variant, MadeGood As Variant, Benefit As Variant, Description As Variant, IRDescription As Variant, ByVal ben As IBenefitClass, ByVal ot As OUTPUT_TYPE)
   Dim iBenITem As Long
   jCount = jCount + 1
   
   value = value + ben.value(ITEM_VALUE)
   MadeGood = MadeGood + ben.value(ITEM_MADEGOOD_NET)
-  benefit = benefit + ben.value(ITEM_BENEFIT)
+  Benefit = Benefit + ben.value(ITEM_BENEFIT)
           
   If jCount = 2 Then
     Description = "Multiple items"
@@ -672,7 +673,7 @@ End Sub
 
 Public Function ListViewAnyChecked(lv As ListView) As Boolean
   Dim i As Long
-  For i = 1 To lv.listitems.Count
+  For i = 1 To lv.listitems.count
     If (lv.listitems(i).Checked) Then
       ListViewAnyChecked = True
       Exit Function
@@ -697,76 +698,33 @@ Private Function FirstTwoLettersValid(ByRef sNI As String) As Boolean
    i = InStr(1, VALID_CODES, s, vbBinaryCompare)
    FirstTwoLettersValid = i > 0
 End Function
-Public Function ValidateNI(ByVal sNI As String, ByVal bAllowTemporaryNumbers As Boolean) As NI_VALID
-  Dim i As Long
-  Dim lLen As Long
-  Dim bIsTemporary As Boolean
+Public Function ValidateNI(ByVal ni As String, ByVal bAllowTemporaryNumbers As Boolean) As NI_VALID
+  ni = Trim$(UCASE$(ni))
   
-  sNI = Trim$(UCASE$(sNI))
-   'CAD check NI formats
-  lLen = Len(sNI)
   ValidateNI = INVALID
   
-  If lLen < 8 Then GoTo NINumberValid_END
-  bIsTemporary = (StrComp("TN", Left$(sNI, 2), vbTextCompare) = 0)
-  'temporary numbers invalid
-  If Not bAllowTemporaryNumbers Then
-    If bIsTemporary Then GoTo NINumberValid_END
-  End If
-  
-  If IsAlphaStrEx(sNI, 1) Then
-    If Len(sNI) = 8 And bIsTemporary Then
-      GoTo NINumberValid_END
-    End If
-    'two types of vailid NI
-    '2 alpha, 6 numeric, l alpha
-    If IsNumeric(Mid$(sNI, 3, 6)) Then
-      If Not bIsTemporary And Not (FirstTwoLettersValid(sNI)) Then
-        GoTo NINumberValid_END
-      End If
-      For i = 1 To 9
-        If i < 3 Then
-          If Not IsAlphaStrEx(sNI, i) Then
-            GoTo NINumberValid_END
-          End If
-        ElseIf i > 2 And i < 9 Then
-          If Not IsNumericStrEx(sNI, i) Then
-            GoTo NINumberValid_END
-          End If
-        ElseIf i > 8 And Len(sNI) > 8 Then
-          If bIsTemporary Then
-            If InStr(1, "FM", Mid(sNI, i, 1)) = 0 Then
-              GoTo NINumberValid_END
-            End If
-          Else
-            If InStr(1, "ABCD", Mid(sNI, i, 1)) = 0 Then
-              GoTo NINumberValid_END
-            End If
-          End If
-        End If
-      Next
+  If RegExMatch(ni, "^11A11111$") Then
+    'temporary ni
+    If bAllowTemporaryNumbers Then
       ValidateNI = STANDARD
     End If
-    '2 numeric, 1 alpha, 5 numeric  - expat
-    'cad CORRECT FOR edIcAHR SET ON MIDLLE CHAR
-  ElseIf lLen = 8 Then
-    'not allowed for PAYE online therefore valid musdt not be TWO_number
-    For i = 1 To 8
-      Select Case i
-        Case Is < 3
-          If Not IsNumericStrEx(sNI, i) Then GoTo NINumberValid_END
-        Case 3
-          If Not IsAlphaStrEx(sNI, i) Then GoTo NINumberValid_END
-        Case Is > 3
-          If Not IsNumericStrEx(sNI, i) Then GoTo NINumberValid_END
-      End Select
-    Next
+  ElseIf RegExMatch(ni, "^[0-9]{2}[A-Z]{1}[0-9]{5}$") Then
+    'expat ni, ref https://www.litrg.org.uk/tax-guides/migrants/national-insurance-migrants/how-do-i-get-national-insurance-number
     ValidateNI = TWO_NUMBER
+  ElseIf RegExMatch(ni, "^[A-Z]{2}[0-9]{6}[A-Z]{1}$") And Not RegExMatch(ni, "^[B][G].*$|^[G][B].*$|^[K][N].*$|^[N][K].*$|^[N][T].*$|^[T][N].*$|^[Z][Z].*$|^[DFIQUV].*$|^.[DFIQUV].*$|^.[O].*$") Then
+    ValidateNI = STANDARD
   End If
 
-NINumberValid_END:
+End Function
+Private Function RegExMatch(ByRef toMatch As String, ByRef regExPattern As String) As Boolean
+  Dim r As RegExp
+  Dim matches As MatchCollection
+    
+  Set r = New RegExp
+  r.Global = True
+  r.Pattern = regExPattern
+  RegExMatch = r.Test(toMatch)
   
-
 End Function
 
 Private Function IsAtoD(ByVal ch As Long) As Boolean

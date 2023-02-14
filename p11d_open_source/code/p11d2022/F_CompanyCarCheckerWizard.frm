@@ -1,31 +1,33 @@
 VERSION 5.00
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{AF27A9B5-A3F4-11D2-8DB7-00C04FA9DD6F}#1.2#0"; "TCSPROG.OCX"
 Object = "{00028CDA-0000-0000-0000-000000000046}#6.0#0"; "tdbg6.ocx"
+Object = "{E297AE83-F913-4A8C-873C-EDEAC00CB9AC}#2.1#0"; "atc3ubgrd.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form F_DataCheckerWizard 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Data checker"
-   ClientHeight    =   7710
+   ClientHeight    =   7350
    ClientLeft      =   45
    ClientTop       =   435
-   ClientWidth     =   10650
+   ClientWidth     =   11865
    ControlBox      =   0   'False
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   7710
-   ScaleWidth      =   10650
+   ScaleHeight     =   7350
+   ScaleWidth      =   11865
    StartUpPosition =   3  'Windows Default
    Begin VB.Frame Frame1 
-      Height          =   1065
+      Height          =   975
       Left            =   -225
       TabIndex        =   0
-      Top             =   6675
+      Top             =   6375
       Width           =   12135
       Begin VB.CommandButton cmdPrint 
          Caption         =   "Print results"
          Height          =   390
-         Left            =   4950
+         Left            =   5730
          TabIndex        =   27
          Top             =   375
          Visible         =   0   'False
@@ -35,7 +37,7 @@ Begin VB.Form F_DataCheckerWizard
          Caption         =   "<  &Back"
          Enabled         =   0   'False
          Height          =   375
-         Left            =   6600
+         Left            =   7380
          TabIndex        =   25
          Top             =   375
          Width           =   1230
@@ -44,7 +46,7 @@ Begin VB.Form F_DataCheckerWizard
          Caption         =   "&Next >"
          Enabled         =   0   'False
          Height          =   375
-         Left            =   7875
+         Left            =   8655
          TabIndex        =   4
          Top             =   375
          Width           =   1230
@@ -52,81 +54,118 @@ Begin VB.Form F_DataCheckerWizard
       Begin VB.CommandButton btnCancel 
          Caption         =   "&Cancel"
          Height          =   375
-         Left            =   9375
+         Left            =   10545
          TabIndex        =   3
          Top             =   375
          Width           =   1230
       End
+      Begin TCSPROG.TCSProgressBar progressBar 
+         Height          =   270
+         Left            =   300
+         TabIndex        =   29
+         Top             =   420
+         Width           =   5310
+         _cx             =   9366
+         _cy             =   476
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Min             =   0
+         Max             =   100
+         Value           =   50
+         BarBackColor    =   -2147483633
+         BarForeColor    =   14120960
+         Appearance      =   1
+         Style           =   0
+         CaptionColor    =   0
+         CaptionInvertColor=   16777215
+         FillStyle       =   0
+         FadeFromColor   =   0
+         FadeToColor     =   16777215
+         Caption         =   ""
+         InnerCircle     =   0   'False
+         Percentage      =   0
+         Skew            =   0
+         PictureOffsetTop=   0
+         PictureOffsetLeft=   0
+         Enabled         =   -1  'True
+         Increment       =   1
+         TextAlignment   =   2
+      End
       Begin VB.Label lblStatus 
          Caption         =   "Status"
          Height          =   375
-         Left            =   480
+         Left            =   375
          TabIndex        =   13
-         Top             =   450
+         Top             =   210
          Visible         =   0   'False
-         Width           =   4455
+         Width           =   5025
       End
    End
    Begin TabDlg.SSTab tabCheckWizard 
-      Height          =   7350
+      Height          =   6810
       Left            =   0
       TabIndex        =   1
       Top             =   -375
-      Width           =   10935
-      _ExtentX        =   19288
-      _ExtentY        =   12965
+      Width           =   11910
+      _ExtentX        =   21008
+      _ExtentY        =   12012
       _Version        =   393216
-      Tab             =   1
       TabHeight       =   520
       ShowFocusRect   =   0   'False
       TabCaption(0)   =   "Tab 0"
       TabPicture(0)   =   "F_CompanyCarCheckerWizard.frx":0000
-      Tab(0).ControlEnabled=   0   'False
+      Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "frame"
+      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).ControlCount=   1
       TabCaption(1)   =   "Tab 1"
       TabPicture(1)   =   "F_CompanyCarCheckerWizard.frx":001C
-      Tab(1).ControlEnabled=   -1  'True
-      Tab(1).Control(0)=   "Label1"
-      Tab(1).Control(0).Enabled=   0   'False
-      Tab(1).Control(1)=   "tvwCheckResults"
-      Tab(1).Control(1).Enabled=   0   'False
-      Tab(1).Control(2)=   "btnRefresh"
-      Tab(1).Control(2).Enabled=   0   'False
-      Tab(1).Control(3)=   "cmbOrderBy"
-      Tab(1).Control(3).Enabled=   0   'False
-      Tab(1).Control(4)=   "dtgCheckWizard"
-      Tab(1).Control(4).Enabled=   0   'False
-      Tab(1).Control(5)=   "Frame2"
-      Tab(1).Control(5).Enabled=   0   'False
+      Tab(1).ControlEnabled=   0   'False
+      Tab(1).Control(0)=   "ubgrd"
+      Tab(1).Control(1)=   "ctlOverlappingCars"
+      Tab(1).Control(2)=   "iml"
+      Tab(1).Control(3)=   "pctInfo"
+      Tab(1).Control(4)=   "pctSpacer"
+      Tab(1).Control(5)=   "pctHeader"
       Tab(1).Control(6)=   "fraHeader"
-      Tab(1).Control(6).Enabled=   0   'False
-      Tab(1).Control(7)=   "pctHeader"
-      Tab(1).Control(7).Enabled=   0   'False
-      Tab(1).Control(8)=   "pctSpacer"
-      Tab(1).Control(8).Enabled=   0   'False
-      Tab(1).Control(9)=   "pctInfo"
-      Tab(1).Control(9).Enabled=   0   'False
-      Tab(1).Control(10)=   "iml"
-      Tab(1).Control(10).Enabled=   0   'False
-      Tab(1).Control(11)=   "ctlOverlappingCars"
-      Tab(1).Control(11).Enabled=   0   'False
-      Tab(1).ControlCount=   12
+      Tab(1).Control(7)=   "Frame2"
+      Tab(1).Control(8)=   "dtgCheckWizard"
+      Tab(1).Control(9)=   "cmbOrderBy"
+      Tab(1).Control(10)=   "btnRefresh"
+      Tab(1).Control(11)=   "tvwCheckResults"
+      Tab(1).Control(12)=   "Label1"
+      Tab(1).ControlCount=   13
       TabCaption(2)   =   "Tab 2"
       TabPicture(2)   =   "F_CompanyCarCheckerWizard.frx":0038
       Tab(2).ControlEnabled=   0   'False
       Tab(2).ControlCount=   0
+      Begin atc3ubgrd.UBGRD ubgrd 
+         Height          =   3915
+         Left            =   -71760
+         TabIndex        =   30
+         Top             =   2250
+         Width           =   8595
+         _ExtentX        =   15161
+         _ExtentY        =   6906
+      End
       Begin P11D2022.CarCheckOverlap ctlOverlappingCars 
          Height          =   3915
-         Left            =   3225
+         Left            =   -71775
          TabIndex        =   28
          Top             =   2250
-         Width           =   7290
-         _ExtentX        =   12859
+         Width           =   8595
+         _ExtentX        =   15161
          _ExtentY        =   6906
       End
       Begin MSComctlLib.ImageList iml 
-         Left            =   2100
+         Left            =   -72900
          Top             =   3825
          _ExtentX        =   1005
          _ExtentY        =   1005
@@ -146,7 +185,7 @@ Begin VB.Form F_DataCheckerWizard
       Begin VB.PictureBox pctInfo 
          BorderStyle     =   0  'None
          Height          =   765
-         Left            =   1350
+         Left            =   -73650
          ScaleHeight     =   765
          ScaleWidth      =   9240
          TabIndex        =   23
@@ -175,12 +214,12 @@ Begin VB.Form F_DataCheckerWizard
          BackColor       =   &H80000005&
          ForeColor       =   &H80000008&
          Height          =   915
-         Left            =   3225
+         Left            =   -71775
          ScaleHeight     =   885
-         ScaleWidth      =   7260
+         ScaleWidth      =   8565
          TabIndex        =   20
          Top             =   1200
-         Width           =   7290
+         Width           =   8595
          Begin VB.Label lblCheckType 
             BackColor       =   &H8000000E&
             Caption         =   "lblCheckType"
@@ -221,22 +260,22 @@ Begin VB.Form F_DataCheckerWizard
       Begin VB.PictureBox pctHeader 
          BackColor       =   &H00FFFFFF&
          BorderStyle     =   0  'None
-         Height          =   735
-         Left            =   0
-         ScaleHeight     =   735
-         ScaleWidth      =   10695
+         Height          =   780
+         Left            =   -75000
+         ScaleHeight     =   780
+         ScaleWidth      =   11820
          TabIndex        =   16
          Top             =   390
-         Width           =   10695
+         Width           =   11820
          Begin VB.Image imgMagnify 
             Height          =   735
-            Left            =   9540
+            Left            =   10995
             Picture         =   "F_CompanyCarCheckerWizard.frx":08E8
-            Top             =   15
+            Top             =   60
             Width           =   870
          End
          Begin VB.Label lblResults 
-            BackColor       =   &H80000009&
+            BackColor       =   &H80000005&
             Caption         =   "Anaylse results"
             BeginProperty Font 
                Name            =   "Verdana"
@@ -257,33 +296,33 @@ Begin VB.Form F_DataCheckerWizard
       Begin VB.Frame fraHeader 
          BackColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   0
+         Left            =   -75000
          TabIndex        =   19
          Top             =   945
-         Width           =   11000
+         Width           =   11820
       End
       Begin VB.Frame Frame2 
          Caption         =   "Frame2"
          Height          =   135
-         Left            =   0
+         Left            =   -75000
          TabIndex        =   18
          Top             =   0
          Width           =   10695
       End
       Begin TrueDBGrid60.TDBGrid dtgCheckWizard 
          Bindings        =   "F_CompanyCarCheckerWizard.frx":10E2
-         Height          =   3885
-         Left            =   3225
+         Height          =   3915
+         Left            =   -71775
          OleObjectBlob   =   "F_CompanyCarCheckerWizard.frx":10FF
          TabIndex        =   6
          Top             =   2250
          Visible         =   0   'False
-         Width           =   7305
+         Width           =   8595
       End
       Begin VB.ComboBox cmbOrderBy 
          Appearance      =   0  'Flat
          Height          =   315
-         Left            =   120
+         Left            =   -74880
          Style           =   2  'Dropdown List
          TabIndex        =   10
          Top             =   1440
@@ -292,19 +331,19 @@ Begin VB.Form F_DataCheckerWizard
       Begin VB.CommandButton btnRefresh 
          Caption         =   "&Refresh"
          Height          =   375
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   8
          Top             =   6300
          Width           =   735
       End
       Begin MSComctlLib.TreeView tvwCheckResults 
-         Height          =   4455
-         Left            =   120
+         Height          =   4395
+         Left            =   -74880
          TabIndex        =   5
          Top             =   1800
          Width           =   3015
          _ExtentX        =   5318
-         _ExtentY        =   7858
+         _ExtentY        =   7752
          _Version        =   393217
          HideSelection   =   0   'False
          Indentation     =   0
@@ -318,14 +357,14 @@ Begin VB.Form F_DataCheckerWizard
          Appearance      =   0
       End
       Begin VB.Frame frame 
-         BackColor       =   &H80000009&
+         BackColor       =   &H80000005&
          Height          =   7695
-         Left            =   -75000
+         Left            =   0
          TabIndex        =   2
          Top             =   0
          Width           =   16215
          Begin VB.CheckBox chkAllChecks 
-            BackColor       =   &H80000009&
+            BackColor       =   &H80000005&
             Caption         =   "Run all checks"
             Height          =   195
             Left            =   3600
@@ -347,8 +386,8 @@ Begin VB.Form F_DataCheckerWizard
             Left            =   3600
             TabIndex        =   7
             Top             =   1560
-            Width           =   6735
-            _ExtentX        =   11880
+            Width           =   7950
+            _ExtentX        =   14023
             _ExtentY        =   6165
             _Version        =   393217
             HideSelection   =   0   'False
@@ -386,9 +425,9 @@ Begin VB.Form F_DataCheckerWizard
          End
          Begin VB.Image Image1 
             Height          =   1020
-            Left            =   9300
+            Left            =   10470
             Picture         =   "F_CompanyCarCheckerWizard.frx":3807
-            Top             =   5250
+            Top             =   5265
             Width           =   990
          End
          Begin VB.Label lblDescription 
@@ -400,8 +439,8 @@ Begin VB.Form F_DataCheckerWizard
             Height          =   990
             Left            =   3750
             TabIndex        =   15
-            Top             =   5400
-            Width           =   5520
+            Top             =   5430
+            Width           =   6510
          End
          Begin VB.Label labelIntroduction 
             BackColor       =   &H00FFFFFF&
@@ -413,7 +452,7 @@ Begin VB.Form F_DataCheckerWizard
             Width           =   6855
          End
          Begin VB.Label lblCheckWizard 
-            BackColor       =   &H80000009&
+            BackColor       =   &H80000005&
             Caption         =   "Welcome to the Data Checker wizard"
             BeginProperty Font 
                Name            =   "Arial"
@@ -441,7 +480,7 @@ Begin VB.Form F_DataCheckerWizard
       Begin VB.Label Label1 
          Caption         =   "Display by"
          Height          =   255
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   11
          Top             =   1230
          Width           =   2895
@@ -466,6 +505,8 @@ Private m_bSelected As Boolean
 Private m_bPrint As Boolean
 Private m_bCheckDown As Boolean
 Private m_tnNodeSelected As node
+Private m_PayeOnlineChecksObjectList As ObjectList
+
 Private Sub btnBack_Click()
   tabCheckWizard.tab = 0
   btnBack.Enabled = False
@@ -481,8 +522,6 @@ Private Sub RefreshChecks()
   Dim bFound As Boolean
   
   On Error GoTo err_err
-  
-'  Set m_tnNodeSelected = tvwCheckResults.SelectedItem
   
   LockWindowUpdate (tvwCheckResults.hwnd)
   Call tvwCheckResults.nodes.Clear
@@ -574,10 +613,9 @@ Private Function ValidateDataFields() As String
   
   sMessage = ""
   If dtgCheckWizard.DataChanged Then
-    For i = 0 To dtgCheckWizard.Columns.Count - 1
+    For i = 0 To dtgCheckWizard.Columns.count - 1
       If dtgCheckWizard.Columns(i).Visible And Not dtgCheckWizard.Columns(i).Locked Then
         Select Case dtgCheckWizard.Columns(i).caption
-          
           Case p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableFrom_db), p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableTo_db)
             If Not DateWithinTaxYear(CStr(dtgCheckWizard.Columns(i).value)) Then
               sMessage = sMessage & dtgCheckWizard.Columns(i).caption & _
@@ -649,114 +687,133 @@ Private Sub cmdPrint_Click()
   Dim ac As atc3GRID_ADO.AutoClass
   Dim iCheck As CHECKS, i As Long
   Dim rep As Reporter
-  Dim f As ADODB.Field
-  Dim sWhere As String
+  Dim f As ADODB.field
   Dim cn As ADODB.Connection
-  Dim benEY As IBenefitClass
+  Dim benEy As IBenefitClass
   
   On Error GoTo err_err
   
   Set rep = ReporterNew(Nothing)
        
-  Set benEY = m_ey
+  Set benEy = m_ey
   If Not rep.InitReport("TITLE" & vbCrLf & vbCrLf, REPORT_TARGET.PREPARE_REPORT, LANDSCAPE, True) Then GoTo err_end
-  Set cn = ADOConnect(ADOAccess4ConnectString(benEY.value(employer_FileName), p11d32.SystemMDWPath()), adUseClient)
+  Set cn = ADOConnect(ADOAccess4ConnectString(benEy.value(employer_FileName), p11d32.SystemMDWPath()), adUseClient)
   
   For Each n In tvwCheckResults.nodes
-      
     If n.Children > 0 Then
       sKey = n.Tag
       iCheck = Replace(sKey, S_NODE_KEY, "")
       Set rsMaster = Nothing
-      sWhere = ""
       For Each nChild In tvwCheckResults.nodes
         If nChild.Parent Is n Then
-          sData = GetPropertyFromString(nChild.Tag, S_DATA_KEY)
-          
-          sSQL = GetNodeClickSQL(iCheck, sData)
-          Set rs = cn.Execute(sSQL)
-          
-          If rsMaster Is Nothing Then
-            Set rsMaster = New ADODB.Recordset
-            For Each f In rs.Fields
-              Call rsMaster.Fields.Append(f.Name, f.Type, f.DefinedSize, f.Attributes)
-            Next
-            Call rsMaster.Open
+          If (iCheck = CK_PAYE_ONLINE) Then
+            Set rsMaster = PayeOnlineErrorsAsRecordset()
+          Else
+            sData = GetPropertyFromString(nChild.Tag, S_DATA_KEY)
+            sSQL = GetNodeClickSQL(iCheck, sData)
+            Set rs = cn.Execute(sSQL)
+            If rsMaster Is Nothing Then
+              Set rsMaster = New ADODB.Recordset
+              For Each f In rs.Fields
+                Call rsMaster.Fields.Append(f.Name, f.Type, f.DefinedSize, f.Attributes)
+              Next
+              Call rsMaster.Open
+            End If
+            Do While Not rs.EOF
+              Call rsMaster.AddNew
+              For Each f In rs.Fields
+                rsMaster.Fields(f.Name).value = rs.Fields(f.Name).value
+              Next
+              Call rsMaster.Update
+              Call rs.MoveNext
+            Loop
           End If
-          
-           Do While Not rs.EOF
-             Call rsMaster.AddNew
-             For Each f In rs.Fields
-              rsMaster.Fields(f.Name).value = rs.Fields(f.Name).value
-             Next
-             Call rsMaster.Update
-             Call rs.MoveNext
-           Loop
-        
         End If
       Next
       
-       Set ac = New atc3GRID_ADO.AutoClass
-       If Not ac.InitAutoData("ReportErrors", rsMaster) Then GoTo err_end
+      Set ac = New atc3GRID_ADO.AutoClass
+      If Not ac.InitAutoData("ReportErrors", rsMaster) Then GoTo err_end
        
-       For Each f In rsMaster.Fields
-         '{CAPTION="Description"}
-          sFieldCaption = ""
-         Select Case UCASE$(f.Name)
-           Case S_FIELD_PERSONEL_NUMBER
-             sFieldCaption = p11d32.BenDataLinkUDMDisplayName(BC_EMPLOYEE, ee_PersonnelNumber_db)
-             If iCheck <> CK_EC_NI Then
+      For Each f In rsMaster.Fields
+        '{CAPTION="Description"}
+         sFieldCaption = ""
+        Select Case UCASE$(f.Name)
+          Case S_FIELD_PERSONEL_NUMBER
+            sFieldCaption = p11d32.BenDataLinkUDMDisplayName(BC_EMPLOYEE, ee_PersonnelNumber_db)
+            If iCheck <> CK_EC_NI Then
               Call ac.AddFieldFormat(f.Name, "{GROUP}")
-             End If
-           Case "DISPLAYNAME"
-             Call ac.AddFieldFormat(f.Name, "{HIDE}")
-           Case "AVAILTO"
-              sFieldCaption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableTo_db)
-           Case "AVAILFROM"
-              sFieldCaption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableFrom_db)
-           Case "REGREPLACED"
-           
-             Call ac.AddFieldFormat(f.Name, "{HIDE}")
-           Case "REGDATE"
-             sFieldCaption = "Date first registered"
-           Case "REG"
-            sFieldCaption = "Registration"
-         End Select
-           
-         If Len(sFieldCaption) > 0 Then
+            End If
+          Case "DISPLAYNAME"
+            Call ac.AddFieldFormat(f.Name, "{HIDE}")
+          Case "AVAILTO"
+             sFieldCaption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableTo_db)
+          Case "AVAILFROM"
+             sFieldCaption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableFrom_db)
+          Case "REGREPLACED"
+          
+            Call ac.AddFieldFormat(f.Name, "{HIDE}")
+          Case "REGDATE"
+            sFieldCaption = "Date first registered"
+          Case "REG"
+           sFieldCaption = "Registration"
+        End Select
+          
+        If Len(sFieldCaption) > 0 Then
           Call ac.AddFieldFormat(f.Name, "{CAPTION=""" & sFieldCaption & """}")
-         End If
-         
-       Next
+        End If
+        
+      Next
       
-       ac.dateFormat = "DD/MM/YYYY"
-       ac.ReportHeader = "{B+}" & CheckListCaption(iCheck, CMT_LIST_ITEM) & "{B-}" & vbCrLf
-       
-       
-       Call ac.ShowReport(rep)
-       Call rep.Out(vbCrLf & vbCrLf)
-       
-       
+      ac.dateFormat = "DD/MM/YYYY"
+      ac.ReportHeader = "{B+}" & CheckListCaption(iCheck, CMT_LIST_ITEM) & "{B-}" & vbCrLf
              
+      Call ac.ShowReport(rep)
+      Call rep.Out(vbCrLf & vbCrLf)
     End If
   Next
 rep.EndReport
   Call rep.PreviewReport
 
-  
-  
 err_end:
   If Not cn Is Nothing Then
     Call cn.Close
   End If
-  
   Exit Sub
 err_err:
   Call ErrorMessage(ERR_ERROR, Err, "Print", "Print", "Failed to print report for data checker")
   Resume err_end
   Resume
 End Sub
-
+Private Function PayeOnlineErrorsAsRecordset() As ADODB.Recordset
+  Dim rs As ADODB.Recordset
+  Dim i As Long
+  Dim Error As PAYEOnlineError
+  
+  Set rs = New ADODB.Recordset
+  
+  Call rs.Fields.Append(PAYE_ONLINE_ERROR_EMPLOYEE, adBSTR)
+  Call rs.Fields.Append(PAYE_ONLINE_ERROR_BENEFIT_TYPE, adBSTR)
+  Call rs.Fields.Append(PAYE_ONLINE_ERROR_BENEFIT, adBSTR)
+  Call rs.Fields.Append(PAYE_ONLINE_ERROR_DESCRIPTION, adBSTR)
+  
+  rs.CursorType = adOpenKeyset
+  rs.CursorLocation = adUseClient
+  rs.LockType = adLockPessimistic
+  Call rs.Open
+  
+  For i = 1 To m_PayeOnlineChecksObjectList.count
+    Set Error = m_PayeOnlineChecksObjectList(i)
+    Call rs.AddNew
+    rs.Fields(0).value = Error.Employee
+    rs.Fields(1).value = Error.BenefitType
+    rs.Fields(2).value = Error.Benefit
+    rs.Fields(3).value = Error.Description
+    Call rs.Update
+  Next
+  
+  Set PayeOnlineErrorsAsRecordset = rs
+          
+End Function
 Private Sub dtgCheckWizard_Validate(Cancel As Boolean)
   Dim sMessage As String
   On Error GoTo err_err
@@ -781,6 +838,8 @@ End Sub
 Private Sub Form_Load()
   Dim ben As IBenefitClass
   On Error GoTo err_err
+  
+  progressBar.Visible = False
   lblInfo.caption = ""
   lblResults.caption = ""
   lblStatus.caption = ""
@@ -791,6 +850,7 @@ Private Sub Form_Load()
     Set ben = m_ey
    lblResults.caption = "Analyse results for " & ben.value(ITEM_DESC)
   End If
+  
     
   lblCheckType.caption = "No check selected"
   Call FillOrderByComboBox
@@ -837,7 +897,7 @@ Public Function CheckBeforePrint(ey As Employer, TempOL As ObjectList, ByVal rt 
   'Run company car checks
   For i = [_CK_FIRST_ITEM] To [_CK_EC_START] - 1
     If i <> CK_CC_NOCARS Then 'ignore gaps between car useage
-      RunCompanyCarChecker (i)
+      Call RunCompanyCarChecker(i)
     End If
   Next i
   
@@ -892,6 +952,20 @@ Start_ERR:
   Call ErrorMessage(ERR_ERROR, Err, "Start", "Start", "Error in Start of CompanyCarChecker.")
   Resume Start_END
 End Sub
+Private Sub PayeOnlineChecksNodes(tvw As TreeView, isResults As Boolean)
+  Dim tnRoot As node
+  Dim tnChild As node
+  Dim caption As String
+  
+  caption = CheckListCaption(CK_PAYE_ONLINE, CMT_LIST_ITEM)
+  Set tnRoot = AddFolderNode(tvw, CK_PAYE_ONLINE)
+  Set tnChild = tvw.nodes.Add(tnRoot, tvwChild, , caption, IMG_REPORT)
+  If (isResults) Then
+    tnChild.Tag = DataKey(caption)
+  Else
+    tnChild.Tag = CK_PAYE_ONLINE
+  End If
+End Sub
 Private Sub FillCheckTreeview(iChecksSelected As Long)
 ' Fill treeview with available checks
   Dim tnRoot As node
@@ -920,6 +994,10 @@ Private Sub FillCheckTreeview(iChecksSelected As Long)
     tnChild.Tag = i
     If (nFirst Is Nothing) Then Set nFirst = tnChild
   Next i
+  
+  Call PayeOnlineChecksNodes(tvwChecks, False)
+  
+  If (nFirst Is Nothing) Then Set nFirst = tnChild
   
   
   Call FormatTreeview(tvwChecks)
@@ -1066,7 +1144,6 @@ Private Sub btnNext_Click()
       btnNext.caption = "&Finish"
       btnCancel.caption = "&Cancel"
       Call SelectFirstCheck
-      
     Else
       Call MsgBox("Please select a check to run.", vbExclamation, "Company Car Checker")
     End If
@@ -1082,13 +1159,20 @@ btnNext_ERR:
   Resume btnNext_END
   Resume
 End Sub
-
+Private Sub PayeOnlineCheckResultsToTreeView()
+  
+  Call PayeOnlineChecksNodes(tvwCheckResults, True)
+  
+  Set m_PayeOnlineChecksObjectList = PayeOnlineChecks
+  
+End Sub
 Private Sub DoChecks()
   Dim i As Integer
   Dim j As Integer
   Dim lEEChecks As Long
   Dim tnRoot As node
   Dim tnChild As node
+  Dim benEy As IBenefitClass
   
   On Error GoTo DoChecks_ERR
   
@@ -1103,13 +1187,17 @@ Private Sub DoChecks()
   
   'Company car checks
   m_bInError = False
+  Set benEy = m_ey
+  Call benEy.Calculate
   
   For Each tnRoot In tvwChecks.nodes
     Set tnChild = tnRoot.child
     For i = 1 To tnRoot.Children
       If tnChild.Checked Then
         j = tnChild.Tag
-        If j < [_CK_EC_START] And j >= [_CK_FIRST_ITEM] Then
+        If (j = CK_PAYE_ONLINE) Then
+          Call PayeOnlineCheckResultsToTreeView
+        ElseIf j < [_CK_EC_START] And j >= [_CK_FIRST_ITEM] Then
           Call RunCompanyCarChecker(j)
         Else
           lEEChecks = lEEChecks + (2 ^ j)
@@ -1139,7 +1227,7 @@ Private Sub CompanyCarCheckerFuncEnd()
   On Error GoTo CompanyCarCheckerFuncEnd_END
   
   If Not m_ey.CurrentEmployee Is Nothing Then
-    m_ey.CurrentEmployee.LoadBenefits (TBL_ALLBENEFITS)
+    Call m_ey.CurrentEmployee.LoadBenefits(TBL_ALLBENEFITS, , True)
     If IsBenefitForm(CurrentForm) And Not CurrentForm Is F_Employees Then
       Call BenScreenSwitchEnd(CurrentForm)
     End If
@@ -1156,9 +1244,6 @@ Private Sub CompanyCarCheckerFuncStart()
   On Error GoTo CompanyCarCheckerFuncStart_ERR
   
   If Not m_ey.MoveMenuUpdateEmployee Then Call Err.Raise(ERR_MOVE_MENU_UPDATE_EMPLOYEE, "CompanyCarCheckerFuncStart", "Failed to update employee.")
-  
-  Call m_ey.KillEmployeesBenefits
-  
   If m_ey.db Is Nothing Then Call Err.Raise(ERR_DB_IS_NOTHING, "IProgress_Progress", "Employer db is nothing when trying company car checker.")
   
 CompanyCarCheckerFuncStart_END:
@@ -1167,23 +1252,21 @@ CompanyCarCheckerFuncStart_ERR:
   Call Err.Raise(Err.Number, ErrorSource(Err, "CompanyCarCheckerFuncStart"), Err.Description)
   Resume CompanyCarCheckerFuncStart_END
 End Sub
-Private Function AddFolderNode(c As CHECKS) As node
+Private Function AddFolderNode(tvw As TreeView, c As CHECKS) As node
   Dim n As node
   Dim sKey As String
   
   sKey = S_NODE_KEY & c
   
-  
-  Set n = InTreeViewByKey(tvwCheckResults, sKey)
+  Set n = InTreeViewByKey(tvw, sKey)
   
   If (n Is Nothing) Then
-    Set n = tvwCheckResults.nodes.Add(, , sKey, CheckListCaption(c, CMT_TREEVIEW_NODE_TITLE), IMG_FOLDER_CLOSED)
+    Set n = tvw.nodes.Add(, , sKey, CheckListCaption(c, CMT_TREEVIEW_NODE_TITLE), IMG_FOLDER_CLOSED)
     n.Tag = sKey
-    n.ExpandedImage = IMG_FOLDER_OPEN
-    Set AddFolderNode = n
-  Else
-    Set AddFolderNode = n
   End If
+  n.ExpandedImage = IMG_FOLDER_OPEN
+  Set AddFolderNode = n
+  
 End Function
 
 Private Function InTreeViewByTag(tvw As TreeView, vTag As Variant) As node
@@ -1253,13 +1336,14 @@ Private Sub EmployeeChecks(lChecks As Long)
   
   lblStatus.caption = "Calculating Employee checks..."
   lblStatus.Refresh
-  For i = 1 To m_TempOL.Count
+  For i = 1 To m_TempOL.count
     Set ee = m_TempOL(i)
-    Set n = Nothing
-    If DoingCheck(CK_EC_NI, lChecks) Then
-      Call CheckNINumbers(ee)
+    If Not ee Is Nothing Then
+      Set n = Nothing
+      If DoingCheck(CK_EC_NI, lChecks) Then
+        Call CheckNINumbers(ee)
+      End If
     End If
-    
   Next i
  
 EmployeeChecks_END:
@@ -1278,12 +1362,16 @@ End Function
 Private Sub CheckNINumbers(ee As Employee)
   Dim child As node
   Dim tnCheckNI As node
+  Dim ben As IBenefitClass
+  
   On Error GoTo CheckNINumbers_ERR
   
-  If ee.NINumberValid Then GoTo CheckNINumbers_END
+  Set ben = ee
+  
+  If Not ben.value(ee_NIInvalid) Then GoTo CheckNINumbers_END
   m_bInError = True
-  Set tnCheckNI = AddFolderNode(CK_EC_NI)
-  Set child = tvwCheckResults.nodes.Add(tnCheckNI, tvwChild)
+  Set tnCheckNI = AddFolderNode(tvwCheckResults, CK_EC_NI)
+  Set child = tvwCheckResults.nodes.Add(tnCheckNI, tvwChild, , , IMG_REPORT)
   child.Tag = DataKeyEE(ee)
   tnCheckNI.Sorted = True
   
@@ -1293,7 +1381,6 @@ CheckNINumbers_ERR:
   Call Err.Raise(Err.Number, ErrorSource(Err, "CheckNINumbers"), Err.Description)
   Resume CheckNINumbers_END
 End Sub
-
 Private Function GetOrderDisplay(ben As IBenefitClass, iOrderBy As CHECKORDERBY) As String
   Dim sName As String
   
@@ -1392,13 +1479,18 @@ Private Function DataCheckerTreeViewRecordset(ByVal iCheck As CHECKS) As Records
   Dim rs As Recordset
   Dim sOrderBy As String
   
-  If iCheck = CK_CARS_IN_USE_BY_MORE_THAN_ONE_EMPLOYEE Then
-    sOrderBy = "DisplayName"
+  If iCheck = CK_PAYE_ONLINE Then
+        
+    Set rs = PayeOnlineChecks
   Else
-    sOrderBy = GetOrderByName(p11d32.ReportPrint.CHECKORDERBY)
+    If iCheck = CK_CARS_IN_USE_BY_MORE_THAN_ONE_EMPLOYEE Then
+      sOrderBy = "DisplayName"
+    Else
+      sOrderBy = GetOrderByName(p11d32.ReportPrint.CHECKORDERBY)
+    End If
+    
+    Set rs = m_ey.db.OpenRecordset(sql.Queries(GetCCSQL(iCheck), sOrderBy))
   End If
-  
-  Set rs = m_ey.db.OpenRecordset(sql.Queries(GetCCSQL(iCheck), sOrderBy))
   Set DataCheckerTreeViewRecordset = rs
 End Function
 Private Sub RunCompanyCarChecker(ByVal iCheck As CHECKS)
@@ -1420,7 +1512,6 @@ Private Sub RunCompanyCarChecker(ByVal iCheck As CHECKS)
   lblStatus.caption = "Calculating " & CheckListCaption(iCheck, CMT_TREEVIEW_NODE_TITLE) & "..."
   lblStatus.Refresh
   
-  
   If iCheck <> CK_CARS_IN_USE_BY_MORE_THAN_ONE_EMPLOYEE Then
     PNum = rs.Fields(S_FIELD_PERSONEL_NUMBER).value
   Else
@@ -1429,11 +1520,10 @@ Private Sub RunCompanyCarChecker(ByVal iCheck As CHECKS)
   
   Do While Not rs.EOF
     If (UserSelected(PNum)) Then
-      
-      Set root = AddFolderNode(iCheck)
+      Set root = AddFolderNode(tvwCheckResults, iCheck)
       m_bInError = True
       sData = rs.Fields("Data")
-      Set child = tvwCheckResults.nodes.Add(root, tvwChild)
+      Set child = tvwCheckResults.nodes.Add(root, tvwChild, , , IMG_REPORT)
       child.Tag = DataKey(sData)
       child.Text = sData
       i = i + 1
@@ -1466,7 +1556,7 @@ Private Function UserSelected(sPNum As String) As Boolean
   End If
     
   If m_bSelected Then
-    For i = 1 To m_TempOL.Count
+    For i = 1 To m_TempOL.count
       Set ee = m_TempOL(i)
       If StrComp(sPNum, ee.PersonnelNumber, vbBinaryCompare) = 0 Then
         bFound = True
@@ -1519,34 +1609,24 @@ Private Sub FormatGrid()
       Call LockColumn(1)
       dtgCheckWizard.Columns(2).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableFrom_db)
       dtgCheckWizard.Columns(3).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableTo_db)
-      
     Case CK_CC_REGDATES
       dtgCheckWizard.Columns(0).Visible = True
       Call LockColumn(0)
       dtgCheckWizard.Columns(0).caption = p11d32.BenDataLinkUDMDisplayName(BC_EMPLOYEE, ee_PersonnelNumber_db)
-      
       dtgCheckWizard.Columns(1).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, car_Registration_db)
       Call LockColumn(1)
-      
       dtgCheckWizard.Columns(2).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableFrom_db)
-       
       dtgCheckWizard.Columns(3).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableTo_db)
       dtgCheckWizard.Columns(4).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, car_Registrationdate_db)
-      
     Case CK_CC_EE_AVAILDATES
-      
       dtgCheckWizard.Columns(S_FIELD_CAR_REGISTRATION).Locked = True
       dtgCheckWizard.Columns(0).Visible = False
       dtgCheckWizard.Columns(1).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, car_Registration_db)
       Call LockColumn(1)
       dtgCheckWizard.Columns(2).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableFrom_db)
       dtgCheckWizard.Columns(3).caption = p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, Car_AvailableTo_db)
-      'dtgCheckWizard.Columns(4).Caption = p11d32.BenDataLinkUDMDisplayName(BC_EMPLOYEE, ee_joined_db)
-      
       Call LockColumn(4)
-      'dtgCheckWizard.Columns(5).Caption = p11d32.BenDataLinkUDMDisplayName(BC_EMPLOYEE, ee_left_db)
       Call LockColumn(5)
-      
     Case CK_EC_NI
       dtgCheckWizard.Columns(0).Visible = False
       dtgCheckWizard.Columns(1).caption = p11d32.BenDataLinkUDMDisplayName(BC_EMPLOYEE, ee_NINumber_db)
@@ -1586,6 +1666,30 @@ ShowDataInGrid_ERR:
   Resume ShowDataInGrid_END
   Resume
 End Sub
+Private Sub ShowDataInGridPayeOnline(iCheckType As CHECKS)
+  Dim g As Object
+  
+  Set g = ubgrd.grid
+  g.AllowAddNew = False
+  g.AllowDelete = False
+  g.AllowUpdate = False
+  g.AllowRowSizing = False
+  
+  Set ubgrd.ObjectList = Nothing
+  
+  While g.Columns.count > 0
+    Call g.Columns.Remove(0)
+  Wend
+    
+  Call AddUBGRDStandardColumn(g, 0, 1150, PAYE_ONLINE_ERROR_EMPLOYEE, "")
+  Call AddUBGRDStandardColumn(g, 1, 1250, PAYE_ONLINE_ERROR_BENEFIT_TYPE, "")
+  Call AddUBGRDStandardColumn(g, 2, 1300, PAYE_ONLINE_ERROR_BENEFIT, "")
+  Call AddUBGRDStandardColumn(g, 3, 4250, PAYE_ONLINE_ERROR_DESCRIPTION, "")
+  
+  Set ubgrd.ObjectList = m_PayeOnlineChecksObjectList
+    
+End Sub
+
 
 Private Sub SetColumnWidths(dtgGrdid As TDBGrid)
   Dim i As Integer
@@ -1594,13 +1698,13 @@ Private Sub SetColumnWidths(dtgGrdid As TDBGrid)
   On Error GoTo err_err
   
   j = 0
-  For i = 0 To dtgGrdid.Columns.Count - 1
+  For i = 0 To dtgGrdid.Columns.count - 1
     If dtgGrdid.Columns(i).Visible = True Then
       j = j + 1
     End If
   Next i
   
-  For i = 0 To dtgGrdid.Columns.Count - 1
+  For i = 0 To dtgGrdid.Columns.count - 1
     dtgGrdid.Columns(i).width = (dtgGrdid.width - 500) / j
   Next i
   
@@ -1619,7 +1723,7 @@ Private Sub FormatTreeview(tvw As TreeView)
   Dim tnNode As node
   
   For Each tnNode In tvw.nodes
-    If Len(GetPropertyFromString(tnNode.Tag, "DATA")) = 0 Then
+    If tnNode.Children > 0 Then
       tnNode.Expanded = True
     End If
   Next
@@ -1713,7 +1817,7 @@ Private Sub SaveCCCheckGrid()
   If Not ee Is Nothing Then
     'Load company car benefits
     ee.LoadBenefits (TBL_COMPANY_CARS)
-    For j = 1 To ee.benefits.Count
+    For j = 1 To ee.benefits.count
       Set ben = ee.benefits(j)
       'get correct car benefit
       If ben.value(car_Registration_db) = dtgCheckWizard.Columns(p11d32.BenDataLinkUDMDisplayName(BC_COMPANY_CARS_F, car_Registration_db)) Then
@@ -1751,7 +1855,7 @@ Private Sub UpdateEeListview(ben As IBenefitClass, sPNum As String)
   On Error GoTo UpdateEeListview_ERR
   
   Set ibf = F_Employees
-  For i = 1 To ibf.lv.listitems.Count
+  For i = 1 To ibf.lv.listitems.count
     If ibf.lv.listitems(i).SubItems(1) = sPNum Then
       Call ibf.UpdateBenefitListViewItem(ibf.lv.listitems(i), ben)
     End If
@@ -1817,6 +1921,22 @@ err_err:
   Call ErrorMessage(Err.Number, Err, "CheckOverlapDirty", "CheckOverlapDirty", Err.Description)
   Resume err_end
 End Sub
+Private Function PayeOnlineChecks() As ObjectList
+  On Error GoTo err_err:
+
+  progressBar.Visible = True
+  
+  Set PayeOnlineChecks = p11d32.PAYEonline.SubmissionErrors(m_ey, progressBar)
+  
+err_end:
+  progressBar.Visible = False
+ Exit Function
+err_err:
+  progressBar.Visible = False
+  Call Err.Raise(ERR_ERROR, ErrorSource(Err, "PayeOnlineChecks"), Err.Description)
+  Resume
+End Function
+
 Private Sub ChangeCheck(node As node)
   Dim sData As String
   Dim iCheckType As CHECKS
@@ -1826,7 +1946,7 @@ Private Sub ChangeCheck(node As node)
   On Error GoTo ChangeCheck_ERR
   
   
-  If tvwCheckResults.nodes.Count < 2 Then GoTo ChangeCheck_END
+  If tvwCheckResults.nodes.count < 2 Then GoTo ChangeCheck_END
   Call CheckOverlapDirty
     
   If node.Children = 0 Then
@@ -1835,24 +1955,34 @@ Private Sub ChangeCheck(node As node)
     sData = GetPropertyFromString(node.Tag, S_DATA_KEY)
     Me.ctlOverlappingCars.DragDropMode = (iCheckType = CK_CC_SEQUENTIAL_NOT_MARKED_AS_REPLACED)
         
-    sSQL = GetNodeClickSQL(iCheckType, sData)
-    
-    Select Case iCheckType
+    If (iCheckType = CK_PAYE_ONLINE) Then
+      Call ShowDataInGridPayeOnline(CK_PAYE_ONLINE)
+    Else
+      sSQL = GetNodeClickSQL(iCheckType, sData)
+      Select Case iCheckType
       Case CK_CARS_IN_USE_BY_MORE_THAN_ONE_EMPLOYEE, CK_CC_NOCARS, CK_CC_OVERLAPS, CK_CC_SEQUENTIAL_NOT_MARKED_AS_REPLACED
         Call ShowOverlapData(sSQL, iCheckType)
       Case CK_CC_AVAILDATES, CK_CC_REGDATES, CK_CC_EE_AVAILDATES, CK_EC_NI
         Call ShowDataInGrid(iCheckType, sSQL)
       Case Else
         ECASE ("Unknown checktype")
-    End Select
+      End Select
+    End If
     
     If iCheckType = CK_CC_SEQUENTIAL_NOT_MARKED_AS_REPLACED Then
       pctInfo.Visible = True
+      dtgCheckWizard.Visible = False
+      ubgrd.Visible = False
       lblInfo.caption = "Drag the end of a bar for a car to the start of another cars' bar to mark it as replaced. To delete a link press the - button to the right of the car, this clears the replacement flag. Only sequential cars can be linked. To change the dates for a car change the dates in the boxes."
+    ElseIf iCheckType = CK_PAYE_ONLINE Then
+      pctInfo.Visible = False
+      dtgCheckWizard.Visible = False
+      ubgrd.Visible = True
     Else
       pctInfo.Visible = False
+      dtgCheckWizard.Visible = True
+      ubgrd.Visible = False
     End If
-    
     
     lblCheckType.caption = CheckListCaption(iCheckType, CMT_LIST_ITEM)
     lblEeName.caption = node.Text
@@ -1880,6 +2010,10 @@ Private Function IsChildSelected(tvw As TreeView, n As node)
     End If
   End If
 End Function
+
+Private Sub Form_Unload(Cancel As Integer)
+  Set m_PayeOnlineChecksObjectList = Nothing
+End Sub
 
 Private Sub tvwCheckResults_NodeClick(ByVal node As MSComctlLib.node)
   Call ChangeCheck(node)
@@ -2137,7 +2271,7 @@ Private Function CheckListCaption(ByVal CHK_TYPE As CHECKS, ByVal CMT As CHECK_M
     Case CK_EC_NI
       Select Case CMT
         Case CMT_LIST_ITEM
-          s = "National Insurance numbers"
+          s = "Invalid National Insurance number"
         Case CMT_ALERT_MESSAGE_CHANGE, CMT_ALERT_MESSAGE_CHECK
           s = "Check National Insurance numbers"
         Case CMT_ALERT_MESSAGE_DESCRIPTION
@@ -2147,6 +2281,20 @@ Private Function CheckListCaption(ByVal CHK_TYPE As CHECKS, ByVal CMT As CHECK_M
         Case Else
           ECASE ("Invalid Company car check message type = " & CMT)
       End Select
+    Case CK_PAYE_ONLINE
+      Select Case CMT
+        Case CMT_LIST_ITEM
+          s = "Pre-submission checks"
+        Case CMT_ALERT_MESSAGE_CHANGE, CMT_ALERT_MESSAGE_CHECK
+          s = "Check data for valid PAYE Online submission"
+        Case CMT_ALERT_MESSAGE_DESCRIPTION
+          s = "Checks for PAYE online"
+        Case CMT_TREEVIEW_NODE_TITLE
+          s = "PAYE Onliine"
+        Case Else
+          ECASE ("Invalid PAYE online check message type = " & CMT)
+      End Select
+    
     Case Else
       Call ECASE("Invalid Company car check = " & CHK_TYPE)
   End Select
@@ -2173,4 +2321,27 @@ Private Sub tvwChecks_NodeClick(ByVal node As MSComctlLib.node)
     node.Checked = Not node.Checked
     Call tvwChecks_NodeCheck(node)
   End If
+End Sub
+
+Private Sub ubgrd_ReadData(RowBuf As TrueDBGrid60.RowBuffer, ByVal RowBufRowIndex As Long, ObjectList As ATC2CORE.ObjectList, ByVal ObjectListIndex As Long)
+  Dim Error As PAYEOnlineError
+  Dim i As Long
+  
+  Set Error = ObjectList(ObjectListIndex)
+  
+  For i = 0 To (RowBuf.ColumnCount - 1)
+    Select Case i
+      Case 0
+        RowBuf.value(RowBufRowIndex, i) = Error.Employee
+      Case 1
+        RowBuf.value(RowBufRowIndex, i) = Error.BenefitType
+      Case 2
+        RowBuf.value(RowBufRowIndex, i) = Error.Benefit
+      Case 3
+        RowBuf.value(RowBufRowIndex, i) = Error.Description
+      Case Else
+        ECASE ("Invalid column ubgrd read data.")
+    End Select
+  Next
+
 End Sub

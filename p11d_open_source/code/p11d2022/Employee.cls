@@ -215,7 +215,7 @@ Public Function HasCDBBenefit(benCDB As IBenefitClass) As Long
   
   On Error GoTo err_err
   
-  For j = 1 To benefits.Count
+  For j = 1 To benefits.count
     Set benEE = benefits(j)
     If Not benEE Is Nothing Then
       If benEE.CompanyDefined And (TypeOf benEE Is other) Then
@@ -267,7 +267,7 @@ van:
     End If
   Else
 other:
-    For i = 1 To benefits.Count
+    For i = 1 To benefits.count
       Set ben = benefits(i)
       If (Not ben Is Nothing) Then
         If ben.BenefitClass <> BC_SHAREDVANs_G And ben.BenefitClass <> BC_NONSHAREDVANS_G And ben.BenefitClass <> BC_LOANS_H Then
@@ -303,7 +303,7 @@ Public Function GetLoan(ByVal Index As Long) As IBenefitClass
   
   If AnyLoanBenefit Then
     lLoansIndex = GetLoansBenefitIndex()
-    If lLoansIndex <= benefits.Count Then
+    If lLoansIndex <= benefits.count Then
       Set loans = benefits(lLoansIndex)
       If loans Is Nothing Then
         Call Err.Raise(ERR_IS_NOTHING, "GetLoan", "The loans collection for " & FullName & " is nothing but requested loan.")
@@ -395,7 +395,7 @@ Public Sub CalculateBenefitsOfType(ByVal bc As BEN_CLASS)
   Dim i As Long
   Dim ben As IBenefitClass
   
-  For i = 1 To benefits.Count
+  For i = 1 To benefits.count
     Set ben = benefits(i)
     If Not ben Is Nothing Then
       If ben.BenefitClass = bc Then
@@ -418,7 +418,7 @@ On Error GoTo IterateBenefits_ERR
   Set ben = Me
   Call ben.Calculate
      
-  For l = 1 To benefits.Count
+  For l = 1 To benefits.count
     Set ben = benefits.Item(l)
     If Not (ben Is Nothing) Then
       Select Case IT
@@ -504,7 +504,7 @@ Public Function KillBenefits() As Boolean
  'Debug.Print"Employee " & m_BenItems(ee_Surname) & " - kill benefits"
   
   If Not benefits Is Nothing Then
-    For i = 1 To benefits.Count
+    For i = 1 To benefits.count
       If Not (benefits(i) Is Nothing) Then
         Set ben = benefits(i)
         Call ben.Kill
@@ -514,6 +514,7 @@ Public Function KillBenefits() As Boolean
   End If
   
   benefits.RemoveAll
+  
   BenefitsLoaded = False
   
   Call xReturn("KillBenefits")
@@ -532,7 +533,7 @@ Public Function LoadBenefits(ben As BENEFIT_TABLES, Optional bToScreen As Boolea
   
   Call xSet("LoadBenefits")
   
-  If m_bBenefitsLoaded And Not bForceLoad Then GoTo LoadBenefits_End
+  If BenefitsLoaded And Not bForceLoad Then GoTo LoadBenefits_End
   
   Call KillBenefits
   
@@ -594,7 +595,7 @@ Public Function LoadBenefits(ben As BENEFIT_TABLES, Optional bToScreen As Boolea
   Next i
   
   'clear up
-  For i = 1 To benefits.Count
+  For i = 1 To benefits.count
     If Not benefits(i) Is Nothing Then
       Set benobj = benefits(i)
       Call benobj.ReadDB
@@ -604,7 +605,7 @@ Public Function LoadBenefits(ben As BENEFIT_TABLES, Optional bToScreen As Boolea
   
   Call CreateCDBLinks
   If (ben = TBL_ALLBENEFITS) Or bForceLoaded Then
-    m_bBenefitsLoaded = True
+    BenefitsLoaded = True
   End If
   LoadBenefits = True
   
@@ -635,19 +636,19 @@ End Property
 Public Function ReportFooter(Description As String) As String
   ReportFooter = "{Arial=8,nb}{x=0}P11D " & p11d32.Rates.value(TaxFormYear) & Description & "(" & app.companyName & "){Arial=8,i}{x=50}Page {PAGE}" & " -  printed at {TIME} on {DATE}"
 End Function
-Public Function SumBenefit(ByRef Description As Variant, ByRef value As Variant, ByRef MadeGood As Variant, ByRef benefit As Variant, BenArr() As BEN_CLASS, Optional VALUE_ENUM As Long = ITEM_VALUE, Optional MADEGOOD_ENUM As Long = ITEM_MADEGOOD_NET, Optional BENEFIT_ENUM As Long = ITEM_BENEFIT, Optional sIRDesc As String) As Boolean
+Public Function SumBenefit(ByRef Description As Variant, ByRef value As Variant, ByRef MadeGood As Variant, ByRef Benefit As Variant, BenArr() As BEN_CLASS, Optional VALUE_ENUM As Long = ITEM_VALUE, Optional MADEGOOD_ENUM As Long = ITEM_MADEGOOD_NET, Optional BENEFIT_ENUM As Long = ITEM_BENEFIT, Optional sIRDesc As String) As Boolean
   Dim ben As IBenefitClass
   Dim i As Long, j As Long, lLoansIndex As Long, k As Long
   Dim loans As loans
   Dim bFoundBen As Boolean
-  Dim OL As ObjectList
+  Dim ol As ObjectList
   
   On Error GoTo SumBenefit_Err
   Call xSet("SumBenefit")
   
   value = 0
   MadeGood = 0
-  benefit = 0
+  Benefit = 0
   Description = ""
     
     
@@ -660,13 +661,13 @@ Public Function SumBenefit(ByRef Description As Variant, ByRef value As Variant,
       If lLoansIndex < 1 Then ECASE ("Loans not found when loan type passed in Sum Benefit.")
       Set loans = benefits(lLoansIndex)
       If loans Is Nothing Then ECASE ("Loans not found when loan type passed in Sum Benefit.")
-      Set OL = loans.loans
+      Set ol = loans.loans
     Else
-      Set OL = benefits
+      Set ol = benefits
     End If
     
-    For j = 1 To OL.Count
-      Set ben = OL(j)
+    For j = 1 To ol.count
+      Set ben = ol(j)
       If Not ben Is Nothing Then
         If ben.BenefitClass = BenArr(i) Then
           If ben.LinkBen And (Not ben.value(ITEM_BENEFIT_REPORTABLE)) Then
@@ -674,7 +675,7 @@ Public Function SumBenefit(ByRef Description As Variant, ByRef value As Variant,
           End If
           value = value + ben.value(VALUE_ENUM)
           MadeGood = MadeGood + ben.value(MADEGOOD_ENUM)
-          benefit = benefit + ben.value(BENEFIT_ENUM)
+          Benefit = Benefit + ben.value(BENEFIT_ENUM)
           k = k + 1
           bFoundBen = True
           If BenefitIsLoan(BenArr(i)) Then
@@ -699,10 +700,10 @@ NEXT_ARRAY_BEN:
   Next
   
   SumBenefit = bFoundBen
-  If Not SumBenefit Or benefit < 0 Then 'EK Or added to filter out neg section E benefit
+  If Not SumBenefit Or Benefit < 0 Then 'EK Or added to filter out neg section E benefit
     value = ""
     MadeGood = ""
-    benefit = ""
+    Benefit = ""
   End If
   
 SumBenefit_End:
@@ -714,7 +715,7 @@ SumBenefit_Err:
   Description = S_ERROR
   value = S_ERROR
   MadeGood = S_ERROR
-  benefit = S_ERROR
+  Benefit = S_ERROR
   Resume SumBenefit_End
   Resume
 End Function
@@ -755,7 +756,7 @@ Public Function GetRelevantBenClasses(BenClasses() As BEN_CLASS) As Long
   
   Call xSet("GetRelevantBenClasses")
   
-  For i = 1 To benefits.Count
+  For i = 1 To benefits.count
     Set ben = benefits(i)
     If Not ben Is Nothing Then
       If (2 ^ (p11d32.Rates.BenClassTo(ben.BenefitClass, BCT_HMIT_SECTION)) And p11d32.ReportPrint.HMITSections_PRINT) Then
@@ -804,7 +805,7 @@ Public Function CalculateBenefits(Optional lRelevantHMITSections As Long = -1, O
   
   CalculateBenefits = 0
   
-  For i = 1 To benefits.Count
+  For i = 1 To benefits.count
     Set ben = benefits(i)
     If Not ben Is Nothing Then
       ben.Calculate
@@ -845,9 +846,9 @@ Private Function IBenefitClass_CalculateBody() As Variant
   Dim i As Long, j As Long
   Dim ben As IBenefitClass
   Dim benEmployee As IBenefitClass
-  Dim benefit As Long
+  Dim Benefit As Long
   Dim bc As BEN_CLASS
-  Dim OL As ObjectList
+  Dim ol As ObjectList
   Dim loans As loans
   Dim NIC As Double
   
@@ -859,28 +860,21 @@ Private Function IBenefitClass_CalculateBody() As Variant
   benEmployee.value(ee_NIInvalid) = ValidateNI(benEmployee.value(ee_NINumber_db), True) = INVALID
   Call LoadBenefits(TBL_ALLBENEFITS, False)
   
-  For i = 1 To benefits.Count
+  For i = 1 To benefits.count
     Set ben = benefits(i)
     If Not ben Is Nothing Then
       If ben.BenefitClass = BC_LOANS_H Then
         Set loans = ben
-        Set OL = loans.loans
-        For j = 1 To OL.Count
-          Call Employee_CalculateEx(benEmployee, OL(j))
+        Set ol = loans.loans
+        For j = 1 To ol.count
+          Call Employee_CalculateEx(benEmployee, ol(j))
         Next
       Else
         Call Employee_CalculateEx(benEmployee, ben)
       End If
     End If
   Next
-  
-  'cad p11db
-  'Dim a As Long
-  
-  'a = benEmployee.value(ee_NIC_BENEFIT_SUBJECT_TO_CLASS1A) - benEmployee.value(ITEM_CLASS1A_ADJUSTMENT)
-  'a = benEmployee.value(ee_TotalBenefitsPotentiallySubjectToClass1A) - a
-  'benEmployee.value(ee_NIC_AdjustmentDeduct) = a
-  
+    
 Employee_Calculate_END:
   IBenefitClass_CalculateBody = benEmployee.value(ITEM_BENEFIT)
   Call xSet("Employee_Calculate")
@@ -999,7 +993,7 @@ Private Function IBenefitClass_DeleteDB() As Boolean
   
   Call LoadBenefits(TBL_ALLBENEFITS, False)
   
-  For i = 1 To benefits.Count
+  For i = 1 To benefits.count
     Set ben = benefits(i)
     If Not ben Is Nothing Then
       If Not ben.CompanyDefined Then
@@ -1572,9 +1566,6 @@ Private Function IsAlphaStrEx(s As String, ByVal CharPos As Long)
   IsAlphaStrEx = (l >= 65) And (l <= 90)
   
 End Function
-Public Property Get NINumberValid() As Boolean
-  NINumberValid = ValidateNI(IBenefitClass_value(ee_NINumber_db), False) = STANDARD
-End Property
 
 Private Property Get IBenefitClass_TABLE() As BENEFIT_TABLES
   ECASE ("TABLE")
@@ -1819,8 +1810,8 @@ Public Function WriteBenefits() As Boolean
 
   b = True
   
-  If Not p11d32.BringForward.Yes Then Call PrgStart(benefits.Count, "Writing benefits", ValueOfMax)
-  For i = 1 To benefits.Count
+  If Not p11d32.BringForward.Yes Then Call PrgStart(benefits.count, "Writing benefits", ValueOfMax)
+  For i = 1 To benefits.count
     Set ben = benefits(i)
     If Not ben Is Nothing Then
       If Not p11d32.BringForward.Yes Then
@@ -1892,7 +1883,7 @@ Public Function GetLoansBenefitIndex() As Long
   On Error GoTo GetLoansBenefitIndex_Err
   Call xSet("GetLoansBenefitIndex")
   
-  For i = 1 To benefits.Count
+  For i = 1 To benefits.count
     Set ben = benefits(i)
     If Not (ben Is Nothing) Then
       If ben.BenefitClass = BC_LOANS_H Then
@@ -2004,7 +1995,7 @@ Public Function GetP46Cars(P46Cars As ObjectList, ByVal dDateFrom As Date, ByVal
   
   Set P46Cars = New ObjectList
     
-  For i = 1 To CompanyCars.Count
+  For i = 1 To CompanyCars.count
     Set CompanyCar = CompanyCars(i)
     
       With CompanyCar
@@ -2067,7 +2058,7 @@ Public Function GetP46Cars(P46Cars As ObjectList, ByVal dDateFrom As Date, ByVal
               If .value(car_P46CarProvidedReplaced) Then
                 'IF MORE THAN 2 CARS FROM - TO SPAN OR HIT MY AVAILABLE FROM - 1 DAY THEN NEED TO PRINT DETAILS
                 dDateFromLess1Day = DateAdd("d", -1, .value(Car_AvailableFrom_db))
-                For j = 1 To CompanyCars.Count
+                For j = 1 To CompanyCars.count
                   If j <> i Then
                     Set CompanyCarDateCheck = CompanyCars(j)
                     If DateInRange(dDateFromLess1Day, CompanyCarDateCheck.value(Car_AvailableFrom_db), CompanyCarDateCheck.value(Car_AvailableTo_db)) Then
@@ -2214,7 +2205,7 @@ Public Function GetBenefitFromCDBEmployee(ben As IBenefitClass, sBenCode As Stri
 
   With p11d32.CurrentEmployer.CDBEmployee
     Call .LoadBenefits(TBL_OTHER, , , True)
-    For i = 1 To .benefits.Count
+    For i = 1 To .benefits.count
       Set ben = .benefits(i)
       If Not ben Is Nothing Then
         If IsBenOtherClass(ben.BenefitClass) Then
@@ -2341,12 +2332,12 @@ Public Sub EnumBenefitsDoAction(ByVal value As Variant, ByVal bet As BENEFITS_EN
   Dim Vans As nonSharedVans
   On Error GoTo err_err
   
-  For i = 1 To benefits.Count
+  For i = 1 To benefits.count
     Set ben = benefits(i)
     If Not ben Is Nothing Then
       If ben.BenefitClass = BC_LOANS_H Then
         Set lns = ben
-        For j = 1 To lns.loans.Count
+        For j = 1 To lns.loans.count
           Set benSub = lns.loans(j)
           If Not benSub Is Nothing Then
             Call EnumBenefitAction(benSub, value, bet)
@@ -2354,7 +2345,7 @@ Public Sub EnumBenefitsDoAction(ByVal value As Variant, ByVal bet As BENEFITS_EN
         Next
       ElseIf ben.BenefitClass = BC_NONSHAREDVANS_G Then
         Set Vans = ben
-        For j = 1 To Vans.Vans.Count
+        For j = 1 To Vans.Vans.count
           Set benSub = Vans.Vans(j)
           If Not benSub Is Nothing Then
             Call EnumBenefitAction(benSub, value, bet)

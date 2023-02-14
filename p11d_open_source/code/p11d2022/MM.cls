@@ -153,8 +153,8 @@ Public Sub EmployersToListView()
   
   Call xSet("EmployersToListView")
 
-  For i = 1 To p11d32.Employers.Count
-    Set ben = p11d32.Employers(i)
+  For i = 1 To p11d32.employers.count
+    Set ben = p11d32.employers(i)
     If Not ben Is Nothing Then
       Set li = F_MM.lvMMEmployers.listitems.Add()
       Call UpdateListViewItem(li, ben, i)
@@ -171,25 +171,25 @@ EmployersToListView_ERR:
   Resume EmployersToListView_END
   Resume
 End Sub
-Private Function EmployersSelected(Employers As ObjectList) As Long
+Private Function EmployersSelected(employers As ObjectList) As Long
   Dim i As Long
   Dim ben As IBenefitClass
   
-  Set Employers = New ObjectList
-  For i = 1 To p11d32.Employers.Count
-    Set ben = p11d32.Employers(i)
+  Set employers = New ObjectList
+  For i = 1 To p11d32.employers.count
+    Set ben = p11d32.employers(i)
     If Not ben Is Nothing Then
       If ben.value(employer_MagneticMediaSelected) Then
         If i = 1 Then
           SubmitterName = ben.value(employer_SubmitterName_db)
           SubmitterRef = ben.value(employer_SubmitterRef_db)
         End If
-        Call Employers.Add(ben)
+        Call employers.Add(ben)
       End If
     End If
   Next
     
-  EmployersSelected = Employers.Count
+  EmployersSelected = employers.count
 End Function
 Private Function ValidEmployees(employees As ObjectList, ey As Employer) As Long
   Dim i As Long
@@ -197,14 +197,14 @@ Private Function ValidEmployees(employees As ObjectList, ey As Employer) As Long
   
   Set employees = New ObjectList
   
-  For i = 1 To ey.employees.Count
+  For i = 1 To ey.employees.count
     Set ee = ey.employees(i)
     If Not ee Is Nothing Then
       Call employees.Add(ee)
     End If
   Next
     
-  ValidEmployees = employees.Count
+  ValidEmployees = employees.count
 
 End Function
 
@@ -432,7 +432,7 @@ Private Function Type20Record(ee As Employee, ey As IBenefitClass, lEmployeesWit
   
   Set ben = ee
   
-  If Not ee.NINumberValid Then
+  If ben.value(ee_NIInvalid) Then
     lEmployeesWithInvaidNI = lEmployeesWithInvaidNI + 1
     Call Err.Raise(ERR_NI_INVALID_BUT_ADDED, "Type20Record", "NI number '" & ben.value(ee_NINumber_db) & "' invalid but employee added.")
     'leave NI blank as IR will not acccept
@@ -495,7 +495,7 @@ End Function
 Public Sub CreateMagneticMediaFiles(ByVal prgEmployee As TCSProgressBar, ByVal lblFile As Label)
   Dim ey As Employer, ee As Employee
   Dim ben As IBenefitClass
-  Dim Employers As ObjectList
+  Dim employers As ObjectList
   Dim bMMSelected As Boolean
   Dim bAnyEmployeeBenefitRecords As Boolean
   Dim i As Long, j As Long, lBytesWritten As Long
@@ -515,11 +515,11 @@ Public Sub CreateMagneticMediaFiles(ByVal prgEmployee As TCSProgressBar, ByVal l
   prgEmployee.Visible = True
   prgEmployee.value = prgEmployee.Min
   prgEmployee.Indicator = None
-  prgEmployee.Caption = ""
+  prgEmployee.caption = ""
   
-  Call EmployersSelected(Employers)
+  Call EmployersSelected(employers)
   
-  If Employers.Count > 0 Then
+  If employers.count > 0 Then
     If ErrorLogging Then
       Set ErrorFilter = Me
     Else
@@ -530,15 +530,15 @@ Public Sub CreateMagneticMediaFiles(ByVal prgEmployee As TCSProgressBar, ByVal l
   End If
   
   Call p11d32.LoadEmployer(Nothing, False)
-  For i = 1 To Employers.Count
-    Set ey = Employers(i)
+  For i = 1 To employers.count
+    Set ey = employers(i)
     Call p11d32.LoadEmployer(ey, False)
     Set ben = ey
     bAnyEmployeeBenefitRecords = False
             
     If ben.value(employer_EmployeesCount) = 0 Then GoTo NEXT_EMPLOYER
     
-    For j = 1 To ey.employees.Count
+    For j = 1 To ey.employees.count
       Set ee = ey.employees(j)
       Call ee.LoadBenefits(TBL_ALLBENEFITS, False)
       If ee.IterateBenefits(AnyReportable) Then
@@ -559,11 +559,11 @@ Public Sub CreateMagneticMediaFiles(ByVal prgEmployee As TCSProgressBar, ByVal l
     
     Call OutData(Type1Record(ey), lVolumeNumber, lVolumeEmployerCount, lVolumeEmployeeCount, lblFile, , True)
     
-    prgEmployee.Max = ey.employees.Count
+    prgEmployee.Max = ey.employees.count
     prgEmployee.value = 0
     prgEmployee.Indicator = ValueOfMax
     
-    For j = 1 To ey.employees.Count
+    For j = 1 To ey.employees.count
       Set ee = ey.employees(j)
       Call prgEmployee.StepCaption("Analysing employee: " & ee.FullName)
       If ee Is Nothing Then GoTo NEXT_EMPLOYEE
@@ -592,7 +592,7 @@ NEXT_EMPLOYER:
   
   If lEmployersWritten > 0 Then
     Call CheckNIRatio(lEmployeesWithInvalidNI, lEmployeesWritten)
-    prgEmployee.Caption = "Completed magnetic media " & lVolumeNumber & " file(s) written, " & lEmployeesWritten & " employees written."
+    prgEmployee.caption = "Completed magnetic media " & lVolumeNumber & " file(s) written, " & lEmployeesWritten & " employees written."
     prgEmployee.Indicator = None
     If Not m_TS Is Nothing Then
       m_TS.Write (Type3Record(lEmployersWritten, lEmployeesWritten))
@@ -624,15 +624,15 @@ Public Function Kill()
   Set m_ws = Nothing
 End Function
 Private Function BenLine(sbenline As String, ey As Employer, ee As Employee, benefits As ObjectList, BenArr() As BEN_CLASS, ByVal HS As HMIT_SECTIONS, ByVal MMS0 As MM_STANDARD_OUT, Optional bRecordHeader As Boolean = True) As Boolean
-  Dim Description, value, MadeGood, benefit
+  Dim Description, value, MadeGood, Benefit
   
-  BenLine = Validations.SumBenefit(Description, value, MadeGood, benefit, ey, ee, benefits, BenArr())
-  sbenline = StandardOutLine(Description, value, MadeGood, benefit, ee, BenArr(1), HS, MMS0, bRecordHeader)
+  BenLine = Validations.SumBenefit(Description, value, MadeGood, Benefit, ey, ee, benefits, BenArr())
+  sbenline = StandardOutLine(Description, value, MadeGood, Benefit, ee, BenArr(1), HS, MMS0, bRecordHeader)
   
 End Function
 
 Private Function GetEmployeesBenefits(ey As IBenefitClass, ee As Employee) As String
-  Dim Description, value, MadeGood, benefit
+  Dim Description, value, MadeGood, Benefit
   Dim sbenline As String, s As String
   Dim HS As HMIT_SECTIONS
   Dim sHMITSectionString As String
@@ -732,7 +732,7 @@ GetEmployeesBenefits_ERR:
   Resume GetEmployeesBenefits_END
   Resume
 End Function
-Private Function SectionMTypePartialOutLine(ByVal bc As BEN_CLASS, IRDesc As Variant, Description As Variant, value As Variant, MadeGood As Variant, benefit As Variant) As String
+Private Function SectionMTypePartialOutLine(ByVal bc As BEN_CLASS, IRDesc As Variant, Description As Variant, value As Variant, MadeGood As Variant, Benefit As Variant) As String
   Dim s As String
   Dim iBenITem As Long
   
@@ -743,7 +743,7 @@ Private Function SectionMTypePartialOutLine(ByVal bc As BEN_CLASS, IRDesc As Var
   s = s & PadFieldHelper(bc, ITEM_DESC, Description)
   s = s & PadFieldHelper(bc, ITEM_VALUE, value)
   s = s & PadFieldHelper(bc, ITEM_MADEGOOD_NET, MadeGood)
-  s = s & PadFieldHelper(bc, ITEM_BENEFIT, benefit)
+  s = s & PadFieldHelper(bc, ITEM_BENEFIT, Benefit)
   
   SectionMTypePartialOutLine = s
 End Function
@@ -769,26 +769,26 @@ Private Function SectionMTypePartialOutLineNoBenefits(ByVal bc As BEN_CLASS) As 
   SectionMTypePartialOutLineNoBenefits = s
 End Function
 
-Private Function BlankFieldByRecordPosition(pStart As Long, pEnd As Long, Optional char As String = " ") As String
-  BlankFieldByRecordPosition = String$(pEnd - pStart + 1, char)
+Private Function BlankFieldByRecordPosition(pStart As Long, pEnd As Long, Optional Char As String = " ") As String
+  BlankFieldByRecordPosition = String$(pEnd - pStart + 1, Char)
 End Function
-Private Function BlankField(bc As BEN_CLASS, Item As Long, Optional char As String = " ") As String
+Private Function BlankField(bc As BEN_CLASS, Item As Long, Optional Char As String = " ") As String
   Dim iLen As Long
   iLen = p11d32.BenDataLinkMMFieldSize(bc, Item)
-  BlankField = String$(iLen, char)
+  BlankField = String$(iLen, Char)
 End Function
 
 Private Function SectionM2(sbenline As String, ey As IBenefitClass, ee As Employee) As Boolean
   Dim BenArr() As BEN_CLASS
   Dim HS As HMIT_SECTIONS
-  Dim Description As Variant, value As Variant, MadeGood As Variant, benefit As Variant
+  Dim Description As Variant, value As Variant, MadeGood As Variant, Benefit As Variant
   Dim IRDesc As Variant
   Dim sbenline_class_1a As String, sbenline_non_class_1a As String, sbenline_2t_class_1a As String, sbenline_2t_non_class_1a As String
   Dim sbenline_2t As String, sbenline_2t_income_tax_not_dedcuted As String
   Dim sHMITSectionString As String
   Dim bAnyC1ABenefits As Boolean, bAnyNonClass1ABenefits As Boolean, bAnyIncomeTaxNotDeducted As Boolean
   
-  On Error GoTo err_Err
+  On Error GoTo err_err
   
   Call xSet("SectionM")
   
@@ -803,13 +803,13 @@ Private Function SectionM2(sbenline As String, ey As IBenefitClass, ee As Employ
   'class 1A benefits, all stored under subs & professional
   ReDim BenArr(1 To 1)
   BenArr(1) = BC_CLASS_1A_M
-  If (Validations.SumBenefit(Description, value, MadeGood, benefit, ey, ee, ee.benefits, BenArr(), IRDesc)) Then
+  If (Validations.SumBenefit(Description, value, MadeGood, Benefit, ey, ee, ee.benefits, BenArr(), IRDesc)) Then
     bAnyC1ABenefits = True
-    sbenline_class_1a = SectionMTypePartialOutLine(BenArr(1), IRDesc, Description, value, MadeGood, benefit)
+    sbenline_class_1a = SectionMTypePartialOutLine(BenArr(1), IRDesc, Description, value, MadeGood, Benefit)
   Else
     sbenline_class_1a = SectionMTypePartialOutLineNoBenefits(BenArr(1))
   End If
-  sbenline_2t_class_1a = PadFieldHelper(BC_CLASS_1A_M, ITEM_BENEFIT, benefit) 'get the zeros for the 2T line
+  sbenline_2t_class_1a = PadFieldHelper(BC_CLASS_1A_M, ITEM_BENEFIT, Benefit) 'get the zeros for the 2T line
   
   'class non class 1A benefits, all stored under nursery, and nother - do not include income tax not deducted
   'Charlie
@@ -820,26 +820,26 @@ Private Function SectionM2(sbenline As String, ey As IBenefitClass, ee As Employ
   ReDim BenArr(1 To 1)
   BenArr(1) = BC_NON_CLASS_1A_M
     
-  If (Validations.SumBenefit(Description, value, MadeGood, benefit, ey, ee, ee.benefits, BenArr(), IRDesc)) Then
-    sbenline_non_class_1a = SectionMTypePartialOutLine(BenArr(1), IRDesc, Description, value, MadeGood, benefit)
+  If (Validations.SumBenefit(Description, value, MadeGood, Benefit, ey, ee, ee.benefits, BenArr(), IRDesc)) Then
+    sbenline_non_class_1a = SectionMTypePartialOutLine(BenArr(1), IRDesc, Description, value, MadeGood, Benefit)
     bAnyNonClass1ABenefits = True
   Else
     sbenline_non_class_1a = SectionMTypePartialOutLineNoBenefits(BenArr(1))
   End If
   
-  sbenline_2t_non_class_1a = PadFieldHelper(BC_NON_CLASS_1A_M, ITEM_BENEFIT, benefit)
+  sbenline_2t_non_class_1a = PadFieldHelper(BC_NON_CLASS_1A_M, ITEM_BENEFIT, Benefit)
   
   ReDim BenArr(1 To 1)
   BenArr(1) = BC_INCOME_TAX_PAID_NOT_DEDUCTED_M
-  If (Validations.SumBenefit(Description, value, MadeGood, benefit, ey, ee, ee.benefits, BenArr())) Then bAnyIncomeTaxNotDeducted = True
-  sbenline_2t_income_tax_not_dedcuted = PadFieldHelper(BC_INCOME_TAX_PAID_NOT_DEDUCTED_M, ITEM_BENEFIT, benefit)
+  If (Validations.SumBenefit(Description, value, MadeGood, Benefit, ey, ee, ee.benefits, BenArr())) Then bAnyIncomeTaxNotDeducted = True
+  sbenline_2t_income_tax_not_dedcuted = PadFieldHelper(BC_INCOME_TAX_PAID_NOT_DEDUCTED_M, ITEM_BENEFIT, Benefit)
     
   'create the record entries
   If bAnyC1ABenefits Or bAnyNonClass1ABenefits Or bAnyIncomeTaxNotDeducted Then
     SectionM2 = True
     
     If (bAnyC1ABenefits Or bAnyNonClass1ABenefits) Then
-      sbenline = StandardOutLine("", "", "", benefit, ee, -1, HS, MM_SO_RECORD_HEADER)
+      sbenline = StandardOutLine("", "", "", Benefit, ee, -1, HS, MM_SO_RECORD_HEADER)
       sbenline = sbenline & sbenline_class_1a & sbenline_non_class_1a & vbCrLf
     End If
     
@@ -853,12 +853,12 @@ Private Function SectionM2(sbenline As String, ey As IBenefitClass, ee As Employ
   End If
   
   
-err_End:
+err_end:
   Call xReturn("SectionM")
   Exit Function
-err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionM", FilterMessageTitle(ey.Name, ee.FullName, sHMITSectionString), "Error getting the section M line.")
-  Resume err_End
+  Resume err_end
   Resume
 End Function
 
@@ -877,7 +877,7 @@ Private Function SectionN(sbenline As String, ey As IBenefitClass, ee As Employe
   Dim sHMITSectionString As String
   Dim bBenefitApplies
   Dim s As String
-  Dim Description, value, MadeGood, benefit
+  Dim Description, value, MadeGood, Benefit
   Dim IRDesc As Variant
   Dim bMultiple As Boolean
   Dim iBenITem As Long
@@ -924,7 +924,7 @@ Private Function SectionN(sbenline As String, ey As IBenefitClass, ee As Employe
   BenArr(1) = BC_OOTHER_N
   BenArr(2) = BC_CHAUFFEUR_OTHERO_N
   
-  SectionN = SectionN Or Validations.SumBenefit(Description, value, MadeGood, benefit, ey, ee, ee.benefits, BenArr(), IRDesc)
+  SectionN = SectionN Or Validations.SumBenefit(Description, value, MadeGood, Benefit, ey, ee, ee.benefits, BenArr(), IRDesc)
   'we seem to be able to have some common funtion here
    
   iBenITem = IRDescriptionBenItem(BC_OOTHER_N)
@@ -933,7 +933,7 @@ Private Function SectionN(sbenline As String, ey As IBenefitClass, ee As Employe
   
   sbenline = sbenline & PadFieldHelper(BC_OOTHER_N, ITEM_VALUE, value) & _
                 PadFieldHelper(BC_OOTHER_N, ITEM_MADEGOOD_NET, MadeGood) & _
-                PadFieldHelper(BC_OOTHER_N, ITEM_BENEFIT, benefit)
+                PadFieldHelper(BC_OOTHER_N, ITEM_BENEFIT, Benefit)
   
   sbenline = sbenline & vbCrLf
 SectionN_END:
@@ -951,7 +951,7 @@ Private Function SectionF(sbenline As String, ey As Employer, ee As Employee) As
   Dim car As CompanyCar
   Dim FuelBen As IBenefitClass
   Dim BenArr() As BEN_CLASS
-  Dim value, MadeGood, benefit, Description
+  Dim value, MadeGood, Benefit, Description
   Dim i As Long, lErrorNum As Long
   Dim d As Date
   
@@ -985,7 +985,7 @@ Private Function SectionF(sbenline As String, ey As Employer, ee As Employee) As
   
   sbenline = ""
   
-  For i = 1 To ee.benefits.Count
+  For i = 1 To ee.benefits.count
     Set ben = ee.benefits(i)
     If Not ben Is Nothing Then
       If ben.BenefitClass = BC_COMPANY_CARS_F Then
@@ -1065,14 +1065,14 @@ Private Function SectionF(sbenline As String, ey As Employer, ee As Employee) As
   If Len(sbenline) > 0 Then
     ReDim BenArr(1 To 1)
     BenArr(1) = BC_COMPANY_CARS_F
-    Call Validations.SumBenefit(Description, value, MadeGood, benefit, ey, ee, ee.benefits, BenArr)
+    Call Validations.SumBenefit(Description, value, MadeGood, Benefit, ey, ee, ee.benefits, BenArr)
     sbenline = sbenline & RecordType(MM_REC_BENFIT_SECTION_F) & PadFieldHelper(BC_EMPLOYEE, ee_PersonnelNumber_db, ee.PersonnelNumber) & _
-               PadFieldHelper(BC_COMPANY_CARS_F, ITEM_BENEFIT, benefit)
+               PadFieldHelper(BC_COMPANY_CARS_F, ITEM_BENEFIT, Benefit)
     BenArr(1) = BC_FUEL_F
     
-    Call Validations.SumBenefit(Description, value, MadeGood, benefit, ey, ee, ee.benefits, BenArr)
-    If benefit > 0 Then
-      sbenline = sbenline & PadFieldHelper(BC_COMPANY_CARS_F, ITEM_BENEFIT, benefit) & vbCrLf
+    Call Validations.SumBenefit(Description, value, MadeGood, Benefit, ey, ee, ee.benefits, BenArr)
+    If Benefit > 0 Then
+      sbenline = sbenline & PadFieldHelper(BC_COMPANY_CARS_F, ITEM_BENEFIT, Benefit) & vbCrLf
     Else
       sbenline = sbenline & PadFieldHelper(BC_COMPANY_CARS_F, ITEM_BENEFIT, "", , TYPE_STR) & vbCrLf
     End If
@@ -1102,8 +1102,8 @@ End Function
 'does not append crlf on summary
 Private Function SectionAType(sbenline As String, ey As Employer, ee As Employee, BenArr() As BEN_CLASS, HS As HMIT_SECTIONS, mmrc As MM_RECORD_TYPE) As Boolean
   Dim sHMITSectionString As String
-  Dim value As Variant, MadeGood As Variant, benefit As Variant, Description As Variant, IRDesc As Variant
-  On Error GoTo err_Err
+  Dim value As Variant, MadeGood As Variant, Benefit As Variant, Description As Variant, IRDesc As Variant
+  On Error GoTo err_err
   
   Call xSet("SectionAType")
   
@@ -1111,19 +1111,19 @@ Private Function SectionAType(sbenline As String, ey As Employer, ee As Employee
   
   sbenline = ""
     
-  If Validations.SumBenefit(Description, value, MadeGood, benefit, ey, ee, ee.benefits, BenArr(), IRDesc) Then
-    sbenline = StandardOutLine(Description, value, MadeGood, benefit, ee, BenArr(1), HS, MM_SO_IR_DESC_TYPE_BENEFIT_AND_VALUE, True, IRDesc) & vbCrLf
-    sbenline = sbenline & StandardOutLine("", "", "", benefit, ee, BenArr(1), HS, MM_SO_SUMMARY_TYPE, , , mmrc) & vbCrLf
+  If Validations.SumBenefit(Description, value, MadeGood, Benefit, ey, ee, ee.benefits, BenArr(), IRDesc) Then
+    sbenline = StandardOutLine(Description, value, MadeGood, Benefit, ee, BenArr(1), HS, MM_SO_IR_DESC_TYPE_BENEFIT_AND_VALUE, True, IRDesc) & vbCrLf
+    sbenline = sbenline & StandardOutLine("", "", "", Benefit, ee, BenArr(1), HS, MM_SO_SUMMARY_TYPE, , , mmrc) & vbCrLf
     SectionAType = True
   End If
   
     
-err_End:
+err_end:
   Call xReturn("SectionAType")
   Exit Function
-err_Err:
+err_err:
   Call Err.Raise(Err.Number, "SectionAType", "Error generating section A type line")
-  Resume err_End
+  Resume err_end
   Resume
 End Function
 
@@ -1132,9 +1132,9 @@ Private Function SectionB2(sbenline As String, ey As Employer, ee As Employee) A
   Dim HS As HMIT_SECTIONS
   Dim BenArr() As BEN_CLASS
   Dim staxnotional As String
-  Dim Description As Variant, MadeGood As Variant, benefit As Variant, value As Variant, IRDesc As Variant
+  Dim Description As Variant, MadeGood As Variant, Benefit As Variant, value As Variant, IRDesc As Variant
   Dim bTaxOnNotional As Boolean
-  On Error GoTo err_Err
+  On Error GoTo err_err
   
   Call xSet("SectionB")
   
@@ -1145,39 +1145,39 @@ Private Function SectionB2(sbenline As String, ey As Employer, ee As Employee) A
   ReDim BenArr(1 To 1)
   BenArr(1) = BC_TAX_NOTIONAL_PAYMENTS_B
   
-  If (Validations.SumBenefit("", "", "", benefit, ey, ee, ee.benefits, BenArr())) Then
+  If (Validations.SumBenefit("", "", "", Benefit, ey, ee, ee.benefits, BenArr())) Then
     bTaxOnNotional = True
     SectionB2 = True
   End If
   
-  staxnotional = PadFieldHelper(BenArr(1), ITEM_BENEFIT, benefit)
+  staxnotional = PadFieldHelper(BenArr(1), ITEM_BENEFIT, Benefit)
   
   BenArr(1) = BC_PAYMENTS_ON_BEFALF_B
   
-  If Validations.SumBenefit(Description, value, MadeGood, benefit, ey, ee, ee.benefits, BenArr(), IRDesc) Then
-    sbenline = StandardOutLine(Description, value, MadeGood, benefit, ee, BenArr(1), HS, MM_SO_IR_DESC_TYPE_BENEFIT, True, IRDesc) & vbCrLf
+  If Validations.SumBenefit(Description, value, MadeGood, Benefit, ey, ee, ee.benefits, BenArr(), IRDesc) Then
+    sbenline = StandardOutLine(Description, value, MadeGood, Benefit, ee, BenArr(1), HS, MM_SO_IR_DESC_TYPE_BENEFIT, True, IRDesc) & vbCrLf
     SectionB2 = True
   End If
   
   If SectionB2 Then
-    sbenline = sbenline & StandardOutLine("", "", "", benefit, ee, BenArr(1), HS, MM_SO_SUMMARY_TYPE, , , MM_REC_BENEFIT_SECTION_B) & staxnotional & vbCrLf
+    sbenline = sbenline & StandardOutLine("", "", "", Benefit, ee, BenArr(1), HS, MM_SO_SUMMARY_TYPE, , , MM_REC_BENEFIT_SECTION_B) & staxnotional & vbCrLf
   End If
   
 
   
-err_End:
+err_end:
   Call xReturn("SectionB")
   Exit Function
-err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionB", FilterMessageTitle(ey, ee, sHMITSectionString), "Error getting the section B line.")
-  Resume err_End
+  Resume err_end
   Resume
 End Function
 Private Function SectionA(sbenline As String, ey As Employer, ee As Employee) As Boolean
   Dim sHMITSectionString As String
   Dim HS As HMIT_SECTIONS
   Dim BenArr() As BEN_CLASS
-  On Error GoTo err_Err
+  On Error GoTo err_err
   
   Call xSet("SectionA")
   
@@ -1189,12 +1189,12 @@ Private Function SectionA(sbenline As String, ey As Employer, ee As Employee) As
   sbenline = ""
   SectionA = SectionAType(sbenline, ey, ee, BenArr(), HS, MM_REC_BENEFIT_SECTION_A)
   
-err_End:
+err_end:
   Call xReturn("SectionA")
   Exit Function
-err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionA", FilterMessageTitle(ey, ee, sHMITSectionString), "Error getting the section A line.")
-  Resume err_End
+  Resume err_end
   Resume
 End Function
 
@@ -1254,7 +1254,7 @@ Private Function SectionEandU(sbenline As String, ey As IBenefitClass, ee As Emp
   
   sbenline = ""
     
-  For i = 1 To ee.benefits.Count
+  For i = 1 To ee.benefits.count
     Set ben = ee.benefits(i)
     If Not ben Is Nothing Then
       If ben.BenefitClass = BC_EMPLOYEE_CAR_E Then
@@ -1321,7 +1321,7 @@ Private Function SectionH(sbenline As String, ey As Employer, ee As Employee) As
   If loans Is Nothing Then GoTo SectionH_END
   bc = BC_LOAN_OTHER_H
   
-  For i = 1 To loans.loans.Count
+  For i = 1 To loans.loans.count
     Set ben = loans.loans(i)
     If Not ben Is Nothing Then
       If CheckBen(ey, ee, ben) Then
@@ -1351,7 +1351,7 @@ Private Function SectionL(sbenline As String, ey As Employer, ee As Employee) As
   Dim sHMITSectionString As String
   Dim HS As HMIT_SECTIONS
   Dim BenArr() As BEN_CLASS
-  On Error GoTo err_Err
+  On Error GoTo err_err
   
   Call xSet("SectionA")
   
@@ -1363,12 +1363,12 @@ Private Function SectionL(sbenline As String, ey As Employer, ee As Employee) As
   sbenline = ""
   SectionL = SectionAType(sbenline, ey, ee, BenArr(), HS, MM_REC_BENEFIT_SECTION_L)
   
-err_End:
+err_end:
   Call xReturn("SectionL")
   Exit Function
-err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionL", FilterMessageTitle(ey, ee, sHMITSectionString), "Error getting the section L line.")
-  Resume err_End
+  Resume err_end
   Resume
 End Function
 Private Function AddCrLf(sLine As String, bAdd As Boolean) As Boolean
@@ -1393,7 +1393,7 @@ Public Sub Start()
   Call EmployersToListView
   
     F_MM.optDataFormat(DataFormat).value = True
-    F_MM.Caption = "Magnetic Media " & p11d32.AppYear & "/" & p11d32.AppYear + 1   'RH
+    F_MM.caption = "Magnetic Media " & p11d32.AppYear & "/" & p11d32.AppYear + 1   'RH
     Call p11d32.Help.ShowForm(F_MM, vbModal)
 
 Start_END:
@@ -1405,7 +1405,7 @@ Start_ERR:
   Call ErrorMessage(ERR_ERROR, Err, "Start", "Start", "Error starting Magnetic Media.")
   Resume Start_END
 End Sub
-Public Function StandardOutLine(Description, value, MadeGoodNet, benefit, ee As IBenefitClass, bc As BEN_CLASS, HS As HMIT_SECTIONS, ByVal MMS0 As MM_STANDARD_OUT, Optional bRecordHeader As Boolean = True, Optional IRDesc, Optional RecordHeaderType As MM_RECORD_TYPE = MM_REC_BENEFIT) As String
+Public Function StandardOutLine(Description, value, MadeGoodNet, Benefit, ee As IBenefitClass, bc As BEN_CLASS, HS As HMIT_SECTIONS, ByVal MMS0 As MM_STANDARD_OUT, Optional bRecordHeader As Boolean = True, Optional IRDesc, Optional RecordHeaderType As MM_RECORD_TYPE = MM_REC_BENEFIT) As String
   Dim sRecordHeader As String
   Dim iBenITem As Long
   On Error GoTo StandardOutLine_ERR
@@ -1419,30 +1419,30 @@ Public Function StandardOutLine(Description, value, MadeGoodNet, benefit, ee As 
       Select Case MMS0
         Case MM_SO_VAN_TYPE, MM_SO_VAN_TYPE_WITH_DESCRIPTION
           StandardOutLine = sRecordHeader & _
-                            IIf(MMS0 = MM_SO_VAN_TYPE_WITH_DESCRIPTION, PadFieldHelper(bc, ITEM_DESC, Description), "") & PadFieldHelper(bc, ITEM_VALUE, benefit)
+                            IIf(MMS0 = MM_SO_VAN_TYPE_WITH_DESCRIPTION, PadFieldHelper(bc, ITEM_DESC, Description), "") & PadFieldHelper(bc, ITEM_VALUE, Benefit)
         Case MM_SO_ASSETSTRANSFERRED_TYPE, MM_SO_ASSETSTRANSFERRED_TYPE_WITH_DESCRIPTION
           StandardOutLine = sRecordHeader & _
-                            IIf(MMS0 = MM_SO_ASSETSTRANSFERRED_TYPE_WITH_DESCRIPTION, PadFieldHelper(bc, ITEM_DESC, Description), "") & StandardOutLine(Description, value, MadeGoodNet, benefit, ee, bc, HS, MM_SO_VALUE_MADEGOOD_BENEFIT)
+                            IIf(MMS0 = MM_SO_ASSETSTRANSFERRED_TYPE_WITH_DESCRIPTION, PadFieldHelper(bc, ITEM_DESC, Description), "") & StandardOutLine(Description, value, MadeGoodNet, Benefit, ee, bc, HS, MM_SO_VALUE_MADEGOOD_BENEFIT)
         Case MM_SO_VALUE_MADEGOOD_BENEFIT
           StandardOutLine = PadFieldHelper(bc, ITEM_VALUE, value) & _
-                            PadFieldHelper(bc, ITEM_MADEGOOD_NET, MadeGoodNet) & PadFieldHelper(bc, ITEM_BENEFIT, benefit)
+                            PadFieldHelper(bc, ITEM_MADEGOOD_NET, MadeGoodNet) & PadFieldHelper(bc, ITEM_BENEFIT, Benefit)
         Case MM_SO_RECORD_HEADER
           StandardOutLine = sRecordHeader
         Case MM_SO_ASSETSTRANSFERRED_TYPE_WITH_DESCRIPTION_NO_RECORD_HEADER
-          StandardOutLine = PadFieldHelper(bc, ITEM_DESC, Description) & StandardOutLine(Description, value, MadeGoodNet, benefit, ee, bc, HS, MM_SO_VALUE_MADEGOOD_BENEFIT)
+          StandardOutLine = PadFieldHelper(bc, ITEM_DESC, Description) & StandardOutLine(Description, value, MadeGoodNet, Benefit, ee, bc, HS, MM_SO_VALUE_MADEGOOD_BENEFIT)
         Case MM_SO_NONE
           StandardOutLine = PadFieldHelper(bc, ITEM_VALUE, "") & _
                             PadFieldHelper(bc, ITEM_MADEGOOD_NET, "") & PadFieldHelper(bc, ITEM_BENEFIT, "")
         Case MM_SO_SECTION_B 'CAD CHECK, this can be removed
-          StandardOutLine = sRecordHeader & PadFieldHelper(bc, ITEM_DESC, IRDesc) & PadFieldHelper(bc, ITEM_DESC, Description) & PadFieldHelper(bc, ITEM_BENEFIT, benefit)
+          StandardOutLine = sRecordHeader & PadFieldHelper(bc, ITEM_DESC, IRDesc) & PadFieldHelper(bc, ITEM_DESC, Description) & PadFieldHelper(bc, ITEM_BENEFIT, Benefit)
         Case MM_SO_IR_DESC_TYPE_BENEFIT_AND_VALUE
           iBenITem = IRDescriptionBenItem(bc)
-          StandardOutLine = sRecordHeader & PadFieldHelper(bc, iBenITem, IRDesc) & PadFieldHelper(bc, ITEM_DESC, Description) & PadFieldHelper(bc, ITEM_BENEFIT, value) & PadFieldHelper(bc, ITEM_BENEFIT, MadeGoodNet) & PadFieldHelper(bc, ITEM_BENEFIT, benefit)
+          StandardOutLine = sRecordHeader & PadFieldHelper(bc, iBenITem, IRDesc) & PadFieldHelper(bc, ITEM_DESC, Description) & PadFieldHelper(bc, ITEM_BENEFIT, value) & PadFieldHelper(bc, ITEM_BENEFIT, MadeGoodNet) & PadFieldHelper(bc, ITEM_BENEFIT, Benefit)
         Case MM_SO_IR_DESC_TYPE_BENEFIT
           iBenITem = IRDescriptionBenItem(bc)
-          StandardOutLine = sRecordHeader & PadFieldHelper(bc, iBenITem, IRDesc) & PadFieldHelper(bc, ITEM_DESC, Description) & PadFieldHelper(bc, ITEM_BENEFIT, benefit)
+          StandardOutLine = sRecordHeader & PadFieldHelper(bc, iBenITem, IRDesc) & PadFieldHelper(bc, ITEM_DESC, Description) & PadFieldHelper(bc, ITEM_BENEFIT, Benefit)
          Case MM_SO_SUMMARY_TYPE
-          StandardOutLine = sRecordHeader & PadFieldHelper(bc, ITEM_BENEFIT, benefit)
+          StandardOutLine = sRecordHeader & PadFieldHelper(bc, ITEM_BENEFIT, Benefit)
         Case Else
           Call ECASE("Invalid MM Standard Out type.")
       End Select
@@ -1461,7 +1461,7 @@ StandardOutLine_ERR:
   Resume StandardOutLine_END
   Resume
 End Function
-Private Function PadFieldHelper(bc As BEN_CLASS, Item As Long, Data As Variant, Optional mmdc As MMDATE_COMPARE = MMDC_NO_COMPARE, Optional MM_FT_OVERIDE As DATABASE_FIELD_TYPES = TYPE_BLOB) As String
+Private Function PadFieldHelper(bc As BEN_CLASS, Item As Long, data As Variant, Optional mmdc As MMDATE_COMPARE = MMDC_NO_COMPARE, Optional MM_FT_OVERIDE As DATABASE_FIELD_TYPES = TYPE_BLOB) As String
   Dim MM_FT As DATABASE_FIELD_TYPES
   
   
@@ -1472,7 +1472,7 @@ Private Function PadFieldHelper(bc As BEN_CLASS, Item As Long, Data As Variant, 
   
   End If
   
-  PadFieldHelper = PadField(Data, p11d32.BenDataLinkMMFieldSize(bc, Item), MM_FT, mmdc)
+  PadFieldHelper = PadField(data, p11d32.BenDataLinkMMFieldSize(bc, Item), MM_FT, mmdc)
 End Function
 Public Function PadField(ByVal FieldData As Variant, ByVal FieldLen As Long, ByVal MM_FT As DATABASE_FIELD_TYPES, Optional MMDATE_COMPARE = MMDC_NO_COMPARE) As String
   Dim s As String
@@ -1671,7 +1671,7 @@ Dim i As Long, j As Long
 
   Call xSet("bMultipleRecs")
 
-  For i = 1 To ee.benefits.Count
+  For i = 1 To ee.benefits.count
     Set ben = ee.benefits(i)
     If Not (ben Is Nothing) Then
       If ben.BenefitClass = bc Then

@@ -3678,12 +3678,10 @@ On Error GoTo err_err
   Call WKOut(rep, WK_SECTION_BREAK)
   
   
-'section p11db
-  Call P11Db_ReconciliationSubHeading(rep, S_P11D_B)
   
 'A
   Call WKTblColFormats("nib", "nib", "nirb", "nirb")
-  Call WKTableHeadings(rep, S_P11D_B & "~box", "Caption", "£", "£")
+  Call WKTableHeadings(rep, S_P11D_B & "~box", "", "£", "£")
   Call WKTblColFormats("n", "n", "rn", "rn")
   Call WKTableRow(rep, "A", UpperCaseFirstLetter(S_P11DB_SHORT_CAPTION_BOX_A), "", FormatWNNoCurrency(benEY.value(employer_TotalBenefitsPotentiallySubjectToClass1A)))
   Call WKTableBlankRow(rep)
@@ -3711,12 +3709,14 @@ On Error GoTo err_err
   
   Call P11Db_ReconciliationAdjustments(ey, rep, ey.P11DbDeductions, True)
   Call WKTableRow(rep, "", "", "", FormatWNNoCurrency(-1 * benEY.value(employer_NIC_AdjustmentDeductTotal)))
+  
+  Call WKOut(rep, WK_ITEM_Total, "Sub total", benEY.value(employer_NIC_BenefitsAndAdjustmentsSubTotal), , True)
+  
+  
 'D
   Call WKTableBlankRow(rep)
   
-  Call WKTableRow(rep, "D", S_P11DB_TOTAL_BOX_D & " (minimum 0)", "", "")
-  Call WKOut(rep, WK_ITEM_Total, "", benEY.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A), , False)
-  'FormatWNNoCurrency(benEY.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A)
+  Call WKTableRow(rep, "D", S_P11DB_TOTAL_BOX_D & " (minimum 0)", "", FormatWNNoCurrency(benEY.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A)))
   
   Call WKTableBlankRow(rep)
 'E
@@ -3744,10 +3744,6 @@ Private Sub P11Db_ReconciliationAdjustments(ey As Employer, rep As Reporter, Adj
   If ey.P11DbAdjustmentsSum(Adjustments) = 0 Then
     Exit Sub
   End If
-  
-  'Call WKTableBlankRow(rep)
-'  Call WKTableRow(rep, "", Title, "", "")
-'  Call WKTableBlankRow(rep)
   
   For i = 1 To Adjustments.Count
     Set adjustment = Adjustments(i)

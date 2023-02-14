@@ -203,6 +203,7 @@ Private benefit As IBenefitClass
 Private Sub fbWorkingDirectory_Ended()
   Call p11d32.WorkingDirectoryChange(fbWorkingDirectory.Directory)
   Call p11d32.LoadEmployers
+  
 End Sub
 
 Private Sub IBenefitForm2_AddBenefit()
@@ -357,7 +358,7 @@ BenefitToScreen_Err:
 End Function
 
 Private Property Get IBenefitForm2_lv() As MSComctlLib.IListView
-  Set IBenefitForm2_lv = lb
+  Set IBenefitForm2_lv = LB
 End Property
 
 Private Function IBenefitForm2_RemoveBenefit(ByVal BenefitIndex As Long) As Boolean
@@ -439,17 +440,17 @@ Private Sub L_Title_Click()
 End Sub
 
 Private Sub lb_ColumnClick(ByVal ColumnHeader As MSComctlLib.ColumnHeader)
-  Call SetSortOrder(lb, ColumnHeader)
+  Call SetSortOrder(LB, ColumnHeader)
 End Sub
 Private Sub lb_DblClick()
-  If Not lb.SelectedItem Is Nothing Then Call ToolBarButton(TBR_EMPLOYEESCREEN, lb.SelectedItem.Tag)
+  If Not LB.SelectedItem Is Nothing Then Call ToolBarButton(TBR_EMPLOYEESCREEN, LB.SelectedItem.Tag)
     
 End Sub
 Private Sub lb_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
   Dim li As ListItem
   
   If Button And vbRightButton Then
-    Set li = lb.HitTest(X, Y)
+    Set li = LB.HitTest(X, Y)
     If Not li Is Nothing Then
       Call p11d32.EditEmployer(li.Tag)
     End If
@@ -465,10 +466,10 @@ Private Sub lb_KeyPress(KeyAscii As Integer)
     Call lb_DblClick
   End If
 End Sub
-Public Property Get workingDirectory() As String
-  workingDirectory = fbWorkingDirectory.Directory
+Public Property Get WorkingDirectory() As String
+  WorkingDirectory = fbWorkingDirectory.Directory
 End Property
-Public Property Let workingDirectory(ByVal value As String)
+Public Property Let WorkingDirectory(ByVal value As String)
   fbWorkingDirectory.Directory = value
 End Property
 

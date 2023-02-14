@@ -30,7 +30,7 @@ Attribute VB_Exposed = False
 'new sdsteam@ hmrc.gsi.gov.uk
 
 Option Explicit
-Implements IErrorFilter
+Implements IPAYEOnlineOnError
 Implements IBaseNotify
 
 Public SubReturn As Long
@@ -166,63 +166,46 @@ Private Sub IBaseNotify_Notify(ByVal Current As Long, ByVal Max As Long, ByVal M
 
   
 End Sub
-
-Private Function IErrorFilter_FilterErrorMessage(ByVal Username As String, ByVal DateTime As Date, ByVal ErrorNumber As Long, ByVal ErrorName As String, ByVal ErrorText As String, ByVal SourceFunction As String) As Boolean
-  Dim s() As String
-  Dim lEqualsPos As Long
+Private Sub IPAYEOnlineOnError_OnError(ByVal count As Long, Error As PAYEOnlineError)
   
-  On Error GoTo FilterError_err
-   
   m_rsError.AddNew
   
-  If ErrorNumber = 0 Then
+  If Error.Number = 0 Then
     ECASE ("Error number in PAYE Online error filter is 0")
   End If
   
-  ErrorCount = ErrorCount + 1
-   
+  ErrorCount = count
+  
   m_rsError.Sort = "errorNumber"
-  
-  m_rsError.Fields("Error Number") = ErrorNumber
-  
-  m_rsError.Fields("Description") = ErrorText
-  
-  Call GetDelimitedValues(s, ErrorName)
-  m_rsError.Fields("Employer") = s(1)
-  m_rsError.Fields("Employee") = s(2)
-  m_rsError.Fields("HMIT Section") = s(3)
-  m_rsError.Fields("Benefit") = s(4)
-  m_rsError.Fields("Benefit type") = s(5)
-    
+  m_rsError.Fields("Error Number") = Error.Number
+  m_rsError.Fields("Description") = Error.Description
+  m_rsError.Fields("Employer") = Error.Employer
+  m_rsError.Fields("Employee") = Error.Employee
+  m_rsError.Fields("HMIT Section") = Error.HMITSection
+  m_rsError.Fields("Benefit") = Error.Benefit
+  m_rsError.Fields("Benefit type") = Error.BenefitType
   m_rsError.Update
-  
-FilterError_end:
-  Exit Function
-FilterError_err:
-  Resume Next
-End Function
 
-Private Function EmployersSelected(Employers As ObjectList) As Long
+End Sub
+Private Function EmployersSelected(employers As ObjectList) As Long
 '  'Returns list of Employers where PAYEOnline is selected
   Dim i As Long
   Dim benEmployer As IBenefitClass
   Dim ey As Employer
   
-  Set Employers = New ObjectList
-  For i = 1 To p11d32.Employers.Count
-    Set ey = p11d32.Employers(i)
+  Set employers = New ObjectList
+  For i = 1 To p11d32.employers.count
+    Set ey = p11d32.employers(i)
     Set benEmployer = ey
     If Not benEmployer Is Nothing Then
       If benEmployer.value(employer_PAYEOnlineSelected) Then
-        Call Employers.Add(ey)
+        Call employers.Add(ey)
       End If
     End If
   Next
     
-  EmployersSelected = Employers.Count
+  EmployersSelected = employers.count
 End Function
-
-
 Public Sub Errors(ByVal Dest As REPORT_TARGET, lPAYEOnlineErrorType As VIEW_ERRORS_TYPE, Optional SubIDs As String)
   
   On Error GoTo Errors_ERR
@@ -243,11 +226,8 @@ Errors_END:
   Exit Sub
 Errors_ERR:
   If Not m_db Is Nothing Then
-'MP Rv - changed mm ref to PAYE ref
-'MP    Call ErrorMessage(ERR_ERROR, Err, "Errors", "Errors", "Error viewing/printing the magnetic media errors from " & m_db.Name & ".")
     Call ErrorMessage(ERR_ERROR, Err, "Errors", "Errors", "Error viewing/printing the PAYE submission errors from " & m_db.Name & ".")
   Else
-'MP    Call ErrorMessage(ERR_ERROR, Err, "Errors", "Errors", "Error viewing/printing the magnetic media errors from ")
     Call ErrorMessage(ERR_ERROR, Err, "Errors", "Errors", "Error viewing/printing the PAYE submission errors. ")
   End If
   Resume Errors_END
@@ -301,8 +281,8 @@ Public Sub EmployersToListView()
   
   Call xSet("EmployersToListView")
 
-  For i = 1 To p11d32.Employers.Count
-    Set ben = p11d32.Employers(i)
+  For i = 1 To p11d32.employers.count
+    Set ben = p11d32.employers(i)
     If Not ben Is Nothing Then
       Set li = F_PayeOnline.lvPAYEEmployers.listitems.Add()
       Call UpdateListViewItem(li, ben, i)
@@ -392,80 +372,189 @@ Private Function CreateP46Node(XML_doc As DOMDocument60, XMLHeaderNode As IXMLDO
   XMLHeaderNode.appendChild n
   Set CreateP46Node = n
 End Function
+Public Function SubmissionErrors(ey As Employer, progressBar As TCSProgressBar) As ObjectList
+  Dim employers As ObjectList
+  Dim ef As EFiler
+  Dim payeOnlineErrorFilter As PAYEOnlineSubmissionErrors
+  Dim errorf As payeOnlineErrorFilter
+  
+  On Error GoTo err_err
+  
+  Set m_Prg = progressBar
+  
+  Set ef = NewEfiler
+  Set employers = New ObjectList
+  
+  Call employers.Add(ey)
+  
+  Set errorf = New payeOnlineErrorFilter
+  Set payeOnlineErrorFilter = New PAYEOnlineSubmissionErrors
+  Set errorf.Filter = payeOnlineErrorFilter
+  Set ErrorFilter = errorf
+  Call ValidateEmployers(ef, employers, True)
+  
+  
+  Set SubmissionErrors = payeOnlineErrorFilter.Errors
+  
+err_end:
+  Set m_Prg = Nothing
+  Set ErrorFilter = Nothing
+  Exit Function
+err_err:
+  Set m_Prg = Nothing
+  Set ErrorFilter = Nothing
+  Call Err.Raise(Err.Number, ErrorSource(Err, "SubmissionErrors"), Err.Description)
+  
+  
+  
+  
+End Function
+
 Public Sub CreatePAYEFiles(ByVal prgEmployee As TCSProgressBar, ByVal lblFile As Label)
   Dim ey As Employer, ee As Employee
   Dim ben As IBenefitClass
   Dim ben_ee As IBenefitClass
   Dim ben_car As IBenefitClass
-  Dim Employers As ObjectList
+  Dim employers As ObjectList
   Dim i As Long, j As Long, k As Long
   Dim lEmployeesWritten As Long
   Dim sBenefits As String, sEmployeeRec As String
-  Dim XMLBenefitNode As IXMLDOMNode, XMLHeaderNode As IXMLDOMNode, xmlNode As IXMLDOMNode, XML_doc As DOMDocument60
-  Dim XML_employeeheader As IXMLDOMNode
   Dim root As String
   Dim iReportedCarCount As Long
-  Dim node_p11d_record_count As IXMLDOMNode, node_p46_record_count As IXMLDOMNode, node_declarations As IXMLDOMNode
   Dim sLastFileName As String, sSubmissionID As String
-  Dim bSubmit As Boolean, bInvalidNI As Boolean
+  Dim bSubmit As Boolean
   Dim Response_doc As String
+  Dim eFilter As payeOnlineErrorFilter
+  Dim generationResult As PAYEOnlineGenerationResult
+  
   Dim ef As EFiler
-      
+  
+  
+  
   On Error GoTo CreatePAYEFiles_ERR
   
   Call xSet("CreatePAYEFiles")
-  ' Call Initialise_XML_doc
-    
+  
+  'temp code
+  Call EmployersSelected(employers)
+  
   Set m_Prg = prgEmployee
   
-  'reinit to prevent efiler retaining properties  , really efiler should have a clear method
-  Set ef = NewEfiler()
+  ' Call Initialise_XML_doc
+    
   
+  Set m_Prg = prgEmployee
+  'reinit to prevent efiler retaining properties  , really efiler should have a clear method
   
   m_Prg.Visible = True
   m_Prg.value = m_Prg.Min
   m_Prg.Indicator = None
   m_Prg.caption = ""
       
-   m_Entity_ID = ""
-   m_Entity_Name = ""
-   root = ""
+  m_Entity_ID = ""
+  m_Entity_Name = ""
+  root = ""
    
   'Set up error logging
   ErrorCount = 0
   AtLeastOneError = False
+  Set ef = NewEfiler
+  
   Call OpenErrorLogDB
+  Call m_db.Execute(sql.Queries(DELETE_PAYEONLINE_VALIDATION_ERRORS))
+  Set m_rsError = m_db.OpenRecordset(sql.Queries(SELECT_PAYEONLINE_VALIDATION_ERRORS), dbOpenDynaset)
+  
   If ErrorLogging Then
-    Set ErrorFilter = Me
+    Set eFilter = New payeOnlineErrorFilter
+    Set eFilter.Filter = Me
+    Set ErrorFilter = eFilter
   Else
     ErrorLogging = True
   End If
   
-    Call m_db.Execute(sql.Queries(DELETE_PAYEONLINE_VALIDATION_ERRORS))
-    Set m_rsError = m_db.OpenRecordset(sql.Queries(SELECT_PAYEONLINE_VALIDATION_ERRORS), dbOpenDynaset)
+  Call EmployersSelected(employers)
+  If (employers.count > 0) Then
+    Set ey = employers(1)
+  End If
   
-  Call EmployersSelected(Employers)
-  
-  If Not ValidateEmployers(ef, Employers) Then
+  If Not ValidateEmployers(ef, employers, False) Then
     Me.ViewProceedButtonIfErrors = False
     GoTo ERR_ERRORS:
   Else
     Me.ViewProceedButtonIfErrors = True
   End If
   
+  Set generationResult = GenerateFile(employers, ef)
+  
+  If (generationResult.EmployeesWritten > 0) Or (Type_Selected = POT_P11DB_ONLY) Then
+    
+    m_Prg.caption = "Completed Paye Online " & lEmployeesWritten & " employees written."
+    m_Prg.Indicator = None
+ERR_ERRORS:
+    If (ErrorCount > 0) And (AtLeastOneError) Then
+      bSubmit = F_PayeOnlineWarning.Start(PMT_WARNINGS_AND_ERRORS)
+    ElseIf ErrorCount > 0 And (Not AtLeastOneError) Then
+      bSubmit = F_PayeOnlineWarning.Start(PMT_WARNINGS_ONLY)
+    Else
+      bSubmit = True
+    End If
+    Call ClearCursor
+  
+    If bSubmit Then
+      Set ErrorFilter = Nothing
+      
+      If MsgBox("PAYE Online document generated successfully." & vbCrLf & "Please confirm if you would like to submit to the HM Revenue & Customs." & vbCrLf & vbCrLf & "Please note this can take some time, the times below indicate the upload time to the Revenue." & vbCrLf & "Once uploaded the system will check the Revenue site for confirmation of completion." & vbCrLf & vbCrLf & UploadTime(Len(generationResult.XmlDocument.xml)) & vbCrLf & vbCrLf & "Please do not interfere.", vbYesNo) = vbYes Then
+        Call SetCursor
+        sSubmissionID = Submit_EfilerCom(ef, generationResult.XmlDocument, Response_doc)
+        sLastFileName = SubmissionTypeToString & "_" & CStr(ey.EmployerRefNo) & CStr(Format$(Now(), "ddmmhh_mmss") & ".xml")
+        LastPathAndFileCreated = OutputDirectory & sLastFileName
+        Call Save_Files(sSubmissionID, LastPathAndFileCreated, Response_doc)
+        If Len(sSubmissionID) > 0 Then
+          Call Update_SubIDs(employers, sSubmissionID)
+        End If
+      End If
+    End If
+  Else
+    Call MsgBox("Submission is not required as there is no data to transfer to HMRC", vbInformation)
+    Call Err.Raise(ERR_PAYE_ONLINE_CANCEL, "CreatePAYEFiles", "Nothing to submit")
+  End If
+  
+CreatePAYEFiles_END:
+  Call ClearCursor
+  
+  Set m_Prg = Nothing
+  Call ClearCursor
+  Set ErrorFilter = Nothing
+  Call CloseErrorLogDB
+  Call xReturn("CreatePAYEFiles")
+  Exit Sub
+CreatePAYEFiles_ERR:
+  Call ErrorMessage(ERR_ERROR, Err, "CreatePAYEFiles", "Creating submission", "Unable to create Paye Online files.")
+  Resume CreatePAYEFiles_END
+  Resume
+End Sub
+Private Function GenerateFile(employers As ObjectList, ef As EFiler) As PAYEOnlineGenerationResult
+  Dim i As Long, j As Long, k As Long, lEmployeesWritten As Long, iReportedCarCount As Long
+  Dim ey As Employer, ee As Employee
+  Dim ben As IBenefitClass, ben_car As IBenefitClass, ben_ee As IBenefitClass
+  Dim XMLBenefitNode As IXMLDOMNode, XMLHeaderNode As IXMLDOMNode, xmlNode As IXMLDOMNode, XML_doc As DOMDocument60
+  Dim XML_employeeheader As IXMLDOMNode
+  Dim node_p11d_record_count As IXMLDOMNode, node_p46_record_count As IXMLDOMNode, node_declarations As IXMLDOMNode
+  Dim ret As PAYEOnlineGenerationResult
+  
+On Error GoTo err_err
+  
+  Set ret = New PAYEOnlineGenerationResult
+  
   Set XML_doc = New DOMDocument60
-  'Call XML_doc.appendChild(XML_doc.createProcessingInstruction("xml", " version=""1.0"" encoding=""UTF-8"""))
+  Set ret.XmlDocument = XML_doc
+  
   Set XMLHeaderNode = XML_doc.createElement("ExpensesAndBenefits")
   
-  
-  
-
-  'XML_doc.do
-  For i = 1 To Employers.Count
-    
-    Set ey = Employers(i)
+  For i = 1 To employers.count
+    Set ey = employers(i)
     If i = 1 Then
-      Call CreatePAYEEmployerHead(node_p11d_record_count, node_p46_record_count, node_declarations, XML_doc, XMLHeaderNode, Employers)
+      Call CreatePAYEEmployerHead(node_p11d_record_count, node_p46_record_count, node_declarations, XML_doc, XMLHeaderNode, employers)
       XML_doc.appendChild XMLHeaderNode
     End If
     
@@ -479,14 +568,14 @@ Public Sub CreatePAYEFiles(ByVal prgEmployee As TCSProgressBar, ByVal lblFile As
     End If
     
     If (ben.value(employer_EmployeesCount) = 0) Then GoTo NEXT_EMPLOYER
-      
       ' Public Variables to hold counters for XMLDocument
-      m_Prg.Max = ey.employees.Count
+      m_Prg.Max = ey.employees.count
       m_Prg.value = 0
       m_Prg.Indicator = ValueOfMax
       
-      For j = 1 To ey.employees.Count
+      For j = 1 To ey.employees.count
         Set ee = ey.employees(j)
+        If ee Is Nothing Then GoTo NEXT_EMPLOYEE
         Set ben_ee = ee
         Call m_Prg.StepCaption("Analysing employee: " & ee.FullName)
         If ee Is Nothing Then GoTo NEXT_EMPLOYEE
@@ -496,7 +585,7 @@ Public Sub CreatePAYEFiles(ByVal prgEmployee As TCSProgressBar, ByVal lblFile As
               'adding car details
               Set ben_ee = ee
               lEmployeesWritten = lEmployeesWritten + 1
-              For k = 1 To P46Cars.Count
+              For k = 1 To P46Cars.count
                   
                 'Each P46 Car is an individual node
                 Set ben_car = P46Cars(k)
@@ -562,54 +651,18 @@ NEXT_EMPLOYER:
        node_p46_record_count.Text = iReportedCarCount
     End If
 
+    ret.EmployeesWritten = lEmployeesWritten
     
-    If (lEmployeesWritten > 0) Or (Type_Selected = POT_P11DB_ONLY) Then
-      
-      m_Prg.caption = "Completed Paye Online " & lEmployeesWritten & " employees written."
-      m_Prg.Indicator = None
-ERR_ERRORS:
-      If (ErrorCount > 0) And (AtLeastOneError) Then
-        bSubmit = F_PayeOnlineWarning.Start(PMT_WARNINGS_AND_ERRORS)
-      ElseIf ErrorCount > 0 And (Not AtLeastOneError) Then
-        bSubmit = F_PayeOnlineWarning.Start(PMT_WARNINGS_ONLY)
-      Else
-        bSubmit = True
-      End If
-      Call ClearCursor
-    
-      If bSubmit Then
-        Set ErrorFilter = Nothing
-        
-        If MsgBox("PAYE Online document generated successfully." & vbCrLf & "Please confirm if you would like to submit to the HM Revenue & Customs." & vbCrLf & vbCrLf & "Please note this can take some time, the times below indicate the upload time to the Revenue." & vbCrLf & "Once uploaded the system will check the Revenue site for confirmation of completion." & vbCrLf & vbCrLf & UploadTime(Len(XML_doc.xml)) & vbCrLf & vbCrLf & "Please do not interfere.", vbYesNo) = vbYes Then
-          Call SetCursor
-          sSubmissionID = Submit_EfilerCom(ef, XML_doc, Response_doc)
-          sLastFileName = SubmissionTypeToString & "_" & CStr(ey.EmployerRefNo) & CStr(Format$(Now(), "ddmmhh_mmss") & ".xml")
-          LastPathAndFileCreated = OutputDirectory & sLastFileName
-          Call Save_Files(sSubmissionID, LastPathAndFileCreated, Response_doc)
-          If Len(sSubmissionID) > 0 Then
-            Call Update_SubIDs(Employers, sSubmissionID)
-          End If
-        End If
-      End If
-    Else
-      Call MsgBox("Submission is not required as there is no data to transfer to HMRC", vbInformation)
-      Call Err.Raise(ERR_PAYE_ONLINE_CANCEL, "CreatePAYEFiles", "Nothing to submit")
-    End If
-  
-CreatePAYEFiles_END:
-  Call ClearCursor
-  
-  Set m_Prg = Nothing
-  Call ClearCursor
+err_end:
+  Set GenerateFile = ret
   Set ErrorFilter = Nothing
-  Call CloseErrorLogDB
-  Call xReturn("CreatePAYEFiles")
-  Exit Sub
-CreatePAYEFiles_ERR:
-  Call ErrorMessage(ERR_ERROR, Err, "CreatePAYEFiles", "Creating submission", "Unable to create Paye Online files.")
-  Resume CreatePAYEFiles_END
+  Exit Function
+err_err:
+  Set ErrorFilter = Nothing
+  Call Err.Raise(Err.Number, "GenerateFile", Err.Description)
+  
   Resume
-End Sub
+End Function
 
 Public Function NewEfiler() As EFiler
   Dim ef As EFiler
@@ -741,7 +794,7 @@ Submit_EfilerCom_ERR:
   Resume Submit_EfilerCom_END
   Resume
 End Function
-Public Sub Update_SubIDs(Employers As ObjectList, ByVal sSubmissionID As String)
+Public Sub Update_SubIDs(employers As ObjectList, ByVal sSubmissionID As String)
   Dim i As Integer
   Dim ey As Employer
   Dim ben As IBenefitClass
@@ -750,8 +803,8 @@ Public Sub Update_SubIDs(Employers As ObjectList, ByVal sSubmissionID As String)
   On Error GoTo Update_SubIDs_ERR
   Call xSet("Update_SubIDs")
     
-    For i = 1 To Employers.Count
-        Set ey = Employers(i)
+    For i = 1 To employers.count
+        Set ey = employers(i)
         ey.OpenEmployer (False)
         Set ben = ey
         
@@ -862,7 +915,7 @@ Private Function EmployeeHasp46Cars(ByVal ee As Employee)
   
   Call ee.LoadBenefits(TBL_COMPANY_CARS, False, False)
   Call ee.GetP46Cars(ol, p11d32.PAYEonline.P46DateFrom, p11d32.PAYEonline.P46DateTo, True)
-  If ol.Count Then
+  If ol.count Then
     EmployeeHasp46Cars = True
   End If
 
@@ -877,7 +930,7 @@ Private Function RefreshEmployerHasP46Cars(ey As Employer) As String
   Set benEmployer = ey
   If Not benEmployer Is Nothing Then
     benEmployer.value(employer_hasP46Cars) = False
-    For i = 1 To ey.employees.Count
+    For i = 1 To ey.employees.count
       Set ee = ey.employees(i)
       If EmployeeHasp46Cars(ee) Then
         benEmployer.value(employer_hasP46Cars) = True
@@ -1165,7 +1218,7 @@ Private Function ProceedWithEmployee(ee As Employee, Optional ol As ObjectList) 
     
   ProceedWithEmployee = True
   
-  If ee.benefits.Count = 0 Then
+  If ee.benefits.count = 0 Then
     ProceedWithEmployee = False
   ElseIf p11d32.PAYEonline.Type_Selected = POT_P11D Or p11d32.PAYEonline.Type_Selected = POT_P11DB_ONLY Then
     Set benEE = ee
@@ -1217,10 +1270,10 @@ Private Function ValidateEmployees(ey As Employer, lEmployeesWithInvalidNI As Lo
   ReDim BenArr(1 To 1)
   iAnyCars = 0
   m_Prg.Min = 0
-  m_Prg.Max = ey.employees.Count
+  m_Prg.Max = ey.employees.count
   m_Prg.Indicator = ValueOfMax
   ValidateEmployees = True
-  For i = 1 To ey.employees.Count
+  For i = 1 To ey.employees.count
     Set ee = ey.employees(i)
     Set benEmployee = ee
     iNoOfCars = 0
@@ -1249,11 +1302,7 @@ Private Function ValidateEmployees(ey As Employer, lEmployeesWithInvalidNI As Lo
       If (Not NIValid(ee)) Then
         lEmployeesWithInvalidNI = lEmployeesWithInvalidNI + 1
         If StrComp(benEmployee.value(ee_Gender_db), S_GENDER_NA, vbTextCompare) = 0 Then
-          If p11d32.PAYEonline.Type_Selected = POT_P46 Then
-            Call Err.Raise(ERR_NI_INVALID_BUT_ADDED, "ValidateEmployees", "NI '" & benEmployee.value(ee_NINumber_db) & "' invalid, and gender has not been supplied.")
-          Else
-            Call Err.Raise(ERR_NI_INVALID_BUT_ADDED, "ValidateEmployees", "NI '" & benEmployee.value(ee_NINumber_db) & "' invalid, and gender has not been supplied.")
-          End If
+          Call Err.Raise(ERR_NI_INVALID_BUT_ADDED, "ValidateEmployees", "NI '" & benEmployee.value(ee_NINumber_db) & "' is invalid for online filing and gender has not been supplied.")
           AtLeastOneError = True
         End If
       End If
@@ -1285,7 +1334,7 @@ Private Function ValidateEmployees(ey As Employer, lEmployeesWithInvalidNI As Lo
     Select Case p11d32.PAYEonline.Type_Selected
       Case POT_P11D, POT_P11DB_ONLY
       'p11d specific checks here
-        For j = 1 To ee.benefits.Count
+        For j = 1 To ee.benefits.count
           Set ben = ee.benefits(j)
           If Not ben Is Nothing Then
             If ben.BenefitClass <> BC_NONSHAREDVANS_G And ben.BenefitClass <> BC_LOANS_H Then
@@ -1318,7 +1367,7 @@ Private Function ValidateEmployees(ey As Employer, lEmployeesWithInvalidNI As Lo
             
       Case POT_P46
         'validate cars data
-        For j = 1 To ol.Count
+        For j = 1 To ol.count
           Set mycar = ol.Item(j)
           
           Call ValidateP46Car(mycar)
@@ -1374,7 +1423,7 @@ Private Property Get SubmissionTypeToString()
 End Property
 
 
-Private Function ValidateEmployers(ef As EFiler, Employers As ObjectList) As Boolean
+Private Function ValidateEmployers(ef As EFiler, employers As ObjectList, validateOnly As Boolean) As Boolean
   'Applies PAYEOnline validation checks to current batch of employers
   On Error GoTo ValidateEmployers_err
   
@@ -1391,7 +1440,6 @@ Private Function ValidateEmployers(ef As EFiler, Employers As ObjectList) As Boo
   Dim employer_paye_online_submitted_field As Long
   Dim employer_paye_online_submitted_date_field As Long
   Dim sEmailAddress As String
-  
   
   Call xSet("ValidateEmployers")
   
@@ -1415,24 +1463,27 @@ Private Function ValidateEmployers(ef As EFiler, Employers As ObjectList) As Boo
   End If
 
   ValidateEmployers = True
-  For i = 1 To Employers.Count
+  For i = 1 To employers.count
     
     'Load employer
-    Set ey = Employers(i)
+    Set ey = employers(i)
     Call p11d32.LoadEmployer(ey, False)
     
-    If Not ey.DataChecker(-2, Nothing) Then Call Err.Raise(ERR_PAYE_ONLINE_CANCEL, "Validate Employers", "Submission cancelled")
-     
+    
+    If (Not validateOnly) Then
+      If Not ey.DataChecker(-2, Nothing) Then Call Err.Raise(ERR_PAYE_ONLINE_CANCEL, "Validate Employers", "Submission cancelled")
+    End If
     
     Set benEmployer = ey
     If benEmployer.value(employer_EmployeesCount) = 0 And p11d32.PAYEonline.Type_Selected <> POT_P11DB_ONLY Then GoTo NEXT_EMPLOYER
     ' Set ben2 = p11d32.Employers(i)
     
-    
     If (Len(benEmployer.value(employer_paye_online_submitted_field)) > 0) Then
       sEmployersAlreadySubmitted = sEmployersAlreadySubmitted & benEmployer.Name & ", submitted on " & DateValReadToScreen(benEmployer.value(employer_paye_online_submitted_date_field)) & vbCrLf
     End If
     
+    
+    Call benEmployer.Calculate
     'Check Employer PAYE details (required and optional fields)
     Call CheckPAYEEmployerDetails(benEmployer)
     
@@ -1542,7 +1593,7 @@ Private Function ValidateEmployers(ef As EFiler, Employers As ObjectList) As Boo
 
 NEXT_EMPLOYER:
   Next i
-  If Employers.Count > 1 Then
+  If employers.count > 1 Then
     Call Err.Raise(ERR_PAYE_DIFFERENT_EMPLOYER_FIELDS, , "For online filing only the Employer name " & sEmployerName & " will be used.")
     If iAdjustmentsCount > 1 Then
       Call Err.Raise(ERR_PAYE_DIFFERENT_EMPLOYER_FIELDS, , "For online filing only the P11D(b) additions description " & sAddDesc & " will be used.")
@@ -1550,7 +1601,7 @@ NEXT_EMPLOYER:
     End If
   End If
   
-  If (Len(sEmployersAlreadySubmitted) > 0) Then
+  If Not validateOnly And (Len(sEmployersAlreadySubmitted) > 0) Then
      sEmployersAlreadySubmitted = "The following employers have already been submitted for '" & SubmissionTypeToString & "':" & vbCrLf & vbCrLf & sEmployersAlreadySubmitted
      sEmployersAlreadySubmitted = sEmployersAlreadySubmitted & vbCrLf & vbCrLf
      sEmployersAlreadySubmitted = sEmployersAlreadySubmitted & "do you wish to continue?"
@@ -1582,27 +1633,27 @@ Private Function Analyse_Benefits(XML_doc As DOMDocument60, er As IBenefitClass,
     Dim benclass As BEN_CLASS
     Dim HMITArr() As HMIT_SECTIONS
     Dim HMITSection As HMIT_SECTIONS
-    Dim i As Integer, Count As Integer
+    Dim i As Integer, count As Integer
     Dim ben As IBenefitClass
     
     On Error GoTo Analyse_Benefits_ERR
     Call xSet("Analyse_Benefits")
     
     'Adding each benefit class to the arraay
-    Count = 0
-    For i = 1 To ee.benefits.Count
+    count = 0
+    For i = 1 To ee.benefits.count
         Set ben = ee.benefits(i)
         benclass = ben.BenefitClass
         HMITSection = p11d32.Rates.BenClassTo(benclass, BCT_HMIT_SECTION)
         'checking if this Section already exists in the array
-        If (Count = 0) Then GoTo AddHMITSection
+        If (count = 0) Then GoTo AddHMITSection
         If Not HMITSectionInArray(HMITArr, HMITSection) Then
 AddHMITSection:
-            Count = Count + 1
-            ReDim Preserve BenArr(1 To Count)
-            ReDim Preserve HMITArr(1 To Count)
-            BenArr(Count) = benclass
-            HMITArr(Count) = HMITSection
+            count = count + 1
+            ReDim Preserve BenArr(1 To count)
+            ReDim Preserve HMITArr(1 To count)
+            BenArr(count) = benclass
+            HMITArr(count) = HMITSection
         End If
     Next
     'Sorting them in ascending order as required by Gateway requirements
@@ -1658,7 +1709,7 @@ End Function
 
 Private Function SectionB(XML_doc As DOMDocument60, er As Employer, ee As Employee, benefits_node As IXMLDOMNode) As Boolean
   Dim BenArr() As BEN_CLASS
-  Dim value As Variant, MadeGood As Variant, benefit As Variant, Description As Variant, IRDesc As Variant
+  Dim value As Variant, MadeGood As Variant, Benefit As Variant, Description As Variant, IRDesc As Variant
   Dim node_payments As IXMLDOMNode, node_payment As IXMLDOMNode
   
   On Error GoTo SectionB_ERR
@@ -1670,14 +1721,14 @@ Private Function SectionB(XML_doc As DOMDocument60, er As Employer, ee As Employ
   BenArr(1) = BC_PAYMENTS_ON_BEFALF_B
   BenArr(2) = BC_TAX_NOTIONAL_PAYMENTS_B
   
-  If SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr) Then
+  If SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr) Then
     SectionB = True
     Set node_payments = PAYEAddXMLChildWithAttribute(XML_doc, benefits_node, "", "Payments", "", "Type", "B")
     
     ReDim BenArr(1 To 1)
     BenArr(1) = BC_PAYMENTS_ON_BEFALF_B
     
-    If (SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc)) Then
+    If (SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc)) Then
        Set node_payment = PAYEAddXMLChild(XML_doc, node_payments, "", "Payment", "")
        Call PAYEAddXMLChild(XML_doc, node_payment, "", "Desc", IRDesc)
        
@@ -1685,13 +1736,13 @@ Private Function SectionB(XML_doc As DOMDocument60, er As Employer, ee As Employ
          Call PAYEAddXMLChild(XML_doc, node_payment, "", "Other", Description, , , L_MAX_LONG_STANDARD_FIELD_LENGTH)
        End If
 
-       Call PAYEAddXMLChild(XML_doc, node_payment, "", S_PAYE_ONLINE_CASH_EQUIV_OR_RELEVANT_AMOUNT, GetXMLAmount(benefit))
+       Call PAYEAddXMLChild(XML_doc, node_payment, "", S_PAYE_ONLINE_CASH_EQUIV_OR_RELEVANT_AMOUNT, GetXMLAmount(Benefit))
        
     End If
     BenArr(1) = BC_TAX_NOTIONAL_PAYMENTS_B
 
-    If (SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc)) Then
-      Call PAYEAddXMLChild(XML_doc, node_payments, "", "Tax", GetXMLAmount(benefit))
+    If (SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc)) Then
+      Call PAYEAddXMLChild(XML_doc, node_payments, "", "Tax", GetXMLAmount(Benefit))
     End If
     
   End If
@@ -1707,10 +1758,10 @@ End Function
 
 Private Function SectionAandL(XML_doc As DOMDocument60, er As Employer, ee As Employee, benefits_node As IXMLDOMNode, benclass As BEN_CLASS) As Boolean
   Dim BenArr(1 To 1) As BEN_CLASS
-  Dim value As Variant, MadeGood As Variant, benefit As Variant, Description As Variant, IRDesc As Variant
+  Dim value As Variant, MadeGood As Variant, Benefit As Variant, Description As Variant, IRDesc As Variant
   Dim node As IXMLDOMNode, node_asset As IXMLDOMNode
   Dim sText As String, sType As String, sValueDesc As String
-  On Error GoTo Err_Err
+  On Error GoTo err_err
   
   Call xSet("SectionAandL")
   
@@ -1729,7 +1780,7 @@ Private Function SectionAandL(XML_doc As DOMDocument60, er As Employer, ee As Em
   sType = p11d32.Rates.HMITSectionToHMITCode(p11d32.Rates.BenClassTo(benclass, BCT_HMIT_SECTION))
       
   
-  If SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
+  If SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
     SectionAandL = True
     Set node = PAYEAddXMLChildWithAttribute(XML_doc, benefits_node, "", sText, "", "Type", sType)
     Set node_asset = PAYEAddXMLChild(XML_doc, node, "", "Asset", "")
@@ -1738,42 +1789,42 @@ Private Function SectionAandL(XML_doc As DOMDocument60, er As Employer, ee As Em
       Call PAYEAddXMLChild(XML_doc, node_asset, "", "Other", Description, , , L_MAX_LONG_STANDARD_FIELD_LENGTH)
     End If
     Call PAYEAddXMLChild(XML_doc, node_asset, "", sValueDesc, GetXMLAmount(value))
-    Call Standard_XML_Out(XML_doc, node_asset, "", False, 0, True, MadeGood, True, benefit)
+    Call Standard_XML_Out(XML_doc, node_asset, "", False, 0, True, MadeGood, True, Benefit)
   End If
   
-Err_End:
+err_end:
   Call xReturn("SectionAandL")
   Exit Function
-Err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionAandL", "SectionAandL", "Error in Type A or L Benefits in PAYEOnline.")
-  Resume Err_End
+  Resume err_end
   Resume
 End Function
 
 Private Function SectionC(XML_doc As DOMDocument60, er As Employer, ee As Employee, benefits_node As IXMLDOMNode) As Boolean
     'may be used for Section C
   Dim BenArr(1 To 1) As BEN_CLASS
-  Dim value As Variant, MadeGood As Variant, benefit As Variant, Description As Variant, IRDesc As Variant
+  Dim value As Variant, MadeGood As Variant, Benefit As Variant, Description As Variant, IRDesc As Variant
   Dim node As IXMLDOMNode
-  On Error GoTo Err_Err
+  On Error GoTo err_err
   
   Call xSet("SectionC")
   
   BenArr(1) = BC_VOUCHERS_AND_CREDITCARDS_C
   
-  If SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
+  If SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
     SectionC = True
     Set node = PAYEAddXMLChildWithAttribute(XML_doc, benefits_node, "", "VouchersOrCCs", "", "Type", "C")
     Call PAYEAddXMLChild(XML_doc, node, "", S_PAYE_ONLINE_GROSS_OR_AMOUNT_FORGONE, GetXMLAmount(value))
-    Call Standard_XML_Out(XML_doc, node, "", False, value, True, MadeGood, True, benefit)
+    Call Standard_XML_Out(XML_doc, node, "", False, value, True, MadeGood, True, Benefit)
   End If
   
-Err_End:
+err_end:
   Call xReturn("SectionC")
   Exit Function
-Err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionC", "SectionC", "Error in Type C Benefits in PAYEOnline.")
-  Resume Err_End
+  Resume err_end
   Resume
 End Function
 Private Function SectionG(XML_doc As DOMDocument60, er As Employer, ee As Employee, benefits_node As IXMLDOMNode) As Boolean
@@ -1797,10 +1848,10 @@ Private Function SectionG(XML_doc As DOMDocument60, er As Employer, ee As Employ
 End Function
 Private Function SectionDandJ(XML_doc As DOMDocument60, er As Employer, ee As Employee, benefits_node As IXMLDOMNode, benclass As BEN_CLASS) As Boolean
   Dim BenArr(1 To 1) As BEN_CLASS
-  Dim value As Variant, MadeGood As Variant, benefit As Variant, Description As Variant, IRDesc As Variant
+  Dim value As Variant, MadeGood As Variant, Benefit As Variant, Description As Variant, IRDesc As Variant
   Dim node As IXMLDOMNode
   Dim sText As String, sType As String, sBenefitText As String
-  On Error GoTo Err_Err
+  On Error GoTo err_err
   
   Call xSet("SectionDandGandJ")
   Select Case benclass
@@ -1817,18 +1868,18 @@ Private Function SectionDandJ(XML_doc As DOMDocument60, er As Employer, ee As Em
     Case Else
       Call Err.Raise(Err.Number)
   End Select
-  If SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
+  If SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
     SectionDandJ = True
     Set node = PAYEAddXMLChildWithAttribute(XML_doc, benefits_node, "", sText, "", "Type", sType)
-    Call PAYEAddXMLChild(XML_doc, node, "", sBenefitText, GetXMLAmount(benefit))
+    Call PAYEAddXMLChild(XML_doc, node, "", sBenefitText, GetXMLAmount(Benefit))
   End If
   
-Err_End:
+err_end:
   Call xReturn("SectionDandGandJ")
   Exit Function
-Err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionDandGandJ", "SectionDandGandJ", "Error in Type D, G or J Benefits in PAYEOnline.")
-  Resume Err_End
+  Resume err_end
   Resume
 End Function
 
@@ -1860,12 +1911,12 @@ Private Function SectionE(XML_doc As DOMDocument60, er As Employer, ee As Employ
   Dim NetBenefit As Variant
   Dim node As IXMLDOMNode
   Dim i As Long
-  On Error GoTo Err_Err
+  On Error GoTo err_err
   
   Call xSet("SectionE")
   NetBenefit = 0
   
-  For i = 1 To ee.benefits.Count
+  For i = 1 To ee.benefits.count
     Set ben = ee.benefits(i)
     If Not ben Is Nothing Then
       If ben.BenefitClass = benclass Then
@@ -1880,21 +1931,21 @@ Private Function SectionE(XML_doc As DOMDocument60, er As Employer, ee As Employ
     Call PAYEAddXMLChild(XML_doc, node, "", "TaxablePmt", GetXMLAmount(NetBenefit))
   End If
   
-Err_End:
+err_end:
   Call xReturn("SectionE")
   Exit Function
-Err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionE", "SectionE", "Error in Type E Benefits in PAYEOnline.")
-  Resume Err_End
+  Resume err_end
   Resume
 End Function
 
 Private Function SectionIandK(XML_doc As DOMDocument60, er As Employer, ee As Employee, benefits_node As IXMLDOMNode, benclass As BEN_CLASS) As Boolean
   Dim BenArr(1 To 1) As BEN_CLASS
-  Dim value As Variant, MadeGood As Variant, benefit As Variant, Description As Variant, IRDesc As Variant
+  Dim value As Variant, MadeGood As Variant, Benefit As Variant, Description As Variant, IRDesc As Variant
   Dim node As IXMLDOMNode
   Dim sText As String, sType As String
-  On Error GoTo Err_Err
+  On Error GoTo err_err
   
   Call xSet("SectionIandK")
   
@@ -1911,18 +1962,18 @@ Private Function SectionIandK(XML_doc As DOMDocument60, er As Employer, ee As Em
       Call Err.Raise(Err.Number)
   End Select
   
-  If SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
+  If SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
     SectionIandK = True
     Set node = PAYEAddXMLChildWithAttribute(XML_doc, benefits_node, "", sText, "", "Type", sType)
-    Call Standard_XML_Out(XML_doc, node, "", True, value, True, MadeGood, True, benefit)
+    Call Standard_XML_Out(XML_doc, node, "", True, value, True, MadeGood, True, Benefit)
   End If
   
-Err_End:
+err_end:
   Call xReturn("SectionIandK")
   Exit Function
-Err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionIandK", "SectionIandK", "Error in Type I or K Benefits in PAYEOnline.")
-  Resume Err_End
+  Resume err_end
   Resume
 End Function
 
@@ -1930,7 +1981,7 @@ End Function
 Private Function SectionF(XML_doc As DOMDocument60, er As Employer, ee As Employee, benefits_node As IXMLDOMNode) As Boolean
 
   Dim BenArr() As BEN_CLASS
-  Dim value As Variant, MadeGood As Variant, benefit As Variant, Description As Variant, IRDesc As Variant
+  Dim value As Variant, MadeGood As Variant, Benefit As Variant, Description As Variant, IRDesc As Variant
   Dim node_cars As IXMLDOMNode, node_car As IXMLDOMNode
   Dim ben As IBenefitClass
   Dim ben_err As IBenefitClass
@@ -1959,7 +2010,7 @@ Private Function SectionF(XML_doc As DOMDocument60, er As Employer, ee As Employ
 
 
   'iterate through all cars
-  For i = 1 To ee.benefits.Count
+  For i = 1 To ee.benefits.count
     Set ben = ee.benefits(i)
     If Not ben Is Nothing Then
       If ben.BenefitClass = BC_COMPANY_CARS_F Then
@@ -1988,13 +2039,13 @@ Private Function SectionF(XML_doc As DOMDocument60, er As Employer, ee As Employ
     'Car benefit total
     ReDim BenArr(1 To 1)
     BenArr(1) = BC_COMPANY_CARS_F
-    Call SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr)
-    Call PAYEAddXMLChild(XML_doc, node_cars, "", "TotalCarsOrRelevantAmt", GetXMLAmount(benefit))
+    Call SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr)
+    Call PAYEAddXMLChild(XML_doc, node_cars, "", "TotalCarsOrRelevantAmt", GetXMLAmount(Benefit))
 
     'Fuel benefit Total
     BenArr(1) = BC_FUEL_F
-    If SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr) Then
-      Call PAYEAddXMLChild(XML_doc, node_cars, "", "TotalFuelOrRelevantAmt", GetXMLAmount(benefit))
+    If SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr) Then
+      Call PAYEAddXMLChild(XML_doc, node_cars, "", "TotalFuelOrRelevantAmt", GetXMLAmount(Benefit))
     End If
     SectionF = True
   End If
@@ -2029,15 +2080,15 @@ Private Function SectionH(XML_doc As DOMDocument60, er As Employer, ee As Employ
   Dim dDate As Date, dDischarge As Date
   Dim loans As loans
   Dim ben As IBenefitClass
-  On Error GoTo Err_Err
+  On Error GoTo err_err
   Call xSet("SectionH")
   
   i = ee.GetLoansBenefitIndex
-  If i = 0 Then GoTo Err_End
+  If i = 0 Then GoTo err_end
   Set loans = ee.benefits(i)
-  If loans Is Nothing Then GoTo Err_End
+  If loans Is Nothing Then GoTo err_end
   
-    For i = 1 To loans.loans.Count
+    For i = 1 To loans.loans.count
       Set ben = loans.loans(i)
       If Not ben Is Nothing Then
         If CheckBen(er, ee, ben) Then
@@ -2064,18 +2115,18 @@ Private Function SectionH(XML_doc As DOMDocument60, er As Employer, ee As Employ
       End If
     Next
 
-Err_End:
+err_end:
   Call xReturn("SectionH")
   Exit Function
-Err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionH", "SectionH", "Error in Type H Benefits in PAYEOnline.")
-  Resume Err_End
+  Resume err_end
   Resume
 End Function
-Public Function SumBenefit(ByRef Description As Variant, ByRef value As Variant, ByRef MadeGood As Variant, ByRef benefit As Variant, ey As IBenefitClass, ee As Employee, benefits As ObjectList, BenArr() As BEN_CLASS, Optional IRDesc As Variant) As Boolean
+Public Function SumBenefit(ByRef Description As Variant, ByRef value As Variant, ByRef MadeGood As Variant, ByRef Benefit As Variant, ey As IBenefitClass, ee As Employee, benefits As ObjectList, BenArr() As BEN_CLASS, Optional IRDesc As Variant) As Boolean
   Dim b As Boolean
   
-  b = Validations.SumBenefit(Description, value, MadeGood, benefit, ey, ee, benefits, BenArr(), IRDesc)
+  b = Validations.SumBenefit(Description, value, MadeGood, Benefit, ey, ee, benefits, BenArr(), IRDesc)
   If (b) Then
     Description = MarkUpField(Description)
   End If
@@ -2092,11 +2143,11 @@ Private Sub SectionMTransLateIRDesc(ByRef IRDesc, ByRef bUCase)
 End Sub
 Private Function SectionM(XML_doc As DOMDocument60, er As Employer, ee As Employee, benefits_node As IXMLDOMNode) As Boolean
   Dim BenArr() As BEN_CLASS
-  Dim value As Variant, MadeGood As Variant, benefit As Variant, Description As Variant, IRDesc As Variant
+  Dim value As Variant, MadeGood As Variant, Benefit As Variant, Description As Variant, IRDesc As Variant
   Dim node As IXMLDOMNode, node_Class1A As IXMLDOMNode, node_NonClass1A As IXMLDOMNode
   Dim sText As String, sType As String, sValueDesc As String
   Dim bUCase As Boolean
-  On Error GoTo Err_Err
+  On Error GoTo err_err
 
   Call xSet("SectionM")
   
@@ -2106,7 +2157,7 @@ Private Function SectionM(XML_doc As DOMDocument60, er As Employer, ee As Employ
   BenArr(3) = BC_INCOME_TAX_PAID_NOT_DEDUCTED_M
   bUCase = False
   
-  If SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
+  If SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
     SectionM = True
     Set node = PAYEAddXMLChildWithAttribute(XML_doc, benefits_node, "", "Other", "", "Type", p11d32.Rates.HMITSectionToHMITCode(HMIT_M))
     If (ee.PersonnelNumber = "54664") Then
@@ -2115,7 +2166,7 @@ Private Function SectionM(XML_doc As DOMDocument60, er As Employer, ee As Employ
     
     ReDim BenArr(1 To 1)
     BenArr(1) = BC_CLASS_1A_M
-    If (SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc)) Then
+    If (SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc)) Then
 
       Set node_Class1A = PAYEAddXMLChild(XML_doc, node, "", "Class1A", "")
       Call SectionMTransLateIRDesc(IRDesc, bUCase)
@@ -2124,11 +2175,11 @@ Private Function SectionM(XML_doc As DOMDocument60, er As Employer, ee As Employ
       If (Len(Description) > 0) Then
         Call PAYEAddXMLChild(XML_doc, node_Class1A, "", "Other", Description, , , L_MAX_LONG_STANDARD_FIELD_LENGTH)
       End If
-      Call Standard_XML_Out(XML_doc, node_Class1A, "", True, value, True, MadeGood, True, benefit)
+      Call Standard_XML_Out(XML_doc, node_Class1A, "", True, value, True, MadeGood, True, Benefit)
     End If
 
     BenArr(1) = BC_NON_CLASS_1A_M
-    If (SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc)) Then
+    If (SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc)) Then
       Set node_NonClass1A = PAYEAddXMLChild(XML_doc, node, "", "NonClass1A", "")
       
       Call SectionMTransLateIRDesc(IRDesc, bUCase)
@@ -2137,32 +2188,32 @@ Private Function SectionM(XML_doc As DOMDocument60, er As Employer, ee As Employ
       If (Len(Description) > 0) Then
         Call PAYEAddXMLChild(XML_doc, node_NonClass1A, "", "Other", Description, , , L_MAX_LONG_STANDARD_FIELD_LENGTH)
       End If
-      Call Standard_XML_Out(XML_doc, node_NonClass1A, "", True, value, True, MadeGood, True, benefit)
+      Call Standard_XML_Out(XML_doc, node_NonClass1A, "", True, value, True, MadeGood, True, Benefit)
     End If
 
     BenArr(1) = BC_INCOME_TAX_PAID_NOT_DEDUCTED_M
-    If (SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc)) Then
-      Call PAYEAddXMLChild(XML_doc, node, "", "TaxPaid", GetXMLAmount(benefit))
+    If (SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc)) Then
+      Call PAYEAddXMLChild(XML_doc, node, "", "TaxPaid", GetXMLAmount(Benefit))
     End If
   End If
  
-Err_End:
+err_end:
   Call xReturn("SectionM")
   Exit Function
-Err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionM", "SectionM", "Error in Type M Benefits in PAYEOnline.")
-  Resume Err_End
+  Resume err_end
   Resume
 End Function
 
 Private Function SectionN(XML_doc As DOMDocument60, er As IBenefitClass, ee As Employee, benefits_node As IXMLDOMNode) As Boolean
   Dim BenArr() As BEN_CLASS
-  Dim value As Variant, MadeGood As Variant, benefit As Variant, Description As Variant, IRDesc As Variant
+  Dim value As Variant, MadeGood As Variant, Benefit As Variant, Description As Variant, IRDesc As Variant
   Dim node As IXMLDOMNode, node_genbus As IXMLDOMNode, node_ent As IXMLDOMNode
   Dim node_travel As IXMLDOMNode, node_HomeTel As IXMLDOMNode, node_NonQualRes As IXMLDOMNode
   Dim node_other As IXMLDOMNode
   Dim sText As String, sType As String, sValueDesc As String
-  On Error GoTo Err_Err
+  On Error GoTo err_err
 
   Call xSet("SectionN")
   
@@ -2175,73 +2226,73 @@ Private Function SectionN(XML_doc As DOMDocument60, er As IBenefitClass, ee As E
   BenArr(6) = BC_OOTHER_N
   BenArr(7) = BC_CHAUFFEUR_OTHERO_N
 
-  If SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
+  If SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
     SectionN = True
     Set node = PAYEAddXMLChildWithAttribute(XML_doc, benefits_node, "", "ExpPaid", "", "Type", p11d32.Rates.HMITSectionToHMITCode(HMIT_N))
 
     'travel and subsistance
     ReDim BenArr(1 To 1)
     BenArr(1) = BC_TRAVEL_AND_SUBSISTENCE_N
-    If SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
+    If SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
 
       Set node_travel = PAYEAddXMLChild(XML_doc, node, "", "TravAndSub", "")
-      Call SectionN_XMLOut(XML_doc, node_travel, "", value, MadeGood, benefit)
+      Call SectionN_XMLOut(XML_doc, node_travel, "", value, MadeGood, Benefit)
     End If
     'entertainment
     BenArr(1) = BC_ENTERTAINMENT_N
-    If SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
+    If SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
       Set node_ent = PAYEAddXMLChildWithAttribute(XML_doc, node, "", "Ent", "", "TradingOrgInd", PAYEBoolYesNo(er.value(employer_CT_db)))
       'Call PAYEAddXMLChild(XML_doc, node_ent, "", "TradingOrdInd", er.value(employer_CT))
-      Call SectionN_XMLOut(XML_doc, node_ent, "", value, MadeGood, benefit)
+      Call SectionN_XMLOut(XML_doc, node_ent, "", value, MadeGood, Benefit)
     End If
     'business travel
     BenArr(1) = BC_GENERAL_EXPENSES_BUSINESS_N
-    If SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
+    If SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
       Set node_genbus = PAYEAddXMLChild(XML_doc, node, "", "General", "")
-      Call SectionN_XMLOut(XML_doc, node_genbus, "", value, MadeGood, benefit)
+      Call SectionN_XMLOut(XML_doc, node_genbus, "", value, MadeGood, Benefit)
     End If
     'home telephone
     BenArr(1) = BC_PHONE_HOME_N
-    If SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
+    If SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
       Set node_HomeTel = PAYEAddXMLChild(XML_doc, node, "", "HomeTel", "")
-      Call SectionN_XMLOut(XML_doc, node_HomeTel, "", value, MadeGood, benefit)
+      Call SectionN_XMLOut(XML_doc, node_HomeTel, "", value, MadeGood, Benefit)
     End If
     'non qualifying relocation
     BenArr(1) = BC_NON_QUALIFYING_RELOCATION_N
-    If SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
+    If SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
       Set node_NonQualRes = PAYEAddXMLChild(XML_doc, node, "", "NonQualRel", "")
-      Call SectionN_XMLOut(XML_doc, node_NonQualRes, "", value, MadeGood, benefit)
+      Call SectionN_XMLOut(XML_doc, node_NonQualRes, "", value, MadeGood, Benefit)
     End If
     'non other and chauffeur
     ReDim BenArr(1 To 2)
     BenArr(1) = BC_OOTHER_N
     BenArr(2) = BC_CHAUFFEUR_OTHERO_N
-    If SumBenefit(Description, value, MadeGood, benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
+    If SumBenefit(Description, value, MadeGood, Benefit, er, ee, ee.benefits, BenArr, IRDesc) Then
       Set node_other = PAYEAddXMLChild(XML_doc, node, "", "Other", "")
       Call PAYEAddXMLChild(XML_doc, node_other, "", "Desc", IRDesc)
-      Call SectionN_XMLOut(XML_doc, node_other, "", value, MadeGood, benefit)
+      Call SectionN_XMLOut(XML_doc, node_other, "", value, MadeGood, Benefit)
     End If
   End If
     
-Err_End:
+err_end:
   Call xReturn("SectionN")
   Exit Function
-Err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "SectionN", "SectionN", "Error in Type O or L Benefits in PAYEOnline.")
-  Resume Err_End
+  Resume err_end
   Resume
 End Function
 
 
-Private Sub SectionN_XMLOut(XML_doc As DOMDocument60, top_node As IXMLDOMNode, root As String, value As Variant, MadeGood As Variant, benefit As Variant)
+Private Sub SectionN_XMLOut(XML_doc As DOMDocument60, top_node As IXMLDOMNode, root As String, value As Variant, MadeGood As Variant, Benefit As Variant)
 
       Call PAYEAddXMLChild(XML_doc, top_node, root, S_PAYE_ONLINE_COST_OR_AMOUNT_FORGONE, GetXMLAmount(value))
       Call PAYEAddXMLChild(XML_doc, top_node, root, "MadeGood", GetXMLAmount(MadeGood))
-      Call PAYEAddXMLChild(XML_doc, top_node, root, S_PAYE_ONLINE_TAXABLE_PAYMENT_OR_RELEVANT_AMOUNT, GetXMLAmount(benefit))
+      Call PAYEAddXMLChild(XML_doc, top_node, root, S_PAYE_ONLINE_TAXABLE_PAYMENT_OR_RELEVANT_AMOUNT, GetXMLAmount(Benefit))
 
 End Sub
 
-Private Sub Standard_XML_Out(XML_doc As DOMDocument60, top_node As IXMLDOMNode, root As String, ValueRequired As Boolean, value As Variant, MadeGoodRequired As Boolean, MadeGood As Variant, BenefitRequired As Boolean, benefit As Variant)
+Private Sub Standard_XML_Out(XML_doc As DOMDocument60, top_node As IXMLDOMNode, root As String, ValueRequired As Boolean, value As Variant, MadeGoodRequired As Boolean, MadeGood As Variant, BenefitRequired As Boolean, Benefit As Variant)
     If ValueRequired Then
       Call PAYEAddXMLChild(XML_doc, top_node, root, S_PAYE_ONLINE_COST_OR_AMOUNT_FORGONE, GetXMLAmount(value))
     End If
@@ -2249,7 +2300,7 @@ Private Sub Standard_XML_Out(XML_doc As DOMDocument60, top_node As IXMLDOMNode, 
       Call PAYEAddXMLChild(XML_doc, top_node, root, "MadeGood", GetXMLAmount(MadeGood))
     End If
     If BenefitRequired Then
-      Call PAYEAddXMLChild(XML_doc, top_node, root, S_PAYE_ONLINE_CASH_EQUIV_OR_RELEVANT_AMOUNT, GetXMLAmount(benefit))
+      Call PAYEAddXMLChild(XML_doc, top_node, root, S_PAYE_ONLINE_CASH_EQUIV_OR_RELEVANT_AMOUNT, GetXMLAmount(Benefit))
     End If
 
 End Sub
@@ -2282,7 +2333,7 @@ SortBenArray_End:
 
 End Sub
 
-Private Function SumBenefitIRDesc(ByRef Description As Variant, ByRef sIRDesc As Variant, ByRef value As Variant, ByRef MadeGood As Variant, ByRef benefit As Variant, ey As IBenefitClass, ee As Employee, benefits As ObjectList, BenArr() As BEN_CLASS, Optional IRDesc As Integer) As Boolean
+Private Function SumBenefitIRDesc(ByRef Description As Variant, ByRef sIRDesc As Variant, ByRef value As Variant, ByRef MadeGood As Variant, ByRef Benefit As Variant, ey As IBenefitClass, ee As Employee, benefits As ObjectList, BenArr() As BEN_CLASS, Optional IRDesc As Integer) As Boolean
 
 '  ' This function sums the benefit for one IRDesc and returns the Description as a string too.
 '  Dim ben As IBenefitClass
@@ -2355,7 +2406,7 @@ End Function
 
 
 'returns employee count node
-Private Sub CreatePAYEEmployerHead(node_p11d_record_count As IXMLDOMNode, node_p46_record_count As IXMLDOMNode, node_declarations As IXMLDOMNode, XML_doc As DOMDocument60, XMLHeaderNode As IXMLDOMNode, Employers As ObjectList)
+Private Sub CreatePAYEEmployerHead(node_p11d_record_count As IXMLDOMNode, node_p46_record_count As IXMLDOMNode, node_declarations As IXMLDOMNode, XML_doc As DOMDocument60, XMLHeaderNode As IXMLDOMNode, employers As ObjectList)
   Dim ey As Employer, ee As Employee
   Dim ben As IBenefitClass
   Dim i As Long, j As Long
@@ -2371,18 +2422,18 @@ Private Sub CreatePAYEEmployerHead(node_p11d_record_count As IXMLDOMNode, node_p
   Dim sEmployerName As String
   
   
-  On Error GoTo Err_Err
+  On Error GoTo err_err
   
   Call xSet("CreateEmployeeXML")
   
-  If (Employers.Count = 0) Then
+  If (employers.count = 0) Then
     Call Err.Raise(ERR_EMPLOYER_INVALID, "CreatePAYEEmployerHead", "No employers selected to submit")
   End If
   
-  Set benEyFirst = Employers(1)
+  Set benEyFirst = employers(1)
     
-  For i = 1 To Employers.Count
-    Set ey = Employers(i)
+  For i = 1 To employers.count
+    Set ey = employers(i)
     Call p11d32.LoadEmployer(ey, False, False)
     Set ben = ey
     Call ben.Calculate
@@ -2436,12 +2487,12 @@ Private Sub CreatePAYEEmployerHead(node_p11d_record_count As IXMLDOMNode, node_p
   Set node_p46_record_count = PAYEAddXMLChild(XML_doc, XMLHeaderNode, "", "P46CarRecordCount", "0")
 
 
-Err_End:
+err_end:
   Call xReturn("CreatePAYEEmplyerHead")
   Exit Sub
-Err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "CreatePAYEEmplyerHead", "CreatePAYEEmplyerHead", "Error creating Head Employee XML in PAYEOnline.")
-  Resume Err_End
+  Resume err_end
   Resume
 End Sub
 'returns if invalid NI
@@ -2458,7 +2509,7 @@ Public Sub CreateEmployeeXML(ByVal XML_doc As DOMDocument60, benefits_node As IX
     Dim node_name As IXMLDOMNode
     Dim sNodeName As String
     Dim node_ee_Details As IXMLDOMNode
-    On Error GoTo Err_Err
+    On Error GoTo err_err
   
     Call xSet("CreateEmployeeXML")
 
@@ -2559,20 +2610,20 @@ Public Sub CreateEmployeeXML(ByVal XML_doc As DOMDocument60, benefits_node As IX
         End If
   
 
-Err_End:
+err_end:
   Call xReturn("CreateEmployeeXML")
   Exit Sub
-Err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "CreateEmployeeXML", "CreateEmployeeXML", "Error creating Employee XML in PAYEOnline.")
-  Resume Err_End
+  Resume err_end
   Resume
 End Sub
-Private Function MarkUpField(ByVal Field As String, Optional ByVal IfZeroLengthUseThis As String = "") As String
+Private Function MarkUpField(ByVal field As String, Optional ByVal IfZeroLengthUseThis As String = "") As String
   Dim s As String
   Dim i As Long, iLen As Long, iAsc As Long
   Dim s1 As String, s2 As String
   
-  s = Field
+  s = field
     
   
   's = Replace(s, ">", "&gt;")
@@ -2612,10 +2663,10 @@ Private Function MarkUpField(ByVal Field As String, Optional ByVal IfZeroLengthU
 
 End Function
 
-Private Function MarkUpFieldPersonnelNumber(ByVal Field As String) As String
+Private Function MarkUpFieldPersonnelNumber(ByVal field As String) As String
   Dim s As String
   
-  s = MarkUpField(Field)
+  s = MarkUpField(field)
   s = Replace(s, "(", "")
   s = Replace(s, ")", "")
     
@@ -3137,7 +3188,7 @@ Private Sub ValidateXMLToRevenueLocal(ByVal xml As String, ByVal xsdPath As Stri
   Dim ValidateXML As String
   Dim validator As PayeOnlineXMLValidator
   Dim validateForm As F_PayeOnlineValidate
-On Error GoTo Err_Err
+On Error GoTo err_err
 
   ValidateXML = PAyeOnlineValidateXML(xml, xsdPath)
   If (IsRunningInIDE()) Then
@@ -3147,7 +3198,7 @@ On Error GoTo Err_Err
   Set validator = New PayeOnlineXMLValidator
   Call validator.Validate(ValidateXML, xsdPath)
   'Set ts = fso.CreateTextFile("c:\test2.xml", True)
-  If (validator.Errors.Count > 0) Then
+  If (validator.Errors.count > 0) Then
     Call ClearCursor
     Call F_PayeOnlineValidate.Init(validator, ValidateXML)
     Call SetCursor(vbHourglass)
@@ -3163,10 +3214,10 @@ On Error GoTo Err_Err
   'Call XMLErrorPayeOnline("Data sent to HMRC", qs.bstr)
    
 
-Err_End:
+err_end:
   Unload F_PayeOnlineValidate
   Exit Sub
-Err_Err:
+err_err:
   Call ClearAllCursors
   Unload F_PayeOnlineValidate
   If (Err.Number = ERR_PAYE_ONLINE_CANCEL) Then
@@ -3176,18 +3227,18 @@ Err_Err:
   If MsgBox("Error during local schema validation" & vbCrLf & vbCrLf & Err.Description & vbCrLf & vbCrLf & "Do you still wish to try and submit to the Revenue?", vbYesNo, "Local schema validation") = vbNo Then
     Call Err.Raise(ERR_INVALID, "ValidateXMLToRevenue", "Submission cancelled")
   End If
-  Resume Err_End
+  Resume err_end
   Resume
 End Sub
 Private Function AltovaXMLObject() As Object
   Dim altovaXML As Object
   
-  On Error GoTo Err_Err:
+  On Error GoTo err_err:
 
   Set altovaXML = CreateObject("AltovaXML.Application")
 
   Set AltovaXMLObject = altovaXML
-Err_Err:
+err_err:
   
   Exit Function
 End Function
@@ -3250,8 +3301,6 @@ Private Sub XMLErrorPayeOnline(ByVal sDOCName As String, sXML As String)
     
     Call Err.Raise(ERR_XMLNUMBERTOOBIG, "Submit_EfilerCom", sDescription)
   End If
-
-
     
 End Sub
 

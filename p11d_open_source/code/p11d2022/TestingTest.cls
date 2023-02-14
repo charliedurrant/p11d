@@ -30,9 +30,12 @@ Public Property Get ImportQueryId() As QUERY_NAMES_IMP
       ImportQueryId = IMP_RELOCATION_ITEM
     Case "relocation_items"
       ImportQueryId = IMP_RELOCATION_DETAIL
-      
+    Case "relocation_items"
+      ImportQueryId = IMP_RELOCATION_DETAIL
+    Case "non_shared_vans"
+      ImportQueryId = IMP_NON_SHARED_VANS
     Case Else
-      Call Err.Raise(ERR_TESTING, "Testing", "Unrecognosed import sheet:" & Me.Sheet)
+      Call Err.Raise(ERR_TESTING, "Testing", "Unrecognosed import sheet:'" & Me.Sheet & "', this needs to be added to the P11D code function ImportQueryId")
   End Select
 End Property
 

@@ -2,6 +2,17 @@ Attribute VB_Name = "Constants"
 Option Explicit
 
 
+'Queries = "SELECT ValidationErrors.ErrorNumber AS [Error number], ValidationErrors.ErrorDescription AS Description, ValidationErrors.EmployerName AS Employer,
+'ValidationErrors.EmployeeName AS Employee, ValidationErrors.BenefitName AS Benefit, ValidationErrors.HMITSectionString AS [HMIT Section], ValidationErrors.BenfitFormName AS [Benefit type] " & _
+
+Public Const PAYE_ONLINE_ERROR_ERROR_NUMBER As String = "Error number"
+Public Const PAYE_ONLINE_ERROR_DESCRIPTION As String = "Description"
+Public Const PAYE_ONLINE_ERROR_EMPLOYER As String = "Employer"
+Public Const PAYE_ONLINE_ERROR_EMPLOYEE As String = "Employee"
+Public Const PAYE_ONLINE_ERROR_BENEFIT As String = "Benefit"
+Public Const PAYE_ONLINE_ERROR_HMIT_SECTION As String = "HMIT Section"
+Public Const PAYE_ONLINE_ERROR_BENEFIT_TYPE As String = "Benefit type"
+
 Public Const S_FIELD_LOAN_CHEAP_TAXABLE As String = "Taxable Cheap Loan"
 Public Const S_FIELD_CAR_FUEL_WITHDRAWN_DATE As String = "Fuel withdrawn date"
 Public Const S_FIELD_CAR_ELECTRIC_RANGE_MILES As String = "ElectricRangeMiles"
@@ -540,7 +551,8 @@ Public Enum CHECKS
   [_CK_EC_START]
   CK_EC_NI = [_CK_EC_START]
   [_CK_EC_END] = CK_EC_NI
-  [_CK_LAST_ITEM] = [_CK_EC_END]
+  CK_PAYE_ONLINE
+  [_CK_LAST_ITEM] = CK_PAYE_ONLINE
 End Enum
 
 Public Enum EE_CHECKS

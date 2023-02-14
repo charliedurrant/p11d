@@ -326,7 +326,6 @@ Private Sub PAYERun()
   
   'Validate Employer level required fields
   
-  
   If ValidatePAYEOnlineEmployerData Then
     'Create files
     Call p11d32.PAYEonline.CreatePAYEFiles(prgEmployee, lblWritingFile)
@@ -540,7 +539,7 @@ Public Sub lvPAYEEmployers_ItemCheck(ByVal Item As MSComctlLib.ListItem)
   If (Item Is Nothing) Then Exit Sub
   
   If (Item.Checked) Then
-    For i = 1 To lvPAYEEmployers.listitems.Count
+    For i = 1 To lvPAYEEmployers.listitems.count
       Set li = lvPAYEEmployers.listitems(i)
       If (li.Checked And Item <> li) Then
         li.Checked = False
@@ -580,7 +579,7 @@ Private Sub EditEmployerDetails(Button As Integer, Shift As Integer, X As Single
       Set liPrevious = ibf.lv.SelectedItem
       Set ibf.lv.SelectedItem = li
       Call p11d32.EditEmployer(li.Tag)
-      Call p11d32.PAYEonline.UpdateListViewItem(liMe, p11d32.Employers(li.Tag))
+      Call p11d32.PAYEonline.UpdateListViewItem(liMe, p11d32.employers(li.Tag))
       Set ibf.lv.SelectedItem = liPrevious
       Exit For
     End If
@@ -670,10 +669,10 @@ Private Function CheckStatus() As Boolean
 
 '  If InvalidFields(Me) Then Call Err.Raise(ERR_INVALID_FIELDS, "CheckStatus", "Some of the data entry fields are invalid, please amend.")
 '
-  For i = 1 To lvPAYEEmployers.listitems.Count
+  For i = 1 To lvPAYEEmployers.listitems.count
     Set li = lvPAYEEmployers.listitems(i)
     If Not li.Checked Then GoTo NEXT_ITEM
-    Set ey = p11d32.Employers(li.Tag)
+    Set ey = p11d32.employers(li.Tag)
 
     Set benEmployer = ey
 
@@ -709,15 +708,15 @@ Private Function ValidatePAYEOnlineEmployerData() As Boolean
   
   If InvalidFields(Me) Then Call Err.Raise(ERR_INVALID_FIELDS, "ValidatePAYEOnlineEmployerData", "Some of the data entry fields are invalid, please amend.")
   
-  For i = 1 To lvPAYEEmployers.listitems.Count
+  For i = 1 To lvPAYEEmployers.listitems.count
     Set li = lvPAYEEmployers.listitems(i)
     
     'Update Employer objects with user selection
-     Set benEmployer = p11d32.Employers(li.Tag)
+     Set benEmployer = p11d32.employers(li.Tag)
      benEmployer.value(employer_PAYEOnlineSelected) = li.Checked
     If li.Checked Then
       bAnyChecked = True
-      Set ey = p11d32.Employers(li.Tag)
+      Set ey = p11d32.employers(li.Tag)
      'Check Employer level PAYE fields
         Call ey.PAYEOnlineValid(True)
       

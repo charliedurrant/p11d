@@ -65,7 +65,7 @@ Public Function CsvField(ByVal value As String) As String
   CsvField = value
 End Function
 Public Function UpperCaseFirstLetter(ByRef value As String)
-  UpperCaseFirstLetter = CaseFirstLetter(value, False)
+  UpperCaseFirstLetter = CaseFirstLetter(value, True)
 End Function
 
 Public Function LowerCaseFirstLetter(ByRef value As String)

@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "ATC2VTEXT.OCX"
+Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "atc2vtext.ocx"
 Begin VB.UserControl CarCheckOverlap 
    BackColor       =   &H8000000E&
    ClientHeight    =   4320
@@ -102,7 +102,7 @@ Begin VB.UserControl CarCheckOverlap
       Y2              =   450
    End
    Begin VB.Label Label2 
-      BackColor       =   &H80000009&
+      BackColor       =   &H80000005&
       Caption         =   "Apr XX"
       Height          =   255
       Left            =   5160
@@ -111,7 +111,7 @@ Begin VB.UserControl CarCheckOverlap
       Width           =   615
    End
    Begin VB.Label Label1 
-      BackColor       =   &H80000009&
+      BackColor       =   &H80000005&
       Caption         =   "Apr XX"
       Height          =   255
       Left            =   840
@@ -244,7 +244,7 @@ On Error GoTo SaveOverlappingCCC_ERR
         If Not ee Is Nothing Then
           'Load company car benefits
           ee.LoadBenefits (TBL_COMPANY_CARS)
-          For j = 1 To ee.benefits.Count
+          For j = 1 To ee.benefits.count
             Set ben = ee.benefits(j)
             If Not ben Is Nothing Then
               'get correct car benefit
@@ -292,9 +292,9 @@ Private Function FindReplacedCarBenefit(ByVal ee As Employee, sRegReplaced As St
   Dim i As Long
   Dim ben As IBenefitClass
   
- On Error GoTo err_Err
+ On Error GoTo err_err
  
-  For i = 1 To ee.benefits.Count
+  For i = 1 To ee.benefits.count
     Set ben = ee.benefits(i)
     If Not ben Is Nothing Then
         If ben.BenefitClass = BC_COMPANY_CARS_F Then
@@ -306,9 +306,9 @@ Private Function FindReplacedCarBenefit(ByVal ee As Employee, sRegReplaced As St
     End If
   Next
   
-err_End:
+err_end:
   Exit Function
-err_Err:
+err_err:
   Call Err.Raise(Err.Number, ErrorSource(Err, "FindReplacedCarBenefit"), "Failed to find replacement car")
 End Function
 Private Sub PositionControls()
@@ -343,8 +343,8 @@ Dim irsCount As Long
 
 On Error GoTo DrawOverlaps_ERR
   Call LockWindowUpdate(UserControl.hwnd)
-  Label1.Caption = Replace(Label1.Caption, "XX", Right(DateStringEx(p11d32.Rates.value(TaxYearStart), p11d32.Rates.value(TaxYearStart)), 2))
-  Label2.Caption = Replace(Label2.Caption, "XX", Right(DateStringEx(p11d32.Rates.value(TaxYearEnd), p11d32.Rates.value(TaxYearEnd)), 2))
+  Label1.caption = Replace(Label1.caption, "XX", Right(DateStringEx(p11d32.Rates.value(TaxYearStart), p11d32.Rates.value(TaxYearStart)), 2))
+  Label2.caption = Replace(Label2.caption, "XX", Right(DateStringEx(p11d32.Rates.value(TaxYearEnd), p11d32.Rates.value(TaxYearEnd)), 2))
   
   Set rs = p11d32.CurrentEmployer.db.OpenRecordset(sSQL)
   m_sSQL = sSQL
@@ -396,7 +396,7 @@ DrawOverlaps_ERR:
 End Sub
 Private Sub btnDelete_Click(Index As Integer)
   Dim biFrom As BARINFO, biTo As BARINFO
-  On Error GoTo err_Err
+  On Error GoTo err_err
   
   If m_DragDropMode Then
     biFrom = BarInformation(Index)
@@ -409,11 +409,11 @@ Private Sub btnDelete_Click(Index As Integer)
   Else
     Call DeleteCar(Index)
   End If
-err_End:
+err_end:
   Exit Sub
-err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "Delete", "Failed to delete", Err.Description)
-  Resume err_End
+  Resume err_end
 End Sub
 Private Sub DeleteCar(i As Integer)
   
@@ -434,7 +434,7 @@ Private Sub DeleteCar(i As Integer)
   If Not ee Is Nothing Then
     'Load company car benefits
     ee.LoadBenefits (TBL_COMPANY_CARS)
-    For j = 1 To ee.benefits.Count
+    For j = 1 To ee.benefits.count
      Set ben = ee.benefits(j)
      'get correct car benefit
      If Not ben Is Nothing Then
@@ -464,7 +464,7 @@ Private Sub cmdAutoLink_Click()
   Dim i As Long
   Dim j As Long
   
-  On Error GoTo err_Err
+  On Error GoTo err_err
   
   If m_DragDropMode Then
     For i = 1 To txtStart.UBound
@@ -479,11 +479,11 @@ Private Sub cmdAutoLink_Click()
   End If
   Call UserControl.Refresh
   
-err_End:
+err_end:
   Exit Sub
-err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, ErrorSource(Err, "AutoLink"), "Auto link", "Failed to auto link the cars")
-  Resume err_End
+  Resume err_end
 End Sub
 
 Private Sub scroll_Change()
@@ -573,7 +573,7 @@ Private Sub UserControl_MouseMove(Button As Integer, Shift As Integer, X As Sing
   Dim dx As Long
   Dim iDays As Long
   Dim dNewDate As Date
-  On Error GoTo err_Err
+  On Error GoTo err_err
   
   pt.X = X
   pt.Y = Y
@@ -614,13 +614,13 @@ Private Sub UserControl_MouseMove(Button As Integer, Shift As Integer, X As Sing
         dNewDate = DateAdd("d", iDays, m_BarInfoMove.DateStart)
         If DateInRange(dNewDate, p11d32.Rates.value(TaxYearStart), m_BarInfoMove.DateEnd) Then
           txtStart(m_BarInfoMove.carIndex).Text = DateValReadToScreen(dNewDate)
-          GoTo err_End
+          GoTo err_end
         End If
       Else
         dNewDate = DateAdd("d", iDays, m_BarInfoMove.DateEnd)
         If DateInRange(dNewDate, m_BarInfoMove.DateStart, p11d32.Rates.value(TaxYearEnd)) Then
           txtEnd(m_BarInfoMove.carIndex).Text = DateValReadToScreen(dNewDate)
-          GoTo err_End
+          GoTo err_end
         End If
         
       End If
@@ -629,10 +629,10 @@ Private Sub UserControl_MouseMove(Button As Integer, Shift As Integer, X As Sing
     End If
   End If
 
-err_End:
+err_end:
   Exit Sub
-err_Err:
-  Resume err_End
+err_err:
+  Resume err_end
   Resume
 End Sub
 
@@ -839,7 +839,7 @@ Private Sub UserControl_MouseUp(Button As Integer, Shift As Integer, X As Single
   Dim bi As BARINFO
   Dim biSource As BARINFO, biDest As BARINFO
   
-  On Error GoTo err_Err
+  On Error GoTo err_err
   
   Dim sData As String
   pt.X = X
@@ -865,11 +865,11 @@ Private Sub UserControl_MouseUp(Button As Integer, Shift As Integer, X As Single
   m_bInMove = False
   m_bMoveDirectionFound = False
   
-err_End:
+err_end:
   Exit Sub
-err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, ErrorSource(Err, "MouseUp"), "Mouse Up", "Error linking cars")
-  Resume err_End
+  Resume err_end
   Resume
 End Sub
 

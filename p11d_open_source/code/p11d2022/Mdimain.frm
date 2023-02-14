@@ -1271,11 +1271,11 @@ Private Sub MDIForm_Load()
   Call BenefitMnuCaptionShortCut(mnuServicesProvided, BC_SERVICES_PROVIDED_K)
   Call BenefitMnuCaptionShortCut(mnuAssetsAtDisposal, BC_ASSETSATDISPOSAL_L)
   
-  mnuOther.Caption = "&" & p11d32.Rates.BenClassTo(BC_INCOME_TAX_PAID_NOT_DEDUCTED_M, BCT_HMIT_SECTION_STRING) & " - Other"
+  mnuOther.caption = "&" & p11d32.Rates.BenClassTo(BC_INCOME_TAX_PAID_NOT_DEDUCTED_M, BCT_HMIT_SECTION_STRING) & " - Other"
   Call BenefitMnuCaptionShortCut(mnuSubscriptions, BC_CLASS_1A_M, True)
   Call BenefitMnuCaptionShortCut(mnuNursery, BC_NON_CLASS_1A_M, True)
   Call BenefitMnuCaptionShortCut(mnuTaxPaidNotDeducted, BC_INCOME_TAX_PAID_NOT_DEDUCTED_M, True)
-  mnuExpenses.Caption = "&" & p11d32.Rates.BenClassTo(BC_OOTHER_N, BCT_HMIT_SECTION_STRING) & S_O_EXPENSES_CAPTION
+  mnuExpenses.caption = "&" & p11d32.Rates.BenClassTo(BC_OOTHER_N, BCT_HMIT_SECTION_STRING) & S_O_EXPENSES_CAPTION
   Call BenefitMnuCaptionShortCut(mnuEntertainment, BC_ENTERTAINMENT_N, True)
   'Call BenefitMnuCaptionShortCut(mnuGeneralExpensesBusinessTravel, BC_GENERAL_EXPENSES_BUSINESS_N, True)
   Call BenefitMnuCaptionShortCut(mnuHomePhones, BC_PHONE_HOME_N, True)
@@ -1301,12 +1301,12 @@ Private Sub MDIForm_Load()
   Call BenefitMnuCaptionShortCut(mnuOtherButtonAssetsAtDisposal, BC_ASSETSATDISPOSAL_L)
   'Call BenefitMnuCaptionShortCut(mnuOtherButtonShares, BC_SHARES_M)
   
-  mnuOtherButtonOther.Caption = mnuOther.Caption
+  mnuOtherButtonOther.caption = mnuOther.caption
   Call BenefitMnuCaptionShortCut(mnuOtherButtonOtherSubscriptions, BC_CLASS_1A_M, True) 'sub is now c1a
   
   Call BenefitMnuCaptionShortCut(mnuOtherButtonOtherNursery, BC_NON_CLASS_1A_M, True)
   Call BenefitMnuCaptionShortCut(mnuOtherButtonOtherIncomeTax, BC_INCOME_TAX_PAID_NOT_DEDUCTED_M, True)
-  mnuOtherButtonPExpenses.Caption = mnuExpenses.Caption
+  mnuOtherButtonPExpenses.caption = mnuExpenses.caption
   Call BenefitMnuCaptionShortCut(mnuOtherButtonOTravel, BC_TRAVEL_AND_SUBSISTENCE_N, True)
   Call BenefitMnuCaptionShortCut(mnuOtherButtonOEntertainment, BC_ENTERTAINMENT_N, True)
   'Call BenefitMnuCaptionShortCut(mnuOtherButtonOGeneral, BC_GENERAL_EXPENSES_BUSINESS_N, True)
@@ -1335,7 +1335,7 @@ Private Sub MDIForm_Load()
   Call p11d32.VersionCheck
 End Sub
 Private Sub BenefitMnuCaptionShortCut(mnu As Menu, bc As BEN_CLASS, Optional bSubItem As Boolean = False)
-  mnu.Caption = "&" & p11d32.Rates.BenefitMenuCaption(bc, bSubItem)
+  mnu.caption = "&" & p11d32.Rates.BenefitMenuCaption(bc, bSubItem)
 End Sub
 Private Sub MDIForm_QueryUnload(Cancel As Integer, UnloadMode As Integer)
   Dim doExitApp As Boolean
@@ -1439,9 +1439,9 @@ Private Sub mnuBrowseDirectory_Click()
   
   On Error GoTo err_err
   
-  s = p11d32.workingDirectory
-  Call p11d32.CreateAndSetWorkingDirectory(MDIMain, p11d32.workingDirectory, True)
-  F_Employers.workingDirectory = p11d32.workingDirectory
+  s = p11d32.WorkingDirectory
+  Call p11d32.CreateAndSetWorkingDirectory(MDIMain, p11d32.WorkingDirectory, True)
+  F_Employers.WorkingDirectory = p11d32.WorkingDirectory
     
 err_end:
   Exit Sub
@@ -1903,17 +1903,17 @@ Private Sub mnuOOther_Click()
 End Sub
 
 Private Sub mnuRecentWorkingDirectory_Click(Index As Integer)
-  Dim workingDirectory As String
+  Dim WorkingDirectory As String
   
 On Error GoTo err_err
 
-  workingDirectory = mnuRecentWorkingDirectory(Index).Tag
+  WorkingDirectory = mnuRecentWorkingDirectory(Index).Tag
   
-  If (Not FileExists(workingDirectory, True)) Then
-    Call Err.Raise(ERR_ERROR, "mnuRecentWorkingDirectory_Click", "The directory '" & workingDirectory * "' does not exist")
+  If (Not FileExists(WorkingDirectory, True)) Then
+    Call Err.Raise(ERR_ERROR, "mnuRecentWorkingDirectory_Click", "The directory '" & WorkingDirectory * "' does not exist")
   End If
   
-  Call p11d32.WorkingDirectoryChange(workingDirectory)
+  Call p11d32.WorkingDirectoryChange(WorkingDirectory)
   Call p11d32.LoadEmployers
   
   
@@ -1957,7 +1957,7 @@ Public Sub LoadRecentWorkingDirectories()
       mnuRecentWorkingDirectory(i).Visible = False
     Else
       mnuRecentWorkingDirectory(i).Visible = True
-      mnuRecentWorkingDirectory(i).Caption = CStr(i) & ". " & sl.Item(i)
+      mnuRecentWorkingDirectory(i).caption = CStr(i) & ". " & sl.Item(i)
       mnuRecentWorkingDirectory(i).Tag = sl.Item(i)
     End If
   Next

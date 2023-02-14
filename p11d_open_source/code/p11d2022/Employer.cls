@@ -128,6 +128,7 @@ Public Enum Employer_ITEMS
   employer_GUID_db
   employer_NIC_AdjustmentAddTotal
   employer_NIC_AdjustmentDeductTotal
+  employer_NIC_BenefitsAndAdjustmentsSubTotal
   employer_NIC_AdjustmentAddUserEntered
   employer_NIC_AdjustmentDeductUserEntered
 
@@ -268,7 +269,7 @@ Private Sub ClearP11DbAdjustmentsValuesEx(ol As ObjectList)
   Dim i As Long
   Dim adjustment As P11DbAdjustment
   
-  For i = 1 To ol.Count
+  For i = 1 To ol.count
     Set adjustment = ol(i)
     adjustment.value = 0
   Next
@@ -390,9 +391,11 @@ Friend Sub KillEmployeesBenefits()
    
   Call SetCursor(vbArrowHourglass)
   
-  For i = 1 To employees.Count
+  For i = 1 To employees.count
     Set ee = employees(i)
-    ee.KillBenefits
+    If (Not ee Is Nothing) Then
+      ee.KillBenefits
+    End If
   Next
     
 KillEmployeesBenefits_END:
@@ -402,6 +405,7 @@ KillEmployeesBenefits_END:
 KillEmployeesBenefits_ERR:
   Call ErrorMessage(ERR_ERROR, Err, "KillEmployeesBenefits", "Kill Employees Benefits", "Error killing all the employees benefits.")
   Resume KillEmployeesBenefits_END
+  Resume
 End Sub
 Public Property Get PayeRefValid() As Boolean
   
@@ -502,11 +506,11 @@ Public Function WriteFPCS() As Boolean
   
   Set rs = Me.db.OpenRecordset(sql.Queries(SELECT_FPCS), dbOpenDynaset, dbFailOnError)
   
-  For l = 2 To FPCSchemes.Count
+  For l = 2 To FPCSchemes.count
     Set FPCS = FPCSchemes(l)
     If Not FPCS Is Nothing Then
       FPCS.Bands.Compact
-      For m = 1 To FPCS.Bands.Count
+      For m = 1 To FPCS.Bands.count
         Set Band = FPCS.Bands(m)
         rs.AddNew
         rs.Fields("FPCS").value = FPCS.Name
@@ -530,9 +534,9 @@ Public Function WriteFPCS() As Boolean
     'we must redo the FPCS combo
     If Not ibf.lv.SelectedItem Is Nothing Then
       Call F_EmployeeCar.FPCSToCombo(True)
-      ibf.benefit.Calculate
+      ibf.Benefit.Calculate
       Call ibf.BenefitToScreen(ibf.lv.SelectedItem.Tag)
-      Call ibf.UpdateBenefitListViewItem(ibf.lv.SelectedItem, ibf.benefit)
+      Call ibf.UpdateBenefitListViewItem(ibf.lv.SelectedItem, ibf.Benefit)
     Else
       Call F_EmployeeCar.FPCSToCombo(False)
     End If
@@ -595,7 +599,7 @@ Public Function WriteCDCs() As Long
   
   Set rs = db.OpenRecordset(sql.Queries(SELECT_CDCS), dbOpenDynaset)
   If Not rs Is Nothing Then
-    For i = 1 To CDCs.Count
+    For i = 1 To CDCs.count
       Set ben = CDCs(i)
       If Not ben Is Nothing Then
         If Not ben.ReadFromDB Or p11d32.BringForward.Yes Then
@@ -709,13 +713,13 @@ err_err:
   Resume err_end
   Resume
 End Sub
-Private Sub WriteP11DbAdjustmentsList(rs As Recordset, Data As ObjectList, addition As Boolean)
+Private Sub WriteP11DbAdjustmentsList(rs As Recordset, data As ObjectList, addition As Boolean)
   Dim i As Long
   Dim P11DbAdjustment As P11DbAdjustment
   
-  Call Data.Compact
-  For i = 1 To Data.Count
-    Set P11DbAdjustment = Data(i)
+  Call data.Compact
+  For i = 1 To data.count
+    Set P11DbAdjustment = data(i)
     Call rs.AddNew
     rs.Fields("Addition").value = addition
     rs.Fields("Caption").value = P11DbAdjustment.caption
@@ -813,7 +817,7 @@ Public Function EditCDC() As Boolean
   Set rs = db.OpenRecordset(sql.Queries(SELECT_CDCS_EMPLOYEES))
   If rs Is Nothing Then Call Err.Raise(ERR_RS_IS_NOTHING, "EditCDC", "The rs is nothing when trying to determine if CDCs being used by employees.")
   
-  For i = 1 To CDCs.Count
+  For i = 1 To CDCs.count
     Set ben = CDCs(i)
     If Not ben Is Nothing Then
       If Not (rs.EOF And rs.BOF) Then rs.MoveFirst
@@ -821,7 +825,7 @@ Public Function EditCDC() As Boolean
 'MP DB
 '          If rs!CDCKey = ben.value(cdc_Key) Then
         If rs!CDCKey = ben.value(cdc_Key_db) Then
-          bFound = rs!Count > 0
+          bFound = rs!count > 0
         End If
         rs.MoveNext
       Loop
@@ -976,7 +980,7 @@ Public Function FindEmployee(sPNum As String) As Employee
   
   Set FindEmployee = Nothing
   
-  For i = 1 To employees.Count
+  For i = 1 To employees.count
     Set ee = employees(i)
     If (Not ee Is Nothing) Then
       
@@ -1172,20 +1176,20 @@ Private Sub RunAllFixes(ByVal RunUpdateFixes As Boolean)
     Call ibf.UpdateBenefitListViewItem(ibf.lv.SelectedItem, ben)
   End If
 End Sub
-Private Function SetBenefitDirtyStatus(benefit As IBenefitClass) As Boolean
+Private Function SetBenefitDirtyStatus(Benefit As IBenefitClass) As Boolean
   On Error GoTo SetBenefitDirtyStatus_ERR
   
   xSet ("SetBenefitDirtyStatus")
   
-  If Not benefit Is Nothing Then
-    If benefit.InvalidFields Then
+  If Not Benefit Is Nothing Then
+    If Benefit.InvalidFields Then
       Call SetPanel2(S_NOSAVE)
       Call MDIMain.SetUndo
       Call MDIMain.SetConfirmUndo
-    ElseIf benefit.Dirty Then
+    ElseIf Benefit.Dirty Then
       Call SetPanel2("")
       Call MDIMain.SetConfirmUndo
-      benefit.Dirty = True
+      Benefit.Dirty = True
     End If
     SetBenefitDirtyStatus = True
   End If
@@ -1354,12 +1358,12 @@ RunFixes_END:
   Call xReturn("RunFixes")
   
 End Sub
-Private Sub RemoveValidationRule(db As Database, TABLE As String, Field As String)
+Private Sub RemoveValidationRule(db As Database, TABLE As String, field As String)
   Dim td As TableDef
-  Dim f As Field
+  Dim f As field
   
   Set td = db.TableDefs(TABLE)
-  Set f = td.Fields(Field)
+  Set f = td.Fields(field)
   f.ValidationRule = ""
   
 End Sub
@@ -1477,7 +1481,7 @@ Public Function EmployeeScreen() As Boolean
     Set ee = Nothing
     Call UpdateBenefitFromTags
     If p11d32.CurrentEmployer.CurrentEmployee Is p11d32.CurrentEmployer.CDBEmployee Then
-      If (Not CurrentForm Is F_Employers) And F_Employees.lb.listitems.Count > 0 Then
+      If (Not CurrentForm Is F_Employers) And F_Employees.LB.listitems.count > 0 Then
         Set ee = employees(GetEmployeeIndexFromSelectedEmployee)
       End If
     End If
@@ -1544,7 +1548,7 @@ Private Function IBenefitClass_Calculate() As Variant
   Call ey.SetCalcDefaults
   IBenefitClass_Calculate = 0
   
-  For i = 1 To employees.Count
+  For i = 1 To employees.count
     Set ee = employees(i)
     If Not ee Is Nothing Then
        IBenefitClass_Calculate = IBenefitClass_Calculate + ee.Calculate
@@ -1583,7 +1587,9 @@ Private Function IBenefitClass_Calculate() As Variant
   ey.value(employer_NIC_AdjustmentAddTotal) = ey.value(employer_NIC_AdjustmentAddUserEntered) + ey.value(ITEM_CLASS1A_ADJUSTMENT)
   ey.value(employer_NIC_AdjustmentDeductTotal) = ey.value(employer_NIC_AdjustmentDeductUserEntered) + iEmployeesDeductions
   
-  ey.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A) = Max(0, ey.value(employer_TotalBenefitsPotentiallySubjectToClass1A) + ey.value(employer_NIC_AdjustmentAddTotal) - ey.value(employer_NIC_AdjustmentDeductTotal))
+  ey.value(employer_NIC_BenefitsAndAdjustmentsSubTotal) = ey.value(employer_TotalBenefitsPotentiallySubjectToClass1A) + ey.value(employer_NIC_AdjustmentAddTotal) - ey.value(employer_NIC_AdjustmentDeductTotal)
+  
+  ey.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A) = Max(0, ey.value(employer_NIC_BenefitsAndAdjustmentsSubTotal))
   
   'see P11D electronic business rules for crazy rounding
   dNIC = p11d32.Rates.value(carNICRate) * ey.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A)
@@ -1604,7 +1610,7 @@ Public Function P11DbAdjustmentsSum(Adjustments As ObjectList) As Long
   Dim ret As Long
   
   ret = 0
-  For i = 1 To Adjustments.Count
+  For i = 1 To Adjustments.count
     Set adjustment = Adjustments(i)
     ret = ret + adjustment.value
   Next
@@ -1666,7 +1672,7 @@ Public Function ValidatePersonnelNumber(vNewNumber As Variant, Optional bRaiseEr
     GoTo ValidatePersonnelNumber_End
   End If
   
-  For i = 1 To employees.Count
+  For i = 1 To employees.count
     Set ben = employees(i)
     If Not ben Is Nothing Then
       If vNewNumber = ben.value(ee_PersonnelNumber_db) Then
@@ -1845,8 +1851,8 @@ Public Function GetEmployees(ol As ObjectList) As Boolean
 
   Set ol = New ObjectList
   
-  With F_Employees.lb
-    For i = 1 To .listitems.Count
+  With F_Employees.LB
+    For i = 1 To .listitems.count
       Set li = .listitems(i)
       If p11d32.EmployeeSelectedForPrint(employees(li.Tag), Me) Then
         Call ol.Add(employees(li.Tag))
@@ -1854,7 +1860,7 @@ Public Function GetEmployees(ol As ObjectList) As Boolean
     Next
   End With
   
-  GetEmployees = ol.Count
+  GetEmployees = ol.count
   
 GetEmployees_End:
   Call xReturn("GetEmployees")
@@ -2136,7 +2142,7 @@ Private Sub IBenefitClass_Kill()
   On Error GoTo CloseEmployer_Err
   Call xSet("CloseEmployer")
   
-  For i = 1 To employees.Count
+  For i = 1 To employees.count
     Set emp = employees(i)
     If Not (emp Is Nothing) Then emp.Kill
   Next i
@@ -2154,7 +2160,7 @@ Private Sub IBenefitClass_Kill()
     Set m_rsBenTables(i) = Nothing
   Next i
   If Not m_dbfile Is Nothing Then
-    For i = 1 To FPCSchemes.Count
+    For i = 1 To FPCSchemes.count
       Set FPCS = FPCSchemes(i)
       If Not FPCS Is Nothing Then Call FPCS.Kill
     Next
@@ -2818,8 +2824,8 @@ Public Sub FindCompanyCar()
         rs.MoveNext
       Loop
       If MsgBox(rs.RecordCount & " employee(s) found with company car registration of " & sCarReg & vbCrLf & vbCrLf & sEmployees & vbCrLf & vbCrLf & "Do you wish to go to " & sFirstEmployee & "?", vbYesNo, "Results") = vbYes Then
-        Set lv = F_Employees.lb
-        For i = 1 To lv.listitems.Count
+        Set lv = F_Employees.LB
+        For i = 1 To lv.listitems.count
           Set li = lv.listitems(i)
           Set ben = employees(li.Tag)
           If StrComp(ben.value(ee_PersonnelNumber_db), sFirstEmployee, vbTextCompare) = 0 Then
@@ -2923,8 +2929,8 @@ Public Function TransferEmployees() As Long
   F_Transfer.prg.value = F_Transfer.prg.Min
   F_Transfer.prg.Indicator = None
   
-  For i = 1 To p11d32.Employers.Count
-    Set ben = p11d32.Employers(i)
+  For i = 1 To p11d32.employers.count
+    Set ben = p11d32.employers(i)
       If Not ben Is Nothing Then
         If Not ben Is Me Then
           Set li = F_Transfer.lv.listitems.Add(, , ben.Name, , IMG_UNSELECTED)

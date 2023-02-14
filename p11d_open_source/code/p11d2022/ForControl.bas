@@ -87,7 +87,7 @@ Public Sub SetSortOrderToColumn(lv As ListView, lColIndex, SortOrder As ListSort
   Call xSet("SetSortOrderToColumn")
   
   If lv Is Nothing Then Call Err.Raise(ERR_LV_IS_NOTHING, "SetSortOrderToColumn", "The colindex of " & lColIndex & " is outside the column headers range.")
-  If lColIndex <= lv.ColumnHeaders.Count And lColIndex > 0 Then
+  If lColIndex <= lv.ColumnHeaders.count And lColIndex > 0 Then
     If lColIndex > 1 Then Call SetSortOrder(lv, lv.ColumnHeaders(lColIndex), SortOrder)
   Else
     Call Err.Raise(ERR_INVALIDCOL_INDEX, "SetSortOrderToColumn", "The colindex of " & lColIndex & " is outside the column headers range.")
@@ -100,17 +100,17 @@ SetSortOrderToColumn_ERR:
   Call ErrorMessage(ERR_ERROR, Err, "SetSortOrderToColumn", "Set Sort Order To Column", "Error setting the sort order column.")
   Resume SetSortOrderToColumn_END
 End Sub
-Public Sub SetPanel2(Caption As String)
-  If app.StartMode = vbSModeStandalone Then MDIMain.sts.Panels(S_P2).Caption = Caption
+Public Sub SetPanel2(caption As String)
+  If app.StartMode = vbSModeStandalone Then MDIMain.sts.Panels(S_P2).caption = caption
 End Sub
-Public Sub SetPanel1(Caption As String)
-  If app.StartMode = vbSModeStandalone Then MDIMain.sts.Panels(S_P1).Caption = Caption
+Public Sub SetPanel1(caption As String)
+  If app.StartMode = vbSModeStandalone Then MDIMain.sts.Panels(S_P1).caption = caption
 End Sub
 Public Sub PrgStep()
   If app.StartMode = vbSModeStandalone Then Call MDIMain.sts.Step
 End Sub
-Public Sub PrgStepCaption(Caption As String)
-  If app.StartMode = vbSModeStandalone Then Call MDIMain.sts.StepCaption(Caption)
+Public Sub PrgStepCaption(caption As String)
+  If app.StartMode = vbSModeStandalone Then Call MDIMain.sts.StepCaption(caption)
 End Sub
 Public Sub PrgStopCaption()
   If app.StartMode = vbSModeStandalone Then
@@ -158,7 +158,7 @@ Private Function GetListItemIndexbyText(lv As ListView) As Long
   
   GetListItemIndexbyText = 1
   If (Len(mCurrentText) > 0) Then
-    For i = 1 To lv.listitems.Count
+    For i = 1 To lv.listitems.count
       If StrComp(lv.listitems(i).Text, mCurrentText) = 0 Then
         GetListItemIndexbyText = i
       End If
@@ -167,16 +167,16 @@ Private Function GetListItemIndexbyText(lv As ListView) As Long
   
 End Function
 
-Public Function UpdateBenefitListViewItem(li As ListItem, benefit As IBenefitClass, Optional BenefitIndex As Long = 0, Optional ByVal SelectItem As Boolean = False) As Long
+Public Function UpdateBenefitListViewItem(li As ListItem, Benefit As IBenefitClass, Optional BenefitIndex As Long = 0, Optional ByVal SelectItem As Boolean = False) As Long
   
   On Error GoTo UpdateBenefitListViewItem_ERR
   Call xSet("UpdateBenefitListViewItem")
   
-  If Not li Is Nothing And Not benefit Is Nothing Then
+  If Not li Is Nothing And Not Benefit Is Nothing Then
     If BenefitIndex > 0 Then li.Tag = BenefitIndex
-    li.SmallIcon = benefit.ImageListKey
-    li.SubItems(1) = FormatWN(benefit.Calculate)
-    li.Text = benefit.value(ITEM_DESC)
+    li.SmallIcon = Benefit.ImageListKey
+    li.SubItems(1) = FormatWN(Benefit.Calculate)
+    li.Text = Benefit.value(ITEM_DESC)
     If SelectItem Then li.Selected = SelectItem
     UpdateBenefitListViewItem = li.Index
   End If
@@ -244,7 +244,7 @@ Public Function BenefitsToListView(ibf As IBenefitForm2) As Long
   
   ibf.lv.Sorted = False
   
-  For i = 1 To p11d32.CurrentEmployer.CurrentEmployee.benefits.Count
+  For i = 1 To p11d32.CurrentEmployer.CurrentEmployee.benefits.count
     Set ben = p11d32.CurrentEmployer.CurrentEmployee.benefits(i)
     BenefitsToListView = BenefitsToListView + ibf.BenefitToListView(ben, i)
   Next
@@ -280,7 +280,7 @@ Public Function UpdateBenefitFromTags() As Boolean
   Call xSet("UpdateBenefitFromTags")
   Set ibf = p11d32.GetBenefitForm
   If Not ibf Is Nothing Then
-    Set ben = ibf.benefit
+    Set ben = ibf.Benefit
     If Not ben Is Nothing Or ibf.benclass = BC_NONSHAREDVANS_G Then
       bChanged = TestChangedControls(ibf)
       UpdateBenefitFromTags = bChanged
@@ -324,9 +324,9 @@ Public Function GetNextBestListItemBenefitIndex(ibf As IBenefitForm2, ByVal Curr
   GetNextBestListItemBenefitIndex = -1
   
   Set lv = ibf.lv
-  For i = 1 To lv.listitems.Count
+  For i = 1 To lv.listitems.count
     If lv.listitems(i).Tag = CurrentBenefitIndex Then
-      If (i + 1) < lv.listitems.Count Then
+      If (i + 1) < lv.listitems.count Then
         GetNextBestListItemBenefitIndex = lv.listitems(i + 1).Tag
       ElseIf i > 1 Then
         GetNextBestListItemBenefitIndex = lv.listitems(i - 1).Tag
@@ -348,7 +348,7 @@ Public Function GetNextBestListItem(liRet As ListItem, lv As ListView, li As Lis
   On Error GoTo GetNextBestListItem_Err
   Call xSet("GetNextBestListItem")
     
-  lCount = lv.listitems.Count
+  lCount = lv.listitems.count
   If li.Index < lCount Then
     Set liRet = lv.listitems(li.Index + 1)
   ElseIf li.Index > 1 Then
@@ -417,14 +417,14 @@ Public Function AfterCheckChanged(c As Control, ibf As IBenefitForm2, ByVal bDir
   Call xSet("AfterCheckChanged")
   
   If Not ibf Is Nothing Then
-    If Not ibf.benefit Is Nothing Then
-      ibf.benefit.Dirty = ibf.benefit.Dirty Or bDirty
+    If Not ibf.Benefit Is Nothing Then
+      ibf.Benefit.Dirty = ibf.Benefit.Dirty Or bDirty
       If bDirty Then
-        Call UpdateInfoStatusBar(ibf.benefit)
-        Call ibf.UpdateBenefitListViewItem(ibf.lv.SelectedItem, ibf.benefit)
+        Call UpdateInfoStatusBar(ibf.Benefit)
+        Call ibf.UpdateBenefitListViewItem(ibf.lv.SelectedItem, ibf.Benefit)
         c.Tag = ""
-        If bSaveBenefitStatus Then Call SaveBenefitStatus(ibf.benefit)
-        ibf.benefit.InvalidFields = InvalidFields(ibf, ctlContainer)
+        If bSaveBenefitStatus Then Call SaveBenefitStatus(ibf.Benefit)
+        ibf.Benefit.InvalidFields = InvalidFields(ibf, ctlContainer)
       End If
       'if we changed then check validity
       AfterCheckChanged = True
@@ -442,16 +442,16 @@ AfterCheckChanged_ERR:
   Resume AfterCheckChanged_END
   Resume
 End Function
-Public Function SaveBenefitStatus(benefit As IBenefitClass) As Boolean
+Public Function SaveBenefitStatus(Benefit As IBenefitClass) As Boolean
 
   On Error GoTo SaveBenefitStatus_ERR
   
   Call xSet("SaveBenefitStatus")
   
-  If benefit.Dirty Then
+  If Benefit.Dirty Then
     Call SetPanel2("")
     Call MDIMain.SetConfirmUndo
-  ElseIf benefit.InvalidFields Then
+  ElseIf Benefit.InvalidFields Then
     Call SetPanel2(S_NOSAVE)
     Call MDIMain.SetConfirmUndo
   End If
@@ -468,19 +468,19 @@ SaveBenefitStatus_ERR:
   Resume SaveBenefitStatus_END
 End Function
 
-Public Function GetBenefitRecord(rs As Recordset, benefit As IBenefitClass)
+Public Function GetBenefitRecord(rs As Recordset, Benefit As IBenefitClass)
 
 On Error GoTo GetBenefitRecord_ERR
 
   Call xSet("GetBenefitRecord")
   
-  If Not rs Is Nothing And Not benefit Is Nothing Then
-    If benefit.HasBookMark Then
-      rs.Bookmark = benefit.RSBookMark
+  If Not rs Is Nothing And Not Benefit Is Nothing Then
+    If Benefit.HasBookMark Then
+      rs.Bookmark = Benefit.RSBookMark
       rs.Edit
     Else
       rs.AddNew
-      rs.Fields(S_FIELD_PERSONEL_NUMBER) = GetEmployeeNumber(benefit)
+      rs.Fields(S_FIELD_PERSONEL_NUMBER) = GetEmployeeNumber(Benefit)
     End If
     GetBenefitRecord = True
   End If
@@ -505,13 +505,13 @@ Public Sub SetBenefitFormState(ibf As IBenefitForm2, Optional bGetInvalidFields 
   
   Call xSet("SetBenefitFormState")
   
-  Call UpdateInfoStatusBar(ibf.benefit)
+  Call UpdateInfoStatusBar(ibf.Benefit)
       
-  If Not (ibf.benefit Is Nothing) Then
-    If bGetInvalidFields Then ibf.benefit.InvalidFields = InvalidFields(ibf)
-    If ibf.benefit.CompanyDefined Then
+  If Not (ibf.Benefit Is Nothing) Then
+    If bGetInvalidFields Then ibf.Benefit.InvalidFields = InvalidFields(ibf)
+    If ibf.Benefit.CompanyDefined Then
       Call ibf.BenefitFormState(FORM_CDB)
-    ElseIf ibf.benefit.LinkBen Then
+    ElseIf ibf.Benefit.LinkBen Then
       Call ibf.BenefitFormState(FORM_LINK_BEN)
     Else
       Call ibf.BenefitFormState(FORM_ENABLED)
@@ -547,18 +547,18 @@ ScreenToDateVal_ERR:
   Resume ScreenToDateVal_END
 End Function
 
-Public Function CheckTextInput(sText As String, benefit As IBenefitClass, ItemIndex As Long) As Boolean
+Public Function CheckTextInput(sText As String, Benefit As IBenefitClass, ItemIndex As Long) As Boolean
   Dim bDirty As Boolean
   
   On Error GoTo CheckTextInput_ERR
   Call xSet("CheckTextInput")
   
-  If p11d32.BenDataLinkDataType(benefit.BenefitClass, ItemIndex) = TYPE_DATE Then
-    bDirty = StrComp(DateValReadToScreen(sText), benefit.value(ItemIndex), vbBinaryCompare)
-    benefit.value(ItemIndex) = ScreenToDateVal(sText, STDV_STRING)
+  If p11d32.BenDataLinkDataType(Benefit.BenefitClass, ItemIndex) = TYPE_DATE Then
+    bDirty = StrComp(DateValReadToScreen(sText), Benefit.value(ItemIndex), vbBinaryCompare)
+    Benefit.value(ItemIndex) = ScreenToDateVal(sText, STDV_STRING)
   Else
-    bDirty = StrComp(sText, benefit.value(ItemIndex), vbBinaryCompare)
-    benefit.value(ItemIndex) = sText
+    bDirty = StrComp(sText, Benefit.value(ItemIndex), vbBinaryCompare)
+    Benefit.value(ItemIndex) = sText
   End If
           
   CheckTextInput = bDirty
@@ -574,15 +574,15 @@ CheckTextInput_ERR:
 End Function
 
 
-Public Function CheckCheckBoxInput(cbc As CheckBoxConstants, benefit As IBenefitClass, ItemIndex As Long) As Boolean
+Public Function CheckCheckBoxInput(cbc As CheckBoxConstants, Benefit As IBenefitClass, ItemIndex As Long) As Boolean
   Dim bDirty As Boolean
   
   On Error GoTo CheckCheckBoxInput_ERR
   Call xSet("CheckCheckBoxInput")
   
-  bDirty = (IIf(cbc = vbChecked, True, False) <> benefit.value(ItemIndex))
+  bDirty = (IIf(cbc = vbChecked, True, False) <> Benefit.value(ItemIndex))
   If bDirty Then
-    benefit.value(ItemIndex) = IIf(cbc = vbChecked, True, False)
+    Benefit.value(ItemIndex) = IIf(cbc = vbChecked, True, False)
   End If
           
   CheckCheckBoxInput = bDirty
@@ -658,13 +658,13 @@ CheckValidity_Err:
   Resume
 End Function
 
-Public Function CheckValidityAndBenefitDirty(benefit As IBenefitClass, ifg As IFrmGeneral, Optional ctlContainer As Object = Nothing) As Boolean
+Public Function CheckValidityAndBenefitDirty(Benefit As IBenefitClass, ifg As IFrmGeneral, Optional ctlContainer As Object = Nothing) As Boolean
   Dim frm As Form
   
   On Error GoTo CheckValidityAndBenefitDirty_Err
   Call xSet("CheckValidityAndBenefitDirty")
 
-  If benefit.Dirty Then
+  If Benefit.Dirty Then
     CheckValidityAndBenefitDirty = CheckValidity(ifg, ctlContainer)
   Else
     CheckValidityAndBenefitDirty = True
@@ -682,22 +682,21 @@ CheckValidityAndBenefitDirty_Err:
   Resume CheckValidityAndBenefitDirty_End
 End Function
 
-Public Function AddUBGRDStandardColumn(UBGRD As Object, lIndex As Long, sngWidth As Single, sCaption As String, sNumberFormat As String) As TrueDBGrid60.column
+Public Function AddUBGRDStandardColumn(ubgrd As Object, lIndex As Long, sngWidth As Single, sCaption As String, sNumberFormat As String) As TrueDBGrid60.column
   Dim c As TrueDBGrid60.column
-  Dim u As UBGRD
+  Dim u As ubgrd
   
   On Error GoTo AddUBGRDStandardColumn_Err
   Call xSet("AddUBGRDStandardColumn")
-
   
-  Set c = UBGRD.Columns.Add(lIndex)
+  Set c = ubgrd.Columns.Add(lIndex)
     
   With c
     .NumberFormat = sNumberFormat
     .Locked = False
     .Visible = True
     .width = sngWidth
-    .Caption = sCaption
+    .caption = sCaption
     .AllowSizing = True
     .AllowFocus = True
   End With
@@ -739,7 +738,7 @@ InitMilesGrid_Err:
   Resume InitMilesGrid_End
 End Function
 
-Public Function MilesDelete(lblTotalMiles As Label, benefit As IBenefitClass, lTotalMilesEnumKey As Long, ObjectList As ObjectList, ObjectListIndex As Long) As Boolean
+Public Function MilesDelete(lblTotalMiles As Label, Benefit As IBenefitClass, lTotalMilesEnumKey As Long, ObjectList As ObjectList, ObjectListIndex As Long) As Boolean
   Dim Miles As MileDetail
   
 On Error GoTo MilesDelete_Err
@@ -747,12 +746,12 @@ On Error GoTo MilesDelete_Err
   Call xSet("MilesDelete")
 
   Set Miles = ObjectList(ObjectListIndex)
-  benefit.value(lTotalMilesEnumKey) = benefit.value(lTotalMilesEnumKey) - Miles.MileAmount
+  Benefit.value(lTotalMilesEnumKey) = Benefit.value(lTotalMilesEnumKey) - Miles.MileAmount
   Call ObjectList.Remove(ObjectListIndex)
   
-  lblTotalMiles = benefit.value(lTotalMilesEnumKey)
+  lblTotalMiles = Benefit.value(lTotalMilesEnumKey)
   
-  benefit.Dirty = benefit.Dirty Or True
+  Benefit.Dirty = Benefit.Dirty Or True
   
 MilesDelete_End:
   Set Miles = Nothing
@@ -797,7 +796,7 @@ MilesRead_Err:
   Resume MilesRead_End
 End Function
 
-Public Function MilesWrite(lblTotalMiles As Label, lTotalMilesEnumKey As Long, RowBuf As TrueDBGrid60.RowBuffer, RowBufRowIndex As Long, ObjectList As ObjectList, ObjectListIndex As Long, benefit As IBenefitClass) As Boolean
+Public Function MilesWrite(lblTotalMiles As Label, lTotalMilesEnumKey As Long, RowBuf As TrueDBGrid60.RowBuffer, RowBufRowIndex As Long, ObjectList As ObjectList, ObjectListIndex As Long, Benefit As IBenefitClass) As Boolean
   Dim Miles As MileDetail
   
   On Error GoTo MilesWrite_Err
@@ -809,7 +808,7 @@ Public Function MilesWrite(lblTotalMiles As Label, lTotalMilesEnumKey As Long, R
     ObjectListIndex = ObjectList.Add(Miles)
   Else
     Set Miles = ObjectList(ObjectListIndex)
-    benefit.value(lTotalMilesEnumKey) = benefit.value(lTotalMilesEnumKey) - Miles.MileAmount
+    Benefit.value(lTotalMilesEnumKey) = Benefit.value(lTotalMilesEnumKey) - Miles.MileAmount
   End If
        
   With Miles
@@ -818,11 +817,11 @@ Public Function MilesWrite(lblTotalMiles As Label, lTotalMilesEnumKey As Long, R
     If Not IsNull(RowBuf.value(RowBufRowIndex, 2)) Then .MileItem = RowBuf.value(RowBufRowIndex, 2)
   End With
 
-  benefit.value(lTotalMilesEnumKey) = benefit.value(lTotalMilesEnumKey) + Miles.MileAmount
+  Benefit.value(lTotalMilesEnumKey) = Benefit.value(lTotalMilesEnumKey) + Miles.MileAmount
   
-  lblTotalMiles = benefit.value(lTotalMilesEnumKey)
+  lblTotalMiles = Benefit.value(lTotalMilesEnumKey)
   
-  benefit.Dirty = benefit.Dirty Or True
+  Benefit.Dirty = Benefit.Dirty Or True
   
   MilesWrite = True
 
@@ -974,7 +973,7 @@ Public Function SelectBenefitByListItem(ibf As IBenefitForm2, li As ListItem) As
     DoEvents 'added to enble ensure visible to work, take it out and see
     Call ibf.lv.SelectedItem.EnsureVisible
     Selected = True
-  ElseIf ibf.lv.listitems.Count > 0 Then
+  ElseIf ibf.lv.listitems.count > 0 Then
     Set ibf.lv.SelectedItem = ibf.lv.listitems(1)
     Call ibf.BenefitToScreen(ibf.lv.SelectedItem.Tag)
     
@@ -1006,7 +1005,7 @@ Public Function SelectBenefitByBenefitIndex(ibf As IBenefitForm2, Optional ByVal
   On Error GoTo SelectBenefitByBenefitIndex_ERR
 
   Call xSet("SelectBenefitByBenefitIndex")
-  lListCount = ibf.lv.listitems.Count
+  lListCount = ibf.lv.listitems.count
   If lListCount > 0 Then
     If (lBenefitIndex < 1) Then
       lListItemIndex = GetListItemIndexbyText(ibf.lv) ' returns 1 if no matches found
@@ -1123,7 +1122,7 @@ SetControlsBooleanProperty_ERR:
   Call ErrorMessage(ERR_ERROR, Err, "SetControlsBooleanProperty", "Set Controls Boolean Property", "Error setting controls property.")
   Resume SetControlsBooleanProperty_END
 End Sub
-Public Function BenefitFormStateEx(ByVal fState As BENEFIT_FORM_STATE, benefit As IBenefitClass, ParamArray Controls()) As Boolean
+Public Function BenefitFormStateEx(ByVal fState As BENEFIT_FORM_STATE, Benefit As IBenefitClass, ParamArray Controls()) As Boolean
   Dim vControls()
   On Error GoTo BenefitFormStateEx_err
   
@@ -1140,7 +1139,7 @@ Public Function BenefitFormStateEx(ByVal fState As BENEFIT_FORM_STATE, benefit A
     End If
     Call MDIMain.SetDelete
   ElseIf fState = FORM_DISABLED Then
-    Set benefit = Nothing
+    Set Benefit = Nothing
     Call SetControlsBooleanProperty(CP_ENABLED, False, vControls)
     Call MDIMain.ClearDelete
     Call MDIMain.ClearConfirmUndo

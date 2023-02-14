@@ -240,7 +240,7 @@ Public Sub ShowForm(ByRef oForm As Form, Optional iFormModal As FormShowConstant
   
   Call AssignControlTooltip(oForm, iFormModal = vbModeless)
   
-      oForm.Show iFormModal
+  oForm.Show iFormModal
   
   
 err_end:

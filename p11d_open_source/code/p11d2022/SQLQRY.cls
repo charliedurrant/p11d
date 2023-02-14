@@ -351,7 +351,7 @@ Public Function Queries(QueryID As QUERY_NAMES, ParamArray P()) As String
     Case DELETE_PAYEONLINE_VALIDATION_ERRORS
       Queries = "DELETE * from ValidationErrors"
     Case SELECT_PAYEONLINE_VALIDATION_ERRORS
-      Queries = "SELECT ValidationErrors.ErrorNumber AS [Error number], ValidationErrors.ErrorDescription AS Description, ValidationErrors.EmployerName AS Employer, ValidationErrors.EmployeeName AS Employee, ValidationErrors.BenefitName AS Benefit, ValidationErrors.HMITSectionString AS [HMIT Section], ValidationErrors.BenfitFormName AS [Benefit type] " & _
+      Queries = "SELECT ValidationErrors.ErrorNumber AS [" & PAYE_ONLINE_ERROR_ERROR_NUMBER & "], ValidationErrors.ErrorDescription AS [" & PAYE_ONLINE_ERROR_DESCRIPTION & "], ValidationErrors.EmployerName AS [" & PAYE_ONLINE_ERROR_EMPLOYER & "], ValidationErrors.EmployeeName AS [" & PAYE_ONLINE_ERROR_EMPLOYEE & "], ValidationErrors.BenefitName AS [" & PAYE_ONLINE_ERROR_BENEFIT & "], ValidationErrors.HMITSectionString AS [" & PAYE_ONLINE_ERROR_HMIT_SECTION & "], ValidationErrors.BenfitFormName AS [" & PAYE_ONLINE_ERROR_BENEFIT_TYPE & "]" & _
                 "From ValidationErrors"
     Case SELECT_PAYEONLINE_XML
       Queries = "SELECT SubmissionBody AS [xml] From Submissions where SubmissionID like '" & P(0) & "'"
@@ -404,16 +404,10 @@ Public Function Queries(QueryID As QUERY_NAMES, ParamArray P()) As String
                  "AND ( (c2.replaced = 0 ) ) " & _
                  ") " & _
                  ") )"
-                 
     Case SELECT_COMPANYCAR_CHECKER_CARS_IN_USE_BY_MORE_THAN_ONE_ANALYSE_TV
       Queries = "SELECT P_Num, Reg, AvailFrom, AvailTo FROM T_BenCar WHERE Reg = '" & P(0) & "'"
     Case SELECT_COMPANYCAR_CHECKER_CARS_IN_USE_BY_MORE_THAN_ONE_TV
-      'Queries = "SELECT Reg  FROM T_BenCar GROUP BY Reg HAVING Count(Reg) > 1"
-      
       Queries = "SELECT DISTINCT c1.Reg AS Data, c1.Reg AS DisplayName FROM T_BenCar c1 INNER JOIN T_BenCar c2 ON (c1.Reg = c2.Reg) AND (NOT (c1.P_Num =c2.P_Num AND c1.Reg=c2.Reg AND c1.AvailFrom=c2.AvailFrom AND c1.AvailTo=c2.AvailTo)) AND c2.AvailFrom<=c1.AvailTo AND c2.AvailTo>=c1.AvailTo group by c1.Reg"
-      'Queries = "SELECT DISTINCT c1.Reg AS Data, c1.Reg AS DisplayName, c1.P_Num FROM T_BenCar c1 INNER JOIN T_BenCar c2 " & _
-      '          "ON (c1.Reg = c2.Reg) AND (NOT (c1.P_Num =c2.P_Num AND c1.Reg=c2.Reg AND c1.AvailFrom=c2.AvailFrom AND c1.AvailTo=c2.AvailTo)) " & _
-      '          "AND c2.AvailFrom<=c1.AvailTo AND c2.AvailTo>=c1.AvailTo"
     Case SELECT_COMPANYCAR_CHECKER_CARS_IN_USE_BY_MORE_THAN_ONE
       Queries = "SELECT ee.Surname + ',' + ee.Firstname + ' (' + ee.P_Num + ')'  as Displayname ,  c.P_Num,c.Reg, c.AvailFrom, c.AvailTo, c.Replaced, c.Replacement, c.RegReplaced  FROM T_BenCar c INNER JOIN T_Employees ee ON c.P_Num = ee.P_Num WHERE Reg = '" & P(0) & "'"
     Case SELECT_COMPANYCAR_CHECKER_CARS_LOG_REGDATES
@@ -507,7 +501,7 @@ Function CCarCheckGapsInCarUsage(sOrderBy As String) As String
   
   Dim sql As String
   Dim dtYearEnd As Date
-  On Error GoTo err_Err
+  On Error GoTo err_err
   
   
   
@@ -600,9 +594,9 @@ Function CCarCheckGapsInCarUsage(sOrderBy As String) As String
   
   CCarCheckGapsInCarUsage = sql
 
-err_End:
+err_end:
   Exit Function
-err_Err:
+err_err:
   Call ErrorMessage(Err.Number, Err, "CCarCheckGapsInCarUsage", "CCarCheckGapsInCarUsage", Err.Description)
 End Function
 

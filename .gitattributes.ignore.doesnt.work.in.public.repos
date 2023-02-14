@@ -1,0 +1,109 @@
+# Auto detect text files and perform LF normalization
+#REF: https://stackoverflow.com/questions/170961/whats-the-strategy-for-handling-crlf-carriage-return-line-feed-with-git
+* text=auto
+
+# Never modify line endings of our bash scripts
+*.sh text eol=lf
+
+# The above will handle all files NOT found below
+#
+# These files are text and should be normalized (Convert crlf => lf)
+*.css text
+*.java text
+*.js text
+*.json text
+*.properties text
+*.txt text
+*.cs text
+*.xml text
+*.txt text
+*.html text
+*.css text
+*.js text
+*.csv text
+
+*.md text diff=markdown
+*.cs       text diff=csharp
+*.cshtml   text diff=html
+*.csx      text diff=csharp
+
+# These files are text and should always be crlf
+*.sln      text eol=crlf
+*.csproj   text eol=crlf
+*.vbp   text eol=crlf
+*.vbg   text eol=crlf
+
+#Binaries
+*.[pP][dD][bB] filter=lfs diff=lfs merge=lfs -text
+*.[pP][dD][bB] filter=lfs diff=lfs merge=lfs -text
+*.[eE][xX][eE] filter=lfs diff=lfs merge=lfs -text
+*.[fF][rR][xX] filter=lfs diff=lfs merge=lfs -text
+*.[mM][sS][iI] filter=lfs diff=lfs merge=lfs -text
+*.[dD][lL][lL] filter=lfs diff=lfs merge=lfs -text
+*.[bB][iI][nN] filter=lfs diff=lfs merge=lfs -text
+#Database
+*.[dD][bB] filter=lfs diff=lfs merge=lfs -text
+*.[mM][dD][bB] filter=lfs diff=lfs merge=lfs -text
+*.[lL][dD][bB] filter=lfs diff=lfs merge=lfs -text
+*.[pP][dD] filter=lfs diff=lfs merge=lfs -text
+*.[pP][dD] filter=lfs diff=lfs merge=lfs -text
+#Templates
+*_[tT][pP][lL].[xX][mM][lL] filter=lfs diff=lfs merge=lfs -text
+TemplatesRepository/** filter=lfs diff=lfs merge=lfs -text
+*.[mM][oO][dD][iI][fF][iI][eE][dD] filter=lfs diff=lfs merge=lfs -text
+#Word
+*.[dD][oO][cC] filter=lfs diff=lfs merge=lfs -text
+*.[dD][oO][cC][xX] filter=lfs diff=lfs merge=lfs -text
+#Excel
+*.[xX][lL][sS] filter=lfs diff=lfs merge=lfs -text
+*.[xX][lL][sS][xX] filter=lfs diff=lfs merge=lfs -text
+# Fonts
+*.[oO][tT][fF] filter=lfs diff=lfs merge=lfs -text
+*.[tT][tT][fF] filter=lfs diff=lfs merge=lfs -text
+# Packaging
+*.7[zZ] filter=lfs diff=lfs merge=lfs -text
+*.[zZ][iI][pP] filter=lfs diff=lfs merge=lfs -text
+*.[gG][zZ] filter=lfs diff=lfs merge=lfs -text
+*.[bB][zZ]2 filter=lfs diff=lfs merge=lfs -text
+*.[rR][aA][rR] filter=lfs diff=lfs merge=lfs -text
+*.[tT][aA][rR] filter=lfs diff=lfs merge=lfs -text
+*.[tT][aA][rR].[gG][zZ] filter=lfs diff=lfs merge=lfs -text
+*.[jJ][aA][rR] filter=lfs diff=lfs merge=lfs -text
+# Video formats
+*.[aA][sS][fF] filter=lfs diff=lfs merge=lfs -text
+*.[aA][vV][iI] filter=lfs diff=lfs merge=lfs -text
+*.[fF][lL][vV] filter=lfs diff=lfs merge=lfs -text
+*.[mM][oO][vV] filter=lfs diff=lfs merge=lfs -text
+*.[mM][pP]4 filter=lfs diff=lfs merge=lfs -text
+*.[mM][pP][eE][gG] filter=lfs diff=lfs merge=lfs -text
+*.[mM][pP][gG] filter=lfs diff=lfs merge=lfs -text
+*.[oO][gG][vV] filter=lfs diff=lfs merge=lfs -text
+*.[wW][mM][vV] filter=lfs diff=lfs merge=lfs -text
+# Audio formats
+*.[aA][iI][fF] filter=lfs diff=lfs merge=lfs -text
+*.[aA][iI][fF][fF] filter=lfs diff=lfs merge=lfs -text
+*.[bB][aA][nN][kK] filter=lfs diff=lfs merge=lfs -text
+*.[iI][tT] filter=lfs diff=lfs merge=lfs -text
+*.[mM][oO][dD] filter=lfs diff=lfs merge=lfs -text
+*.[mM][pP]3 filter=lfs diff=lfs merge=lfs -text
+*.[oO][gG][gG] filter=lfs diff=lfs merge=lfs -text
+*.[sS]3[mM] filter=lfs diff=lfs merge=lfs -text
+*.[wW][aA][vV] filter=lfs diff=lfs merge=lfs -text
+*.[xX][mM] filter=lfs diff=lfs merge=lfs -text
+# 2D formats
+*.[aA][iI] filter=lfs diff=lfs merge=lfs -text
+*.[bB][mM][pP] filter=lfs diff=lfs merge=lfs -text
+*.[dD][dD][sS] filter=lfs diff=lfs merge=lfs -text
+*.[eE][xX][rR] filter=lfs diff=lfs merge=lfs -text
+*.[gG][iI][fF] filter=lfs diff=lfs merge=lfs -text
+*.[hH][dD][rR] filter=lfs diff=lfs merge=lfs -text
+*.[iI][fF][fF] filter=lfs diff=lfs merge=lfs -text
+*.[jJ][pP][eE][gG] filter=lfs diff=lfs merge=lfs -text
+*.[jJ][pP][gG] filter=lfs diff=lfs merge=lfs -text
+*.[pP][iI][cC][tT] filter=lfs diff=lfs merge=lfs -text
+*.[pP][nN][gG] filter=lfs diff=lfs merge=lfs -text
+*.[pP][sS][dD] filter=lfs diff=lfs merge=lfs -text
+*.[tT][gG][aA] filter=lfs diff=lfs merge=lfs -text
+*.[tT][iI][fF] filter=lfs diff=lfs merge=lfs -text
+*.[tT][iI][fF][fF] filter=lfs diff=lfs merge=lfs -text
+*.[pP][dD][fF] filter=lfs diff=lfs merge=lfs -text

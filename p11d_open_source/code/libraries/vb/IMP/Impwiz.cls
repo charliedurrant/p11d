@@ -841,9 +841,9 @@ Private Sub LoadRecentSpecs(FrmSrc As Frm_Source)
       path = c(i)
       Set lvi = FrmSrc.listViewRecentSpecs.ListItems.Add(, , path)
       lvi.ToolTipText = path
-      
     Next
   End If
+  
 End Sub
 Friend Function ReCalc_Src(frmSrcObj As Object) As Boolean
   Dim FrmSrc As Frm_Source

@@ -79,7 +79,7 @@ Private Sub grid_ValidateTCS(FirstColIndexInError As Long, ValidateMessage As St
           End If
           
           Set ol = grid.ObjectList
-          For i = 1 To ol.Count
+          For i = 1 To ol.count
             Set adjustment = ol(i)
             If ObjectListIndex <> i Then
               If (adjustment.caption = caption) Then

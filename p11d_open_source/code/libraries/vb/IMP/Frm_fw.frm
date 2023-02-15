@@ -158,11 +158,6 @@ Attribute VB_Exposed = False
 Option Explicit
 Private m_ImpWiz As ImportWizard
 Implements IImportForm
-
-Private Sub IImportForm_Entering(ByVal forward As Boolean)
-
-End Sub
-
 Private Sub Form_Load()
   Lbl_Instruct = "This screen lets you set field widths (column breaks)." & vbCrLf & vbCrLf & vbCrLf & _
                      "Vertical lines signify column breaks." & vbCrLf & vbCrLf & _

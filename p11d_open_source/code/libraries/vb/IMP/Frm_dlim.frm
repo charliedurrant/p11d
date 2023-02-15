@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
 Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form Frm_DLim 
    BorderStyle     =   3  'Fixed Dialog
@@ -336,12 +336,8 @@ Option Explicit
 Private m_ImpWiz As ImportWizard
 Implements IImportForm
 
-Private Sub IImportForm_Entering(ByVal forward As Boolean)
-
-End Sub
-
 Private Sub Chk_FieldNames_Click()
-  If Chk_FieldNames.value = vbChecked Then
+  If Chk_FieldNames.Value = vbChecked Then
     Txt_FieldNames.Enabled = True
     UpD_FieldNames.Enabled = True
     Txt_FieldNames.Text = "1"
@@ -366,7 +362,7 @@ Private Sub Command1_Click()
 End Sub
 
 Private Sub chkAllowZeroLengthStringValues_Click()
-  m_ImpWiz.ImpParent.AddZeroLengthStringValues = chkAllowZeroLengthStringValues.value = vbChecked
+  m_ImpWiz.ImpParent.AddZeroLengthStringValues = chkAllowZeroLengthStringValues.Value = vbChecked
 End Sub
 
 Private Property Get IImportForm_FormType() As IMPORT_GOTOFORM
@@ -436,7 +432,7 @@ Public Function GetDelimiters() As String
   If Not inGetDelimiter Then
     inGetDelimiter = True
     For i = 0 To Me.Chk_Delims.Count - 1
-      If Me.Chk_Delims(i).value = vbChecked Then
+      If Me.Chk_Delims(i).Value = vbChecked Then
         Select Case i
           Case 0: s = s & ","
           Case 1: s = s & ";"
@@ -446,7 +442,7 @@ Public Function GetDelimiters() As String
           Case 5
             If Len(Me.Txt_Delim.Text) = 0 Then
               Me.Txt_Delim.Text = DEFAULT_TEXT_DELIMITER
-              Me.Chk_Delims(5).value = vbUnchecked
+              Me.Chk_Delims(5).Value = vbUnchecked
             Else
               s = s & Left$(Me.Txt_Delim.Text, 1)
             End If
@@ -468,46 +464,46 @@ Public Sub SetDelimsEscChar(ByVal DLims As String, EChar As String)
     inSetDelimiter = True
     
     For i = 0 To 5
-      Me.Chk_Delims(i).value = vbUnchecked
+      Me.Chk_Delims(i).Value = vbUnchecked
     Next i
     
     Do
       i = InStr(DLims, ",")
       If i = 0 Then Exit Do
-      Me.Chk_Delims(0).value = vbChecked
+      Me.Chk_Delims(0).Value = vbChecked
       DLims = Left$(DLims, i - 1) & Right$(DLims, Len(DLims) - i)
     Loop
     
     Do
       i = InStr(DLims, ";")
       If i = 0 Then Exit Do
-      Me.Chk_Delims(1).value = vbChecked
+      Me.Chk_Delims(1).Value = vbChecked
       DLims = Left$(DLims, i - 1) & Right$(DLims, Len(DLims) - i)
     Loop
     
     Do
       i = InStr(DLims, ":")
       If i = 0 Then Exit Do
-      Me.Chk_Delims(2).value = vbChecked
+      Me.Chk_Delims(2).Value = vbChecked
       DLims = Left$(DLims, i - 1) & Right$(DLims, Len(DLims) - i)
     Loop
     
     Do
       i = InStr(DLims, vbTab)
       If i = 0 Then Exit Do
-      Me.Chk_Delims(3).value = vbChecked
+      Me.Chk_Delims(3).Value = vbChecked
       DLims = Left$(DLims, i - 1) & Right$(DLims, Len(DLims) - i)
     Loop
     
     Do
       i = InStr(DLims, " ")
       If i = 0 Then Exit Do
-      Me.Chk_Delims(4).value = vbChecked
+      Me.Chk_Delims(4).Value = vbChecked
       DLims = Left$(DLims, i - 1) & Right$(DLims, Len(DLims) - i)
     Loop
     
     If Len(DLims) > 0 Then
-      Me.Chk_Delims(5).value = vbChecked
+      Me.Chk_Delims(5).Value = vbChecked
       Me.Txt_Delim.Text = Left$(DLims, 1)
     Else
       Me.Txt_Delim.Text = ""

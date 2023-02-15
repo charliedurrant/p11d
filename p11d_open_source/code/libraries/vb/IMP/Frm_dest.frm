@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
 Begin VB.Form Frm_Dest 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Destination Recordset"
@@ -174,10 +174,6 @@ End Sub
 
 Private Sub Command1_Click()
   MsgBox CStr(m_ImpWiz.ImpParent.UpdateType)
-End Sub
-
-Private Sub IImportForm_Entering(ByVal forward As Boolean)
-   
 End Sub
 
 Private Property Get IImportForm_FormType() As IMPORT_GOTOFORM

@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{AF27A9B5-A3F4-11D2-8DB7-00C04FA9DD6F}#1.2#0"; "TCSPROG.OCX"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
 Begin VB.Form Frm_End 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Import Data"
@@ -16,6 +16,14 @@ Begin VB.Form Frm_End
    ScaleWidth      =   7635
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
+   Begin VB.CommandButton Cmd_SaveSpecAs 
+      Caption         =   "Save Spec &As"
+      Height          =   375
+      Left            =   1680
+      TabIndex        =   19
+      Top             =   5760
+      Width           =   1275
+   End
    Begin TCSPROG.TCSProgressBar PBar_Import 
       Height          =   240
       Left            =   1530
@@ -51,7 +59,7 @@ Begin VB.Form Frm_End
       Skew            =   0
       PictureOffsetTop=   0
       PictureOffsetLeft=   0
-      Enabled         =   -1  'True
+      Enabled         =   0   'False
       Increment       =   1
       TextAlignment   =   1
    End
@@ -172,9 +180,9 @@ Begin VB.Form Frm_End
       Width           =   1215
    End
    Begin VB.CommandButton Cmd_SaveSpec 
-      Caption         =   "Save Spec"
+      Caption         =   "&Save Spec"
       Height          =   375
-      Left            =   1140
+      Left            =   405
       TabIndex        =   3
       ToolTipText     =   "Press the Save Spec button to save the import specification into a file, for future use."
       Top             =   5760
@@ -249,10 +257,6 @@ Option Explicit
 Private m_ImpWiz As ImportWizard
 Implements IImportForm
 
-Private Sub IImportForm_Entering(ByVal forward As Boolean)
-
-End Sub
-
 Private Sub Cmd_ErrPrint_Click()
   Call m_ImpWiz.ImpParent.ErrorFilter.PrintErrors
 End Sub
@@ -260,6 +264,7 @@ End Sub
 Private Sub Cmd_ErrView_Click()
   Call m_ImpWiz.ImpParent.ErrorFilter.ViewErrors
 End Sub
+
 
 Private Property Get IImportForm_FormType() As IMPORT_GOTOFORM
   IImportForm_FormType = TCSIMP_END
@@ -279,6 +284,13 @@ Private Sub Cmd_Back_Click()
 End Sub
 
 Private Sub Cmd_Cancel_Click()
+  If m_ImpWiz.SpecIsDirty Then
+    If MsgBox("You have not saved your import spec, do you still wish to exit?", vbOKCancel, "Save spec") = vbCancel Then
+      Exit Sub
+    End If
+  End If
+  
+  Call m_ImpWiz.SaveRecentSpecs
   Call SwitchForm(Me, TCSIMP_CANCEL, True)
 End Sub
 
@@ -287,15 +299,26 @@ Private Sub Cmd_Import_Click()
 End Sub
 
 Private Sub Cmd_SaveSpec_Click()
-  'apf save spec
+  Dim saveAs As Boolean
+  If (Len(m_ImportWizard.specFile) = 0) Then
+    saveAs = True
+  End If
+  Call SaveSpec(saveAs)
+End Sub
+Private Sub Cmd_SaveSpecAs_Click()
+  Call SaveSpec(True)
+End Sub
+Private Sub SaveSpec(ByVal saveAs As Boolean)
   Dim s As String
   
-  s = FileSaveAsDlg("Choose a file in which to save the specification", "Specification Files (*.imp)|*.imp|All Files (*.*)|*.*", m_ImpWiz.SpecPath)
-  If Len(s) > 0 Then
-    Call SplitPath(s, m_ImpWiz.SourcePath)
-    Call m_ImpWiz.SaveSpec(s)
+  If (saveAs) Then
+    s = FileSaveAsDlg("Choose a file in which to save the specification", "Specification Files (*.imp)|*.imp|All Files (*.*)|*.*", m_ImpWiz.specPath)
+    If (Len(s) = 0) Then Exit Sub
+  Else
+    s = m_ImportWizard.specFile
   End If
-
+  Call SplitPath(s, m_ImpWiz.SourcePath)
+  Call m_ImpWiz.SaveSpec(s)
 End Sub
 
 Private Sub Cmd_Another_Click()

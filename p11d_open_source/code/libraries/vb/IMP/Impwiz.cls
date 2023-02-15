@@ -86,15 +86,16 @@ Private m_sFileExtensions As String
 
 Private m_ShowSimpleLinkView As Boolean
 
-Private m_UseSpec As Boolean  'MPSMarch
+Private m_UseSpec As Boolean
 Private m_GotoSourceScreen As Boolean
 Private m_SavedSpec As Boolean
 Private m_IImportWizard As IImportWizard
+Private m_RecentSpecsDataSetName As String
+Private m_RecentSpecs As StringList
 
 Public Property Get SavedSpec() As Boolean
   SavedSpec = m_SavedSpec
 End Property
-
 Public Sub AddFileExtension(DisplayName As String, FileExtension As String, Optional DefaultChoice As Boolean = False, Optional ClearExisting As Boolean = False)
   If ClearExisting Then m_sFileExtensions = ""
   If Len(FileExtension) Then
@@ -105,7 +106,6 @@ Public Sub AddFileExtension(DisplayName As String, FileExtension As String, Opti
     End If
   End If
 End Sub
-
 Private Sub Class_Initialize()
   Dim iFrm As IImportForm
   
@@ -127,6 +127,8 @@ Private Sub Class_Initialize()
   
   Set m_DestRecSets = New Collection
   m_sFileExtensions = "Text Files (*.txt)|*.txt|Comma Separated Variable Files (*.csv)|*.csv|All Files (*.*)|*.*"
+  Set m_RecentSpecs = New StringList
+    
 End Sub
 
 Private Sub Class_Terminate()
@@ -177,11 +179,11 @@ Public Property Let SourcePath(ByVal NewValue As String)
   m_SourcePath = NewValue
 End Property
 
-Public Property Get SpecPath() As String
-  SpecPath = m_SpecPath
+Public Property Get specPath() As String
+  specPath = m_SpecPath
 End Property
 
-Public Property Let SpecPath(ByVal NewValue As String)
+Public Property Let specPath(ByVal NewValue As String)
   m_SpecPath = NewValue
 End Property
 
@@ -409,17 +411,13 @@ Public Sub StartWizard()
       End If
       
       If (m_DestRecSets.Count = 1) And GotoForm = TCSIMP_DEST And (Not Started) Then
-        'Frm_Source.Cmd_Back.Visible = False  'User should be able to go back to see existing recordset contents
         Frm_Dest.Cmd_Next.value = True
         GotoForm = TCSIMP_SOURCE
       Else
         Set frm = m_ImportForms.Item(CStr(GotoForm))
         Dim importForm As IImportForm
         Set importForm = frm
-        Call importForm.Entering(True)
         frm.Show vbModal
-        
-        
       End If
       Started = True
     Loop
@@ -710,6 +708,8 @@ Friend Function ReCalc_Dest(Optional ByVal NewDest As DestRecordSet) As Boolean
   
   frmDest.Caption = m_TitlePrefix & "Destination Recordset"
   
+  Call LoadRecentSpecs(Frm_Source)
+  
 ReCalc_redo:
   Set OldDest = CurrentDest
   If frmDest.Cbo_Table.ListCount > 0 Then
@@ -722,6 +722,8 @@ ReCalc_redo:
   If Not NewDest Is Nothing Then
     Set OldDest = Nothing
     Set CurrentDest = NewDest
+    
+    
     frmDest.Cbo_Table.Text = CurrentDest.DisplayName
   Else
     Set CurrentDest = GetdestbyDisplayname(frmDest.Cbo_Table.Text)
@@ -793,7 +795,6 @@ ReCalc_redo:
   ImpParent.FooterCount = -1
   Call SetUpdateType(frmDest, CurrentDest.UpdateType, m_AllowChangeUpdateType, CurrentDest.LockUpdate)
   ReCalc_Dest = True
-  'frmEnd.Lbl_RecsImported.Caption = ""
   
 ReCalc_Dest_End:
   Call xReturn("ReCalc_Dest")
@@ -804,6 +805,7 @@ ReCalc_Dest_Err:
   If Not frmDest Is Nothing Then frmDest.FlG_Dest.Visible = False
   Call ErrorMessage(ERR_ERROR, Err, "ReCalc_Dest", "Recalc Destination Form", "Unable to recalc the Destination form")
   Resume ReCalc_Dest_End
+  Resume
 End Function
  
 Private Function OpenSQLspecifiedRS(dB As Database, SQL As String) As Boolean
@@ -828,21 +830,64 @@ OpenSQLspecifiedRS_Err:
 End Function
 Private Sub LoadRecentSpecs(FrmSrc As Frm_Source)
   Dim c As Collection
-  Dim path As String
+  Dim path As Variant
   Dim i As Long
   Dim lvi As ListItem
+      
+On Error GoTo err_err:
+
+  If (CurrentDest Is Nothing) Then Exit Sub
   
+  If CurrentDest.Name = m_RecentSpecsDataSetName Then Exit Sub
   
   If (Not Interface Is Nothing) Then
-    
-    Set c = Interface.GetRecentSpecs("")
+    Call FrmSrc.listViewRecentSpecs.ListItems.Clear
+    Set c = Interface.GetRecentSpecs(CurrentDest.Name)
+    Call m_RecentSpecs.RemoveAll
     'remove any specs not in the list
     For i = 1 To c.Count
       path = c(i)
+      Call m_RecentSpecs.Add(path)
       Set lvi = FrmSrc.listViewRecentSpecs.ListItems.Add(, , path)
       lvi.ToolTipText = path
     Next
   End If
+  m_RecentSpecsDataSetName = CurrentDest.Name
+  
+err_end:
+  Exit Sub
+err_err:
+  Call Err.Raise(Err.Number, ErrorSource(Err, "LoadRecentSpecs"), Err.Description)
+  Resume
+End Sub
+Friend Sub RemoveRecentSpec(ByVal specPath As String)
+  If m_RecentSpecs.IsPresent(specPath) Then
+    Call m_RecentSpecs.Remove(specPath)
+  End If
+End Sub
+Friend Sub SaveRecentSpecs()
+  Dim c As Collection
+  Dim i As Long
+  Dim currentSpecExists As Boolean
+  Dim specPath As String
+  
+  If Me.Interface Is Nothing Then Exit Sub
+  
+  Set c = New Collection
+  
+  For i = 1 To m_RecentSpecs.Count
+    specPath = m_RecentSpecs.Item(i)
+    Call c.Add(specPath)
+    If StrComp(specPath, m_SpecFile, vbTextCompare) = 0 Then
+      currentSpecExists = True
+      Exit For
+    End If
+  Next
+  If Not currentSpecExists Then
+    Call c.Add(m_SpecFile)
+  End If
+  
+  Call Interface.SetRecentSpecs(CurrentDest.Name, c)
   
 End Sub
 Friend Function ReCalc_Src(frmSrcObj As Object) As Boolean
@@ -870,7 +915,6 @@ Friend Function ReCalc_Src(frmSrcObj As Object) As Boolean
     Call LoadRecentSpecs(FrmSrc)
     Call SplitPath(m_SourceFile, path, File, Ext)
     File = File & Ext
-    'FrmSrc.Lbl_SourcePath.Caption = Path & vbCrLf & File
     
     FrmSrc.Lbl_SourcePath.Caption = m_SourceFile
     FrmSrc.Lbl_SourcePath.Visible = True
@@ -1122,7 +1166,7 @@ Friend Function ReCalc_FW2(ByVal FrmFW As Frm_FW, ForceInit As Boolean) As Boole
     FrmFW.FW_FWGrid.FWFontSize = 10
     FrmFW.FW_FWGrid.Refresh
   End If
-  v = Frm_FW.FW_FWGrid.Lines
+  v = Frm_FW.FW_FWGrid.lines
   Call m_FieldSpecs.RemoveAll
   Call m_SavedFieldSpecs.RemoveAll
   
@@ -1386,7 +1430,45 @@ SaveSpec_Err:
   Call ErrorMessage(ERR_ERROR, Err, "SaveSpec", "Save Import Specification", "Error saving import specification to " & vbCrLf & FileName & vbCrLf)
   Resume SaveSpec_End
 End Sub
+Friend Property Get SpecIsNew() As Boolean
+  SpecIsNew = (Len(m_SpecFile) = 0)
+End Property
 
+Friend Property Get SpecIsDirty() As Boolean
+  Dim originalSpecFile As String
+  Dim originalSavedSpec As Boolean
+  Dim tempFileName As String
+  Dim currentSpecText As String, originalSpecText As String
+  
+  On Error GoTo err_err
+  
+  If SpecIsNew Then
+    SpecIsDirty = True
+    GoTo err_end:
+  End If
+  
+  originalSpecFile = m_SpecFile
+  originalSavedSpec = m_SavedSpec
+  tempFileName = abatecrt.GetTempFileName
+  
+  Call SaveSpec(tempFileName)
+  
+  currentSpecText = TextFileLoad(tempFileName)
+  originalSpecText = TextFileLoad(originalSpecFile)
+  
+  SpecIsDirty = currentSpecText <> originalSpecText
+  
+err_end:
+  If (Len(tempFileName) > 0) Then
+    Call xKill(tempFileName)
+  End If
+  m_SpecFile = originalSpecFile
+  m_SavedSpec = originalSavedSpec
+  Exit Property
+err_err:
+  Call ErrorMessage(ERR_ERROR, Err, "SpecDirty", "SpecDirty", "Error checking of the spec is dirty")
+  Resume err_end
+End Property
 Friend Sub LoadSpec(Optional ByVal specFile As String)
   Dim i As Long, j As Long
   Dim FrmSrc As Frm_Source
@@ -1912,6 +1994,15 @@ Friend Sub ReCalc_End(Optional FullRecalc As Boolean = False)
     End If
     frmEnd.Cmd_Cancel.Caption = "Exit"
   Else
+    If (Not SpecIsNew) And SpecIsDirty Then
+      frmEnd.Cmd_SaveSpec.Visible = True
+    Else
+      frmEnd.Cmd_SaveSpec.Visible = False
+    End If
+    
+    frmEnd.Cmd_SaveSpecAs.Visible = True
+      
+    
     s = "Press the Import button to import the data in the source file into the database shown below."
     frmEnd.Cmd_Cancel.Caption = "Cancel"
   End If
@@ -3310,11 +3401,9 @@ err_err:
   Call ErrorMessage(ERR_ERROR, Err, "AddFieldDisplayName", "Add Field DisplayName", "Error trying to add a field '" & FieldName & "' dispaly name '" & DisplayName & "'")
   Resume err_end
 End Function
-
 Public Property Get Interface() As IImportWizard
   Set Interface = m_IImportWizard
 End Property
 Public Property Set Interface(ByVal value As IImportWizard)
   Set m_IImportWizard = value
 End Property
-

@@ -74,7 +74,7 @@ On Error GoTo err_err
 
   If F_Employers.LB.SelectedItem Is Nothing Then Call Err.Raise(ERR_EMPLOYER_INVALID, "PreImport", "There is no employer selected")
   
-  Set ey = p11d32.Employers.Item(F_Employers.LB.SelectedItem.Tag)
+  Set ey = p11d32.employers.Item(F_Employers.LB.SelectedItem.Tag)
   Set ben = ey
   Call ben.Kill
   
@@ -92,7 +92,7 @@ Public Sub Zip(ByVal ben As IBenefitClass, sDestFilename As String)
   Dim Zip As cZip
   Call ben.Kill
   Set Zip = New cZip
-  Zip.BasePath = p11d32.WorkingDirectory
+  Zip.BasePath = p11d32.workingDirectory
   Zip.AddFileSpec (ben.value(employer_FileName))
   Zip.RecurseSubDirs = False
   Zip.ZipFile = sDestFilename
@@ -147,7 +147,7 @@ Public Sub InitImport()
       sDestFilename = sTrackingDescription & "_" & sGuid & "_"
       sDestFilename = sDestFilename & Year(dt) & Format$(Month(dt), "0#") & Format$(Day(dt), "0#") & Format$(Hour(dt), "0#") & Format$(Minute(dt), "0#") & Format$(Second(dt), "0#")
       sDestFilename = Me.TrackingPathActual & sDestFilename & S_FILE_EXTENSION_BAK
-      sSourceFileName = p11d32.WorkingDirectory & ben.value(employer_FileName)
+      sSourceFileName = p11d32.workingDirectory & ben.value(employer_FileName)
       Call Me.Zip(ben, sDestFilename)
       
     End If
@@ -606,19 +606,44 @@ End Function
 Private Function IErrorFilter_ViewAvailable() As Boolean
   IErrorFilter_ViewAvailable = True
 End Function
-
 Private Function IImportWizard_GetRecentSpecs(ByVal importDataSet As String) As Collection
   Dim c As Collection
+  Dim sql As String
+  Dim rs As Recordset
+  Dim specs As String
+  Dim specsArray() As String
+  Dim i As Long
   
   Set c = New Collection
   
-  Call c.Add("C:\dump\p11d_data\employees.imp")
+  sql = mSql.Queries(IMPORTS_SPECS_FOR_DATASET_SELECT, importDataSet)
+  Set rs = m_dbP11dFile.OpenRecordset(sql, dbOpenSnapshot)
+  While Not rs.EOF
+    Call c.Add(CStr(rs.Fields("ImportSpec")))
+    rs.MoveNext
+  Wend
+  
   Set IImportWizard_GetRecentSpecs = c
 End Function
-Private Sub IImportWizard_ImportCompleted(ByVal importDataSet As String, ByVal specPathAndFile As String)
+Private Sub IImportWizard_SetRecentSpecs(ByVal importDataSet As String, ByVal specs As Collection)
+  Dim sql As String
+  Dim specPath As Variant
   
-End Sub
+On Error GoTo err_err
 
+  sql = mSql.Queries(IMPORTS_SPECS_FOR_DATASETS_DELETE, importDataSet)
+  Call m_dbP11dFile.Execute(sql)
+  For Each specPath In specs
+    sql = mSql.Queries(IMPORTS_SPECS_FOR_DATASET_INSERT, importDataSet, CStr(specPath))
+    Call m_dbP11dFile.Execute(sql)
+  Next
+  
+err_end:
+  Exit Sub
+err_err:
+  GoTo err_end
+  Resume
+End Sub
 Private Function IProcessImport_PostProcess(ic As ImportClass, RollBack As Boolean, linesOk As Long, AddedRecordCount As Long, UpdatedRecordCount As Long) As Long
   Dim rs As Recordset
   Dim ErrorCount As Long, lTag As QUERY_NAMES_IMP, sImport As String
@@ -735,8 +760,8 @@ Private Function ImportWizardSettings() As Boolean
     Call .AddFileExtension("All files (*.*)", "*.*")
   
     .AutoOpenSourceFile = True
-    .SourcePath = p11d32.WorkingDirectory
-    .SpecPath = p11d32.WorkingDirectory
+    .SourcePath = p11d32.workingDirectory
+    .specPath = p11d32.workingDirectory
     .TitlePrefix = GetStatic("ApplicationName") & " Importer  -  "
     .AllowChangeUpdateType = True
   End With

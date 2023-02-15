@@ -17,7 +17,7 @@ Option Explicit
 Public Function GetRecentSpecs(ByVal importDataSet As String) As Collection
 
 End Function
-Public Sub ImportCompleted(ByVal importDataSet As String, ByVal specPathAndFile As String)
+Public Sub SetRecentSpecs(ByVal importDataSet As String, ByVal specs As Collection)
 
 End Sub
 

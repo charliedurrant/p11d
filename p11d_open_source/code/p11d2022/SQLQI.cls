@@ -76,7 +76,9 @@ Public Enum QUERY_NAMES_IMP
   UPDATE_EMPLOYEE_CAR_KEYS
   UPDATE_RELOCATION_KEYS
   UPDATE_COMPANY_CAR_FUEL_AVAILABLE_TO
-
+  IMPORTS_SPECS_FOR_DATASET_SELECT
+  IMPORTS_SPECS_FOR_DATASETS_DELETE
+  IMPORTS_SPECS_FOR_DATASET_INSERT
 End Enum
 Private mLastQuery As QUERY_NAMES_IMP
 Private Const S_GEN_IMP_SQL_BASE As String = "SELECT DISTINCTROW T_BenOther.P_Num AS [" & S_PNUM & "], T_BenOther.Item AS Description,  T_BenOther.Value AS [Value of benefit],T_BenOther.MadeGood AS [Amount made good], T_BenOther.MadeGoodIsTaxDeducted AS [Amount is tax deducted],T_BenOther.From AS [Available from], T_BenOther.To AS [Available to], T_BenOther.UDBCode, T_BenOther.Category, T_BenOther.Class"
@@ -106,10 +108,17 @@ Public Property Get LastQuery() As QUERY_NAMES_IMP
 End Property
 
 Private Function QueriesEx(ByVal QueryID As QUERY_NAMES_IMP, params() As Variant, ByVal Paramcount As Long, ByVal NameOnly As Boolean, ByVal IgnoreEmpty As Boolean) As String
+  Dim paramsLBound As Long
   
   On Error GoTo QueriesEx_ERR
   
   Call xSet("Queries")
+  
+  
+  
+  If (IsArrayEx(params)) Then
+    paramsLBound = LBound(params)
+  End If
   
   mLastQuery = QueryID
   Select Case QueryID
@@ -397,7 +406,12 @@ Private Function QueriesEx(ByVal QueryID As QUERY_NAMES_IMP, params() As Variant
       QueriesEx = "UPDATE DISTINCTROW T_BenReloc INNER JOIN T_BenRelocDetails ON (T_BenReloc.Item = T_BenRelocDetails.Address) AND (T_BenReloc.P_Num = T_BenRelocDetails.P_Num) SET T_BenRelocDetails.RelocKey = [T_BenReloc].[RelocKey] Where ((T_BenRelocDetails.RelocKey Is Null Or T_BenRelocDetails.RelocKey = ''))"
     Case UPDATE_COMPANY_CAR_FUEL_AVAILABLE_TO
       QueriesEx = "UPDATE  T_BenCar set FuelAvailTo = AvailTo Where isnull(FuelAvailTo)"
-    
+    Case IMPORTS_SPECS_FOR_DATASET_SELECT
+      QueriesEx = "Select DatasetName, ImportSpec from T_ImportSpecs where DatasetName = " & StrSQL(params(paramsLBound))
+    Case IMPORTS_SPECS_FOR_DATASETS_DELETE
+      QueriesEx = "Delete * from T_ImportSpecs where DatasetName = " & StrSQL(params(paramsLBound))
+    Case IMPORTS_SPECS_FOR_DATASET_INSERT
+      QueriesEx = "Insert into T_ImportSpecs (DatasetName,ImportSpec) values(" & StrSQL(params(paramsLBound)) & "," & StrSQL(params(paramsLBound + 1)) & ")"
   End Select
   If Not IgnoreEmpty And (Len(QueriesEx) = 0) Then Call ECASE("Queries " & CStr(QueryID) & "not found")
   

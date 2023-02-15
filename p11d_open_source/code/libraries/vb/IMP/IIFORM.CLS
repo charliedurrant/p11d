@@ -24,7 +24,3 @@ End Property
 Public Property Set ImpWiz(NewValue As ImportWizard)
 
 End Property
-Public Sub Entering(ByVal forward As Boolean)
-
-End Sub
-

@@ -57,9 +57,17 @@ Public minvalue As Variant
 Public maxvalue As Variant
 
 'calc fields
-Public Value As Variant 'Value of this field in import
+Public value As Variant 'Value of this field in import
 Public DestTable As String ' name of table to which field belongs
 Public FieldKey As Long
+Private m_Dirty As Boolean
+  
+Friend Property Get Dirty() As Boolean
+  Dirty = m_Dirty
+End Property
+Friend Property Let Dirty(ByVal value As Boolean)
+  m_Dirty = value
+End Property
 
 Public Function Copy(ISpecTo As ImportSpec) As ImportSpec
   Dim i As Long
@@ -83,7 +91,7 @@ Public Function Copy(ISpecTo As ImportSpec) As ImportSpec
   ISpecTo.minvalue = minvalue
   ISpecTo.multioffset = multioffset
   ISpecTo.Offset = Offset
-  ISpecTo.Value = Value
+  ISpecTo.value = value
   ISpecTo.varaction = varaction
   ISpecTo.vartype = vartype
   ISpecTo.CopyFieldKey = CopyFieldKey

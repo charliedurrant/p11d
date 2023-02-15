@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
 Begin VB.Form Frm_Link 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Link Fields"
@@ -161,10 +161,6 @@ Private m_ImpWiz As ImportWizard
 Public InScroll As Boolean
 
 Implements IImportForm
-
-Private Sub IImportForm_Entering(ByVal forward As Boolean)
-
-End Sub
 
 Private Sub Cbo_Link_DragDrop(Source As Control, x As Single, y As Single)
   Call FlG_Source_DragDrop(Source, x, y)

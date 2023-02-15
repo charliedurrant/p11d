@@ -1,25 +1,20 @@
 Attribute VB_Name = "FormFunctions"
 Option Explicit
 Private mInUpdateType As Boolean
-
 Public Sub FrameEnable(frm As Form, Fram As Frame, Enable As Boolean)
   Dim Ctrl As Control
-  'On Error Resume Next
   For Each Ctrl In frm
     If (Not TypeOf Ctrl Is Data) And (Not TypeOf Ctrl Is Menu) Then
       If Ctrl.Container Is Fram Then
         Ctrl.Enabled = Enable
-        'Call FrameEnable(Frm, Ctrl, Enable)
         If TypeOf Ctrl Is Frame Then Call FrameEnable(frm, Ctrl, Enable)
       End If
     End If
   Next Ctrl
 End Sub
-
 Public Function InUpdate() As Boolean
   InUpdate = mInUpdateType
 End Function
-
 Public Sub SetUpdateType(frmDest As Frm_Dest, ByVal UpdateType As IMPORT_UPDATE_TYPE, ByVal AllowChangeUpdateType As Boolean, Optional ByVal LockUpdateType As IMPORT_UPDATE_TYPE = [_NO_LOCK_UPDATES])
   Dim AllowAddNew As Boolean
     
@@ -86,5 +81,3 @@ Public Function GetUpdateType(frmDest As Frm_Dest) As IMPORT_UPDATE_TYPE
   If (frmDest.Chk_Add.Value <> vbChecked) Then GetUpdateType = (GetUpdateType Or UPDATEONLY_FLAG)
   mInUpdateType = False
 End Function
-
-

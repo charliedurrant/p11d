@@ -680,13 +680,28 @@ err_err:
   Resume
 End Sub
 Public Sub AddDefaultP11DbAdjustments()
+  Call AddDefaultP11DbAdjustment("Add Class 1A NIC due on termination payments", True)
+  Call AddDefaultP11DbAdjustment("Formally payrolled benefits", True)
+  Call AddDefaultP11DbAdjustment("Class 1A NIC due on sporting award", True)
+  
+  Call AddDefaultP11DbAdjustment("Employees not subject to NIC for the full tax year", False)
+  Call AddDefaultP11DbAdjustment("Employees not subject to NIC for part of the tax year", False)
+  Call AddDefaultP11DbAdjustment("Formally payrolled benefits for employees not subject to UK NIC", False)
+End Sub
+Private Sub AddDefaultP11DbAdjustment(caption As String, addition As Boolean)
   Dim adjustment As P11DbAdjustment
   
   Set adjustment = New P11DbAdjustment
-  adjustment.caption = "Add Class 1A NIC due on termination payments"
-  Call P11DbAdditions.Add(adjustment)
+  adjustment.caption = caption
+  
+  If (addition) Then
+    Call P11DbAdditions.Add(adjustment)
+  Else
+    Call P11DbDeductions.Add(adjustment)
+  End If
   
 End Sub
+
 Public Sub WriteP11DbAdjustments()
   Dim rs As Recordset
   
@@ -1358,12 +1373,12 @@ RunFixes_END:
   Call xReturn("RunFixes")
   
 End Sub
-Private Sub RemoveValidationRule(db As Database, TABLE As String, field As String)
+Private Sub RemoveValidationRule(db As Database, TABLE As String, Field As String)
   Dim td As TableDef
-  Dim f As field
+  Dim f As Field
   
   Set td = db.TableDefs(TABLE)
-  Set f = td.Fields(field)
+  Set f = td.Fields(Field)
   f.ValidationRule = ""
   
 End Sub
@@ -2929,8 +2944,8 @@ Public Function TransferEmployees() As Long
   F_Transfer.prg.value = F_Transfer.prg.Min
   F_Transfer.prg.Indicator = None
   
-  For i = 1 To p11d32.employers.count
-    Set ben = p11d32.employers(i)
+  For i = 1 To p11d32.Employers.count
+    Set ben = p11d32.Employers(i)
       If Not ben Is Nothing Then
         If Not ben Is Me Then
           Set li = F_Transfer.lv.listitems.Add(, , ben.Name, , IMG_UNSELECTED)

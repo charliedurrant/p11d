@@ -354,7 +354,7 @@ WKOut_ERR:
 End Function
 Public Function WKTableTotalBen(rep As Reporter, ByVal ben As IBenefitClass)
   Dim BenArr(1 To 1) As BEN_CLASS
-  Dim value As Variant, benefit As Variant, MadeGood As Variant
+  Dim value As Variant, Benefit As Variant, MadeGood As Variant
     
   BenArr(1) = ben.BenefitClass
   Call rep.Out(vbCrLf & vbCrLf)
@@ -743,6 +743,7 @@ Private Function HMITCar(rep As Reporter, ee As Employee, CompanyCar1 As IBenefi
                  LineText("{x=6}Make and Model"))
   
   
+  
 'Date first registered
   Call rep.Out(OutLineBoxR(HMIT_CAR_COL1, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, GetBenItem(CompanyCar1, car_Registrationdate_db)) & _
                OutLineBoxR(HMIT_CAR_COL2, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, GetBenItem(CompanyCar2, car_Registrationdate_db)) & _
@@ -752,12 +753,18 @@ Private Function HMITCar(rep As Reporter, ee As Employee, CompanyCar1 As IBenefi
   
 ' KA: Approved CO2 emissions
   
+  'no C02 box pos
+  
+  Dim noCO2BoxXPos1 As Long, noCO2BoxXPos2 As Long
+  noCO2BoxXPos1 = L_HMIT_COL_1 - 3
+  noCO2BoxXPos2 = L_HMIT_COL_4 - 3
+    
   Call rep.Out("{x=6}{Arial=7,n}Approved CO2 emissions figure for cars " & _
   OutLineBoxR(HMIT_CAR_COL1, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, GetCO2DisplayFigure(CompanyCar1) & "g/km") & _
-  TickOutPlusX(L_HMIT_COL_1 - 3, GetBenItem(CompanyCar1, car_p46NoApprovedCO2Figure_db)) & _
+  TickOutPlusX(noCO2BoxXPos1, GetBenItem(CompanyCar1, car_p46NoApprovedCO2Figure_db)) & _
   "{x=51}{Arial=6,ni}See P11D Guide for" & _
   OutLineBoxR(HMIT_CAR_COL2, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, GetCO2DisplayFigure(CompanyCar2) & "g/km") & _
-  TickOutPlusX(L_HMIT_COL_4 - 3, IIf(CompanyCar2 Is Nothing, False, GetBenItem(CompanyCar2, car_p46NoApprovedCO2Figure_db))) & _
+  TickOutPlusX(noCO2BoxXPos2, IIf(CompanyCar2 Is Nothing, False, GetBenItem(CompanyCar2, car_p46NoApprovedCO2Figure_db))) & _
   "{x=83}{Arial=6,ni}See P11D Guide for" & vbCrLf & _
   "{x=6}{Arial=7,n}registered on or after 1 January 1998 " & _
   "{Arial=6,ni}Tick" & _
@@ -935,7 +942,7 @@ Private Sub HMITPageHeader(rep As Reporter, ee As Employee)
                "{X=49}{YREL=5}{Arial=9,nb}Note to employer" & vbCrLf & "{YREL=4}" & _
                "{Arial=8,n}{x=49}Fill in this return for a director or an employee for the year to 5 April " & Format$(p11d32.Rates.value(TaxYearEnd), "YYYY") & "." & vbCrLf & _
                "{x=49}Send all your P11Ds and one " & S_P11D_B & " to your HMRC office by 6 July " & Format$(p11d32.Rates.value(TaxYearEnd), "YYYY") & "." & vbCrLf & _
-               "{x=49}Don't include payrolled benefits on the P11D. See www.gov.uk/guidance" & vbCrLf & _
+               "{x=49}Don't include payrolled benefits on the P11D, go to www.gov.uk/guidance" & vbCrLf & _
                "{x=49}/paying-your-employees-expenses-and-benefits-through-your-payroll")
 
                 
@@ -1039,16 +1046,16 @@ Private Sub HMITWhichSection(rep As Reporter, ee As Employee, lSections As Long)
   End If
       
 End Sub
-Private Function SumBenefitFWNRPT(ee As Employee, Description As Variant, value As Variant, MadeGood As Variant, benefit As Variant, BenArr() As BEN_CLASS, Optional VALUE_ENUM As Long = ITEM_VALUE, Optional MADEGOOD_ENUM As Long = ITEM_MADEGOOD_NET, Optional BENEFIT_ENUM As Long = ITEM_BENEFIT, Optional sIRDesc As String) As Long
-  SumBenefitFWNRPT = ee.SumBenefit(Description, value, MadeGood, benefit, BenArr(), VALUE_ENUM, MADEGOOD_ENUM, BENEFIT_ENUM, sIRDesc)
+Private Function SumBenefitFWNRPT(ee As Employee, Description As Variant, value As Variant, MadeGood As Variant, Benefit As Variant, BenArr() As BEN_CLASS, Optional VALUE_ENUM As Long = ITEM_VALUE, Optional MADEGOOD_ENUM As Long = ITEM_MADEGOOD_NET, Optional BENEFIT_ENUM As Long = ITEM_BENEFIT, Optional sIRDesc As String) As Long
+  SumBenefitFWNRPT = ee.SumBenefit(Description, value, MadeGood, Benefit, BenArr(), VALUE_ENUM, MADEGOOD_ENUM, BENEFIT_ENUM, sIRDesc)
   If SumBenefitFWNRPT Then
     value = FormatWNRPT(value)
     MadeGood = FormatWNRPT(MadeGood)
-    benefit = FormatWNRPT(benefit)
+    Benefit = FormatWNRPT(Benefit)
   End If
 End Function
 Private Function HMITSection(rep As Reporter, ee As Employee, HMITS As HMIT_SECTIONS, lBenefitStartIndex As Long, lBenefitsFound As Long) As Boolean
-  Dim Description As String, value As Variant, MadeGood As Variant, benefit As Variant
+  Dim Description As String, value As Variant, MadeGood As Variant, Benefit As Variant
   Dim loans As loans, l As Long
   Dim benEmployer As IBenefitClass
   Dim benEmployee As IBenefitClass 'ek for section E change
@@ -1084,7 +1091,7 @@ Private Function HMITSection(rep As Reporter, ee As Employee, HMITS As HMIT_SECT
     Case HMIT_SECTIONS.HMIT_B
       ReDim BenArr(1 To 1)
       BenArr(1) = BC_PAYMENTS_ON_BEFALF_B
-      Call SumBenefitFWNRPT(ee, Description, value, MadeGood, benefit, BenArr, , , , sIRDesc)
+      Call SumBenefitFWNRPT(ee, Description, value, MadeGood, Benefit, BenArr, , , , sIRDesc)
       If Len(sIRDesc) > 0 And Not LCase(sIRDesc) = "other" Then
         tempDesc2 = sIRDesc
       Else
@@ -1093,12 +1100,12 @@ Private Function HMITSection(rep As Reporter, ee As Employee, HMITS As HMIT_SECT
       Call rep.Out(FillBox(3, 3, L_HMIT_STANDARDBOX_HEIGHT, p11d32.Rates.HMITSectionToHMITCode(HMITS)) & HMITText("{x=8}Payments made on behalf of employee") & vbCrLf & vbCrLf & _
                OutLineBoxL(23, (L_HMIT_COL_2 + L_HMIT_STANDARDBOX_WIDTH) - 23, 1.6, tempDesc2) & _
                FillBox(L_HMIT_COL_3, 4, L_HMIT_STANDARDBOX_HEIGHT, p11d32.Rates.BenClassTo(BenArr(1), BCT_HMIT_BOX_NUMBER)) & _
-               OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, benefit) & _
+               OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, Benefit) & _
                LineText("Description of payment") & _
                FillBox(L_HMIT_COL_3, 4, L_HMIT_STANDARDBOX_HEIGHT, p11d32.Rates.BenClassTo(BenArr(1), BCT_HMIT_BOX_NUMBER)))
       BenArr(1) = BC_TAX_NOTIONAL_PAYMENTS_B
-      Call SumBenefitFWNRPT(ee, Description, value, MadeGood, benefit, BenArr)
-      Call rep.Out(OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, benefit) & _
+      Call SumBenefitFWNRPT(ee, Description, value, MadeGood, Benefit, BenArr)
+      Call rep.Out(OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, Benefit) & _
                    LineText("Tax on notional payments made during the year not borne by employee within 90 days of " & p11d32.Rates.value(TaxYearEnd)))
     Case HMIT_SECTIONS.HMIT_C
       ReDim BenArr(1 To 1)
@@ -1182,7 +1189,7 @@ Private Function HMITSection(rep As Reporter, ee As Employee, HMITS As HMIT_SECT
       Call HMITColHeaders(rep, "Cost to you", "or amount foregone", "Amount made good", "or from which tax deducted", "Cash equivalent", "or relevant amount")
       ReDim BenArr(1 To 1)
       BenArr(1) = BC_CLASS_1A_M
-      Call SumBenefitFWNRPT(ee, Description, value, MadeGood, benefit, BenArr)
+      Call SumBenefitFWNRPT(ee, Description, value, MadeGood, Benefit, BenArr)
       Call HMITAssetsTransferredTypeNIC(rep, ee, BenArr, "{x=8}Description of other items", True)
       'Call rep.Out(vbCrLf)
       ReDim BenArr(1 To 1)
@@ -1261,7 +1268,7 @@ Private Function HMITCollections(rep As Reporter, ee As Employee, lBenefitStartI
   bFirst = lBenefitStartIndex
   
   If Not BenefitCollection Is Nothing Then
-    For i = lBenefitStartIndex To BenefitCollection.Count
+    For i = lBenefitStartIndex To BenefitCollection.count
       Set ben = BenefitCollection(i)
       If Not ben Is Nothing Then
         If BenClassInArray(BenArr, ben.BenefitClass) Then
@@ -1522,13 +1529,13 @@ On Error GoTo Report_PrintedEmployees_ERR
   Call WKTblColFormats("n", "n", "n", "rn")
   Call WKTableHeadings(rep, S_TITLEFORMAT & S_SURNAME, S_TITLEFORMAT & S_FIRSTNAME, S_TITLEFORMAT & S_TITLE, S_TITLEFORMAT & S_PNUM)
           
-  For j = 1 To PrintedEmployees.Count
+  For j = 1 To PrintedEmployees.count
     Set ben = PrintedEmployees(j)
     If ben Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "Report_PrintedEmployees", "The employee is nothing.")
     Call WKTableRow(rep, ben.value(ee_Surname_db), ben.value(ee_Firstname_db), ben.value(ee_Title_db), ben.value(ee_PersonnelNumber_db))
   Next
 
-  Call WKTableTotals(rep, "", "", "", "Total printed " & PrintedEmployees.Count)
+  Call WKTableTotals(rep, "", "", "", "Total printed " & PrintedEmployees.count)
   
   Report_PrintedEmployees = True
   
@@ -1839,13 +1846,13 @@ Public Function Report_WK(rep As Reporter, ee As Employee) As Boolean
   BenClassCount = ee.GetRelevantBenClassesSorted(RelevantBenClasses)
   For i = 1 To BenClassCount
     CurBenClass = RelevantBenClasses(i)
-    For j = 1 To ee.benefits.Count
+    For j = 1 To ee.benefits.count
       
       Set ben = ee.benefits(j)
       If Not ben Is Nothing Then
         If ben.BenefitClass = BC_LOANS_H Then
           Set LoansCol = ben
-          For k = 1 To LoansCol.loans.Count
+          For k = 1 To LoansCol.loans.count
             Set ben = LoansCol.loans(k)
             If Not ben Is Nothing Then Call DoReport_WKSub(rep, ben, CurBenClass, bFirst, BenOtherPrinted, ee)
           Next k
@@ -1981,14 +1988,14 @@ Public Function Report_P46CarBeforeApril2018(rep As Reporter, ee As Employee, dD
   Dim CompanyCars As ObjectList
   Set CompanyCars = BenefitsOfType(ee, BC_COMPANY_CARS_F)
   Dim lNumCars As Long
-  lNumCars = CompanyCars.Count
+  lNumCars = CompanyCars.count
   Set CompanyCars = Nothing
   
   rep.PageFooter = HMITFooter("P46(Car)(" & p11d32.AppYear & ")", ee, False)
 
   Set ben = ee
   
-  For i = 1 To P46Cars.Count
+  For i = 1 To P46Cars.count
     Set p46car = P46Cars(i)
     With p46car
               
@@ -2178,14 +2185,14 @@ Public Function Report_P46CarAfterApril2018(rep As Reporter, ee As Employee, dDa
   Dim CompanyCars As ObjectList
   Set CompanyCars = BenefitsOfType(ee, BC_COMPANY_CARS_F)
   Dim lNumCars As Long
-  lNumCars = CompanyCars.Count
+  lNumCars = CompanyCars.count
   Set CompanyCars = Nothing
   
   rep.PageFooter = HMITFooter("P46(Car)(" & p11d32.AppYear & ")", ee, False)
 
   Set ben = ee
   
-  For i = 1 To P46Cars.Count
+  For i = 1 To P46Cars.count
     Set p46car = P46Cars(i)
     With p46car
               
@@ -2356,7 +2363,7 @@ End Function
 Private Sub HMITSectionL(rep As Reporter, ee As Employee, BenArr() As BEN_CLASS)
   'same as HMITAssetsTransferredType but for value = 0 with Computer Related = true need to not include if effect of £500 deminimuns makes 0
   'came in 1999/2000
-  Dim benefit As Variant, MadeGood As Variant, value As Variant, Description As String
+  Dim Benefit As Variant, MadeGood As Variant, value As Variant, Description As String
   Dim sSectionTitle As String
   Dim sIRDesc As String
   
@@ -2365,12 +2372,12 @@ Private Sub HMITSectionL(rep As Reporter, ee As Employee, BenArr() As BEN_CLASS)
   Call HMITSectionHeader(rep, HMIT_L, "Assets placed at the employee's disposal")
   Call HMITColHeaders(rep, "Cost of the benefit", "or amount foregone", "Amount made good or", "from which tax deducted", "Cash equivalent", "or relevant amount")
   
-  If ee.SumBenefit(Description, value, MadeGood, benefit, BenArr()) Then
+  If ee.SumBenefit(Description, value, MadeGood, Benefit, BenArr()) Then
     If IsNumeric(value) Then
       If value > 0 Then
         value = FormatWNRPT(value)
         MadeGood = FormatWNRPT(MadeGood)
-        benefit = FormatWNRPT(benefit)
+        Benefit = FormatWNRPT(Benefit)
         Call HMITAssetsTransferredTypeNIC(rep, ee, BenArr, "{x=8}Description of asset", True)
       Else
         Call HMITAssetsTransferredTypeNIC(rep, ee, BenArr, "{x=8}Description of asset", True)
@@ -2378,7 +2385,7 @@ Private Sub HMITSectionL(rep As Reporter, ee As Employee, BenArr() As BEN_CLASS)
     Else
       value = FormatWNRPT(value)
       MadeGood = FormatWNRPT(MadeGood)
-      benefit = FormatWNRPT(benefit)
+      Benefit = FormatWNRPT(Benefit)
       Call HMITAssetsTransferredTypeNIC(rep, ee, BenArr, "{x=8}Description of asset", True)
     End If
   Else
@@ -2387,48 +2394,48 @@ Private Sub HMITSectionL(rep As Reporter, ee As Employee, BenArr() As BEN_CLASS)
   
 End Sub
 Private Sub HMITAssetsTransferredType(rep As Reporter, ee As Employee, BenArr() As BEN_CLASS, sSectionTitle As String, bAssetDescription As Boolean, Optional VALUE_ENUM As Long = ITEM_VALUE, Optional MADEGOOD_ENUM As Long = ITEM_MADEGOOD, Optional BENEFIT_ENUM As Long = ITEM_BENEFIT)
-  Dim benefit As Variant, MadeGood As Variant, value As Variant, Description As String
+  Dim Benefit As Variant, MadeGood As Variant, value As Variant, Description As String
   Dim sIRDesc As String, tempDesc As String
   
-  Call SumBenefitFWNRPT(ee, Description, value, MadeGood, benefit, BenArr, , , , sIRDesc)
+  Call SumBenefitFWNRPT(ee, Description, value, MadeGood, Benefit, BenArr, , , , sIRDesc)
   If Len(sIRDesc) > 0 And Not LCase(sIRDesc) = "other" Then
     tempDesc = sIRDesc
   Else
     tempDesc = Description
   End If
-  Call HMITAssetsTransferredTypeOut(rep, p11d32.Rates.BenClassTo(BenArr(1), BCT_HMIT_BOX_NUMBER), sSectionTitle, tempDesc, value, MadeGood, benefit, bAssetDescription)
+  Call HMITAssetsTransferredTypeOut(rep, p11d32.Rates.BenClassTo(BenArr(1), BCT_HMIT_BOX_NUMBER), sSectionTitle, tempDesc, value, MadeGood, Benefit, bAssetDescription)
   
 End Sub
 
 Private Sub HMITAssetsTransferredTypeNIC(rep As Reporter, ee As Employee, BenArr() As BEN_CLASS, sSectionTitle As String, bAssetDescription As Boolean, Optional VALUE_ENUM As Long = ITEM_VALUE, Optional MADEGOOD_ENUM As Long = ITEM_MADEGOOD, Optional BENEFIT_ENUM As Long = ITEM_BENEFIT)
-  Dim benefit As Variant, MadeGood As Variant, value As Variant, Description As String
+  Dim Benefit As Variant, MadeGood As Variant, value As Variant, Description As String
   Dim sIRDesc As String, tempDesc As String
     
-  Call SumBenefitFWNRPT(ee, Description, value, MadeGood, benefit, BenArr, , , , sIRDesc)
+  Call SumBenefitFWNRPT(ee, Description, value, MadeGood, Benefit, BenArr, , , , sIRDesc)
   If Len(sIRDesc) > 0 And Not LCase(sIRDesc) = "other" Then
     tempDesc = sIRDesc
   Else
     tempDesc = Description
   End If
-  Call HMITAssetsTransferredTypeOutNIC(rep, p11d32.Rates.BenClassTo(BenArr(1), BCT_HMIT_BOX_NUMBER), sSectionTitle, tempDesc, value, MadeGood, benefit, bAssetDescription, "1A")
+  Call HMITAssetsTransferredTypeOutNIC(rep, p11d32.Rates.BenClassTo(BenArr(1), BCT_HMIT_BOX_NUMBER), sSectionTitle, tempDesc, value, MadeGood, Benefit, bAssetDescription, "1A")
   
 End Sub
 
 
-Private Function HMITAssetsTransferredTypeOut(rep As Reporter, sBoxNumber As String, sSectionTitle As String, Description As String, value As Variant, MadeGood As Variant, benefit As Variant, bAssetDescription As Boolean)
+Private Function HMITAssetsTransferredTypeOut(rep As Reporter, sBoxNumber As String, sSectionTitle As String, Description As String, value As Variant, MadeGood As Variant, Benefit As Variant, bAssetDescription As Boolean)
   Description = HMITFieldTrim(Description, 25)
   
   rep.Out (IIf(bAssetDescription, OutLineBoxL(26, 22, 1.4, Description), "") & _
           OutLineBoxR(L_HMIT_COL_1, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, value) & _
           OutLineBoxR(L_HMIT_COL_2, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, MadeGood) & _
           FillBox(L_HMIT_COL_3, 4, L_HMIT_STANDARDBOX_HEIGHT, sBoxNumber) & _
-          OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, benefit) & _
+          OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, Benefit) & _
           HMITMinus(63) & _
           HMITEquals() & _
           LineText(sSectionTitle))
 End Function
 
-Private Function HMITAssetsTransferredTypeOutNIC(rep As Reporter, sBoxNumber As String, sSectionTitle As String, Description As String, value As Variant, MadeGood As Variant, benefit As Variant, bAssetDescription As Boolean, NIC As String)
+Private Function HMITAssetsTransferredTypeOutNIC(rep As Reporter, sBoxNumber As String, sSectionTitle As String, Description As String, value As Variant, MadeGood As Variant, Benefit As Variant, bAssetDescription As Boolean, NIC As String)
   Description = HMITFieldTrim(Description, 25)
   
   rep.Out (IIf(bAssetDescription, OutLineBoxL(26, 22, 1.4, Description), "") & _
@@ -2436,7 +2443,7 @@ Private Function HMITAssetsTransferredTypeOutNIC(rep As Reporter, sBoxNumber As 
           OutLineBoxR(L_HMIT_COL_2, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, MadeGood) & _
           FillBox(L_HMIT_COL_3, 4, L_HMIT_STANDARDBOX_HEIGHT, sBoxNumber) & _
           FillBoxNIC(L_HMIT_COL_5, 2, L_HMIT_STANDARDBOX_HEIGHT, "1A") & _
-          OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, benefit) & _
+          OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, Benefit) & _
           HMITMinus(63) & _
           HMITEquals() & _
           LineText(sSectionTitle))
@@ -2447,21 +2454,21 @@ Private Sub HMITColHeaders(rep As Reporter, sCol1Line1 As String, sCol1Line2 As 
                HMITColText(sCol1Line2, L_HMIT_COL_1) & HMITColText(sCol2Line2, L_HMIT_COL_2) & HMITColText(sCol4Line2, L_HMIT_COL_4) & vbCrLf)
 End Sub
 Private Sub HMITVanType(rep As Reporter, ee As Employee, BenArr() As BEN_CLASS, sSectionTitle As String, Optional VALUE_ENUM As Long = ITEM_VALUE, Optional MADEGOOD_ENUM As Long = ITEM_MADEGOOD, Optional BENEFIT_ENUM As Long = ITEM_BENEFIT)
-  Dim benefit As Variant, MadeGood As Variant, value As Variant, Description As String
+  Dim Benefit As Variant, MadeGood As Variant, value As Variant, Description As String
   
-  Call SumBenefitFWNRPT(ee, Description, value, MadeGood, benefit, BenArr, VALUE_ENUM, MADEGOOD_ENUM, BENEFIT_ENUM)
-  Call rep.Out(OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, benefit) & _
+  Call SumBenefitFWNRPT(ee, Description, value, MadeGood, Benefit, BenArr, VALUE_ENUM, MADEGOOD_ENUM, BENEFIT_ENUM)
+  Call rep.Out(OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, Benefit) & _
                FillBox(L_HMIT_COL_3, 4, L_HMIT_STANDARDBOX_HEIGHT, p11d32.Rates.BenClassTo(BenArr(1), BCT_HMIT_BOX_NUMBER)) & LineText(sSectionTitle))
 End Sub
 
 Private Sub HMITVanTypeNIC(rep As Reporter, ee As Employee, BenArr() As BEN_CLASS, sSectionTitle As String, Optional VALUE_ENUM As Long = ITEM_VALUE, Optional MADEGOOD_ENUM As Long = ITEM_MADEGOOD, Optional BENEFIT_ENUM As Long = ITEM_BENEFIT, Optional BoxNumber As String = "")
-  Dim benefit As Variant, MadeGood As Variant, value As Variant, Description As String
+  Dim Benefit As Variant, MadeGood As Variant, value As Variant, Description As String
   
   If Len(BoxNumber) = 0 Then
     BoxNumber = p11d32.Rates.BenClassTo(BenArr(1), BCT_HMIT_BOX_NUMBER)
   End If
-  Call SumBenefitFWNRPT(ee, Description, value, MadeGood, benefit, BenArr, VALUE_ENUM, MADEGOOD_ENUM, BENEFIT_ENUM)
-  Call rep.Out(OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, benefit) & _
+  Call SumBenefitFWNRPT(ee, Description, value, MadeGood, Benefit, BenArr, VALUE_ENUM, MADEGOOD_ENUM, BENEFIT_ENUM)
+  Call rep.Out(OutLineBoxR(L_HMIT_COL_4, L_HMIT_STANDARDBOX_WIDTH, L_HMIT_STANDARDBOX_HEIGHT, Benefit) & _
                FillBoxNIC(L_HMIT_COL_5, 2, L_HMIT_STANDARDBOX_HEIGHT, "1A") & _
                FillBox(L_HMIT_COL_3, 4, L_HMIT_STANDARDBOX_HEIGHT, BoxNumber) & _
                LineText(sSectionTitle))
@@ -2996,7 +3003,7 @@ EmployeeLetterCode_ERR:
   Resume EmployeeLetterCode_END
   Resume
 End Function
-Private Function EmployeeLetterTableLine(ByVal bc As BEN_CLASS, ByVal benefit As Variant, bIsEmail As Boolean) As String
+Private Function EmployeeLetterTableLine(ByVal bc As BEN_CLASS, ByVal Benefit As Variant, bIsEmail As Boolean) As String
   Dim qs As QString
   
   Set qs = New QString
@@ -3015,7 +3022,7 @@ Private Function EmployeeLetterTableLine(ByVal bc As BEN_CLASS, ByVal benefit As
      Call qs.Append(EmployeeLetterColData(ELT_COL4, ELT_SPACING_REP))
      Call qs.Append(EmployeeLetterFont(ELC_TABLE_NORMAL_RIGHT, bIsEmail))
      
-     Call qs.Append(FormatWN(benefit, ""))
+     Call qs.Append(FormatWN(Benefit, ""))
      Call qs.Append(vbCrLf)
   Else
     If p11d32.ReportPrint.ParseForNetscape Then
@@ -3034,7 +3041,7 @@ Private Function EmployeeLetterTableLine(ByVal bc As BEN_CLASS, ByVal benefit As
       qs.Append ("</TD>")
       
       qs.Append ("<TD>")
-      qs.Append (FormatWN(benefit, ""))
+      qs.Append (FormatWN(Benefit, ""))
       qs.Append ("</TD>")
       
       qs.Append ("</TR>")
@@ -3045,7 +3052,7 @@ Private Function EmployeeLetterTableLine(ByVal bc As BEN_CLASS, ByVal benefit As
       qs.Append (p11d32.Rates.BenClassTo(bc, BCT_HMIT_BOX_NUMBER))
       qs.Append (EmployeeLetterColData(ELT_COL4, ELT_SPACING_EMAIL_TABLE_LINE))
       qs.Append (EmployeeLetterFont(ELC_TABLE_NORMAL_RIGHT, bIsEmail))
-      qs.Append (FormatWN(benefit, ""))
+      qs.Append (FormatWN(Benefit, ""))
       qs.Append (EmployeeLetterColData(ELT_COL1, ELT_SPACING_EMAIL_TABLE_LINE))
       qs.Append (p11d32.Rates.BenClassTo(bc, BCT_FORM_CAPTION))
       qs.Append (vbCrLf)
@@ -3138,7 +3145,7 @@ Private Function EmployeeLetterFont(ByVal ELCF As ELC_FONT, bIsEmail As Boolean)
   End If
 End Function
 Private Function EmployeeLetterCodeTableReportCode(ee As Employee, bIsEmail As Boolean) As String
-  Dim Description, MadeGood, benefit, value, benefit_other
+  Dim Description, MadeGood, Benefit, value, benefit_other
   Dim i As Long, j As Long, k As Long, lRelevantBenClassCount As Long
   Dim qs As QString
   Dim BenArr(1 To 1) As BEN_CLASS
@@ -3157,13 +3164,13 @@ Private Function EmployeeLetterCodeTableReportCode(ee As Employee, bIsEmail As B
       BenArr(1) = i
       If BenefitIsLoan(i) Then
         If ee.AnyLoanBenefit Then
-          If Not ee.SumBenefit(Description, value, MadeGood, benefit, BenArr) Then benefit = 0
+          If Not ee.SumBenefit(Description, value, MadeGood, Benefit, BenArr) Then Benefit = 0
         Else
-          benefit = 0
+          Benefit = 0
         End If
       Else
-        If Not ee.SumBenefit(Description, value, MadeGood, benefit, BenArr) Then
-          benefit = 0
+        If Not ee.SumBenefit(Description, value, MadeGood, Benefit, BenArr) Then
+          Benefit = 0
           'If i = BC_SHARES_M Then benefit = BoolToString(False)
         Else
           'If i = BC_SHARES_M Then benefit = BoolToString(True)
@@ -3174,12 +3181,12 @@ Private Function EmployeeLetterCodeTableReportCode(ee As Employee, bIsEmail As B
         benefit_other = 0
         If (ee.AnyVanBenefit) Then
           benefit_other = ee.nonSharedVans.value(nsvans_fuel_benefit)
-          benefit = ee.nonSharedVans.value(nsvans_benefit_van_only)
-          Call qs.Append(EmployeeLetterTableLine(i, benefit, bIsEmail))
+          Benefit = ee.nonSharedVans.value(nsvans_benefit_van_only)
+          Call qs.Append(EmployeeLetterTableLine(i, Benefit, bIsEmail))
           Call qs.Append(EmployeeLetterTableLine(BC_NONSHAREDVANS_FUEL_G, benefit_other, bIsEmail))
         End If
       Else
-        Call qs.Append(EmployeeLetterTableLine(i, benefit, bIsEmail))
+        Call qs.Append(EmployeeLetterTableLine(i, Benefit, bIsEmail))
       End If
       
     End If
@@ -3462,7 +3469,7 @@ SelectNodeImage_ERR:
   Resume SelectNodeImage_END
 End Sub
 Public Function SelectDefaultReport(ByRef nodeLastSelected As node, ByVal tvwReports As TreeView) As Boolean
-  If tvwReports.nodes.Count > 1 And tvwReports.SelectedItem Is Nothing Then
+  If tvwReports.nodes.count > 1 And tvwReports.SelectedItem Is Nothing Then
     Set tvwReports.SelectedItem = tvwReports.nodes(1)
   End If
   
@@ -3745,7 +3752,7 @@ Private Sub P11Db_ReconciliationAdjustments(ey As Employer, rep As Reporter, Adj
     Exit Sub
   End If
   
-  For i = 1 To Adjustments.Count
+  For i = 1 To Adjustments.count
     Set adjustment = Adjustments(i)
     Call WKTableRow(rep, "", adjustment.caption, FormatWNNoCurrency(adjustment.value, negative), "")
   Next

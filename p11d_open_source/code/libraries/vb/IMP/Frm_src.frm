@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form Frm_Source 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Source Data File"
@@ -53,7 +53,7 @@ Begin VB.Form Frm_Source
                Strikethrough   =   0   'False
             EndProperty
             Height          =   300
-            Left            =   6795
+            Left            =   6825
             TabIndex        =   15
             ToolTipText     =   "Delete"
             Top             =   105

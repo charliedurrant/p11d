@@ -1194,51 +1194,52 @@ Private Function FuelVATAnnualScaleCharge(ben As IBenefitClass)
   
   iCO2 = CO2CalcValue(ben)
   
+  
   Select Case iCO2
-    Case Is < 125
-      iFuelVATScaleAnnual = 585
-    Case Is < 130
-      iFuelVATScaleAnnual = 875
-    Case Is < 135
-      iFuelVATScaleAnnual = 936
+    Case Is < 125  '120 or less
+      iFuelVATScaleAnnual = 700
+    Case Is < 130 '125
+      iFuelVATScaleAnnual = 1048
+    Case Is < 135 '130 etc
+      iFuelVATScaleAnnual = 1121
     Case Is < 140
-      iFuelVATScaleAnnual = 992
+      iFuelVATScaleAnnual = 1188
     Case Is < 145
-      iFuelVATScaleAnnual = 1053
+      iFuelVATScaleAnnual = 1261
     Case Is < 150
-      iFuelVATScaleAnnual = 1109
+      iFuelVATScaleAnnual = 1329
     Case Is < 155
-      iFuelVATScaleAnnual = 1170
+      iFuelVATScaleAnnual = 1401
     Case Is < 160
-      iFuelVATScaleAnnual = 1226
+      iFuelVATScaleAnnual = 1469
     Case Is < 165
-      iFuelVATScaleAnnual = 1287
+      iFuelVATScaleAnnual = 1542
     Case Is < 170
-      iFuelVATScaleAnnual = 1343
+      iFuelVATScaleAnnual = 1609
     Case Is < 175
-      iFuelVATScaleAnnual = 1404
+      iFuelVATScaleAnnual = 1682
     Case Is < 180
-      iFuelVATScaleAnnual = 1460
+      iFuelVATScaleAnnual = 1749
     Case Is < 185
-      iFuelVATScaleAnnual = 1521
+      iFuelVATScaleAnnual = 1822
     Case Is < 190
-      iFuelVATScaleAnnual = 1577
+      iFuelVATScaleAnnual = 1889
     Case Is < 195
-      iFuelVATScaleAnnual = 1638
+      iFuelVATScaleAnnual = 1962
     Case Is < 200
-      iFuelVATScaleAnnual = 1694
+      iFuelVATScaleAnnual = 2030
     Case Is < 205
-      iFuelVATScaleAnnual = 1755
+      iFuelVATScaleAnnual = 2102
     Case Is < 210
-      iFuelVATScaleAnnual = 1811
+      iFuelVATScaleAnnual = 2170
     Case Is < 215
-      iFuelVATScaleAnnual = 1872
+      iFuelVATScaleAnnual = 2242
     Case Is < 220
-      iFuelVATScaleAnnual = 1928
+      iFuelVATScaleAnnual = 2310
     Case Is < 225
-      iFuelVATScaleAnnual = 1989
+      iFuelVATScaleAnnual = 2383
     Case Is >= 225
-      iFuelVATScaleAnnual = 2045
+      iFuelVATScaleAnnual = 2450
     Case Else
       Call Err.Raise(ERR_INVALIDID, "FuelVATAnnualScaleCharge", "Invalid CO2 value" & iCO2)
   End Select

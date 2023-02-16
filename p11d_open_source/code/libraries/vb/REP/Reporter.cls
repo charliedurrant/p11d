@@ -32,8 +32,6 @@ Public Enum REPORT_EXPORTS
   EXPORT_PDF 'update const L_LAST_EXPORT if add value
 End Enum
 
-
-
 Public Enum REPORT_CONSTANTS
   REPORT_VAR0 = 0
   REPORT_VAR1
@@ -68,6 +66,7 @@ End Enum
 
 Private m_ExportDateFormat As String
 Private m_ReporterInterface As IReporter
+Private m_DefaultExportPath As String
 Public Property Get ReporterInterface() As IReporter
   Call xSet("ReporterInterface")
   ReporterInterface = m_ReporterInterface
@@ -376,6 +375,11 @@ Public Function PreviewReport()
   ReportControl.rTarget = RPT_PREVIEW_DISPLAYPAGE
   ReportControl.CurPage = 1
   Call SetCursor(vbArrow)
+  
+  If (Len(Me.DefaultExportPath) > 0) And (FileExists(Me.DefaultExportPath, True)) Then
+    ReportControl.PreviewForm.DefaultExportPath = Me.DefaultExportPath
+  End If
+  
   ReportControl.PreviewForm.Show vbModal
   Call ClearCursor
   
@@ -677,5 +681,11 @@ End Property
 Public Property Let A4Force(ByVal NewValue As Boolean)
   If ReporterInterfaceNotify(A4_FORCE, CStr(g_A4Force)) Then Exit Property
   g_A4Force = NewValue
+End Property
+Public Property Get DefaultExportPath() As String
+  DefaultExportPath = m_DefaultExportPath
+End Property
+Public Property Let DefaultExportPath(ByVal value As String)
+  m_DefaultExportPath = value
 End Property
 

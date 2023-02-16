@@ -1330,7 +1330,7 @@ Private Sub MDIForm_Load()
   mnuEmployeeSortEmployeeReferenceAsNumber.Checked = p11d32.SortEmployeeReferenceAsNumber
   mnuEmployeeValidateOnscreenNINumber.Checked = p11d32.ValidateNINumberOnEmployeeScreen
   
-  mnuTesting.Enabled = True ' IsRunningInIDE()
+  mnuTesting.Visible = IsRunningInIDE()
 
   Call p11d32.VersionCheck
 End Sub
@@ -1587,9 +1587,9 @@ Private Function SelectedIndex() As Long
   i = -1
 
   If Not Me.ActiveForm Is Nothing Then
-    If Not Me.ActiveForm.LB.SelectedItem Is Nothing Then
-      If Me.ActiveForm.LB.SelectedItem.Selected Then
-        i = CLng(Me.ActiveForm.LB.SelectedItem.Tag)
+    If Not Me.ActiveForm.lb.SelectedItem Is Nothing Then
+      If Me.ActiveForm.lb.SelectedItem.Selected Then
+        i = CLng(Me.ActiveForm.lb.SelectedItem.Tag)
       End If
     End If
   End If
@@ -1701,11 +1701,11 @@ End Sub
 Private Sub mnuGroupItems_Click(Index As Integer)
   Select Case Index
     Case 0
-      F_Employees.LB.SortKey = 4
+      F_Employees.lb.SortKey = 4
     Case 1
-      F_Employees.LB.SortKey = 5
+      F_Employees.lb.SortKey = 5
     Case 2
-      F_Employees.LB.SortKey = 6
+      F_Employees.lb.SortKey = 6
   End Select
 End Sub
 Private Sub mnuHelpAbout_Click()
@@ -1985,13 +1985,13 @@ End Sub
 Private Sub mnuViewItems_Click(Index As Integer)
   Select Case Index
     Case 0
-      F_Employees.LB.SortKey = 0
+      F_Employees.lb.SortKey = 0
     Case 1
-      F_Employees.LB.SortKey = 1
+      F_Employees.lb.SortKey = 1
     Case 2
-      F_Employees.LB.SortKey = 2
+      F_Employees.lb.SortKey = 2
     Case 3
-      F_Employees.LB.SortKey = 3
+      F_Employees.lb.SortKey = 3
   End Select
 End Sub
 
@@ -2010,15 +2010,15 @@ End Sub
 
 
 Private Sub mnuViewSelectAll_Click()
-  Call SelectItems(F_Employees.LB, SELECT_ALL)
+  Call SelectItems(F_Employees.lb, SELECT_ALL)
 End Sub
 
 Private Sub mnuViewSelectBlankEmail_Click()
-  Call SelectItems(F_Employees.LB, SELECT_NO_EMAIL)
+  Call SelectItems(F_Employees.lb, SELECT_NO_EMAIL)
 End Sub
 
 Private Sub mnuViewSelectCurrentEmployees_Click()
-  Call SelectItems(F_Employees.LB, SELECT_CURRENT_EMPLOYED)
+  Call SelectItems(F_Employees.lb, SELECT_CURRENT_EMPLOYED)
 End Sub
 
 Private Sub mnuViewSelectEmployeeAlphabetically_Click()
@@ -2035,7 +2035,7 @@ err_err:
 End Sub
 
 Private Sub mnuViewSelectEmployeeAlphabeticallyLetter_Click(Index As Integer)
-  Call SelectItems(F_Employees.LB, Index)
+  Call SelectItems(F_Employees.lb, Index)
 End Sub
 
 Private Sub mnuViewSelectEmployeeByReport_Click()
@@ -2063,20 +2063,20 @@ Private Sub mnuViewSelectGroup3_Click()
 End Sub
 
 Private Sub mnuViewSelectHasEmail_Click()
-  Call SelectItems(F_Employees.LB, SELECT_EMAIL)
+  Call SelectItems(F_Employees.lb, SELECT_EMAIL)
 End Sub
 
 Private Sub mnuViewSelectLeftEmployees_Click()
-  Call SelectItems(F_Employees.LB, SELECT_LEFT)
+  Call SelectItems(F_Employees.lb, SELECT_LEFT)
 End Sub
 
 Private Sub mnuViewSelectReverse_Click()
-  Call SelectItems(F_Employees.LB, SELECT_REVERSE)
+  Call SelectItems(F_Employees.lb, SELECT_REVERSE)
 End Sub
 
 
 Private Sub mnuViewSelectUnselectAll_Click()
-  Call SelectItems(F_Employees.LB, SELECT_NONE)
+  Call SelectItems(F_Employees.lb, SELECT_NONE)
 End Sub
 
 Private Sub mnuViewSortByName_Click()

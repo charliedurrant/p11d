@@ -42,11 +42,11 @@ Begin VB.Form F_P11Db
          Width           =   6375
          Begin P11D2022.P11DbAdjustmentEditor gridDeductions 
             Height          =   1050
-            Left            =   195
+            Left            =   165
             TabIndex        =   35
             Top             =   660
-            Width           =   5895
-            _ExtentX        =   10398
+            Width           =   5970
+            _ExtentX        =   10530
             _ExtentY        =   1852
          End
          Begin atc2valtext.ValText txtDeductClass1ADescription 

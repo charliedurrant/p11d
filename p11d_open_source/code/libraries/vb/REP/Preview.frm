@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmPreview 
    BackColor       =   &H8000000C&
    Caption         =   "Print Preview"
@@ -601,3 +601,6 @@ Private Sub SetScaleParameters()
   Me.picPaper.ScaleWidth = ReportControl.PageWidth
 End Sub
 
+Friend Property Let DefaultExportPath(ByVal value As String)
+  LastExportDir = value
+End Property

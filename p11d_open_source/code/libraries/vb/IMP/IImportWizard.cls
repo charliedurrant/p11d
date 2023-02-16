@@ -6,7 +6,7 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "IImportWizard"
+Attribute VB_Name = "IWizardRecentSpecs"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
@@ -20,4 +20,7 @@ End Function
 Public Sub SetRecentSpecs(ByVal importDataSet As String, ByVal specs As Collection)
 
 End Sub
+Public Function GetRecentSpecsCaption(ByVal default As String) As String
+  
+End Function
 

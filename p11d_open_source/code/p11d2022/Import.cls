@@ -14,7 +14,7 @@ Attribute VB_Exposed = False
 Option Explicit
 Implements IProcessImport
 Implements IErrorFilter
-Implements IImportWizard
+Implements IWizardRecentSpecs
 
 Private m_dbP11dFile As Database
 Private m_dbError As Database
@@ -74,7 +74,7 @@ On Error GoTo err_err
 
   If F_Employers.LB.SelectedItem Is Nothing Then Call Err.Raise(ERR_EMPLOYER_INVALID, "PreImport", "There is no employer selected")
   
-  Set ey = p11d32.employers.Item(F_Employers.LB.SelectedItem.Tag)
+  Set ey = p11d32.Employers.Item(F_Employers.LB.SelectedItem.Tag)
   Set ben = ey
   Call ben.Kill
   
@@ -92,7 +92,7 @@ Public Sub Zip(ByVal ben As IBenefitClass, sDestFilename As String)
   Dim Zip As cZip
   Call ben.Kill
   Set Zip = New cZip
-  Zip.BasePath = p11d32.workingDirectory
+  Zip.BasePath = p11d32.WorkingDirectory
   Zip.AddFileSpec (ben.value(employer_FileName))
   Zip.RecurseSubDirs = False
   Zip.ZipFile = sDestFilename
@@ -147,7 +147,7 @@ Public Sub InitImport()
       sDestFilename = sTrackingDescription & "_" & sGuid & "_"
       sDestFilename = sDestFilename & Year(dt) & Format$(Month(dt), "0#") & Format$(Day(dt), "0#") & Format$(Hour(dt), "0#") & Format$(Minute(dt), "0#") & Format$(Second(dt), "0#")
       sDestFilename = Me.TrackingPathActual & sDestFilename & S_FILE_EXTENSION_BAK
-      sSourceFileName = p11d32.workingDirectory & ben.value(employer_FileName)
+      sSourceFileName = p11d32.WorkingDirectory & ben.value(employer_FileName)
       Call Me.Zip(ben, sDestFilename)
       
     End If
@@ -170,7 +170,7 @@ Public Sub InitImport()
       Set ic.ErrorFilter = Me
       ic.RightTrimFields = True
       Set m_iw = ic.ImportWizard
-      Set m_iw.Interface = Me
+      Set m_iw.RecentSpecsInterface = Me
       
       m_iw.AllowMultipleImports = True
       If Not ImportWizardSettings Then Exit Do
@@ -606,7 +606,7 @@ End Function
 Private Function IErrorFilter_ViewAvailable() As Boolean
   IErrorFilter_ViewAvailable = True
 End Function
-Private Function IImportWizard_GetRecentSpecs(ByVal importDataSet As String) As Collection
+Private Function IWizardRecentSpecs_GetRecentSpecs(ByVal importDataSet As String) As Collection
   Dim c As Collection
   Dim sql As String
   Dim rs As Recordset
@@ -623,9 +623,14 @@ Private Function IImportWizard_GetRecentSpecs(ByVal importDataSet As String) As 
     rs.MoveNext
   Wend
   
-  Set IImportWizard_GetRecentSpecs = c
+  Set IWizardRecentSpecs_GetRecentSpecs = c
 End Function
-Private Sub IImportWizard_SetRecentSpecs(ByVal importDataSet As String, ByVal specs As Collection)
+
+Private Function IWizardRecentSpecs_GetRecentSpecsCaption(ByVal default As String) As String
+  IWizardRecentSpecs_GetRecentSpecsCaption = "Or 'check' a spec previously used for this employer and import type"
+End Function
+
+Private Sub IWizardRecentSpecs_SetRecentSpecs(ByVal importDataSet As String, ByVal specs As Collection)
   Dim sql As String
   Dim specPath As Variant
   
@@ -760,8 +765,8 @@ Private Function ImportWizardSettings() As Boolean
     Call .AddFileExtension("All files (*.*)", "*.*")
   
     .AutoOpenSourceFile = True
-    .SourcePath = p11d32.workingDirectory
-    .specPath = p11d32.workingDirectory
+    .SourcePath = p11d32.WorkingDirectory
+    .specPath = p11d32.WorkingDirectory
     .TitlePrefix = GetStatic("ApplicationName") & " Importer  -  "
     .AllowChangeUpdateType = True
   End With

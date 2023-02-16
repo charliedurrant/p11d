@@ -122,9 +122,10 @@ Private Sub grid_WriteData(ByVal RowBuf As TrueDBGrid60.RowBuffer, ByVal RowBufR
   End With
 End Sub
 Private Sub UserControl_Initialize()
-  Call AddUBGRDStandardColumn(grid.grid, 0, 3500, "Description", "")
-  Call AddUBGRDStandardColumn(grid.grid, 1, 1244, "Value", "")
+  Call AddUBGRDStandardColumn(grid.grid, 0, 4300, "Description", "")
+  Call AddUBGRDStandardColumn(grid.grid, 1, 1000, "Value", "")
 End Sub
+
 Private Sub UserControl_Resize()
   grid.Top = 0
   grid.Left = 0

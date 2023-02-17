@@ -1,6 +1,9 @@
 Attribute VB_Name = "lows"
 Option Explicit
+Private Const MAX_PATH As Long = 260
 
+Private Declare Function PathCompactPath Lib "shlwapi.dll" Alias "PathCompactPathA" (ByVal hdc As Long, ByVal lpszPath As String, ByVal dx As Long) As Long
+Private Declare Function lstrlenW Lib "kernel32" (ByVal lpString As Long) As Long
 Public Sub SwitchForm(iFrm As IImportForm, Dest As IMPORT_GOTOFORM, ByVal forward As Boolean)
   Dim frm As Form
   
@@ -130,12 +133,14 @@ Public Function IsValidValue(ByVal v As Variant) As Boolean
 End Function
   
 
-Public Function CLngEx(v As Variant, ByVal Default As Long) As Long
+Public Function CLngEx(v As Variant, ByVal default As Long) As Long
   On Error GoTo CLngEx_err
   CLngEx = CLng(v)
 CLngEx_end:
   Exit Function
 CLngEx_err:
-  CLngEx = Default
+  CLngEx = default
   Resume CLngEx_end
 End Function
+
+

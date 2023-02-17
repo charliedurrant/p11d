@@ -882,27 +882,38 @@ End Sub
 Friend Sub SaveRecentSpecs()
   Dim c As Collection
   Dim i As Long
-  Dim currentSpecExists As Boolean
+  Dim icurrentSpecIndex As Long
   Dim specPath As String
   
+On Error GoTo err_err
+
   If Me.RecentSpecsInterface Is Nothing Then Exit Sub
   
   Set c = New Collection
   
+  icurrentSpecIndex = 0
   For i = 1 To m_RecentSpecs.Count
-    specPath = m_RecentSpecs.Item(i)
-    Call c.Add(specPath)
     If StrComp(specPath, m_SpecFile, vbTextCompare) = 0 Then
-      currentSpecExists = True
+      icurrentSpecIndex = i
       Exit For
     End If
   Next
-  If Not currentSpecExists Then
-    Call c.Add(m_SpecFile)
-  End If
+  
+  Call c.Add(m_SpecFile)
+  
+  For i = 1 To m_RecentSpecs.Count
+    If i <> icurrentSpecIndex Then
+      Call c.Add(m_RecentSpecs.Item(i))
+    End If
+  Next
   
   Call RecentSpecsInterface.SetRecentSpecs(CurrentDest.Name, c)
   
+err_end:
+  Exit Sub
+err_err:
+  Call ErrorMessage(ERR_ERROR, Err, ErrorSource(Err, "SaveRecentSpecs"), "Save recent specs", Err.Description)
+  Resume err_end
 End Sub
 Friend Function ReCalc_Src(frmSrcObj As Object) As Boolean
   Dim FrmSrc As Frm_Source
@@ -1445,7 +1456,10 @@ SaveSpec_Err:
   Resume SaveSpec_End
 End Sub
 Friend Property Get SpecIsNew() As Boolean
-  SpecIsNew = (Len(m_SpecFile) = 0)
+  If Len(m_SpecFile) = 0 Then
+    SpecIsNew = True
+  End If
+  
 End Property
 
 Friend Property Get SpecIsDirty() As Boolean
@@ -1467,8 +1481,8 @@ Friend Property Get SpecIsDirty() As Boolean
   
   Call SaveSpec(tempFileName)
   
-  currentSpecText = TextFileLoad(tempFileName)
-  originalSpecText = TextFileLoad(originalSpecFile)
+  currentSpecText = Trim$(TextFileLoad(tempFileName))
+  originalSpecText = Trim$(TextFileLoad(originalSpecFile))
   
   SpecIsDirty = currentSpecText <> originalSpecText
   

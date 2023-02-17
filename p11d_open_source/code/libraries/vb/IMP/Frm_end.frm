@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{AF27A9B5-A3F4-11D2-8DB7-00C04FA9DD6F}#1.2#0"; "TCSPROG.OCX"
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
 Begin VB.Form Frm_End 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Import Data"
@@ -59,7 +59,7 @@ Begin VB.Form Frm_End
       Skew            =   0
       PictureOffsetTop=   0
       PictureOffsetLeft=   0
-      Enabled         =   0   'False
+      Enabled         =   -1  'True
       Increment       =   1
       TextAlignment   =   1
    End
@@ -323,6 +323,7 @@ End Sub
 
 Private Sub Cmd_Another_Click()
   m_ImpWiz.ImportAnother = True
+  Call m_ImportWizard.SaveRecentSpecs
   Call SwitchForm(Me, TCSIMP_CANCEL, True)
 End Sub
 

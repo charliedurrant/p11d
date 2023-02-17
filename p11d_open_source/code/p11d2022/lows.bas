@@ -476,7 +476,7 @@ Public Sub SetSortOrder(lv As ListView, ColumnHeader As ColumnHeader, Optional O
       Call ListViewSortByType(dt, lv, ColumnHeader, OverrideSortOrder)
     End If
   End With
-  If lv.listitems.Count > 0 Then
+  If lv.listitems.count > 0 Then
     If Not lv.SelectedItem Is Nothing Then lv.SelectedItem.EnsureVisible
   End If
   
@@ -534,7 +534,7 @@ On Error GoTo err_err
 
   iColumnIndex = ColumnHeader.Index - 1
   
-  iCount = lv.listitems.Count
+  iCount = lv.listitems.count
   For i = 1 To iCount
     Set LVI = lv.listitems(i)
     If iColumnIndex > 0 Then
@@ -619,7 +619,7 @@ Public Sub ColumnWidths(lv As ListView, ParamArray P())
   Call xSet("ColumnWidths")
   
   i = LBound(P)
-  For j = 1 To (lv.ColumnHeaders.Count)
+  For j = 1 To (lv.ColumnHeaders.count)
     If k >= 100 Then P(i) = 0
     If P(i) <> 0 Then
       If k + P(i) >= 100 Then
@@ -631,7 +631,7 @@ Public Sub ColumnWidths(lv As ListView, ParamArray P())
     End If
     lv.ColumnHeaders(j).width = CLng(CDbl(P(i)) / 100 * CDbl(lv.width))
     i = i + 1
-    If j + 1 = lv.ColumnHeaders.Count Then
+    If j + 1 = lv.ColumnHeaders.count Then
       If k <= 100 Then lv.ColumnHeaders(j + 1).width = ((100 - k) / 100) * CDbl(lv.width) * 0.98
       Exit For
     End If
@@ -676,7 +676,7 @@ Public Sub SelectItems(lv As ListView, ByVal Sm As SELECT_MODE, Optional sGroupC
       Call p11d32.Help.ShowForm(F_SelectEmployeesByReport, vbModal)
       GoTo SelectItems_End:
     End If
-    For i = 1 To lv.listitems.Count
+    For i = 1 To lv.listitems.count
       Set lst = lv.listitems(i)
       Set ben = .employees(lst.Tag)
       Select Case Sm
@@ -908,7 +908,7 @@ GridIsZeroLength_Err:
 End Function
 Public Function ClearCollection(c As Collection)
   Dim i As Long
-  For i = 1 To c.Count
+  For i = 1 To c.count
     Call c.Remove(1)
   Next i
 End Function
@@ -1315,6 +1315,7 @@ End Function
 Public Sub ReporterNewEx(ByVal repInterface As IReporter, ByVal rep As Reporter)
   Set rep.ReporterInterface = repInterface
   rep.A4Force = p11d32.ReportPrint.A4ForcePrint
+  rep.DefaultExportPath = p11d32.BrowseForFolderDefault(AppPath)
 End Sub
 Public Function ReportWizardNew() As ReportWizard
   Dim repw As ReportWizard

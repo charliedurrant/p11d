@@ -202,7 +202,7 @@ Private Sub cmdDeletePreviousSpec_Click()
     Set lvi = listViewRecentSpecs.ListItems(i)
     If (lvi.Selected) Then
       Call listViewRecentSpecs.ListItems.Remove(i)
-      Call m_ImpWiz.RemoveRecentSpec(lvi.Text)
+      Call m_ImpWiz.RemoveRecentSpec(CStr(lvi.Tag))
     End If
   Next
   
@@ -247,7 +247,7 @@ Private Property Get PreviousSelectedSpec() As String
   PreviousSelectedSpec = ""
   For Each lvi In listViewRecentSpecs.ListItems
     If lvi.Checked Then
-      PreviousSelectedSpec = lvi.Text
+      PreviousSelectedSpec = CStr(lvi.Tag)
       Exit Property
     End If
     

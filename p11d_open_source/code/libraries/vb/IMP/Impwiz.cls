@@ -834,6 +834,8 @@ Private Sub LoadRecentSpecs(FrmSrc As Frm_Source)
   Dim i As Long
   Dim lvi As ListItem
   Dim recentSpecsCaption As String
+  Dim ctlwidth As Long
+  Dim compactedPath As String
   
 On Error GoTo err_err:
 
@@ -858,11 +860,16 @@ On Error GoTo err_err:
     Call FrmSrc.listViewRecentSpecs.ListItems.Clear
     Set c = RecentSpecsInterface.GetRecentSpecs(CurrentDest.Name)
     Call m_RecentSpecs.RemoveAll
+    
+    ctlwidth = (FrmSrc.listViewRecentSpecs.Width / Screen.TwipsPerPixelX) * 0.9
     'remove any specs not in the list
     For i = 1 To c.Count
       path = c(i)
       Call m_RecentSpecs.Add(path)
-      Set lvi = FrmSrc.listViewRecentSpecs.ListItems.Add(, , path)
+          
+      compactedPath = MakeCompactedPathPixels(path, FrmSrc.listViewRecentSpecs.hWnd, ctlwidth)
+      Set lvi = FrmSrc.listViewRecentSpecs.ListItems.Add(, , compactedPath)
+      lvi.Tag = path
       lvi.ToolTipText = path
     Next
   End If
@@ -874,6 +881,7 @@ err_err:
   Call Err.Raise(Err.Number, ErrorSource(Err, "LoadRecentSpecs"), Err.Description)
   Resume
 End Sub
+
 Friend Sub RemoveRecentSpec(ByVal specPath As String)
   If m_RecentSpecs.IsPresent(specPath) Then
     Call m_RecentSpecs.Remove(specPath)

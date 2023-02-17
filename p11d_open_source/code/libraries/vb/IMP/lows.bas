@@ -2,8 +2,33 @@ Attribute VB_Name = "lows"
 Option Explicit
 Private Const MAX_PATH As Long = 260
 
-Private Declare Function PathCompactPath Lib "shlwapi.dll" Alias "PathCompactPathA" (ByVal hdc As Long, ByVal lpszPath As String, ByVal dx As Long) As Long
+Private Declare Function PathCompactPath Lib "shlwapi.dll" Alias "PathCompactPathA" (ByVal hDc As Long, ByVal lpszPath As String, ByVal dx As Long) As Long
 Private Declare Function lstrlenW Lib "kernel32" (ByVal lpString As Long) As Long
+Private Declare Function GetDC Lib "user32" (ByVal hWnd As Long) As Long
+
+Public Function MakeCompactedPathPixels(ByVal sPath As String, hWnd As Long, dwPixels As Long) As String
+
+  'Truncates a file path to fit within
+  'a given pixel width by replacing path
+  'components with ellipses.
+   Dim ret As Long
+   Dim buff As String
+   Dim dwhdc As Long
+   
+   
+  'the path to compact and the
+  'return buffer are the same string
+  'and must be MAX_PATH in length
+   buff = sPath & Chr$(0) & Space$(MAX_PATH - Len(sPath) - 1)
+   dwhdc = GetDC(hWnd)
+   ret = PathCompactPath(dwhdc, buff, dwPixels)
+   
+   MakeCompactedPathPixels = TrimNull(buff)
+   
+End Function
+Private Function TrimNull(startstr As String) As String
+   TrimNull = Left$(startstr, lstrlenW(StrPtr(startstr)))
+End Function
 Public Sub SwitchForm(iFrm As IImportForm, Dest As IMPORT_GOTOFORM, ByVal forward As Boolean)
   Dim frm As Form
   

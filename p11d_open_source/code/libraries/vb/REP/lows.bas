@@ -164,3 +164,4 @@ Public Function toupperbyte(ByVal ch As Byte) As Byte
   End If
   toupperbyte = ch
 End Function
+

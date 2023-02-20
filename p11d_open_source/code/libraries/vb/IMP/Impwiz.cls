@@ -899,15 +899,17 @@ On Error GoTo err_err
   
   Set c = New Collection
   
-  icurrentSpecIndex = 0
-  For i = 1 To m_RecentSpecs.Count
-    If StrComp(specPath, m_SpecFile, vbTextCompare) = 0 Then
-      icurrentSpecIndex = i
-      Exit For
-    End If
-  Next
+  If (FileExists(m_SpecFile)) Then
+    icurrentSpecIndex = 0
+    For i = 1 To m_RecentSpecs.Count
+      If StrComp(specPath, m_SpecFile, vbTextCompare) = 0 Then
+        icurrentSpecIndex = i
+        Exit For
+      End If
+    Next
+    Call c.Add(m_SpecFile)
+  End If
   
-  Call c.Add(m_SpecFile)
   
   For i = 1 To m_RecentSpecs.Count
     If i <> icurrentSpecIndex Then

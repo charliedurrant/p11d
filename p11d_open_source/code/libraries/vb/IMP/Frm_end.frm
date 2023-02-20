@@ -59,7 +59,7 @@ Begin VB.Form Frm_End
       Skew            =   0
       PictureOffsetTop=   0
       PictureOffsetLeft=   0
-      Enabled         =   -1  'True
+      Enabled         =   0   'False
       Increment       =   1
       TextAlignment   =   1
    End
@@ -284,15 +284,40 @@ Private Sub Cmd_Back_Click()
 End Sub
 
 Private Sub Cmd_Cancel_Click()
+  If Not SaveRecentSpecs(False) Then
+    Call SwitchForm(Me, TCSIMP_CANCEL, True)
+  End If
+End Sub
+Private Sub Cmd_Another_Click()
+  If Not SaveRecentSpecs(True) Then
+    m_ImpWiz.ImportAnother = True
+    Call SwitchForm(Me, TCSIMP_CANCEL, True)
+  End If
+End Sub
+Private Function SaveRecentSpecs(ByVal importMore As Boolean) As Boolean
+  Dim message As String
+  Dim result As VbMsgBoxResult
+  
   If m_ImpWiz.SpecIsDirty Then
-    If MsgBox("You have not saved your import spec, do you still wish to exit?", vbOKCancel, "Save spec") = vbCancel Then
-      Exit Sub
+    If importMore Then
+      message = "You have not saved your import spec, do you still wish to continue to import more data?"
+    Else
+      message = "You have not saved your import spec, do you still wish to exit?"
     End If
+    result = MsgBox(message, vbOKCancel, "Save spec")
+    If result = vbOK Then
+      SaveRecentSpecs = False
+      Exit Function
+    Else
+      SaveRecentSpecs = True
+      
+    End If
+  Else
+    SaveRecentSpecs = False
   End If
   
   Call m_ImpWiz.SaveRecentSpecs
-  Call SwitchForm(Me, TCSIMP_CANCEL, True)
-End Sub
+End Function
 
 Private Sub Cmd_Import_Click()
   Call m_ImpWiz.DoImport(Me.FlG_Dest, 0, False, True)
@@ -321,9 +346,4 @@ Private Sub SaveSpec(ByVal saveAs As Boolean)
   Call m_ImpWiz.SaveSpec(s)
 End Sub
 
-Private Sub Cmd_Another_Click()
-  m_ImpWiz.ImportAnother = True
-  Call m_ImportWizard.SaveRecentSpecs
-  Call SwitchForm(Me, TCSIMP_CANCEL, True)
-End Sub
 

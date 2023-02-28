@@ -61,6 +61,8 @@ Private Sub grid_ValidateTCS(FirstColIndexInError As Long, ValidateMessage As St
   
   Call xSet("P11dbAdjustmentsValidate")
   
+  If ObjectListIndex = -1 Then GoTo err_end
+  
   With RowBuf
     For l = 0 To RowBuf.ColumnCount - 1
       Select Case l
@@ -105,6 +107,7 @@ err_end:
 err_err:
   Call ErrorMessage(ERR_ERROR, Err, "P11dbAdjustmentsValidate", "P11db Adjustments Validate", "Error validating a P11Db adjustment.")
   Resume err_end
+  Resume
 End Sub
 Private Sub grid_WriteData(ByVal RowBuf As TrueDBGrid60.RowBuffer, ByVal RowBufRowIndex As Long, ObjectList As ATC2CORE.ObjectList, ObjectListIndex As Long)
   Dim p11dbAdjust As P11DbAdjustment

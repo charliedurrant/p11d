@@ -173,28 +173,12 @@ WKBenefitHeader_ERR:
   Resume
 End Sub
 
-'Public Sub ReportEnd(rep As Reporter, ByVal bDonePrinting As Boolean)
-'  If rep Is Nothing Then Call Err.Raise(ERR_REP_IS_NOTHING, "ReportEnd", "The reporter is nothing in report end.")
-'  If bDonePrinting Then Call rep.Out(EmployeeLetterCode(ELC_NEWPAGE, ELCT_LETTER_FILE_CODES, False))
-'End Sub
 Public Sub ReportBanner(rep As Reporter, BannerText As String)
   If rep Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "ReportBanner", "Reporter is nothing.")
   Call HMITBanner(rep, BannerText & " " & p11d32.Rates.value(TaxFormYear), True)
 End Sub
-
-'Public Sub ReportBannerDeclaration(rep As Reporter, BannerText As String)
-'  If rep Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "ReportBanner", "Reporter is nothing.")
-'  Call HMITBanner(rep, BannerText, True)
-'End Sub
-'Public Sub ReportBannerDeclarationSecondLine(rep As Reporter, BannerText As String)
-'  If rep Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "ReportBanner", "Reporter is nothing.")
-'  Call HMITBannerSecondLine(rep, BannerText, True)
-'End Sub
-
-
 Public Function WKMainHeader(rep As Reporter, ben As IBenefitClass, ee As Employee) As Boolean
-  
-  
+   
   On Error GoTo WKMainHeader_ERR
 
   Call xSet("WKMainHeader")
@@ -3760,15 +3744,10 @@ Private Sub P11Db_ReconciliationAdjustments(ey As Employer, rep As Reporter, Adj
   Dim i As Long
   Dim adjustment As P11DbAdjustment
   
-  If ey.P11DbAdjustmentsSum(Adjustments) = 0 Then
-    Exit Sub
-  End If
-  
   For i = 1 To Adjustments.count
     Set adjustment = Adjustments(i)
     Call WKTableRow(rep, "", adjustment.caption, FormatWNNoCurrency(adjustment.value, negative), "")
   Next
-  
 End Sub
 Private Sub P11Db_ReconciliationSubHeading(rep As Reporter, subHeading As String)
   Call WKTblColXOffsets(0)

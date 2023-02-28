@@ -31,15 +31,15 @@ Begin VB.Form F_PrintOptions
       TabCaption(0)   =   "HMIT"
       TabPicture(0)   =   "F_PrintOptions.frx":0000
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "fraReportTotalValue"
+      Tab(0).Control(0)=   "fmeHMITSections"
       Tab(0).Control(1)=   "fmeHMITSectionChoice"
-      Tab(0).Control(2)=   "fmeHMITSections"
+      Tab(0).Control(2)=   "fraReportTotalValue"
       Tab(0).ControlCount=   3
       TabCaption(1)   =   "Employee Letter"
       TabPicture(1)   =   "F_PrintOptions.frx":001C
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "fraLetters"
-      Tab(1).Control(1)=   "fraEmployeeLetter"
+      Tab(1).Control(0)=   "fraEmployeeLetter"
+      Tab(1).Control(1)=   "fraLetters"
       Tab(1).ControlCount=   2
       TabCaption(2)   =   "Other"
       TabPicture(2)   =   "F_PrintOptions.frx":0038
@@ -61,7 +61,7 @@ Begin VB.Form F_PrintOptions
          Caption         =   "Email settings"
          Height          =   375
          Left            =   1920
-         TabIndex        =   70
+         TabIndex        =   67
          Top             =   8880
          Width           =   1305
       End
@@ -69,7 +69,7 @@ Begin VB.Form F_PrintOptions
          Caption         =   "Force print to A4"
          Height          =   255
          Left            =   240
-         TabIndex        =   69
+         TabIndex        =   66
          Top             =   8950
          Width           =   1635
       End
@@ -77,14 +77,14 @@ Begin VB.Form F_PrintOptions
          Caption         =   "Data checker"
          Height          =   1335
          Left            =   120
-         TabIndex        =   61
+         TabIndex        =   58
          Top             =   7440
          Width           =   6855
          Begin VB.CheckBox chkChecksAutoRefresh 
             Caption         =   "Auto refresh of checks"
             Height          =   255
             Left            =   240
-            TabIndex        =   66
+            TabIndex        =   63
             Top             =   960
             Width           =   2175
          End
@@ -92,7 +92,7 @@ Begin VB.Form F_PrintOptions
             Caption         =   "Ask for checks before printing"
             Height          =   255
             Left            =   240
-            TabIndex        =   62
+            TabIndex        =   59
             Top             =   240
             Width           =   2415
          End
@@ -100,7 +100,7 @@ Begin VB.Form F_PrintOptions
             Caption         =   "Frame1"
             Height          =   615
             Left            =   120
-            TabIndex        =   63
+            TabIndex        =   60
             Top             =   240
             Width           =   6615
             Begin VB.OptionButton optChkBeforePrint 
@@ -108,7 +108,7 @@ Begin VB.Form F_PrintOptions
                Height          =   255
                Index           =   1
                Left            =   2400
-               TabIndex        =   65
+               TabIndex        =   62
                Top             =   240
                Width           =   1815
             End
@@ -117,7 +117,7 @@ Begin VB.Form F_PrintOptions
                Height          =   255
                Index           =   0
                Left            =   120
-               TabIndex        =   64
+               TabIndex        =   61
                Top             =   240
                Width           =   1815
             End
@@ -134,14 +134,14 @@ Begin VB.Form F_PrintOptions
             Caption         =   "If employee report in the exported file name use:"
             Height          =   1410
             Left            =   120
-            TabIndex        =   71
+            TabIndex        =   68
             Top             =   960
             Width           =   6615
             Begin VB.CommandButton cmdEditCustomExportFileName 
                Caption         =   "Edit"
                Height          =   375
                Left            =   5760
-               TabIndex        =   78
+               TabIndex        =   75
                Top             =   960
                Width           =   615
             End
@@ -150,7 +150,7 @@ Begin VB.Form F_PrintOptions
                Height          =   195
                Index           =   2
                Left            =   4560
-               TabIndex        =   77
+               TabIndex        =   74
                Top             =   260
                Width           =   1575
             End
@@ -159,7 +159,7 @@ Begin VB.Form F_PrintOptions
                Height          =   195
                Index           =   1
                Left            =   1680
-               TabIndex        =   73
+               TabIndex        =   70
                Top             =   260
                Width           =   3135
             End
@@ -168,7 +168,7 @@ Begin VB.Form F_PrintOptions
                Height          =   195
                Index           =   0
                Left            =   120
-               TabIndex        =   72
+               TabIndex        =   69
                Top             =   260
                Width           =   1575
             End
@@ -177,7 +177,7 @@ Begin VB.Form F_PrintOptions
                Caption         =   "Label2"
                Height          =   360
                Left            =   135
-               TabIndex        =   80
+               TabIndex        =   77
                Top             =   945
                Width           =   5535
             End
@@ -185,7 +185,7 @@ Begin VB.Form F_PrintOptions
                Caption         =   "Custom export file name"
                Height          =   255
                Left            =   120
-               TabIndex        =   79
+               TabIndex        =   76
                Top             =   640
                Width           =   4935
             End
@@ -196,7 +196,7 @@ Begin VB.Form F_PrintOptions
             Left            =   90
             ScaleHeight     =   780
             ScaleWidth      =   5505
-            TabIndex        =   56
+            TabIndex        =   53
             Top             =   225
             Width           =   5505
             Begin VB.OptionButton optExportType 
@@ -204,7 +204,7 @@ Begin VB.Form F_PrintOptions
                Height          =   330
                Index           =   3
                Left            =   2790
-               TabIndex        =   67
+               TabIndex        =   64
                Top             =   360
                Width           =   2085
             End
@@ -213,7 +213,7 @@ Begin VB.Form F_PrintOptions
                Height          =   375
                Index           =   0
                Left            =   0
-               TabIndex        =   59
+               TabIndex        =   56
                Top             =   0
                Width           =   2625
             End
@@ -222,7 +222,7 @@ Begin VB.Form F_PrintOptions
                Height          =   375
                Index           =   1
                Left            =   0
-               TabIndex        =   58
+               TabIndex        =   55
                Top             =   360
                Width           =   2625
             End
@@ -231,7 +231,7 @@ Begin VB.Form F_PrintOptions
                Height          =   330
                Index           =   2
                Left            =   2790
-               TabIndex        =   57
+               TabIndex        =   54
                Top             =   45
                Width           =   2085
             End
@@ -248,7 +248,7 @@ Begin VB.Form F_PrintOptions
             Caption         =   "Draft reports"
             Height          =   240
             Left            =   2520
-            TabIndex        =   74
+            TabIndex        =   71
             Top             =   1485
             Width           =   2490
          End
@@ -256,7 +256,7 @@ Begin VB.Form F_PrintOptions
             Caption         =   "Remember employee selection"
             Height          =   375
             Left            =   2520
-            TabIndex        =   60
+            TabIndex        =   57
             Top             =   1035
             Width           =   2490
          End
@@ -318,6 +318,56 @@ Begin VB.Form F_PrintOptions
          TabIndex        =   27
          Top             =   405
          Width           =   6885
+         Begin VB.PictureBox pctPRN 
+            BorderStyle     =   0  'None
+            Height          =   360
+            Left            =   1590
+            ScaleHeight     =   360
+            ScaleWidth      =   5040
+            TabIndex        =   78
+            Top             =   810
+            Width           =   5040
+            Begin VB.OptionButton optDestination 
+               Caption         =   "PRN file"
+               Height          =   330
+               Index           =   2
+               Left            =   0
+               TabIndex        =   79
+               Top             =   15
+               Width           =   975
+            End
+            Begin atc2valtext.ValText txtPRNFileName 
+               Height          =   315
+               Left            =   2775
+               TabIndex        =   80
+               Top             =   0
+               Width           =   1815
+               _ExtentX        =   3201
+               _ExtentY        =   556
+               BackColor       =   255
+               BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+                  Name            =   "MS Sans Serif"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   400
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Text            =   ""
+               TypeOfData      =   3
+               AllowEmpty      =   0   'False
+               AutoSelect      =   0
+            End
+            Begin VB.Label Label1 
+               Caption         =   "PRN file name"
+               Height          =   375
+               Left            =   1575
+               TabIndex        =   81
+               Top             =   60
+               Width           =   1155
+            End
+         End
          Begin VB.PictureBox pctFrame3 
             BorderStyle     =   0  'None
             Height          =   2235
@@ -330,8 +380,8 @@ Begin VB.Form F_PrintOptions
             Begin P11D2022.MyFolderBrowser fbExportDirectory 
                Height          =   255
                Left            =   120
-               TabIndex        =   75
-               Top             =   1920
+               TabIndex        =   72
+               Top             =   1800
                Width           =   5295
                _ExtentX        =   9340
                _ExtentY        =   450
@@ -352,8 +402,8 @@ Begin VB.Form F_PrintOptions
                Height          =   330
                Index           =   3
                Left            =   45
-               TabIndex        =   68
-               Top             =   840
+               TabIndex        =   65
+               Top             =   600
                Visible         =   0   'False
                Width           =   975
             End
@@ -362,7 +412,7 @@ Begin VB.Form F_PrintOptions
                Height          =   330
                Index           =   1
                Left            =   45
-               TabIndex        =   53
+               TabIndex        =   51
                Top             =   285
                Width           =   2685
             End
@@ -371,65 +421,25 @@ Begin VB.Form F_PrintOptions
                Height          =   330
                Index           =   0
                Left            =   45
-               TabIndex        =   52
+               TabIndex        =   50
                Top             =   0
                Width           =   1725
             End
             Begin VB.CheckBox chkAllowUserReportNameHTML 
                Caption         =   "Allow user export report name"
                Height          =   240
-               Left            =   45
-               TabIndex        =   51
-               Top             =   1200
-               Width           =   2535
-            End
-            Begin VB.OptionButton optDestination 
-               Caption         =   "PRN file"
-               Height          =   330
-               Index           =   2
-               Left            =   45
-               TabIndex        =   50
-               Top             =   585
-               Width           =   975
-            End
-            Begin atc2valtext.ValText txtPRNFileName 
-               Height          =   315
-               Left            =   2820
+               Left            =   30
                TabIndex        =   49
-               Top             =   570
-               Width           =   1815
-               _ExtentX        =   3201
-               _ExtentY        =   556
-               BackColor       =   255
-               BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-                  Name            =   "MS Sans Serif"
-                  Size            =   8.25
-                  Charset         =   0
-                  Weight          =   400
-                  Underline       =   0   'False
-                  Italic          =   0   'False
-                  Strikethrough   =   0   'False
-               EndProperty
-               Text            =   ""
-               TypeOfData      =   3
-               AllowEmpty      =   0   'False
-               AutoSelect      =   0
+               Top             =   1035
+               Width           =   2535
             End
             Begin VB.Label lblExportTo 
                Caption         =   "Directory for export file:"
                Height          =   285
                Left            =   60
-               TabIndex        =   55
-               Top             =   1560
+               TabIndex        =   52
+               Top             =   1485
                Width           =   1665
-            End
-            Begin VB.Label Label1 
-               Caption         =   "PRN file name"
-               Height          =   375
-               Left            =   1620
-               TabIndex        =   54
-               Top             =   630
-               Width           =   1155
             End
          End
       End
@@ -443,7 +453,7 @@ Begin VB.Form F_PrintOptions
          Begin P11D2022.MyFolderBrowser fbUserLetters 
             Height          =   375
             Left            =   120
-            TabIndex        =   76
+            TabIndex        =   73
             Top             =   3480
             Width           =   6615
             _ExtentX        =   9551
@@ -1096,7 +1106,8 @@ Public Function SettingsToScreen() As Boolean
   
   chkRememberEmployeeSelection.value = BoolToChkBox(p11d32.ReportPrint.RemeberEmployeeSelection)
   
-  
+  pctPRN.Visible = False
+   
   
   
 SettingsToScreen_End:
@@ -1150,7 +1161,7 @@ Private Sub DefaultLetterSelection()
   Call ResetAllLetterNodes
   
   'Default if no Employee letter has been selected
-  If m_LastSelectedNode Is Nothing And tvwLetters.nodes.Count > 0 Then
+  If m_LastSelectedNode Is Nothing And tvwLetters.nodes.count > 0 Then
     Set tvwLetters.SelectedItem = tvwLetters.nodes(1)
     Call SetAsSelectedNode(tvwLetters.nodes(1))
   End If

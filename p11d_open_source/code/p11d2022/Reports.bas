@@ -13,6 +13,7 @@ Private Const S_P11DB_TOTAL_BOX_D As String = "Total of benefits on which Class 
 Private Const S_P11DB_MUTIPLY_BY_NIC_RATE_BOX_E As String = "Multiply by Class 1A NICs rate"
 Private Const S_P11DB_CLASS_1A_PAYABLE_BOX_F As String = "Class 1A NICs payable"
 Private Const S_P11DB_AMOUNTS_TAXED_THROUGH_PAYROLL As String = "Amounts taxed through payroll"
+Private Const S_P11DB_AMOUNTS_INFORMALLY_TAXED_THROUGH_PAYROLL As String = "informally taxed through payroll"
 Private Const S_P11DB_EMPLOYEES_NOT_SUBJECT_TO_CLASS_1A As String = "Employees not subject to Class 1A"
 
 
@@ -1549,24 +1550,33 @@ Report_PrintedEmployees_ERR:
   Resume Report_PrintedEmployees_END
   Resume
 End Function
-Public Function P11DbAdditionsDescription(benEmployer As IBenefitClass) As String
+Public Function P11DbAdditionsDescription(benEmployer As IBenefitClass, Optional ByVal defaultValueIfNotUSerValueEntered As Boolean = True) As String
   If (benEmployer.value(employer_NIC_AdjustmentAddTotal) = 0) Then
     P11DbAdditionsDescription = ""
   ElseIf (benEmployer.value(employer_NIC_AdjustmentAddUserEntered) = 0) And (Len(benEmployer.value(employer_addClass1ADescription_db)) = 0) Then
-    P11DbAdditionsDescription = S_P11DB_AMOUNTS_TAXED_THROUGH_PAYROLL
+    If defaultValueIfNotUSerValueEntered Then
+      P11DbAdditionsDescription = S_P11DB_AMOUNTS_TAXED_THROUGH_PAYROLL
+    Else
+      P11DbAdditionsDescription = ""
+    End If
   Else
     P11DbAdditionsDescription = benEmployer.value(employer_addClass1ADescription_db)
   End If
 End Function
-Public Function P11DbDeductionsDescription(benEmployer As IBenefitClass) As String
+Public Function P11DbDeductionsDescription(benEmployer As IBenefitClass, Optional ByVal defaultValueIfNotUSerValueEntered As Boolean = True) As String
   If (benEmployer.value(employer_NIC_AdjustmentDeductTotal) = 0) Then
     P11DbDeductionsDescription = ""
   ElseIf (benEmployer.value(employer_NIC_AdjustmentDeductUserEntered) = 0) And (Len(benEmployer.value(employer_deductClass1ADescription_db)) = 0) Then
-    P11DbDeductionsDescription = S_P11DB_EMPLOYEES_NOT_SUBJECT_TO_CLASS_1A
+    If defaultValueIfNotUSerValueEntered Then
+      P11DbDeductionsDescription = S_P11DB_EMPLOYEES_NOT_SUBJECT_TO_CLASS_1A
+    Else
+      P11DbDeductionsDescription = ""
+    End If
   Else
     P11DbDeductionsDescription = benEmployer.value(employer_deductClass1ADescription_db)
   End If
 End Function
+
 Private Function Report_P11db_NIC_Rate_Formatted() As String
   Report_P11db_NIC_Rate_Formatted = (p11d32.Rates.value(carNICRate) * 100) & "%"
 End Function
@@ -3370,7 +3380,6 @@ Public Sub ManagementReportsToTree(ByVal tvwReports As TreeView)
   Call ReportToTree(tvwReports, RPT_MANAGEMENT)
   For i = [RPT_FIRST_MANAGEMENT] To [RPT_LAST_MANAGEMENT]
     Call ReportToTree(tvwReports, i) 'km
-    'AM Fix
     If (IsManagementReport(i)) Then
      If Not (Is83FileName(p11d32.ReportPrint.ManagementReportPathAndFile(i))) Then Call Err.Raise(ERR_FILE_INVALID, "ReportsToTree", "The management report file " & p11d32.ReportPrint.ManagementReportPathAndFile(i) & " is not 8.3 format.")
     End If
@@ -3703,7 +3712,8 @@ On Error GoTo err_err
   Next
   
   Call P11Db_ReconciliationAdjustments(ey, rep, ey.P11DbAdditions, False)
-  Call WKTableRow(rep, "", "", "", FormatWNNoCurrency(benEY.value(employer_NIC_AdjustmentAddTotal)))
+  Call WKTableBlankRow(rep)
+  Call WKTableRow(rep, "", P11DbAdditionsDescription(benEY, False), "", FormatWNNoCurrency(benEY.value(employer_NIC_AdjustmentAddTotal)))
   
 'C
   Call WKTableBlankRow(rep)
@@ -3715,9 +3725,11 @@ On Error GoTo err_err
   Next
   
   Call P11Db_ReconciliationAdjustments(ey, rep, ey.P11DbDeductions, True)
-  Call WKTableRow(rep, "", "", "", FormatWNNoCurrency(-1 * benEY.value(employer_NIC_AdjustmentDeductTotal)))
-  
+  Call WKTableBlankRow(rep)
+  Call WKTableRow(rep, "", P11DbDeductionsDescription(benEY, False), "", FormatWNNoCurrency(-1 * benEY.value(employer_NIC_AdjustmentDeductTotal)))
+  Call WKTableBlankRow(rep)
   Call WKOut(rep, WK_ITEM_Total, "Sub total", benEY.value(employer_NIC_BenefitsAndAdjustmentsSubTotal), , True)
+  
   
   
 'D
@@ -3778,7 +3790,7 @@ Function P11Db_ReconciliationTableLineP11DBox(rep As Reporter, benEY As IBenefit
   
   
   If sectionValue = HMIT_SECTION_EMPLOYER_BENEFIT_ITEM_P11DB_ADDITIONS Then
-    captionAddition = ":" & LowerCaseFirstLetter(S_P11DB_AMOUNTS_TAXED_THROUGH_PAYROLL)
+    captionAddition = ":" & LowerCaseFirstLetter(S_P11DB_AMOUNTS_INFORMALLY_TAXED_THROUGH_PAYROLL)
   ElseIf sectionValue = HMIT_SECTION_EMPLOYER_BENEFIT_ITEM_P11DB_DEDUCTIONS Then
     captionAddition = ": " & LowerCaseFirstLetter(S_P11DB_EMPLOYEES_NOT_SUBJECT_TO_CLASS_1A)
   End If

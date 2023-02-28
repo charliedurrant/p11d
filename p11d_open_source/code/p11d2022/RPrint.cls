@@ -52,8 +52,9 @@ Public Enum P11D_REPORTS
   
   RPT_MANAGEMENT
     
+  RPT_MANAGEMENT_ALL_BOXES
+  [RPT_FIRST_MANAGEMENT] = RPT_MANAGEMENT_ALL_BOXES
   RPT_MANAGEMENT_EMPLOYEE_LIST
-  [RPT_FIRST_MANAGEMENT] = RPT_MANAGEMENT_EMPLOYEE_LIST
   RPT_MANAGEMENT_BENEFIT_SUMMARY
   RPT_MANAGEMENT_NIC_CLASS1A_EMPLOYER
   RPT_MANAGEMENT_NIC_CLASS1A_EMPLOYEE
@@ -387,6 +388,9 @@ Public Sub Initialise()
   'reports
   sParentName = m_RepSettings(RPT_MANAGEMENT).Name
   
+  Call AddParentedReport(RPT_MANAGEMENT_ALL_BOXES, sParentName, 0, "Default report - All boxes", True)
+  Me.CsvExport(RPT_MANAGEMENT_ALL_BOXES) = True
+  
   Call AddParentedReport(RPT_MANAGEMENT_BENEFIT_SUMMARY, sParentName, 0, "Benefit summary", True)
   Call AddParentedReport(RPT_MANAGEMENT_EMPLOYEE_LIST, sParentName, 0, "Employee list", True)
   Call AddParentedReport(RPT_MANAGEMENT_NIC_CLASS1A_EMPLOYER, sParentName, 0, "Class 1A Summary for employer", True)
@@ -540,6 +544,13 @@ Public Property Get ParentName(ByVal ReportIndex As P11D_REPORTS) As String
   ParentName = m_RepSettings(ReportIndex).ParentName
 End Property
 
+Public Property Get CsvExport(ByVal ReportIndex As P11D_REPORTS) As Boolean
+  CsvExport = m_RepSettings(ReportIndex).CsvExport
+End Property
+Public Property Let CsvExport(ByVal ReportIndex As P11D_REPORTS, ByVal NewValue As Boolean)
+  m_RepSettings(ReportIndex).CsvExport = NewValue
+End Property
+
 Public Property Get Orientation(ByVal ReportIndex As P11D_REPORTS) As REPORT_ORIENTATION
   Orientation = m_RepSettings(ReportIndex).Orientation
 End Property
@@ -598,7 +609,27 @@ StartReportWizard_ERR:
   Resume StartReportWizard_END
   Resume
 End Sub
+Public Sub ExportReportWizardReport(ByVal rpt As P11D_REPORTS)
+  Dim reportName As String
+  Dim csvExportPath As String
+  
+On Error GoTo err_err
 
+  
+
+  reportName = Name(rpt) & ".csv"
+  csvExportPath = FileSaveAsDlg("Save as csv", "Csv files (*.csv)|*.csv", p11d32.BrowseForFolderDefault(CurDir$), reportName)
+  If (Len(csvExportPath) = 0) Then GoTo err_end
+  
+  Call p11d32.ReportPrint.StartReportWizard(ManagementReportPathAndFile(rpt), REPORTW_PREPARE_EXPORT, csvExportPath)
+  
+      
+err_end:
+  Exit Sub
+err_err:
+  Call ErrorMessage(ERR_ERROR, Err, "ExportAbacusReportWizard", "Execute Batch Report Wizard", "Abacus export report failed to execute correctly")
+  Resume err_end
+End Sub
 Public Sub DoExportAbacusReportWizard()
   Dim sExportFile As String, i As Long
   Dim tmpFile As String, fr As TCSFileread
@@ -616,14 +647,11 @@ Public Sub DoExportAbacusReportWizard()
   Set benEmployer = p11d32.CurrentEmployer
   sFIle = benEmployer.Name & ".csv"
   
-  
-  
   sExportFile = BrowseForFolderEx(MDIMain.hwnd, p11d32.BrowseForFolderDefault(CurDir$), "Please choose a directory for the output file [" & sFIle & "]")
   If Len(sExportFile) = 0 Then GoTo ExportAbacusReportWizard_END
   Call PrgStartCaption((RPT_LAST_ABACUSUDM - RPT_FIRST_ABACUSUDM) + 1, "Starting export")
   sFIle = FullPath(sExportFile) & sFIle
   For i = RPT_FIRST_ABACUSUDM To RPT_LAST_ABACUSUDM
-'AM To be removed    If Not (p11d32.AppYear > 2000 And (i = RPT_ABACUSUDM_EDUCATION_OTHER_N)) Then  'AM
       Call PrgStepCaption("Starting export of report " & Name(i))
       tmpFile = GetTempFilename(CoreClass.GetTempDirectory(), "P11D")
       Set RW = ReportWizardNew()
@@ -786,6 +814,8 @@ Public Function ManagementReportPathAndFile(ByVal ReportType As P11D_REPORTS, Op
   On Error GoTo ManagementReportPathAndFile_ERR
   
   Select Case ReportType
+    Case RPT_MANAGEMENT_ALL_BOXES
+      sFIle = "AllBoxes"
     Case RPT_MANAGEMENT_NIC_CLASS1A_EMPLOYER
       sFIle = "1ASum"
     Case RPT_MANAGEMENT_NIC_CLASS1A_EMPLOYEE
@@ -958,7 +988,7 @@ Public Function DoStandardReport(ByVal pr As P11D_REPORTS, ByVal ReportDest As R
   
   rd = Me.Destination
   
-  If SelectedEmployees.Count = 0 Then
+  If SelectedEmployees.count = 0 Then
     If Not p11d32.CurrentEmployeeIsNothing Then
       Call SelectedEmployees.Add(p11d32.CurrentEmployer.CurrentEmployee)
     Else
@@ -1509,7 +1539,7 @@ Private Function ExportFileNameEmployeeReference(ByVal sReportName As String, By
       parts.Add (ben.value(ee_Surname_db))
       parts.Add (ben.value(ee_Firstname_db))
       parts.Add (ee.PersonnelNumber)
-      For i = 1 To parts.Count
+      For i = 1 To parts.count
         part = parts.Item(i)
         part = Trim$(part)
         If (Len(part) > 0) Then
@@ -1598,15 +1628,15 @@ Public Sub ToolBarPreview(CurrentForm As Form)
   If IsBenefitForm(CurrentForm) And AllReports Then
     Set ibf = CurrentForm
     If ibf.benclass = BC_NONSHAREDVANS_G Then
-      If ibf.benefit Is Nothing Then
+      If ibf.Benefit Is Nothing Then
         If p11d32.CurrentEmployer.CurrentEmployee.AnyVanBenefit Then
           Set ben = p11d32.CurrentEmployer.CurrentEmployee.nonSharedVans
         End If
       Else
-        Set ben = ibf.benefit
+        Set ben = ibf.Benefit
       End If
     Else
-      Set ben = ibf.benefit
+      Set ben = ibf.Benefit
     End If
     If Not p11d32.ReportPrint.PreviewBenefitWK(ben) Then Call p11d32.ReportPrint.InitPrintDialog
   Else
@@ -1828,17 +1858,17 @@ IEnumFiles_File_ERR:
 End Sub
 Public Sub EmailSettingsShow()
 
- On Error GoTo Err_Err
+ On Error GoTo err_err
   
   Call InitATCMAIL
   Call ATCMail.ShowOptions
   Call DestroyATCMAIL
 
-Err_End:
+err_end:
   Exit Sub
-Err_Err:
+err_err:
   Call ErrorMessage(ERR_ERROR, Err, "EmailSettingsShow", "EmailSettingsShow", "Failed to show the email settings")
-  Resume Err_End
+  Resume err_end
 
 
 End Sub

@@ -420,7 +420,7 @@ Private Sub cmbPrinter_Click()
   On Error GoTo err_err
   
   Call SetActivePrinter(F_Print.cmbPrinter.Text)
-  'Call SetActivePrinterReporter
+  
 err_end:
   Exit Sub
 err_err:
@@ -457,20 +457,22 @@ Public Sub DoPrint(ByVal rTarget As REPORT_TARGET)
   Call xSet("DoPrint")
   
   
+  
+  
   'Call CheckPrinterSize 'moved to reporter
   'Confirm message for print
   If rTarget = PRINT_REPORT Then
     If p11d32.CurrentEmployer.GetEmployees(TempOL) Then
       Set p11d32.ReportPrint.SelectedEmployees = TempOL
       sMessage = "You are about to print the report:- " & vbCrLf & "'" & tvwReports.SelectedItem.Text & "'" _
-        & vbCrLf & " for " & p11d32.ReportPrint.SelectedEmployees.Count & " employee(s)" & _
+        & vbCrLf & " for " & p11d32.ReportPrint.SelectedEmployees.count & " employee(s)" & _
         vbCrLf & vbCrLf & "Do you wish to continue?"
       If p11d32.ReportPrint.DefaultReportIndex = RPT_EMPLOYEE_LETTER_EMAIL Then
         sMessage = sMessage & vbCrLf & vbCrLf & "This operation will also email the employees"
       End If
       Select Case MultiDialog("Warning", sMessage, "Continue", "Cancel")
         Case 2
-          Exit Sub
+          GoTo DoPrint_END
       End Select
     End If
   End If
@@ -480,6 +482,7 @@ Public Sub DoPrint(ByVal rTarget As REPORT_TARGET)
   rt = p11d32.ReportPrint.ReportPrintPrapare(p11d32.ReportPrint.DefaultReportIndex)
   
   Select Case rt
+    
     Case RPTT_STANDARD
       If p11d32.CurrentEmployer.GetEmployees(TempOL) Then
         Set p11d32.ReportPrint.SelectedEmployees = TempOL
@@ -494,8 +497,12 @@ Public Sub DoPrint(ByVal rTarget As REPORT_TARGET)
       End If
     Case RPTT_MANAGEMENT
       Call UnLoadPrintForm
-      If (Not WarningExportReportAsHTMLOrPDF()) Then
-        Call p11d32.ReportPrint.DoWizardReport(p11d32.ReportPrint.DefaultReportIndex, rTarget)
+      If p11d32.ReportPrint.CsvExport(p11d32.ReportPrint.DefaultReportIndex) Then
+        Call p11d32.ReportPrint.ExportReportWizardReport(p11d32.ReportPrint.DefaultReportIndex)
+      Else
+        If (Not WarningExportReportAsHTMLOrPDF()) Then
+          Call p11d32.ReportPrint.DoWizardReport(p11d32.ReportPrint.DefaultReportIndex, rTarget)
+        End If
       End If
     Case RPTT_OTHER
       Call UnLoadPrintForm

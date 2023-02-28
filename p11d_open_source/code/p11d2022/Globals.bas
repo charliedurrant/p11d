@@ -18,7 +18,8 @@ Public Type REPORT_SETTINGS
   Orientation As REPORT_ORIENTATION
   GroupHeader As Boolean 'if the report is just a group category in the rports treeview
   ParentName As String
-  IgnoreZeroOnly As Boolean   'km
+  IgnoreZeroOnly As Boolean
+  CsvExport As Boolean
 End Type
 
 Public Type BEN_DATA_STATIC

@@ -670,6 +670,8 @@ Friend Sub PrepareReport(ByVal LineCount As Long, Optional ByVal rt As REPORTW_T
   Dim sExportFile As String, re As REPORT_EXPORTS
   Dim bSaveAutoWidth As Boolean
   Dim bExcepted As Boolean, bEndedReport As Boolean, bAborted As Boolean
+  Dim oldExportPath As String
+  Dim oldExportPathSet As Boolean
   On Error GoTo Err_Err
   
   m_Cancel = False
@@ -725,6 +727,12 @@ Friend Sub PrepareReport(ByVal LineCount As Long, Optional ByVal rt As REPORTW_T
     Call m_ReporterInternal.EndReport(m_ReportInError)
     bEndedReport = True
     If Not m_ReportInError Then
+      If (Len(m_ExportPath) > 0) Then
+        oldExportPath = m_ReporterInternal.DefaultExportPath
+        m_ReporterInternal.DefaultExportPath = m_ExportPath
+        oldExportPathSet = True
+      End If
+      
       If (rt = REPORTW_PREPARE_EXPORT) Then
         Call m_ReporterInternal.ExportReport(sExportFile, re, True)
       End If
@@ -737,6 +745,9 @@ Friend Sub PrepareReport(ByVal LineCount As Long, Optional ByVal rt As REPORTW_T
   
 Err_End:
   Call PrepareReportEnd(bSaveAutoWidth, bExcepted, bEndedReport, bAborted)
+  If oldExportPathSet Then
+    m_ReporterInternal.DefaultExportPath = oldExportPath
+  End If
   Exit Sub
 Err_Err:
   Call ErrorMessage(ERR_ERROR, Err, "PrepareReport", "Prepare output report", "Error preparing output report " & mReportDetails.ReportName)

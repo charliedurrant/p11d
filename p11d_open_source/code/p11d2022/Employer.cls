@@ -265,12 +265,12 @@ Public Sub ClearP11DbAdjustmentsValues()
   Call ClearP11DbAdjustmentsValuesEx(P11DbAdditions)
   Call ClearP11DbAdjustmentsValuesEx(P11DbDeductions)
 End Sub
-Private Sub ClearP11DbAdjustmentsValuesEx(ol As ObjectList)
+Private Sub ClearP11DbAdjustmentsValuesEx(OL As ObjectList)
   Dim i As Long
   Dim adjustment As P11DbAdjustment
   
-  For i = 1 To ol.count
-    Set adjustment = ol(i)
+  For i = 1 To OL.count
+    Set adjustment = OL(i)
     adjustment.value = 0
   Next
   
@@ -684,7 +684,6 @@ Public Sub AddDefaultP11DbAdjustments()
   Call AddDefaultP11DbAdjustment("Formally payrolled benefits", True)
   Call AddDefaultP11DbAdjustment("Class 1A NIC due on sporting award", True)
   
-  Call AddDefaultP11DbAdjustment("Employees not subject to NIC for the full tax year", False)
   Call AddDefaultP11DbAdjustment("Employees not subject to NIC for part of the tax year", False)
   Call AddDefaultP11DbAdjustment("Formally payrolled benefits for employees not subject to UK NIC", False)
 End Sub
@@ -1857,25 +1856,25 @@ EditCompanyDefinedBenefits_Err:
 End Function
 
 
-Public Function GetEmployees(ol As ObjectList) As Boolean
+Public Function GetEmployees(OL As ObjectList) As Boolean
   Dim i As Long
   Dim li As ListItem
   
   On Error GoTo GetEmployees_Err
   Call xSet("GetEmployees")
 
-  Set ol = New ObjectList
+  Set OL = New ObjectList
   
   With F_Employees.LB
     For i = 1 To .listitems.count
       Set li = .listitems(i)
       If p11d32.EmployeeSelectedForPrint(employees(li.Tag), Me) Then
-        Call ol.Add(employees(li.Tag))
+        Call OL.Add(employees(li.Tag))
       End If
     Next
   End With
   
-  GetEmployees = ol.count
+  GetEmployees = OL.count
   
 GetEmployees_End:
   Call xReturn("GetEmployees")

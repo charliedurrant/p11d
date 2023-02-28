@@ -680,8 +680,8 @@ err_err:
   Resume
 End Sub
 Public Sub AddDefaultP11DbAdjustments()
-  Call AddDefaultP11DbAdjustment("Add Class 1A NIC due on termination payments", True)
   Call AddDefaultP11DbAdjustment("Formally payrolled benefits", True)
+  Call AddDefaultP11DbAdjustment("Class 1A NIC due on termination payments", True)
   Call AddDefaultP11DbAdjustment("Class 1A NIC due on sporting award", True)
   
   Call AddDefaultP11DbAdjustment("Employees not subject to NIC for part of the tax year", False)

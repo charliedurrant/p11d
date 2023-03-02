@@ -1,3 +1,10 @@
+**** BUILDING RELEASE ******
+COMPILE EVERYTHING ON INtel 12th gen PC - just build on the release machine
+IF change any components then register manually on the build machine and will need to build atc3?2?desk merge module
+If changed componenets then make sure they are upgraded on install, if failed, will need to uninstall previous year, unreg the components and delete then reinstall 
+previous year
+
+
 
 2019/20 (June Release) 
 

@@ -95,7 +95,7 @@ Public Function IsFormLoaded(sFormName As String) As Boolean
   Call xSet("IsFormLoaded")
   Dim lngCount As Long
   
-  For lngCount = 0 To Forms.Count - 1
+  For lngCount = 0 To Forms.count - 1
     If Forms(lngCount).Name = sFormName Then
        IsFormLoaded = True
        Exit Function
@@ -140,9 +140,9 @@ Sub Main()
   
   Set sql = New SQLQUERIES
   
-  Set gPreAlloc = New PreAllocate
+  'Set gPreAlloc = New PreAllocate
   
-  Call gPreAlloc.AllocObjects(PREALLOC_PARSER + PREALLOC_REP + PREALLOC_AUTO)
+  'Call gPreAlloc.AllocObjects(PREALLOC_PARSER + PREALLOC_REP + PREALLOC_AUTO)
   
   Set p11d32 = New p11d32
   

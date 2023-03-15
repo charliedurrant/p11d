@@ -187,24 +187,24 @@ Private Sub IPAYEOnlineOnError_OnError(ByVal count As Long, Error As PAYEOnlineE
   m_rsError.Update
 
 End Sub
-Private Function EmployersSelected(employers As ObjectList) As Long
+Private Function EmployersSelected(Employers As ObjectList) As Long
 '  'Returns list of Employers where PAYEOnline is selected
   Dim i As Long
   Dim benEmployer As IBenefitClass
   Dim ey As Employer
   
-  Set employers = New ObjectList
-  For i = 1 To p11d32.employers.count
-    Set ey = p11d32.employers(i)
+  Set Employers = New ObjectList
+  For i = 1 To p11d32.Employers.count
+    Set ey = p11d32.Employers(i)
     Set benEmployer = ey
     If Not benEmployer Is Nothing Then
       If benEmployer.value(employer_PAYEOnlineSelected) Then
-        Call employers.Add(ey)
+        Call Employers.Add(ey)
       End If
     End If
   Next
     
-  EmployersSelected = employers.count
+  EmployersSelected = Employers.count
 End Function
 Public Sub Errors(ByVal Dest As REPORT_TARGET, lPAYEOnlineErrorType As VIEW_ERRORS_TYPE, Optional SubIDs As String)
   
@@ -281,8 +281,8 @@ Public Sub EmployersToListView()
   
   Call xSet("EmployersToListView")
 
-  For i = 1 To p11d32.employers.count
-    Set ben = p11d32.employers(i)
+  For i = 1 To p11d32.Employers.count
+    Set ben = p11d32.Employers(i)
     If Not ben Is Nothing Then
       Set li = F_PayeOnline.lvPAYEEmployers.listitems.Add()
       Call UpdateListViewItem(li, ben, i)
@@ -373,7 +373,7 @@ Private Function CreateP46Node(XML_doc As DOMDocument60, XMLHeaderNode As IXMLDO
   Set CreateP46Node = n
 End Function
 Public Function SubmissionErrors(ey As Employer, progressBar As TCSProgressBar) As ObjectList
-  Dim employers As ObjectList
+  Dim Employers As ObjectList
   Dim ef As EFiler
   Dim payeOnlineErrorFilter As PAYEOnlineSubmissionErrors
   Dim errorf As payeOnlineErrorFilter
@@ -383,15 +383,15 @@ Public Function SubmissionErrors(ey As Employer, progressBar As TCSProgressBar) 
   Set m_Prg = progressBar
   
   Set ef = NewEfiler
-  Set employers = New ObjectList
+  Set Employers = New ObjectList
   
-  Call employers.Add(ey)
+  Call Employers.Add(ey)
   
   Set errorf = New payeOnlineErrorFilter
   Set payeOnlineErrorFilter = New PAYEOnlineSubmissionErrors
   Set errorf.Filter = payeOnlineErrorFilter
   Set ErrorFilter = errorf
-  Call ValidateEmployers(ef, employers, True)
+  Call ValidateEmployers(ef, Employers, True)
   
   
   Set SubmissionErrors = payeOnlineErrorFilter.Errors
@@ -415,7 +415,7 @@ Public Sub CreatePAYEFiles(ByVal prgEmployee As TCSProgressBar, ByVal lblFile As
   Dim ben As IBenefitClass
   Dim ben_ee As IBenefitClass
   Dim ben_car As IBenefitClass
-  Dim employers As ObjectList
+  Dim Employers As ObjectList
   Dim i As Long, j As Long, k As Long
   Dim lEmployeesWritten As Long
   Dim sBenefits As String, sEmployeeRec As String
@@ -436,7 +436,7 @@ Public Sub CreatePAYEFiles(ByVal prgEmployee As TCSProgressBar, ByVal lblFile As
   Call xSet("CreatePAYEFiles")
   
   'temp code
-  Call EmployersSelected(employers)
+  Call EmployersSelected(Employers)
   
   Set m_Prg = prgEmployee
   
@@ -472,19 +472,19 @@ Public Sub CreatePAYEFiles(ByVal prgEmployee As TCSProgressBar, ByVal lblFile As
     ErrorLogging = True
   End If
   
-  Call EmployersSelected(employers)
-  If (employers.count > 0) Then
-    Set ey = employers(1)
+  Call EmployersSelected(Employers)
+  If (Employers.count > 0) Then
+    Set ey = Employers(1)
   End If
   
-  If Not ValidateEmployers(ef, employers, False) Then
+  If Not ValidateEmployers(ef, Employers, False) Then
     Me.ViewProceedButtonIfErrors = False
     GoTo ERR_ERRORS:
   Else
     Me.ViewProceedButtonIfErrors = True
   End If
   
-  Set generationResult = GenerateFile(employers, ef)
+  Set generationResult = GenerateFile(Employers, ef)
   
   If (generationResult.EmployeesWritten > 0) Or (Type_Selected = POT_P11DB_ONLY) Then
     
@@ -510,7 +510,7 @@ ERR_ERRORS:
         LastPathAndFileCreated = OutputDirectory & sLastFileName
         Call Save_Files(sSubmissionID, LastPathAndFileCreated, Response_doc)
         If Len(sSubmissionID) > 0 Then
-          Call Update_SubIDs(employers, sSubmissionID)
+          Call Update_SubIDs(Employers, sSubmissionID)
         End If
       End If
     End If
@@ -533,7 +533,7 @@ CreatePAYEFiles_ERR:
   Resume CreatePAYEFiles_END
   Resume
 End Sub
-Private Function GenerateFile(employers As ObjectList, ef As EFiler) As PAYEOnlineGenerationResult
+Private Function GenerateFile(Employers As ObjectList, ef As EFiler) As PAYEOnlineGenerationResult
   Dim i As Long, j As Long, k As Long, lEmployeesWritten As Long, iReportedCarCount As Long
   Dim ey As Employer, ee As Employee
   Dim ben As IBenefitClass, ben_car As IBenefitClass, ben_ee As IBenefitClass
@@ -551,10 +551,10 @@ On Error GoTo err_err
   
   Set XMLHeaderNode = XML_doc.createElement("ExpensesAndBenefits")
   
-  For i = 1 To employers.count
-    Set ey = employers(i)
+  For i = 1 To Employers.count
+    Set ey = Employers(i)
     If i = 1 Then
-      Call CreatePAYEEmployerHead(node_p11d_record_count, node_p46_record_count, node_declarations, XML_doc, XMLHeaderNode, employers)
+      Call CreatePAYEEmployerHead(node_p11d_record_count, node_p46_record_count, node_declarations, XML_doc, XMLHeaderNode, Employers)
       XML_doc.appendChild XMLHeaderNode
     End If
     
@@ -794,7 +794,7 @@ Submit_EfilerCom_ERR:
   Resume Submit_EfilerCom_END
   Resume
 End Function
-Public Sub Update_SubIDs(employers As ObjectList, ByVal sSubmissionID As String)
+Public Sub Update_SubIDs(Employers As ObjectList, ByVal sSubmissionID As String)
   Dim i As Integer
   Dim ey As Employer
   Dim ben As IBenefitClass
@@ -803,8 +803,8 @@ Public Sub Update_SubIDs(employers As ObjectList, ByVal sSubmissionID As String)
   On Error GoTo Update_SubIDs_ERR
   Call xSet("Update_SubIDs")
     
-    For i = 1 To employers.count
-        Set ey = employers(i)
+    For i = 1 To Employers.count
+        Set ey = Employers(i)
         ey.OpenEmployer (False)
         Set ben = ey
         
@@ -911,11 +911,11 @@ CheckPAYEEmployerDetails_ERR:
   Resume
 End Function
 Private Function EmployeeHasp46Cars(ByVal ee As Employee)
-  Dim ol As ObjectList
+  Dim OL As ObjectList
   
   Call ee.LoadBenefits(TBL_COMPANY_CARS, False, False)
-  Call ee.GetP46Cars(ol, p11d32.PAYEonline.P46DateFrom, p11d32.PAYEonline.P46DateTo, True)
-  If ol.count Then
+  Call ee.GetP46Cars(OL, p11d32.PAYEonline.P46DateFrom, p11d32.PAYEonline.P46DateTo, True)
+  If OL.count Then
     EmployeeHasp46Cars = True
   End If
 
@@ -1207,7 +1207,7 @@ ValidateP46Car_ERR:
   Resume
 
 End Sub
-Private Function ProceedWithEmployee(ee As Employee, Optional ol As ObjectList) As Boolean
+Private Function ProceedWithEmployee(ee As Employee, Optional OL As ObjectList) As Boolean
   Dim benEE As IBenefitClass
   
   ProceedWithEmployee = False
@@ -1228,7 +1228,7 @@ Private Function ProceedWithEmployee(ee As Employee, Optional ol As ObjectList) 
       End If
     End If
   Else
-    If (p11d32.PAYEonline.Type_Selected = POT_P46) And (Not (ee.GetP46Cars(ol, p11d32.PAYEonline.P46DateFrom, p11d32.PAYEonline.P46DateTo, True))) Then
+    If (p11d32.PAYEonline.Type_Selected = POT_P46) And (Not (ee.GetP46Cars(OL, p11d32.PAYEonline.P46DateFrom, p11d32.PAYEonline.P46DateTo, True))) Then
       ProceedWithEmployee = False
     Else
       ProceedWithEmployee = True
@@ -1237,7 +1237,7 @@ Private Function ProceedWithEmployee(ee As Employee, Optional ol As ObjectList) 
   
 End Function
 Private Function EmployeeIsReportable(ByVal ee As Employee)
-  Dim ol As ObjectList
+  Dim OL As ObjectList
   If p11d32.PAYEonline.Type_Selected = POT_P46 Then
     EmployeeIsReportable = EmployeeHasp46Cars(ee)
   Else
@@ -1262,7 +1262,7 @@ Private Function ValidateEmployees(ey As Employer, lEmployeesWithInvalidNI As Lo
   Dim iAnyCars As Integer
   Dim sTxt As String, lNum As Long
   Dim mycar As CompanyCar
-  Dim ol As ObjectList
+  Dim OL As ObjectList
   
     
   On Error GoTo ValidateEmployees_err
@@ -1287,7 +1287,7 @@ Private Function ValidateEmployees(ey As Employer, lEmployeesWithInvalidNI As Lo
     
     Call m_Prg.StepCaption("Validating employee:" & ee.FullName)
     
-    If Not ProceedWithEmployee(ee, ol) Then
+    If Not ProceedWithEmployee(ee, OL) Then
       GoTo NEXT_EMPLOYEE
     End If
     
@@ -1367,8 +1367,8 @@ Private Function ValidateEmployees(ey As Employer, lEmployeesWithInvalidNI As Lo
             
       Case POT_P46
         'validate cars data
-        For j = 1 To ol.count
-          Set mycar = ol.Item(j)
+        For j = 1 To OL.count
+          Set mycar = OL.Item(j)
           
           Call ValidateP46Car(mycar)
         Next
@@ -1423,7 +1423,7 @@ Private Property Get SubmissionTypeToString()
 End Property
 
 
-Private Function ValidateEmployers(ef As EFiler, employers As ObjectList, validateOnly As Boolean) As Boolean
+Private Function ValidateEmployers(ef As EFiler, Employers As ObjectList, validateOnly As Boolean) As Boolean
   'Applies PAYEOnline validation checks to current batch of employers
   On Error GoTo ValidateEmployers_err
   
@@ -1463,10 +1463,10 @@ Private Function ValidateEmployers(ef As EFiler, employers As ObjectList, valida
   End If
 
   ValidateEmployers = True
-  For i = 1 To employers.count
+  For i = 1 To Employers.count
     
     'Load employer
-    Set ey = employers(i)
+    Set ey = Employers(i)
     Call p11d32.LoadEmployer(ey, False)
     
     
@@ -1593,7 +1593,7 @@ Private Function ValidateEmployers(ef As EFiler, employers As ObjectList, valida
 
 NEXT_EMPLOYER:
   Next i
-  If employers.count > 1 Then
+  If Employers.count > 1 Then
     Call Err.Raise(ERR_PAYE_DIFFERENT_EMPLOYER_FIELDS, , "For online filing only the Employer name " & sEmployerName & " will be used.")
     If iAdjustmentsCount > 1 Then
       Call Err.Raise(ERR_PAYE_DIFFERENT_EMPLOYER_FIELDS, , "For online filing only the P11D(b) additions description " & sAddDesc & " will be used.")
@@ -2333,80 +2333,26 @@ SortBenArray_End:
 
 End Sub
 
-Private Function SumBenefitIRDesc(ByRef Description As Variant, ByRef sIRDesc As Variant, ByRef value As Variant, ByRef MadeGood As Variant, ByRef Benefit As Variant, ey As IBenefitClass, ee As Employee, benefits As ObjectList, BenArr() As BEN_CLASS, Optional IRDesc As Integer) As Boolean
-
-'  ' This function sums the benefit for one IRDesc and returns the Description as a string too.
-'  Dim ben As IBenefitClass
-'  Dim i As Long, j As Long
-'  Dim lError As Long
-'  Dim bc As BEN_CLASS
-'  Dim tempDescription As String
-'  Dim temp As Integer
-'
-'  On Error GoTo SumBenefitIRDesc_Err
-'  Call xSet("SumBenefitIRDesc")
-'
-'  value = 0
-'  MadeGood = 0
-'  Benefit = 0
-'  Description = ""
-'
-'  For i = 1 To benefits.Count
-'    Set ben = benefits(i)
-'    If Not (ben Is Nothing) Then
-'      bc = ben.BenefitClass
-'      If BenClassInArray(BenArr, bc) Then
-'
-'        If ben.value(ITEM_IR_DESC) = IRDesc Then
-'          If CheckBen(ey, ee, ben) Then
-'            j = j + 1
-'            sIRDesc = GetIRDescString(bc, IRDesc)
-'            If LCase(IRDesc) = "other" And Len(ben.value(ITEM_DESC)) > 0 Then
-'              Description = ben.value(ITEM_DESC)
-'            End If
-'            Description = ben.value(ITEM_DESC)
-'            value = value + ben.value(ITEM_VALUE)
-'            MadeGood = MadeGood + ben.value(ITEM_MADEGOOD_NET)
-'            Benefit = Benefit + ben.value(ITEM_BENEFIT)
-'          End If
-'        End If
-'      End If
-'     Set ben = Nothing
-'    End If
-'  Next i
-'
-'  If IRDesc > 0 Then
-'    If j > 1 Then
-'      sIRDesc = "multiple"
-'      Description = ""
-'    Else
-'      Call GetIRDescString(BenArr(1), IRDesc, sIRDesc)
-'    End If
-'  End If
-'
-'  SumBenefitIRDesc = CBool(j)
-'
-'SumBenefitIRDesc_End:
-'  Call xReturn("SumBenefitIRDesc")
-'  Exit Function
-'SumBenefitIRDesc_Err:
-'  If Not ben Is Nothing Then
-'    Call ErrorMessage(ERR_ERROR, Err, "SumBenefitIRDesc", FilterMessageTitle(ey.Name, "", ben.Name, ""), "Unable to sum benefits.")
-'  Else
-'    Call ErrorMessage(ERR_ERROR, Err, "SumBenefitIRDesc", FilterMessageTitle(ey.Name, , "Unknown"), "Unable to sum benefits.")
-'  End If
-'  SumBenefitIRDesc = False
-'  Description = S_ERROR
-'  value = S_ERROR
-'  MadeGood = S_ERROR
-'  Benefit = S_ERROR
-'  Resume SumBenefitIRDesc_End
-'  Resume
+Private Function NICRateString() As String
+  Dim d As Double
+  Dim ret As String
+  Dim i As Long
+  
+  d = Round(p11d32.Rates.value(carNICRate) * 100, 2)
+  
+  ret = CStr(d)
+  If (Len(ret) < 4) Then
+    For i = 1 To 4 - Len(ret)
+      ret = ret & "0"
+    Next
+  End If
+  
+  NICRateString = ret
+  
 End Function
 
-
 'returns employee count node
-Private Sub CreatePAYEEmployerHead(node_p11d_record_count As IXMLDOMNode, node_p46_record_count As IXMLDOMNode, node_declarations As IXMLDOMNode, XML_doc As DOMDocument60, XMLHeaderNode As IXMLDOMNode, employers As ObjectList)
+Private Sub CreatePAYEEmployerHead(node_p11d_record_count As IXMLDOMNode, node_p46_record_count As IXMLDOMNode, node_declarations As IXMLDOMNode, XML_doc As DOMDocument60, XMLHeaderNode As IXMLDOMNode, Employers As ObjectList)
   Dim ey As Employer, ee As Employee
   Dim ben As IBenefitClass
   Dim i As Long, j As Long
@@ -2426,14 +2372,14 @@ Private Sub CreatePAYEEmployerHead(node_p11d_record_count As IXMLDOMNode, node_p
   
   Call xSet("CreateEmployeeXML")
   
-  If (employers.count = 0) Then
+  If (Employers.count = 0) Then
     Call Err.Raise(ERR_EMPLOYER_INVALID, "CreatePAYEEmployerHead", "No employers selected to submit")
   End If
   
-  Set benEyFirst = employers(1)
+  Set benEyFirst = Employers(1)
     
-  For i = 1 To employers.count
-    Set ey = employers(i)
+  For i = 1 To Employers.count
+    Set ey = Employers(i)
     Call p11d32.LoadEmployer(ey, False, False)
     Set ben = ey
     Call ben.Calculate
@@ -2460,7 +2406,7 @@ Private Sub CreatePAYEEmployerHead(node_p11d_record_count As IXMLDOMNode, node_p
     Set node_declarations = PAYEAddXMLChild(XML_doc, PAYEAddXMLChild(XML_doc, XMLHeaderNode, "", "Declarations", ""), "", "P11Dincluded", "")
     
     Set node_p11db = PAYEAddXMLChild(XML_doc, XMLHeaderNode, "", "P11Db", "")
-    Set node_class_contributions = PAYEAddXMLChildWithAttribute(XML_doc, node_p11db, "", "Class1AcontributionsDue", "", "NICsRate", CStr(p11d32.Rates.value(carNICRate) * 100) & "0")
+    Set node_class_contributions = PAYEAddXMLChildWithAttribute(XML_doc, node_p11db, "", "Class1AcontributionsDue", "", "NICsRate", NICRateString())
     
     If bAdjustments Then
       Call PAYEAddXMLChildWithAttribute(XML_doc, node_class_contributions, "", "TotalBenefit", GetXMLAmount(benefitsPotentiallyFor1A), "AdjustmentRequired", "yes")
@@ -2618,12 +2564,12 @@ err_err:
   Resume err_end
   Resume
 End Sub
-Private Function MarkUpField(ByVal field As String, Optional ByVal IfZeroLengthUseThis As String = "") As String
+Private Function MarkUpField(ByVal Field As String, Optional ByVal IfZeroLengthUseThis As String = "") As String
   Dim s As String
   Dim i As Long, iLen As Long, iAsc As Long
   Dim s1 As String, s2 As String
   
-  s = field
+  s = Field
     
   
   's = Replace(s, ">", "&gt;")
@@ -2663,10 +2609,10 @@ Private Function MarkUpField(ByVal field As String, Optional ByVal IfZeroLengthU
 
 End Function
 
-Private Function MarkUpFieldPersonnelNumber(ByVal field As String) As String
+Private Function MarkUpFieldPersonnelNumber(ByVal Field As String) As String
   Dim s As String
   
-  s = MarkUpField(field)
+  s = MarkUpField(Field)
   s = Replace(s, "(", "")
   s = Replace(s, ")", "")
     

@@ -172,7 +172,7 @@ Begin VB.MDIForm MDIMain
       ImageList       =   "ImgToolbar"
       _Version        =   393216
       BeginProperty Buttons {66833FE8-8583-11D1-B16A-00C0F0283628} 
-         NumButtons      =   16
+         NumButtons      =   18
          BeginProperty Button1 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Object.ToolTipText     =   "Open Employer"
             ImageIndex      =   4
@@ -246,6 +246,15 @@ Begin VB.MDIForm MDIMain
          BeginProperty Button16 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Object.ToolTipText     =   "Employees"
             ImageIndex      =   8
+         EndProperty
+         BeginProperty Button17 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Key             =   "data_checker"
+            Object.ToolTipText     =   "Data checker"
+            ImageIndex      =   16
+         EndProperty
+         BeginProperty Button18 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Object.ToolTipText     =   "P11D(b) reconciliation"
+            ImageIndex      =   17
          EndProperty
       EndProperty
    End
@@ -408,7 +417,7 @@ Begin VB.MDIForm MDIMain
       MaskColor       =   12632256
       _Version        =   393216
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
-         NumListImages   =   15
+         NumListImages   =   18
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "Mdimain.frx":9A20
             Key             =   ""
@@ -469,6 +478,18 @@ Begin VB.MDIForm MDIMain
             Picture         =   "Mdimain.frx":B31C
             Key             =   ""
          EndProperty
+         BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "Mdimain.frx":B47A
+            Key             =   "data_checker"
+         EndProperty
+         BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "Mdimain.frx":B914
+            Key             =   "p11db_rec"
+         EndProperty
+         BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "Mdimain.frx":BDAE
+            Key             =   ""
+         EndProperty
       EndProperty
    End
    Begin MSComctlLib.ImageList imlTree 
@@ -484,47 +505,47 @@ Begin VB.MDIForm MDIMain
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   11
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Mdimain.frx":B47A
+            Picture         =   "Mdimain.frx":C248
             Key             =   "PRINT_CROSS"
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Mdimain.frx":B7CC
+            Picture         =   "Mdimain.frx":C59A
             Key             =   "PRINT_TICK"
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Mdimain.frx":BB1E
+            Picture         =   "Mdimain.frx":C8EC
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Mdimain.frx":BC30
+            Picture         =   "Mdimain.frx":C9FE
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Mdimain.frx":BD42
+            Picture         =   "Mdimain.frx":CB10
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Mdimain.frx":BE54
+            Picture         =   "Mdimain.frx":CC22
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Mdimain.frx":BF66
+            Picture         =   "Mdimain.frx":CD34
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Mdimain.frx":C078
+            Picture         =   "Mdimain.frx":CE46
             Key             =   ""
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Mdimain.frx":C18A
+            Picture         =   "Mdimain.frx":CF58
             Key             =   ""
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Mdimain.frx":C29C
+            Picture         =   "Mdimain.frx":D06A
             Key             =   ""
          EndProperty
          BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "Mdimain.frx":C3AE
+            Picture         =   "Mdimain.frx":D17C
             Key             =   ""
          EndProperty
       EndProperty
@@ -1417,10 +1438,7 @@ Private Sub mnuBenefitsCut_Click()
   Call LVKeyDown(vbKeyX, vbShiftMask Or vbCtrlMask, CurrentForm)
 End Sub
 Private Sub mnuBenefitsToolsDataChecker_Click()
-    
-  If Not p11d32.CurrentEmployer Is Nothing Then
-    Call p11d32.CurrentEmployer.DataChecker
-  End If
+  Call ToolBarButton(TBR_DATA_CHECKER, 0)
 End Sub
 Private Sub mnuBenefitsToolsFindCompanyCar_Click()
   Call p11d32.CurrentEmployer.FindCompanyCar
@@ -1439,9 +1457,9 @@ Private Sub mnuBrowseDirectory_Click()
   
   On Error GoTo err_err
   
-  s = p11d32.WorkingDirectory
-  Call p11d32.CreateAndSetWorkingDirectory(MDIMain, p11d32.WorkingDirectory, True)
-  F_Employers.WorkingDirectory = p11d32.WorkingDirectory
+  s = p11d32.workingDirectory
+  Call p11d32.CreateAndSetWorkingDirectory(MDIMain, p11d32.workingDirectory, True)
+  F_Employers.workingDirectory = p11d32.workingDirectory
     
 err_end:
   Exit Sub
@@ -1587,9 +1605,9 @@ Private Function SelectedIndex() As Long
   i = -1
 
   If Not Me.ActiveForm Is Nothing Then
-    If Not Me.ActiveForm.lb.SelectedItem Is Nothing Then
-      If Me.ActiveForm.lb.SelectedItem.Selected Then
-        i = CLng(Me.ActiveForm.lb.SelectedItem.Tag)
+    If Not Me.ActiveForm.LB.SelectedItem Is Nothing Then
+      If Me.ActiveForm.LB.SelectedItem.Selected Then
+        i = CLng(Me.ActiveForm.LB.SelectedItem.Tag)
       End If
     End If
   End If
@@ -1701,11 +1719,11 @@ End Sub
 Private Sub mnuGroupItems_Click(Index As Integer)
   Select Case Index
     Case 0
-      F_Employees.lb.SortKey = 4
+      F_Employees.LB.SortKey = 4
     Case 1
-      F_Employees.lb.SortKey = 5
+      F_Employees.LB.SortKey = 5
     Case 2
-      F_Employees.lb.SortKey = 6
+      F_Employees.LB.SortKey = 6
   End Select
 End Sub
 Private Sub mnuHelpAbout_Click()
@@ -1903,17 +1921,17 @@ Private Sub mnuOOther_Click()
 End Sub
 
 Private Sub mnuRecentWorkingDirectory_Click(Index As Integer)
-  Dim WorkingDirectory As String
+  Dim workingDirectory As String
   
 On Error GoTo err_err
 
-  WorkingDirectory = mnuRecentWorkingDirectory(Index).Tag
+  workingDirectory = mnuRecentWorkingDirectory(Index).Tag
   
-  If (Not FileExists(WorkingDirectory, True)) Then
-    Call Err.Raise(ERR_ERROR, "mnuRecentWorkingDirectory_Click", "The directory '" & WorkingDirectory * "' does not exist")
+  If (Not FileExists(workingDirectory, True)) Then
+    Call Err.Raise(ERR_ERROR, "mnuRecentWorkingDirectory_Click", "The directory '" & workingDirectory * "' does not exist")
   End If
   
-  Call p11d32.WorkingDirectoryChange(WorkingDirectory)
+  Call p11d32.WorkingDirectoryChange(workingDirectory)
   Call p11d32.LoadEmployers
   
   
@@ -1985,13 +2003,13 @@ End Sub
 Private Sub mnuViewItems_Click(Index As Integer)
   Select Case Index
     Case 0
-      F_Employees.lb.SortKey = 0
+      F_Employees.LB.SortKey = 0
     Case 1
-      F_Employees.lb.SortKey = 1
+      F_Employees.LB.SortKey = 1
     Case 2
-      F_Employees.lb.SortKey = 2
+      F_Employees.LB.SortKey = 2
     Case 3
-      F_Employees.lb.SortKey = 3
+      F_Employees.LB.SortKey = 3
   End Select
 End Sub
 
@@ -2010,15 +2028,15 @@ End Sub
 
 
 Private Sub mnuViewSelectAll_Click()
-  Call SelectItems(F_Employees.lb, SELECT_ALL)
+  Call SelectItems(F_Employees.LB, SELECT_ALL)
 End Sub
 
 Private Sub mnuViewSelectBlankEmail_Click()
-  Call SelectItems(F_Employees.lb, SELECT_NO_EMAIL)
+  Call SelectItems(F_Employees.LB, SELECT_NO_EMAIL)
 End Sub
 
 Private Sub mnuViewSelectCurrentEmployees_Click()
-  Call SelectItems(F_Employees.lb, SELECT_CURRENT_EMPLOYED)
+  Call SelectItems(F_Employees.LB, SELECT_CURRENT_EMPLOYED)
 End Sub
 
 Private Sub mnuViewSelectEmployeeAlphabetically_Click()
@@ -2035,7 +2053,7 @@ err_err:
 End Sub
 
 Private Sub mnuViewSelectEmployeeAlphabeticallyLetter_Click(Index As Integer)
-  Call SelectItems(F_Employees.lb, Index)
+  Call SelectItems(F_Employees.LB, Index)
 End Sub
 
 Private Sub mnuViewSelectEmployeeByReport_Click()
@@ -2063,20 +2081,20 @@ Private Sub mnuViewSelectGroup3_Click()
 End Sub
 
 Private Sub mnuViewSelectHasEmail_Click()
-  Call SelectItems(F_Employees.lb, SELECT_EMAIL)
+  Call SelectItems(F_Employees.LB, SELECT_EMAIL)
 End Sub
 
 Private Sub mnuViewSelectLeftEmployees_Click()
-  Call SelectItems(F_Employees.lb, SELECT_LEFT)
+  Call SelectItems(F_Employees.LB, SELECT_LEFT)
 End Sub
 
 Private Sub mnuViewSelectReverse_Click()
-  Call SelectItems(F_Employees.lb, SELECT_REVERSE)
+  Call SelectItems(F_Employees.LB, SELECT_REVERSE)
 End Sub
 
 
 Private Sub mnuViewSelectUnselectAll_Click()
-  Call SelectItems(F_Employees.lb, SELECT_NONE)
+  Call SelectItems(F_Employees.LB, SELECT_NONE)
 End Sub
 
 Private Sub mnuViewSortByName_Click()
@@ -2120,8 +2138,6 @@ Private Sub tbrBenefits_ButtonClick(ByVal Button As MSComctlLib.Button)
 End Sub
 
 Private Sub tbrMain_ButtonClick(ByVal Button As MSComctlLib.Button)
-  
-  
   Call ToolBarButton(Button.Index, BenefitFormSelectedIndex())
 End Sub
 

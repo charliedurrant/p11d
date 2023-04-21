@@ -139,7 +139,7 @@ Private Function ClearFolder() As Boolean
   Set fs = New FileSystemObject
   Set folderintranet = fs.GetFolder(s)
     
-  If folderintranet.Files.Count = 0 And folderintranet.SubFolders.Count = 0 Then
+  If folderintranet.Files.count = 0 And folderintranet.SubFolders.count = 0 Then
     ClearFolder = True
     GoTo ClearFolder_END
   End If
@@ -279,18 +279,29 @@ Public Sub XMLFile(ByVal prgEmployee As TCSProgressBar, ByVal lblFile As Label)
   Dim sEmployerPath As String, s As String
   Dim ts As TextStream
   Dim sFileText As String
+  Dim oldOutPutDirectory As String
+  
+  oldOutPutDirectory = OutputDirectory
   
   On Error GoTo XMLFile_ERR
 
   Call xSet("XMLFile")
   'RC TTP#461 - Make independent of print dialog
   'Call CheckReportSelection
+  
+  If (p11d32.FoldersDefaulToEmployerFolder) Then
+    OutputDirectory = FullPath(FullPath(OutputDirectory) & "intranet")
+    If Not FileExists(OutputDirectory, True) Then
+      Call MkDirEx(OutputDirectory)
+    End If
+  End If
+  
   If Not ClearFolder Then GoTo XMLFile_END
   Set rep = ReporterNew(Nothing)
   prgEmployee.Visible = True
   prgEmployee.value = prgEmployee.Min
   prgEmployee.Indicator = None
-  prgEmployee.Caption = ""
+  prgEmployee.caption = ""
   
   p11d32.ReportPrint.ExportNoSpaces = True
   Call OpenFile(lblFile)
@@ -319,8 +330,6 @@ Public Sub XMLFile(ByVal prgEmployee As TCSProgressBar, ByVal lblFile As Label)
   fs.CopyFile p11d32.SystemIntranetPath & "*.inc", OutputDirectory
   fs.CopyFile p11d32.SystemIntranetPath & "*.asa", OutputDirectory
   fs.CopyFolder p11d32.SystemIntranetPath & "images", OutputDirectory
-  
-  
   
   s = OutputDirectory & "p11d.inc"
   Set ts = fs.OpenTextFile(s, ForReading)
@@ -353,7 +362,7 @@ Public Sub XMLFile(ByVal prgEmployee As TCSProgressBar, ByVal lblFile As Label)
   Call EmployersSelected(Employers)
   Call m_TS.Write(XMLTagOpen("EMPLOYERS"))
          
-  For i = 1 To Employers.Count
+  For i = 1 To Employers.count
     Set ey = Employers(i)
     Call p11d32.LoadEmployer(ey, False)
     Set ben = ey
@@ -368,11 +377,11 @@ Public Sub XMLFile(ByVal prgEmployee As TCSProgressBar, ByVal lblFile As Label)
     Set employees = p11d32.CurrentEmployer.employees
     sReportName = PrintHTMFiles(sEmployerPath, employees)
     
-    prgEmployee.Max = ey.employees.Count
+    prgEmployee.Max = ey.employees.count
     prgEmployee.value = 0
     prgEmployee.Indicator = ValueOfMax
     
-    For j = 1 To ey.employees.Count
+    For j = 1 To ey.employees.count
       Set ee = ey.employees(j)
       Set benEmployee = ee
       Call prgEmployee.StepCaption("Analysing employee: " & ee.FullName)
@@ -388,10 +397,13 @@ NEXT_EMPLOYER:
   
   Call m_TS.Write(XMLTagClose("EMPLOYERS"))
   Call CloseFile
-  prgEmployee.Caption = "Completed creating XML file."
+  prgEmployee.caption = "Completed creating XML file."
   prgEmployee.Indicator = None
 
 XMLFile_END:
+  If (Len(oldOutPutDirectory) > 0) Then
+    OutputDirectory = oldOutPutDirectory
+  End If
   p11d32.ReportPrint.ExportNoSpaces = False
   Call xReturn("XMLFile")
   Exit Sub
@@ -411,7 +423,7 @@ Public Sub EmployersToListView()
 
   Call xSet("EmployersToListView")
 
-  For i = 1 To p11d32.Employers.Count
+  For i = 1 To p11d32.Employers.count
     Set ben = p11d32.Employers(i)
     If Not ben Is Nothing Then
       Set li = F_Intranet.lvIntranetEmployers.listitems.Add()
@@ -433,7 +445,7 @@ Private Function EmployersSelected(Employers As ObjectList) As Long
   Dim ben As IBenefitClass
 
   Set Employers = New ObjectList
-  For i = 1 To p11d32.Employers.Count
+  For i = 1 To p11d32.Employers.count
     Set ben = p11d32.Employers(i)
     If Not ben Is Nothing Then
       If ben.value(employer_IntranetSelected) Then
@@ -442,7 +454,7 @@ Private Function EmployersSelected(Employers As ObjectList) As Long
     End If
   Next
 
-  EmployersSelected = Employers.Count
+  EmployersSelected = Employers.count
 End Function
 Private Function ValidEmployees(employees As ObjectList, ey As Employer) As Long
   Dim i As Long
@@ -450,14 +462,14 @@ Private Function ValidEmployees(employees As ObjectList, ey As Employer) As Long
 
   Set employees = New ObjectList
 
-  For i = 1 To ey.employees.Count
+  For i = 1 To ey.employees.count
     Set ee = ey.employees(i)
     If Not ee Is Nothing Then
       Call employees.Add(ee)
     End If
   Next
 
-  ValidEmployees = employees.Count
+  ValidEmployees = employees.count
 
 End Function
 
@@ -506,15 +518,13 @@ Public Sub Start()
   If Not FileExists(OutputDirectory, True) Then
     Call Err.Raise(ERR_DIRECTORY_NOT_EXIST, "F_MM", "The Intranet directory does not exist = " & p11d32.Intranet.OutputDirectory & ", unable to create export.")
   End If
-  F_Intranet.fb.Directory = FullPath(OutputDirectory)
+  'F_Intranet.fb.Directory = FullPath(OutputDirectory)
   
   Call EmployersToListView
 
-  F_Intranet.Caption = "Intranet " & p11d32.AppYear
+  F_Intranet.caption = "Intranet " & p11d32.AppYear
   Call p11d32.Help.ShowForm(F_Intranet, vbModal)
   
-
-
 Start_END:
   Set p11d32.CurrentEmployer = Nothing
   Set F_Intranet = Nothing

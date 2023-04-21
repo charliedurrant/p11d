@@ -18,6 +18,8 @@ Public Enum ToolbarButtons
   TBR_SEPERATOR4
   TBR_SHAREDVANS
   TBR_EMPLOYEESCREEN
+  TBR_DATA_CHECKER
+  TBR_P11DB_RECONCILIATION
 End Enum
 
 Public Enum MNU_FILE
@@ -274,10 +276,13 @@ Private Function ToolBarDisplay(ByVal dt As DisplayType) As Boolean
         .tbrMain.Buttons(TBR_SEPERATOR4).Visible = False        'MP RV - 2 bars were showing
         .tbrMain.Buttons(TBR_SHAREDVANS).Visible = False
         .tbrMain.Buttons(TBR_EMPLOYEESCREEN).Visible = True
+        .tbrMain.Buttons(TBR_DATA_CHECKER).Visible = False
+        .tbrMain.Buttons(TBR_P11DB_RECONCILIATION).Visible = False
       Case D_EMPLOYER_OFF
         .tbrBenefits.Visible = False
         .tbrNavigate.Visible = False
-        
+        .tbrMain.Buttons(TBR_P11DB_RECONCILIATION).Visible = False
+        .tbrMain.Buttons(TBR_DATA_CHECKER).Visible = False
         .tbrMain.Buttons(TBR_OPEN_EMPLOYER).Visible = True
         .tbrMain.Buttons(TBR_OPEN_EMPLOYER).Enabled = False
         .tbrMain.Buttons(TBR_EDIT_EMPLOYER).Visible = False
@@ -296,6 +301,9 @@ Private Function ToolBarDisplay(ByVal dt As DisplayType) As Boolean
         .tbrMain.Buttons(TBR_SHAREDVANS).Visible = False
         .tbrMain.Buttons(TBR_EMPLOYEESCREEN).Visible = False
       Case D_EMPLOYEES
+        .tbrMain.Buttons(TBR_P11DB_RECONCILIATION).Visible = True
+        .tbrMain.Buttons(TBR_DATA_CHECKER).Visible = True
+        
         .tbrBenefits.Visible = True
         .tbrNavigate.Visible = True
         .cmdGoto.Visible = False      'MP RV added here - removed from DisplayEx

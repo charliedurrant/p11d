@@ -442,8 +442,17 @@ Private Sub Form_Load()
   
   Call SetErrorButtons(True)
   Set lvPAYEEmployers.SmallIcons = MDIMain.imlTree
+  
+  
+  If (p11d32.FoldersDefaulToEmployerFolder) Then
+    p11d32.PAYEonline.OutputDirectory = p11d32.workingDirectory
+  End If
+  
   If Not FileExists(p11d32.PAYEonline.OutputDirectory, True) Then Call Err.Raise(ERR_DIRECTORY_NOT_EXIST, "F_MM", "The PAYE Online directory does not exist = " & p11d32.PAYEonline.OutputDirectory & ", unable to create export.")
+  
   fb.Directory = p11d32.PAYEonline.OutputDirectory
+  
+  
   cmdRun.Enabled = False 'Disable button until optOnlineForm (POT) selected
   chkPerformLocalSchemaValidation.value = BoolToChkBox(Not p11d32.PAYEonline.ByPassLocalSchemaCheck)
   chkCheckSubmissionAllowed.value = BoolToChkBox(Not p11d32.PAYEonline.DisableCheckSubmissionWithAbatec)
@@ -579,7 +588,7 @@ Private Sub EditEmployerDetails(Button As Integer, Shift As Integer, X As Single
       Set liPrevious = ibf.lv.SelectedItem
       Set ibf.lv.SelectedItem = li
       Call p11d32.EditEmployer(li.Tag)
-      Call p11d32.PAYEonline.UpdateListViewItem(liMe, p11d32.employers(li.Tag))
+      Call p11d32.PAYEonline.UpdateListViewItem(liMe, p11d32.Employers(li.Tag))
       Set ibf.lv.SelectedItem = liPrevious
       Exit For
     End If
@@ -636,27 +645,6 @@ Private Sub optOnlineForm_Click(Index As Integer)
     End If
     
 End Sub
-
-
-'Public Function SettingsToScreen() As Boolean
-'
-'  Dim i As Long
-'
-'  On Error GoTo SettingsToScreen_Err
-'  Call xSet("SettingsToScreen")
-'
-'  Call lvPAYEEmployers_ItemCheck(Nothing)
-'
-'SettingsToScreen_End:
-'  Call xReturn("SettingsToScreen")
-'  Exit Function
-'
-'SettingsToScreen_Err:
-'  Call ErrorMessage(ERR_ERROR, Err, "SettingsToScreen", "Settings To Screen", "Error setting dates for P46.")
-'  Resume SettingsToScreen_End
-'  Resume
-'End Function
-
 Private Function CheckStatus() As Boolean
   Dim ey As Employer
   Dim benEmployer As IBenefitClass
@@ -672,7 +660,7 @@ Private Function CheckStatus() As Boolean
   For i = 1 To lvPAYEEmployers.listitems.count
     Set li = lvPAYEEmployers.listitems(i)
     If Not li.Checked Then GoTo NEXT_ITEM
-    Set ey = p11d32.employers(li.Tag)
+    Set ey = p11d32.Employers(li.Tag)
 
     Set benEmployer = ey
 
@@ -712,11 +700,11 @@ Private Function ValidatePAYEOnlineEmployerData() As Boolean
     Set li = lvPAYEEmployers.listitems(i)
     
     'Update Employer objects with user selection
-     Set benEmployer = p11d32.employers(li.Tag)
+     Set benEmployer = p11d32.Employers(li.Tag)
      benEmployer.value(employer_PAYEOnlineSelected) = li.Checked
     If li.Checked Then
       bAnyChecked = True
-      Set ey = p11d32.employers(li.Tag)
+      Set ey = p11d32.Employers(li.Tag)
      'Check Employer level PAYE fields
         Call ey.PAYEOnlineValid(True)
       

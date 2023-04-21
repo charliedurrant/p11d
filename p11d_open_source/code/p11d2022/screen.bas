@@ -49,23 +49,23 @@ Declare Function SendMessage Lib "user32" Alias "SendMessageA" _
 Public Function TreeView_SetImageList(hwnd As Long, himl As Long, iImage As Long) As Long
   TreeView_SetImageList = SendMessage(hwnd, TVM_SETIMAGELIST, ByVal iImage, ByVal himl)
 End Function
-Public Function GetRGB(ByVal RGBval As Long, ByRef r As Integer, ByRef G As Integer, ByRef b As Integer) As Boolean
+Public Function GetRGB(ByVal RGBval As Long, ByRef r As Integer, ByRef g As Integer, ByRef b As Integer) As Boolean
   r = RGBval \ 256 ^ (0) And 255
-  G = RGBval \ 256 ^ (1) And 255
+  g = RGBval \ 256 ^ (1) And 255
   b = RGBval \ 256 ^ (2) And 255
   GetRGB = True
 End Function
 Public Function HTMLColor(l As Long) As String
   Dim r As Integer
-  Dim G As Integer
+  Dim g As Integer
   Dim b As Integer
   
-  Call GetRGB(l, r, G, b)
-  HTMLColor = HTMLColorEx(r, G, b)
+  Call GetRGB(l, r, g, b)
+  HTMLColor = HTMLColorEx(r, g, b)
   
 End Function
-Public Function HTMLColorEx(ByRef r As Integer, ByRef G As Integer, ByRef b As Integer) As String
-  HTMLColorEx = "#" & Hex(r) & Hex(G) & Hex(b)
+Public Function HTMLColorEx(ByRef r As Integer, ByRef g As Integer, ByRef b As Integer) As String
+  HTMLColorEx = "#" & Hex(r) & Hex(g) & Hex(b)
 End Function
 
 Public Sub BenefitInErrorRow(ByVal ben As IBenefitClass, ByVal li As ListItem)
@@ -80,13 +80,13 @@ Public Sub BenefitInErrorRow(ByVal ben As IBenefitClass, ByVal li As ListItem)
   End If
   li.ForeColor = c
   
-  For i = 1 To li.ListSubItems.Count
+  For i = 1 To li.ListSubItems.count
     Set lisub = li.ListSubItems(i)
     lisub.ForeColor = c
   Next
 End Sub
 Public Sub LabelToolTip(ByVal lbl As Label, ByVal sCaption As String)
-  lbl.Caption = sCaption
+  lbl.caption = sCaption
   lbl.ToolTipText = sCaption
   
 End Sub
@@ -120,7 +120,7 @@ Public Function ListViewFastKey(lv As ListView, ByVal LVI As LV_EE_ITEMS, ByVal 
 
   ListViewFastKey = KeyCode
 
-  If lv.listitems.Count = 0 Then GoTo ListViewFastKey_END
+  If lv.listitems.count = 0 Then GoTo ListViewFastKey_END
 
   s = lv.ColumnHeaders(LVI + 1).Text
   ListViewFastKey = 0
@@ -132,7 +132,7 @@ Public Function ListViewFastKey(lv As ListView, ByVal LVI As LV_EE_ITEMS, ByVal 
   End If
 
   lStart = 1
-  lEnd = lv.listitems.Count
+  lEnd = lv.listitems.count
   If Not lv.SelectedItem Is Nothing Then
     If lv.SelectedItem.Index <> lEnd Then
       lStart = lv.SelectedItem.Index + 1
@@ -295,6 +295,15 @@ Public Function ToolBarButton(Index As Long, param As Long) As Boolean
       Else
         Call p11d32.CurrentEmployer.EmployeeScreen
       End If
+    Case TBR_DATA_CHECKER
+      If Not p11d32.CurrentEmployer Is Nothing Then
+        Call p11d32.CurrentEmployer.DataChecker
+      End If
+    Case TBR_P11DB_RECONCILIATION
+      If Not p11d32.CurrentEmployer Is Nothing Then
+        Call p11d32.ReportPrint.DoOtherReport(Nothing, P11D_REPORTS.RPT_P11Db_RECONCILIATION, PREPARE_REPORT)
+      End If
+    
   End Select
   
   
@@ -312,7 +321,7 @@ End Function
 Public Function BenScreenSwitch(benclass As BEN_CLASS, Optional NewEE As Employee = Nothing) As Boolean
   Dim frm As Form
   Dim benfrm2 As IBenefitForm2
-  Dim Caption As String
+  Dim caption As String
   
   On Error GoTo BenScreenSwitch_Err
   
@@ -342,11 +351,11 @@ Public Function BenScreenSwitch(benclass As BEN_CLASS, Optional NewEE As Employe
           MDIMain.chkMoveToNextEmployeeWithBenefit.Visible = True
         Case BC_SERVICES_PROVIDED_K
           Set benfrm2 = F_ServicesProvided
-          Caption = "Services provided to the employee"
+          caption = "Services provided to the employee"
           MDIMain.chkMoveToNextEmployeeWithBenefit.Visible = True
         Case BC_ASSETSATDISPOSAL_L
           Set benfrm2 = F_AssetsAtDisposal
-          Caption = "Assets placed at the employees disposal"
+          caption = "Assets placed at the employees disposal"
           MDIMain.chkMoveToNextEmployeeWithBenefit.Visible = True
         Case BC_ASSETSTRANSFERRED_A
           Set benfrm2 = F_AssetsTransferred
@@ -381,7 +390,7 @@ Public Function BenScreenSwitch(benclass As BEN_CLASS, Optional NewEE As Employe
       If p11d32.CurrentEmployer.LoadEmployeeEx(NewEE) Then
         Set frm = CurrentForm
         Set CurrentForm = benfrm2
-        CurrentForm.Caption = p11d32.Rates.BenClassTo(benfrm2.benclass, BCT_FORM_CAPTION)
+        CurrentForm.caption = p11d32.Rates.BenClassTo(benfrm2.benclass, BCT_FORM_CAPTION)
         Call MDIMain.NavigateBarUpdate(NewEE)
         Call ShowMaximized(CurrentForm, frm, D_BENEFIT)
         Call BenScreenSwitchEnd(benfrm2)
@@ -460,7 +469,7 @@ Public Sub UpdateMDICaption(ey As Employer)
   
   If Not ben Is Nothing Then sCaption = " " & ben.value(employer_Name_db)
   
-  MDIMain.Caption = p11d32.Rates.value(TaxFormYear) & sCaption
+  MDIMain.caption = p11d32.Rates.value(TaxFormYear) & sCaption
 
 UpdateMDICaption_END:
   Exit Sub
@@ -512,7 +521,7 @@ Public Function MoveEmployee(bBackWards As Boolean) As Boolean
   If (bBackWards) Then iStep = -1
   
 Set ibf = F_Employees
-  If ibf.lv.listitems.Count > 0 Then
+  If ibf.lv.listitems.count > 0 Then
      
     If Not ibf.lv.SelectedItem Is Nothing Then
       lCurrentListItemIndex = ibf.lv.SelectedItem.Index
@@ -522,7 +531,7 @@ Set ibf = F_Employees
         End If
         'get the employees collection
       Else
-        If lCurrentListItemIndex < ibf.lv.listitems.Count Then
+        If lCurrentListItemIndex < ibf.lv.listitems.count Then
           lNextEmployeeListItemIndex = lCurrentListItemIndex + iStep
         End If
         'forwards
@@ -542,7 +551,7 @@ Set ibf = F_Employees
             bt = TBL_ALLBENEFITS
           End If
 
-          Do While (lNextEmployeeListItemIndex > 0 And lNextEmployeeListItemIndex < ibf.lv.listitems.Count + 1)
+          Do While (lNextEmployeeListItemIndex > 0 And lNextEmployeeListItemIndex < ibf.lv.listitems.count + 1)
             Set ee = p11d32.CurrentEmployer.employees.Item(ibf.lv.listitems(lNextEmployeeListItemIndex).Tag)
             If Not ee.BenefitsLoaded Then
               'only load from the relevant table

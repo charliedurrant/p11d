@@ -140,15 +140,10 @@ On Error GoTo err_err
   
   For rowIndex = 0 To csvParser.RowCount - 1
     ConsoleWriteLine ("Parse line: " & CStr((rowIndex + 1)))
-    ConsoleWriteLine ("1")
     notificationTypeString = csvParser.ValueByIndex(rowIndex, 0)
-    ConsoleWriteLine ("2:" & notificationTypeString)
     notificationType = CLng(notificationTypeString)
-    ConsoleWriteLine ("3")
     value = csvParser.ValueByIndex(rowIndex, 1)
-    ConsoleWriteLine ("Blah")
     Call ProcessReporterLine(notificationTypeString, value)
-    ConsoleWriteLine ("Blah2")
     Select Case notificationType
       Case REPORTER_NOTIFICATON_TYPE.A4_FORCE
         rep.A4Force = CBoolean(value)
@@ -180,4 +175,3 @@ End Sub
 Private Sub ProcessReporterLine(commandType As String, value As String)
   ConsoleWriteLine ("Command=" & commandType & ", value=" & value)
 End Sub
-

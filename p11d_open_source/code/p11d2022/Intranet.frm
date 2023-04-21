@@ -4,12 +4,12 @@ Object = "{AF27A9B5-A3F4-11D2-8DB7-00C04FA9DD6F}#1.2#0"; "TCSPROG.OCX"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form F_Intranet 
    Caption         =   "FullPath(OutputDirectory)"
-   ClientHeight    =   7860
+   ClientHeight    =   8145
    ClientLeft      =   60
    ClientTop       =   345
    ClientWidth     =   8760
    LinkTopic       =   "Form1"
-   ScaleHeight     =   7860
+   ScaleHeight     =   8145
    ScaleWidth      =   8760
    StartUpPosition =   3  'Windows Default
    Begin P11D2022.MyFolderBrowser fb 
@@ -219,7 +219,7 @@ Begin VB.Form F_Intranet
       Height          =   375
       Left            =   75
       TabIndex        =   3
-      Top             =   7425
+      Top             =   7695
       Visible         =   0   'False
       Width           =   8550
       _cx             =   15081
@@ -339,8 +339,8 @@ Begin VB.Form F_Intranet
       Width           =   765
    End
    Begin VB.Label Label1 
-      Caption         =   "Location to write files to:"
-      Height          =   495
+      Caption         =   "Location to write files to (files will be output to an intranet sub folder):"
+      Height          =   675
       Left            =   150
       TabIndex        =   8
       Top             =   6750
@@ -410,7 +410,7 @@ Private Function ValidateIntranetData() As Boolean
   
   If InvalidFields(Me) Then Call Err.Raise(ERR_INVALID_FIELDS, "ValidateIntranetData", "Some of the data entry fields are invalid, please amend.")
   If Not FileExists(fb.Directory, True) Then Call Err.Raise(ERR_DIRECTORY_NOT_EXIST, "ValidateIntranetData", "The directory " & fb.Directory & " does not exist.")
-  For i = 1 To lvIntranetEmployers.listitems.Count
+  For i = 1 To lvIntranetEmployers.listitems.count
     Set li = lvIntranetEmployers.listitems(i)
     If Not li.Checked Then GoTo NEXT_ITEM
     Set ey = p11d32.Employers(li.Tag)
@@ -450,6 +450,10 @@ Private Sub SettingsToScreen()
   txtUserInfoHTML = p11d32.Intranet.UserInfoHTML
   chkCaseSensitive.value = BoolToChkBox(p11d32.Intranet.CaseSensitiveOnFullAuthentication)
   Call ColorSettings
+  If (p11d32.FoldersDefaulToEmployerFolder) Then
+    p11d32.Intranet.OutputDirectory = p11d32.workingDirectory
+  End If
+  fb.Directory = p11d32.Intranet.OutputDirectory
 End Sub
 Private Function IFrmGeneral_CheckChanged(c As Control) As Boolean
   
@@ -462,6 +466,7 @@ End Property
 Private Property Set IFrmGeneral_InvalidVT(NewValue As Control)
   
 End Property
+
 
 Private Sub lvIntranetEmployers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
   Call EditEmployerDetails(Button, Shift, X, Y)

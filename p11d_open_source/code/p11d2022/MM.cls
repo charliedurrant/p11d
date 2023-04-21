@@ -153,8 +153,8 @@ Public Sub EmployersToListView()
   
   Call xSet("EmployersToListView")
 
-  For i = 1 To p11d32.employers.count
-    Set ben = p11d32.employers(i)
+  For i = 1 To p11d32.Employers.count
+    Set ben = p11d32.Employers(i)
     If Not ben Is Nothing Then
       Set li = F_MM.lvMMEmployers.listitems.Add()
       Call UpdateListViewItem(li, ben, i)
@@ -171,25 +171,25 @@ EmployersToListView_ERR:
   Resume EmployersToListView_END
   Resume
 End Sub
-Private Function EmployersSelected(employers As ObjectList) As Long
+Private Function EmployersSelected(Employers As ObjectList) As Long
   Dim i As Long
   Dim ben As IBenefitClass
   
-  Set employers = New ObjectList
-  For i = 1 To p11d32.employers.count
-    Set ben = p11d32.employers(i)
+  Set Employers = New ObjectList
+  For i = 1 To p11d32.Employers.count
+    Set ben = p11d32.Employers(i)
     If Not ben Is Nothing Then
       If ben.value(employer_MagneticMediaSelected) Then
         If i = 1 Then
           SubmitterName = ben.value(employer_SubmitterName_db)
           SubmitterRef = ben.value(employer_SubmitterRef_db)
         End If
-        Call employers.Add(ben)
+        Call Employers.Add(ben)
       End If
     End If
   Next
     
-  EmployersSelected = employers.count
+  EmployersSelected = Employers.count
 End Function
 Private Function ValidEmployees(employees As ObjectList, ey As Employer) As Long
   Dim i As Long
@@ -495,7 +495,7 @@ End Function
 Public Sub CreateMagneticMediaFiles(ByVal prgEmployee As TCSProgressBar, ByVal lblFile As Label)
   Dim ey As Employer, ee As Employee
   Dim ben As IBenefitClass
-  Dim employers As ObjectList
+  Dim Employers As ObjectList
   Dim bMMSelected As Boolean
   Dim bAnyEmployeeBenefitRecords As Boolean
   Dim i As Long, j As Long, lBytesWritten As Long
@@ -517,9 +517,9 @@ Public Sub CreateMagneticMediaFiles(ByVal prgEmployee As TCSProgressBar, ByVal l
   prgEmployee.Indicator = None
   prgEmployee.caption = ""
   
-  Call EmployersSelected(employers)
+  Call EmployersSelected(Employers)
   
-  If employers.count > 0 Then
+  If Employers.count > 0 Then
     If ErrorLogging Then
       Set ErrorFilter = Me
     Else
@@ -530,8 +530,8 @@ Public Sub CreateMagneticMediaFiles(ByVal prgEmployee As TCSProgressBar, ByVal l
   End If
   
   Call p11d32.LoadEmployer(Nothing, False)
-  For i = 1 To employers.count
-    Set ey = employers(i)
+  For i = 1 To Employers.count
+    Set ey = Employers(i)
     Call p11d32.LoadEmployer(ey, False)
     Set ben = ey
     bAnyEmployeeBenefitRecords = False

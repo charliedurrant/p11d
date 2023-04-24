@@ -1535,32 +1535,24 @@ Report_PrintedEmployees_ERR:
   Resume
 End Function
 Public Function P11DbAdditionsDescription(benEmployer As IBenefitClass, Optional ByVal defaultValueIfNotUSerValueEntered As Boolean = True) As String
-  If (benEmployer.value(employer_NIC_AdjustmentAddTotal) = 0) Then
-    P11DbAdditionsDescription = ""
-  ElseIf (benEmployer.value(employer_NIC_AdjustmentAddUserEntered) = 0) And (Len(benEmployer.value(employer_addClass1ADescription_db)) = 0) Then
-    If defaultValueIfNotUSerValueEntered Then
-      P11DbAdditionsDescription = S_P11DB_AMOUNTS_TAXED_THROUGH_PAYROLL
-    Else
-      P11DbAdditionsDescription = ""
-    End If
+  P11DbAdditionsDescription = P11DbAdditionsDeductionsDescription(benEmployer, employer_NIC_AdjustmentAddTotal, employer_addClass1ADescription_db, S_P11DB_AMOUNTS_TAXED_THROUGH_PAYROLL)
+End Function
+Public Function P11DbDeductionsDescription(benEmployer As IBenefitClass) As String
+  P11DbDeductionsDescription = P11DbAdditionsDeductionsDescription(benEmployer, employer_NIC_AdjustmentDeductTotal, employer_deductClass1ADescription_db, S_P11DB_EMPLOYEES_NOT_SUBJECT_TO_CLASS_1A)
+End Function
+Public Function P11DbAdditionsDeductionsDescription(benEmployer As IBenefitClass, ByVal employer_NIC_AdjustmentAdditionDeductTotalEnumValue As Long, ByVal employer_NIC_AdjustmentAdditionDeductTotalDescriptionEnumValue As Long, ByVal defaultDescription As String) As String
+  If (benEmployer.value(employer_NIC_AdjustmentAdditionDeductTotalEnumValue) = 0) Then
+    P11DbAdditionsDeductionsDescription = ""
   Else
-    P11DbAdditionsDescription = benEmployer.value(employer_addClass1ADescription_db)
+    Dim descriptionEntered As String
+    descriptionEntered = Trim$(benEmployer.value(employer_NIC_AdjustmentAdditionDeductTotalDescriptionEnumValue))
+    If Len(descriptionEntered) = 0 Then
+      P11DbAdditionsDeductionsDescription = defaultDescription
+    Else
+      P11DbAdditionsDeductionsDescription = descriptionEntered
+    End If
   End If
 End Function
-Public Function P11DbDeductionsDescription(benEmployer As IBenefitClass, Optional ByVal defaultValueIfNotUSerValueEntered As Boolean = True) As String
-  If (benEmployer.value(employer_NIC_AdjustmentDeductTotal) = 0) Then
-    P11DbDeductionsDescription = ""
-  ElseIf (benEmployer.value(employer_NIC_AdjustmentDeductUserEntered) = 0) And (Len(benEmployer.value(employer_deductClass1ADescription_db)) = 0) Then
-    If defaultValueIfNotUSerValueEntered Then
-      P11DbDeductionsDescription = S_P11DB_EMPLOYEES_NOT_SUBJECT_TO_CLASS_1A
-    Else
-      P11DbDeductionsDescription = ""
-    End If
-  Else
-    P11DbDeductionsDescription = benEmployer.value(employer_deductClass1ADescription_db)
-  End If
-End Function
-
 Private Function Report_P11db_NIC_Rate_Formatted() As String
   Report_P11db_NIC_Rate_Formatted = (p11d32.Rates.value(carNICRate) * 100) & "%"
 End Function
@@ -3637,7 +3629,7 @@ NEXT_ITEM:
   Next
 End Sub
 Public Sub Report_P11Db_Reconciliation(rep As Reporter, ey As Employer)
-  Dim benEY As IBenefitClass
+  Dim benEy As IBenefitClass
   Dim vTotalBenfitsExClass1 As Variant
   Dim vTotalBenfitsClass1 As Variant
   Dim vTotalBenefits As Variant
@@ -3648,8 +3640,8 @@ Public Sub Report_P11Db_Reconciliation(rep As Reporter, ey As Employer)
   
 On Error GoTo err_err
     
-  Set benEY = ey
-  Call benEY.Calculate
+  Set benEy = ey
+  Call benEy.Calculate
   
   Call rep.Out("{Arial=12,bi}" & S_P11D_B & " reconciliation - " & p11d32.Rates.value(TaxFormYear) & ", Employer: " & ey.Name & vbCrLf)
   
@@ -3669,7 +3661,7 @@ On Error GoTo err_err
   
   vTotalBenefits = 0
   For HMITSection = HMIT_SECTIONS.HMIT_FIRST_ITEM To HMIT_SECTIONS.HMIT_LAST_ITEM
-    vTotalBenefits = vTotalBenefits + P11Db_ReconciliationTableLineP11DBox(rep, benEY, HMITSection, HMIT_SECTION_EMPLOYER_BENEFIT_ITEM_P11D_NICABLE)
+    vTotalBenefits = vTotalBenefits + P11Db_ReconciliationTableLineP11DBox(rep, benEy, HMITSection, HMIT_SECTION_EMPLOYER_BENEFIT_ITEM_P11D_NICABLE)
   Next
   
   Call WKOut(rep, WK_ITEM_Total, "", vTotalBenefits, , False)
@@ -3683,7 +3675,7 @@ On Error GoTo err_err
   Call WKTblColFormats("nib", "nib", "nirb", "nirb")
   Call WKTableHeadings(rep, S_P11D_B & "~box", "", "£", "£")
   Call WKTblColFormats("n", "n", "rn", "rn")
-  Call WKTableRow(rep, "A", UpperCaseFirstLetter(S_P11DB_SHORT_CAPTION_BOX_A), "", FormatWNNoCurrency(benEY.value(employer_TotalBenefitsPotentiallySubjectToClass1A)))
+  Call WKTableRow(rep, "A", UpperCaseFirstLetter(S_P11DB_SHORT_CAPTION_BOX_A), "", FormatWNNoCurrency(benEy.value(employer_TotalBenefitsPotentiallySubjectToClass1A)))
   Call WKTableBlankRow(rep)
 'B
 
@@ -3692,12 +3684,12 @@ On Error GoTo err_err
   'benefits payrolled, made good subject to PAYE
   vTotalBenfitsExClass1 = 0
   For HMITSection = HMIT_SECTIONS.HMIT_FIRST_ITEM To HMIT_SECTIONS.HMIT_LAST_ITEM
-    Call P11Db_ReconciliationTableLineP11DBox(rep, benEY, HMITSection, HMIT_SECTION_EMPLOYER_BENEFIT_ITEM_P11DB_ADDITIONS, False, True, , 3)
+    Call P11Db_ReconciliationTableLineP11DBox(rep, benEy, HMITSection, HMIT_SECTION_EMPLOYER_BENEFIT_ITEM_P11DB_ADDITIONS, False, True, , 3)
   Next
   
   Call P11Db_ReconciliationAdjustments(ey, rep, ey.P11DbAdditions, False)
   Call WKTableBlankRow(rep)
-  Call WKTableRow(rep, "", P11DbAdditionsDescription(benEY, False), "", FormatWNNoCurrency(benEY.value(employer_NIC_AdjustmentAddTotal)))
+  Call WKTableRow(rep, "", P11DbAdditionsDescription(benEy, False), "", FormatWNNoCurrency(benEy.value(employer_NIC_AdjustmentAddTotal)))
   
 'C
   Call WKTableBlankRow(rep)
@@ -3705,28 +3697,28 @@ On Error GoTo err_err
    
   Call WKTableBlankRow(rep)
   For HMITSection = HMIT_SECTIONS.HMIT_FIRST_ITEM To HMIT_SECTIONS.HMIT_LAST_ITEM
-    Call P11Db_ReconciliationTableLineP11DBox(rep, benEY, HMITSection, HMIT_SECTION_EMPLOYER_BENEFIT_ITEM_P11DB_DEDUCTIONS, True, True, , 3)
+    Call P11Db_ReconciliationTableLineP11DBox(rep, benEy, HMITSection, HMIT_SECTION_EMPLOYER_BENEFIT_ITEM_P11DB_DEDUCTIONS, True, True, , 3)
   Next
   
   Call P11Db_ReconciliationAdjustments(ey, rep, ey.P11DbDeductions, True)
   Call WKTableBlankRow(rep)
-  Call WKTableRow(rep, "", P11DbDeductionsDescription(benEY, False), "", FormatWNNoCurrency(-1 * benEY.value(employer_NIC_AdjustmentDeductTotal)))
+  Call WKTableRow(rep, "", P11DbDeductionsDescription(benEy), "", FormatWNNoCurrency(-1 * benEy.value(employer_NIC_AdjustmentDeductTotal)))
   Call WKTableBlankRow(rep)
-  Call WKOut(rep, WK_ITEM_Total, "Sub total", benEY.value(employer_NIC_BenefitsAndAdjustmentsSubTotal), , True)
+  Call WKOut(rep, WK_ITEM_Total, "Sub total", benEy.value(employer_NIC_BenefitsAndAdjustmentsSubTotal), , True)
   
   
   
 'D
   Call WKTableBlankRow(rep)
   
-  Call WKTableRow(rep, "D", S_P11DB_TOTAL_BOX_D & " (minimum 0)", "", FormatWNNoCurrency(benEY.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A)))
+  Call WKTableRow(rep, "D", S_P11DB_TOTAL_BOX_D & " (minimum 0)", "", FormatWNNoCurrency(benEy.value(ITEM_BENEFIT_SUBJECT_TO_CLASS1A)))
   
   Call WKTableBlankRow(rep)
 'E
   Call WKTableRow(rep, "E", S_P11DB_MUTIPLY_BY_NIC_RATE_BOX_E, "", "x " & Report_P11db_NIC_Rate_Formatted())
   Call WKTableBlankRow(rep)
 'F
-  Call WKTableRow(rep, "F", S_P11DB_CLASS_1A_PAYABLE_BOX_F, "", FormatWNNoCurrency(benEY.value(ITEM_NIC_CLASS1A_BENEFIT), , True))
+  Call WKTableRow(rep, "F", S_P11DB_CLASS_1A_PAYABLE_BOX_F, "", FormatWNNoCurrency(benEy.value(ITEM_NIC_CLASS1A_BENEFIT), , True))
   Call WKOut(rep, WK_SECTION_BREAK)
     
 err_end:
@@ -3756,7 +3748,7 @@ Private Sub P11Db_ReconciliationSubHeading(rep As Reporter, subHeading As String
   Call P11Db_ReconciliationAdjustmentsColOffsets
 End Sub
 
-Function P11Db_ReconciliationTableLineP11DBox(rep As Reporter, benEY As IBenefitClass, HMITSection As HMIT_SECTIONS, sectionValue As HMIT_SECTION_VALUE, Optional ByVal negate As Boolean = False, Optional ByVal boxAndNameInColummn2 As Boolean = False, Optional ByVal repOut As Boolean = True, Optional ByVal valueColumn As Long = 4) As Variant
+Function P11Db_ReconciliationTableLineP11DBox(rep As Reporter, benEy As IBenefitClass, HMITSection As HMIT_SECTIONS, sectionValue As HMIT_SECTION_VALUE, Optional ByVal negate As Boolean = False, Optional ByVal boxAndNameInColummn2 As Boolean = False, Optional ByVal repOut As Boolean = True, Optional ByVal valueColumn As Long = 4) As Variant
 
   Dim boxString As String
   Dim boxName As String
@@ -3774,7 +3766,7 @@ Function P11Db_ReconciliationTableLineP11DBox(rep As Reporter, benEY As IBenefit
     captionAddition = ": " & LowerCaseFirstLetter(S_P11DB_EMPLOYEES_NOT_SUBJECT_TO_CLASS_1A)
   End If
   
-  v = benEY.value(eeItem)
+  v = benEy.value(eeItem)
   If IsNumeric(v) And v <> 0 Then
     If (repOut) Then
       If (boxAndNameInColummn2) Then
@@ -3784,7 +3776,7 @@ Function P11Db_ReconciliationTableLineP11DBox(rep As Reporter, benEY As IBenefit
         boxName = p11d32.Rates.HMITSectionToValue(HMITSection, HMIT_SECTION_DESCRIPTION)
       End If
       boxName = boxName & captionAddition
-      boxValue = FormatWNNoCurrency(benEY.value(eeItem), negate)
+      boxValue = FormatWNNoCurrency(benEy.value(eeItem), negate)
       If (valueColumn = 3) Then
         Call WKTableRow(rep, boxString, boxName, boxValue, "")
       Else

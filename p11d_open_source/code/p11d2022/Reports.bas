@@ -3682,7 +3682,6 @@ On Error GoTo err_err
   
   Call WKOut(rep, WK_SECTION_BREAK)
 
-  
 'A
   Call WKTblColFormats("nib", "nib", "nirb", "nirb")
   Call WKTableHeadings(rep, S_P11D_B & "~box", "", "£", "£")

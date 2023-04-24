@@ -3648,10 +3648,15 @@ On Error GoTo err_err
 'section p11d benfits
   Call WKOut(rep, WK_SECTION_BREAK)
   
+  Call WKTblColXOffsets(0, L_WK_OTHER_TABLE_COL4)
+  Call WKTblColFormats("ib", "irb")
+  Call WKTableRow(rep, "Total benefits (including those which are not subject to class 1A)", FormatWN(benEy.value(employer_Benefit)))
+  Call rep.Out(vbCrLf)
+  
+  
   Call P11Db_ReconciliationSubHeading(rep, UpperCaseFirstLetter(S_P11DB_SHORT_CAPTION_BOX_A))
   
   Call P11Db_ReconciliationAdjustmentsColOffsets
-  
   
   Call WKTblColFormats("ib", "ib", "irb", "irb")
   Call WKTableHeadings(rep, "P11D box", "Class 1A NIC benefits:", "", "£")
@@ -3666,10 +3671,17 @@ On Error GoTo err_err
   
   Call WKOut(rep, WK_ITEM_Total, "", vTotalBenefits, , False)
   
+  Call WKTblColXOffsets(0, L_WK_OTHER_TABLE_COL4)
+  Call WKTblColFormats("ilb", "irb")
+  Call WKTableRow(rep, "Total benefits not liable to class 1A (i.e. boxes B, C, E etc)", FormatWN(benEy.value(employer_Benefit) - vTotalBenefits, ""))
+  Call rep.Out(vbCrLf)
+    
+
+  Call P11Db_ReconciliationAdjustmentsColOffsets
+  Call WKTblColFormats("ib", "m", "irb", "irb")
   
   Call WKOut(rep, WK_SECTION_BREAK)
-  
-  
+
   
 'A
   Call WKTblColFormats("nib", "nib", "nirb", "nirb")

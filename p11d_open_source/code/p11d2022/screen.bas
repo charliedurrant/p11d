@@ -301,7 +301,8 @@ Public Function ToolBarButton(Index As Long, param As Long) As Boolean
       End If
     Case TBR_P11DB_RECONCILIATION
       If Not p11d32.CurrentEmployer Is Nothing Then
-        Call p11d32.ReportPrint.DoOtherReport(Nothing, P11D_REPORTS.RPT_P11Db_RECONCILIATION, PREPARE_REPORT)
+        Call p11d32.CurrentEmployer.EditP11Db
+        'Call p11d32.ReportPrint.DoOtherReport(Nothing, P11D_REPORTS.RPT_P11Db_RECONCILIATION, PREPARE_REPORT)
       End If
     
   End Select

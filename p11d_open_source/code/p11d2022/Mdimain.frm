@@ -1526,7 +1526,7 @@ End Sub
 Private Sub mnuEmployeeValidateOnscreenNINumber_Click()
    p11d32.ValidateNINumberOnEmployeeScreen = Not p11d32.ValidateNINumberOnEmployeeScreen
    mnuEmployeeValidateOnscreenNINumber.Checked = p11d32.ValidateNINumberOnEmployeeScreen
-   Call F_Employees.TB_Data(L_NI_NUMBER_TEXT_BOX_INDEX).lValidate
+   Call F_Employees.TB_DATA(L_NI_NUMBER_TEXT_BOX_INDEX).lValidate
 End Sub
 
 Private Sub mnuEmployerCDB_Click()
@@ -1759,7 +1759,6 @@ mnuHelpFAQs_Click_Err:
 End Sub
 
 Private Sub mnuHelpP11D_Click()
-'  Call DisplayHelp(True)
   Call p11d32.Help.ShowHelp(S_DEFAULT_HELP_PAGE)
 End Sub
 

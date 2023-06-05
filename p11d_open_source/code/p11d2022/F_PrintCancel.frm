@@ -50,7 +50,7 @@ Begin VB.Form F_PrintCancel
       Skew            =   0
       PictureOffsetTop=   0
       PictureOffsetLeft=   0
-      Enabled         =   0   'False
+      Enabled         =   -1  'True
       Increment       =   1
       TextAlignment   =   2
    End
@@ -122,7 +122,7 @@ Private Sub DoStandardReportSubEx(ByVal rep As Reporter, ByVal pr As P11D_REPORT
   
   On Error GoTo DoReportStandardSub_Err
   
-  lbl.Caption = "Preparing report " & sReportName
+  lbl.caption = "Preparing report " & sReportName
   'cad who wrote this comment
   'nned to do as use global P11d32.ReportPrint.destination in sub functions
   bSeparatePrintJobs = p11d32.ReportPrint.SeparatePrintJobs
@@ -171,15 +171,15 @@ Private Sub DoStandardReportSubEx(ByVal rep As Reporter, ByVal pr As P11D_REPORT
 
   Set PrintedEmployees = New ObjectList
   
-  If p11d32.ReportPrint.SelectedEmployees.Count > 0 Then
-    Call PrgStartCaption(p11d32.ReportPrint.SelectedEmployees.Count, "Printing for employees", "Analysing employee", ValueOfMax)
+  If p11d32.ReportPrint.SelectedEmployees.count > 0 Then
+    Call PrgStartCaption(p11d32.ReportPrint.SelectedEmployees.count, "Printing for employees", "Analysing employee", ValueOfMax)
     prg.Min = 0
     prg.value = 0
-    prg.Max = p11d32.ReportPrint.SelectedEmployees.Count
-    PrintedEmployees.Increment = p11d32.ReportPrint.SelectedEmployees.Count
+    prg.Max = p11d32.ReportPrint.SelectedEmployees.count
+    PrintedEmployees.Increment = p11d32.ReportPrint.SelectedEmployees.count
   End If
   
-  For i = 1 To p11d32.ReportPrint.SelectedEmployees.Count
+  For i = 1 To p11d32.ReportPrint.SelectedEmployees.count
      Set ee = p11d32.ReportPrint.SelectedEmployees(i)
      If ee Is Nothing Then GoTo NEXT_EMPLOYEE
      
@@ -314,7 +314,7 @@ Private Function IReporter_Notify(rep As atc2rep.Reporter, notificationType As a
         Dim pdfPrintPath As String
         Dim oShell As Object
         tempFileName = GetTempFilename
-        Call TextFileSave(tempFileName, m_NotifyLog.bstr)
+        Call TextFileSave(tempFileName, m_NotifyLog.bstr, "utf-8")
         m_NotifyLog.bstr = ""
 
         Dim shellString As String

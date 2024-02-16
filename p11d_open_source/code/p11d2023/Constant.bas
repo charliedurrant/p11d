@@ -90,7 +90,7 @@ Public Const L_CH_HYPHON As Long = 45
 
 Public Const STRYR2000 = "dd/mm/yyyy" ' cd/apf remove check
 
-Public Const S_TELEPHONE As String = "UKTaxCOEEmploymentTax@deloitte.co.uk "
+Public Const S_TELEPHONE As String = "UKTaxETOperate@deloitte.co.uk "
 'Public Const S_OLD_CONTACT As String = "For help, please contact abatec on (020) 7438 3669" 'RK Hack to convert telephone number written out by Core
 'Public Const S_NEW_CONTACT As String = "For help, please contact abatec on (020) 7303 8122"
 

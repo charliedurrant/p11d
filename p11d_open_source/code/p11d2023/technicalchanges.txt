@@ -1,0 +1,20 @@
+changes
+added gender and DOB needs import / report / p11d 
+changed car calc accorging to 
+
+The main changes we are making to the 2006-07 P11D are as follows.
+Employee Details
+We are introducing 2 new boxes for employee Date of Birth, and Gender (Sex M/F)
+to be completed when the NINO is not available. We anticipate that the validation for
+these fields will be the same as the Date of Birth and Gender fields on the P14.
+These new fields are being introduced to help HMRC locate an employee when the
+NINO isn’t present.
+Company Cars
+ Fuel types B and H, the standard reduction is increased by 1% each (to 2% and
+3% respectively), but the extra adjustment for very low CO2 emission cars no
+longer applies.
+ Fuel type C, the reduction no longer applies.
+ Fuel type L, the supplement for type D cars also applies to type L cars first
+registered on or after 1 January 2006.
+A draft version of the 2006-07 P11D will be available in the next edition of these
+Notes expected to be published early summer 2006.

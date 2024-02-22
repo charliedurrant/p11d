@@ -2341,8 +2341,8 @@ Private Function NICRateString() As String
   d = Round(p11d32.Rates.value(carNICRate) * 100, 2)
   
   ret = CStr(d)
-  If (Len(ret) < 4) Then
-    For i = 1 To 4 - Len(ret)
+  If (Len(ret) < 5) Then
+    For i = 1 To 5 - Len(ret)
       ret = ret & "0"
     Next
   End If

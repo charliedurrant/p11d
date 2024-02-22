@@ -863,14 +863,13 @@ Public Function GridIsNotNumericOrLong(ValidateMessage As String, vNumber As Var
   If (Not IsNull(vNumber)) Or (ObejctListIndex = -1) Then
     'ie it has not changed
     If Not IsNumeric(vNumber) Then
-      
       ValidateMessage = "The value is not a number."
       GridIsNotNumericOrLong = True
     Else
       If vNumber > L_MAX_LONG Then
         ValidateMessage = "The value is greater than " & CStr(L_MAX_LONG) & "."
         GridIsNotNumericOrLong = True
-      ElseIf vNumber < 0 Then
+      ElseIf vNumber < 0 And Not allowNegative Then
         ValidateMessage = "The value is less than 0, only positive numbers are allowed"
         GridIsNotNumericOrLong = True
       End If

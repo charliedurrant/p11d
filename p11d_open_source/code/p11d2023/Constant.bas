@@ -352,10 +352,10 @@ Public Const S_PAYEONLINE_MDB As String = "PayeOnline.mdb"
 Public Const S_CURRENCY As String = "£"
 
 'Serial Number constants
-Public Const S_SERIAL_NUMBER_STANDARD = "P11DD847B378T4373422" 'Full functionality, all reports, emails etc.  Used for year-end (main) release.
-Public Const S_SERIAL_NUMBER_INTRANET = "4687263T4S6P84662L22" 'As above with intranet publishing
-Public Const S_SERIAL_NUMBER_SHORT = "P11DD8S4678V37746622" 'Reduced functionality (no printing (except P46, no employye letter etc.).  Used for b/f (minor) release.
-Public Const S_SERIAL_NUMBER_DEMO = "P11DD366O659V3774622" 'Full functionality available for both releases
+Public Const S_SERIAL_NUMBER_STANDARD = "P11DD847B378T4373423" 'Full functionality, all reports, emails etc.  Used for year-end (main) release.
+Public Const S_SERIAL_NUMBER_INTRANET = "4687263T4S6P84662L23" 'As above with intranet publishing
+Public Const S_SERIAL_NUMBER_SHORT = "P11DD8S4678V37746623" 'Reduced functionality (no printing (except P46, no employye letter etc.).  Used for b/f (minor) release.
+Public Const S_SERIAL_NUMBER_DEMO = "P11DD366O659V3774623" 'Full functionality available for both releases
 
 'XML
 Public Const D_XMLBENEFITMAX As Double = 9999999.99

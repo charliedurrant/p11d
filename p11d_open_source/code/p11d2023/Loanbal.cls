@@ -22,11 +22,11 @@ Public days As Long
 Public RegularPayment As Boolean
 
 Public Function Interest(IT As INTERESTRATE_TYPE) As Double
-  Interest = RoundN((Balance * RoundN(InterestRate(IT), 4) * (days / p11d32.Rates.value(DaysInYearLeap))))
+  Interest = RoundN((Balance * RoundN(InterestRate(IT), 4) * (days / p11d32.Rates.value(DaysInYear))))
 End Function
 Public Function InterestRate(IT As INTERESTRATE_TYPE) As Double
   Dim dblInterestRate As Double
-  
+    
   If GetDailyInterestRate(dblInterestRate, IT) Then
     InterestRate = dblInterestRate
   End If

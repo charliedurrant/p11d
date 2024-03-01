@@ -147,7 +147,7 @@ Public BalanceSheet As ObjectList
 Private Sub Class_Terminate()
  'Debug.Print"Loan - terminate"
 End Sub
-Public Sub BalanceSheetItemsAdd(OL As ObjectList)
+Public Sub BalanceSheetItemsAdd(ol As ObjectList)
   Dim bi As BalanceItem, biexisting As BalanceItem
   Dim i As Long, l As Long
   Dim bFound As Boolean
@@ -156,15 +156,15 @@ Public Sub BalanceSheetItemsAdd(OL As ObjectList)
     Set bi = BalanceSheet(l)
     If Not bi Is Nothing Then
       bFound = False
-      For i = 1 To OL.count
-        Set biexisting = OL.Item(i)
+      For i = 1 To ol.count
+        Set biexisting = ol.Item(i)
         If bi.DateFrom = biexisting.DateFrom Then
           bFound = True
           Exit For
         End If
       Next
       If (Not bFound) Then
-        Call OL.Add(bi)
+        Call ol.Add(bi)
       End If
     End If
   Next
@@ -485,7 +485,7 @@ Private Function IBenefitClass_PrintWkBody(rep As Reporter) As Boolean
   Dim i As Long, s As String
   
   Dim ben As IBenefitClass
-  Dim OL As ObjectList
+  Dim ol As ObjectList
   Dim li As LoanInterest
   
   On Error GoTo clsLoan_PrintWK_Err
@@ -1091,9 +1091,11 @@ On Error GoTo FinishBalances_Err
         End If
         If bLeapYear Then bCrossLeapDay = (bi.DateFrom <= dLeapDate) And (bi.DateTo >= dLeapDate)
         bi.days = DateDiff("d", bi.DateFrom, bi.DateTo)
-        If (bCrossLeapDay) Then
-          bi.days = bi.days + 1
-        End If
+        bi.days = bi.days + 1
+        
+        'If (bCrossLeapDay) Then
+        '  bi.days = bi.days + 1
+        'End If
         
         
         bi.Balance = RoundN(dblWorkingBalance)

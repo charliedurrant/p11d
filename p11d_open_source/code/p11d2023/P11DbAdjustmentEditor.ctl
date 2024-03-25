@@ -53,7 +53,7 @@ End Sub
 Private Sub grid_ValidateTCS(FirstColIndexInError As Long, ValidateMessage As String, ByVal RowBuf As TrueDBGrid60.RowBuffer, ByVal RowBufRowIndex As Long, ByVal ObjectListIndex As Long)
   Dim l As Long
   Dim caption As Variant
-  Dim OL As ObjectList
+  Dim ol As ObjectList
   Dim i As Long
   Dim adjustment As P11DbAdjustment
   
@@ -80,9 +80,9 @@ Private Sub grid_ValidateTCS(FirstColIndexInError As Long, ValidateMessage As St
             GoTo err_end
           End If
           
-          Set OL = grid.ObjectList
-          For i = 1 To OL.count
-            Set adjustment = OL(i)
+          Set ol = grid.ObjectList
+          For i = 1 To ol.count
+            Set adjustment = ol(i)
             If ObjectListIndex <> i Then
               If (adjustment.caption = caption) Then
                 FirstColIndexInError = l

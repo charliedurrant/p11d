@@ -18,7 +18,7 @@ Begin VB.UserControl CodeEditor
       Height          =   3615
       Left            =   120
       TabIndex        =   0
-      Top             =   360
+      Top             =   900
       Width           =   4815
       _ExtentX        =   8493
       _ExtentY        =   6376
@@ -113,7 +113,7 @@ Private Sub ColorCodes()
   Call xSet("ColorCodes")
   txt = Me.Text
   
-  For i = 1 To m_codes.Count
+  For i = 1 To m_codes.count
     Call ColorCode(m_codes.Item(i), False, txt)
   Next
   rt.SelStart = 0
@@ -265,11 +265,18 @@ SetSelTextProperties_ERR:
 End Sub
 
 Private Sub UserControl_Resize()
-  rt.Top = 0
-  rt.Left = 0
-  rt.width = UserControl.width
-  rt.height = UserControl.height
+  rtMultiLine.Top = 0
+  rtMultiLine.Left = 0
+  rtMultiLine.width = UserControl.width
+  rtMultiLine.height = UserControl.height
+  
+  rtSingleLine.Top = 0
+  rtSingleLine.Left = 0
+  rtSingleLine.width = UserControl.width
+  rtSingleLine.height = UserControl.height
 End Sub
+
+
 Private Sub rtSingleLine_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
   Call RichTextBox_MouseUp
 End Sub

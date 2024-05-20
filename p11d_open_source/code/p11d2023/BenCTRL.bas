@@ -56,7 +56,7 @@ Public Function BenefitsOfType(ee As Employee, ByVal bc As BEN_CLASS) As ObjectL
     Set benefits = ee.benefits
   End If
   
-  For i = 1 To benefits.Count
+  For i = 1 To benefits.count
     Set ben = benefits(i)
     If Not ben Is Nothing Then
       If ben.BenefitClass = bc Then Call o.Add(ben)
@@ -120,7 +120,7 @@ On Error GoTo err_err
           'loop thrugh all the employees that have benefits loaded
           Set Employer = benParent.Parent
           Set employees = Employer.employees
-          For i = 1 To employees.Count
+          For i = 1 To employees.count
             Set ee = employees(i)
             If Not ee Is Nothing Then
               If Not IsCBDEmployee(ee.PersonnelNumber) Then
@@ -209,7 +209,9 @@ Public Function LastFixLevel(lYear As Long) As Long
     Case 21
       LastFixLevel = 117
     Case 22
-      LastFixLevel = 118
+      LastFixLevel = 120
+    Case 23
+      LastFixLevel = 120
     Case Else
       Call ECASE("Invalid year in LastFixLevel.")
   End Select
@@ -227,7 +229,7 @@ Public Function EnumEmployerFiles(ByVal sExtension As String, IENUME As IEnumEmp
   
   s = p11d32.WorkingDirectory & "*" & sExtension
   
-  Call IENUME.Count(CountFiles(s))  ' display number of employers
+  Call IENUME.count(CountFiles(s))  ' display number of employers
     
   q = Dir$(s)
   Do While Len(q) > 0
@@ -326,7 +328,7 @@ Private Sub ListItemSelectedGrey(ibf As IBenefitForm2)
   If Not ibf.lv.SelectedItem Is Nothing Then
     Set li = ibf.lv.SelectedItem
     li.ForeColor = vbGrayText
-    For i = 1 To li.ListSubItems.Count
+    For i = 1 To li.ListSubItems.count
       li.ListSubItems(i).ForeColor = vbGrayText
     Next
   End If
@@ -688,7 +690,7 @@ Public Sub RepairCompactEmployer()
   
   Call OnlyFromForm(F_Employers)
   Set ibf = CurrentForm
-  If ibf.lv.listitems.Count = 0 Then Call Err.Raise(ERR_REPAIR_COMPACT, "RepairCompactEmployer", "No employers.")
+  If ibf.lv.listitems.count = 0 Then Call Err.Raise(ERR_REPAIR_COMPACT, "RepairCompactEmployer", "No employers.")
   If Not ibf.lv.SelectedItem Is Nothing Then
     Set ey = p11d32.Employers(ibf.lv.SelectedItem.Tag)
     If ey Is Nothing Then Call Err.Raise(ERR_IS_NOTHING, "RepairCompactEmployer", "Employer is nothing.")
@@ -1508,11 +1510,11 @@ Public Function BenefitToScreenHelper(ibf As IBenefitForm2, ByVal BenefitIndex A
   If BenefitIndex <> -1 Then
     Set ben = p11d32.CurrentEmployer.CurrentEmployee.benefits(BenefitIndex)
     If Not ibf.ValididateBenefit(ben) Then Call Err.Raise(ERR_INVALIDBENCLASS, "BenefitToScreenHelper", "Benefit To Screen Helper", "Invalid benefit type.")
-    Set ibf.benefit = ben
+    Set ibf.Benefit = ben
     Call ibf.BenefitOn
   Else
     
-    Set ibf.benefit = Nothing
+    Set ibf.Benefit = Nothing
     Call ibf.BenefitOff
   End If
   

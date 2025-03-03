@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{AF27A9B5-A3F4-11D2-8DB7-00C04FA9DD6F}#1.2#0"; "TCSPROG.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.OCX"
 Begin VB.Form F_PayeOnline 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "PayeOnline"
@@ -16,7 +16,7 @@ Begin VB.Form F_PayeOnline
    ScaleHeight     =   5190
    ScaleWidth      =   9330
    StartUpPosition =   3  'Windows Default
-   Begin P11D2023.MyFolderBrowser fb 
+   Begin P11D2024.MyFolderBrowser fb 
       Height          =   495
       Left            =   120
       TabIndex        =   16

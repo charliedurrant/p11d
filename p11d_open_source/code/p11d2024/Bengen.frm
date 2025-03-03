@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "atc2vtext.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.OCX"
 Begin VB.Form F_Other 
    Caption         =   " "
    ClientHeight    =   5685
@@ -146,7 +146,7 @@ Begin VB.Form F_Other
          TabIndex        =   21
          Top             =   270
          Width           =   3855
-         Begin P11D2023.ValCombo cboIRDesc2 
+         Begin P11D2024.ValCombo cboIRDesc2 
             Height          =   315
             Left            =   1425
             TabIndex        =   1

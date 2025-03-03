@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "atc2vtext.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.OCX"
 Begin VB.Form F_PrintOptions 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Print options"
@@ -377,7 +377,7 @@ Begin VB.Form F_PrintOptions
             TabIndex        =   48
             Top             =   180
             Width           =   5655
-            Begin P11D2023.MyFolderBrowser fbExportDirectory 
+            Begin P11D2024.MyFolderBrowser fbExportDirectory 
                Height          =   255
                Left            =   120
                TabIndex        =   72
@@ -450,7 +450,7 @@ Begin VB.Form F_PrintOptions
          TabIndex        =   25
          Top             =   360
          Width           =   6885
-         Begin P11D2023.MyFolderBrowser fbUserLetters 
+         Begin P11D2024.MyFolderBrowser fbUserLetters 
             Height          =   375
             Left            =   120
             TabIndex        =   73

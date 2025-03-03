@@ -1,9 +1,9 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.Ocx"
 Object = "{AF27A9B5-A3F4-11D2-8DB7-00C04FA9DD6F}#1.2#0"; "TCSPROG.OCX"
 Object = "{00028CDA-0000-0000-0000-000000000046}#6.0#0"; "tdbg6.ocx"
 Object = "{E297AE83-F913-4A8C-873C-EDEAC00CB9AC}#2.1#0"; "atc3ubgrd.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.OCX"
 Begin VB.Form F_DataCheckerWizard 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Data checker"
@@ -94,7 +94,7 @@ Begin VB.Form F_DataCheckerWizard
          Skew            =   0
          PictureOffsetTop=   0
          PictureOffsetLeft=   0
-         Enabled         =   0   'False
+         Enabled         =   -1  'True
          Increment       =   1
          TextAlignment   =   2
       End
@@ -128,19 +128,19 @@ Begin VB.Form F_DataCheckerWizard
       TabCaption(1)   =   "Tab 1"
       TabPicture(1)   =   "F_CompanyCarCheckerWizard.frx":001C
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "Label1"
-      Tab(1).Control(1)=   "tvwCheckResults"
-      Tab(1).Control(2)=   "btnRefresh"
-      Tab(1).Control(3)=   "cmbOrderBy"
-      Tab(1).Control(4)=   "dtgCheckWizard"
-      Tab(1).Control(5)=   "Frame2"
+      Tab(1).Control(0)=   "ubgrd"
+      Tab(1).Control(1)=   "ctlOverlappingCars"
+      Tab(1).Control(2)=   "iml"
+      Tab(1).Control(3)=   "pctInfo"
+      Tab(1).Control(4)=   "pctSpacer"
+      Tab(1).Control(5)=   "pctHeader"
       Tab(1).Control(6)=   "fraHeader"
-      Tab(1).Control(7)=   "pctHeader"
-      Tab(1).Control(8)=   "pctSpacer"
-      Tab(1).Control(9)=   "pctInfo"
-      Tab(1).Control(10)=   "iml"
-      Tab(1).Control(11)=   "ctlOverlappingCars"
-      Tab(1).Control(12)=   "ubgrd"
+      Tab(1).Control(7)=   "Frame2"
+      Tab(1).Control(8)=   "dtgCheckWizard"
+      Tab(1).Control(9)=   "cmbOrderBy"
+      Tab(1).Control(10)=   "btnRefresh"
+      Tab(1).Control(11)=   "tvwCheckResults"
+      Tab(1).Control(12)=   "Label1"
       Tab(1).ControlCount=   13
       TabCaption(2)   =   "Tab 2"
       TabPicture(2)   =   "F_CompanyCarCheckerWizard.frx":0038
@@ -155,7 +155,7 @@ Begin VB.Form F_DataCheckerWizard
          _ExtentX        =   15161
          _ExtentY        =   6906
       End
-      Begin P11D2023.CarCheckOverlap ctlOverlappingCars 
+      Begin P11D2024.CarCheckOverlap ctlOverlappingCars 
          Height          =   3915
          Left            =   -71775
          TabIndex        =   28
@@ -191,7 +191,7 @@ Begin VB.Form F_DataCheckerWizard
          TabIndex        =   23
          Top             =   6375
          Width           =   9240
-         Begin P11D2023.TransparentPictureBox TransparentPictureBox1 
+         Begin P11D2024.TransparentPictureBox TransparentPictureBox1 
             Height          =   615
             Left            =   300
             TabIndex        =   26

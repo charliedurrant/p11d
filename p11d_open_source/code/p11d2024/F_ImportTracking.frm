@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.OCX"
 Begin VB.Form F_ImportTracking 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Import Tracking"
@@ -14,7 +14,7 @@ Begin VB.Form F_ImportTracking
    ScaleWidth      =   6930
    ShowInTaskbar   =   0   'False
    StartUpPosition =   3  'Windows Default
-   Begin P11D2023.MyFolderBrowser fb 
+   Begin P11D2024.MyFolderBrowser fb 
       Height          =   495
       Left            =   120
       TabIndex        =   8

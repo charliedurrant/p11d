@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{8D988532-0F0C-460C-B00E-7B5637E97680}#1.0#0"; "atc2vtext.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.OCX"
 Begin VB.Form F_Print 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Print"
@@ -15,7 +15,7 @@ Begin VB.Form F_Print
    ScaleHeight     =   7065
    ScaleWidth      =   7485
    StartUpPosition =   3  'Windows Default
-   Begin P11D2023.MyFolderBrowser fbUserReportsDirectory 
+   Begin P11D2024.MyFolderBrowser fbUserReportsDirectory 
       Height          =   495
       Left            =   120
       TabIndex        =   35

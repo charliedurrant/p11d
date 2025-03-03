@@ -40,7 +40,7 @@ Begin VB.Form F_P11Db
          TabIndex        =   31
          Top             =   2325
          Width           =   6375
-         Begin P11D2023.P11DbAdjustmentEditor gridDeductions 
+         Begin P11D2024.P11DbAdjustmentEditor gridDeductions 
             Height          =   1050
             Left            =   165
             TabIndex        =   35
@@ -89,7 +89,7 @@ Begin VB.Form F_P11Db
          TabIndex        =   28
          Top             =   330
          Width           =   6375
-         Begin P11D2023.P11DbAdjustmentEditor gridAdditions 
+         Begin P11D2024.P11DbAdjustmentEditor gridAdditions 
             Height          =   1110
             Left            =   165
             TabIndex        =   34

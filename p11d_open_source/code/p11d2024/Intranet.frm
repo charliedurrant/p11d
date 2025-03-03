@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "ComDlg32.OCX"
 Object = "{AF27A9B5-A3F4-11D2-8DB7-00C04FA9DD6F}#1.2#0"; "TCSPROG.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.OCX"
 Begin VB.Form F_Intranet 
    Caption         =   "FullPath(OutputDirectory)"
    ClientHeight    =   8145
@@ -12,7 +12,7 @@ Begin VB.Form F_Intranet
    ScaleHeight     =   8145
    ScaleWidth      =   8760
    StartUpPosition =   3  'Windows Default
-   Begin P11D2023.MyFolderBrowser fb 
+   Begin P11D2024.MyFolderBrowser fb 
       Height          =   615
       Left            =   2040
       TabIndex        =   29

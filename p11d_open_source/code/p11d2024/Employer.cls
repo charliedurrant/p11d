@@ -265,12 +265,12 @@ Public Sub ClearP11DbAdjustmentsValues()
   Call ClearP11DbAdjustmentsValuesEx(P11DbAdditions)
   Call ClearP11DbAdjustmentsValuesEx(P11DbDeductions)
 End Sub
-Private Sub ClearP11DbAdjustmentsValuesEx(OL As ObjectList)
+Private Sub ClearP11DbAdjustmentsValuesEx(ol As ObjectList)
   Dim i As Long
   Dim adjustment As P11DbAdjustment
   
-  For i = 1 To OL.count
-    Set adjustment = OL(i)
+  For i = 1 To ol.count
+    Set adjustment = ol(i)
     adjustment.value = 0
   Next
   
@@ -1856,25 +1856,25 @@ EditCompanyDefinedBenefits_Err:
 End Function
 
 
-Public Function GetEmployees(OL As ObjectList) As Boolean
+Public Function GetEmployees(ol As ObjectList) As Boolean
   Dim i As Long
   Dim li As ListItem
   
   On Error GoTo GetEmployees_Err
   Call xSet("GetEmployees")
 
-  Set OL = New ObjectList
+  Set ol = New ObjectList
   
   With F_Employees.LB
     For i = 1 To .listitems.count
       Set li = .listitems(i)
       If p11d32.EmployeeSelectedForPrint(employees(li.Tag), Me) Then
-        Call OL.Add(employees(li.Tag))
+        Call ol.Add(employees(li.Tag))
       End If
     Next
   End With
   
-  GetEmployees = OL.count
+  GetEmployees = ol.count
   
 GetEmployees_End:
   Call xReturn("GetEmployees")

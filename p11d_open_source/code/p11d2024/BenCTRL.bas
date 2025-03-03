@@ -212,6 +212,8 @@ Public Function LastFixLevel(lYear As Long) As Long
       LastFixLevel = 120
     Case 23
       LastFixLevel = 120
+    Case 24
+      LastFixLevel = 120
     Case Else
       Call ECASE("Invalid year in LastFixLevel.")
   End Select

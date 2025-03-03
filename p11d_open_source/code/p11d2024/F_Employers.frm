@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.OCX"
 Begin VB.Form F_Employers 
    Appearance      =   0  'Flat
    Caption         =   "Employer Details"
@@ -85,7 +85,7 @@ Begin VB.Form F_Employers
       Tag             =   "free,font"
       Top             =   0
       Width           =   10995
-      Begin P11D2023.MyFolderBrowser fbWorkingDirectory 
+      Begin P11D2024.MyFolderBrowser fbWorkingDirectory 
          Height          =   375
          Left            =   0
          TabIndex        =   6

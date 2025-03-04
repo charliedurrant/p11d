@@ -5,7 +5,8 @@ Execute the following queries:
 'note T_benReloc needs to be changed manually
 UPDATE T_benReloc set TaxYear = '2020/21' where TaxYear = '2019/20'
 
-UPDATE T_bencar set AvailFrom = DateAdd('yyyy',1,AvailFrom) , AvailTo = DateAdd('yyyy',1,AvailTo) 
+
+UPDATE T_bencar set AvailFrom = DateAdd('yyyy',1,AvailFrom) , AvailTo = DateAdd('yyyy',1,AvailTo) , FuelAvailTo = DateAdd('yyyy',1,FuelAvailTo), RegDate = DateAdd('yyyy',1,RegDate)
 
 UPDATE T_benAccom set AvailFrom = DateAdd('yyyy',1,AvailFrom) , AvailTo = DateAdd('yyyy',1,AvailTo) 
 

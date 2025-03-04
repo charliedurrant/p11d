@@ -911,11 +911,11 @@ CheckPAYEEmployerDetails_ERR:
   Resume
 End Function
 Private Function EmployeeHasp46Cars(ByVal ee As Employee)
-  Dim OL As ObjectList
+  Dim ol As ObjectList
   
   Call ee.LoadBenefits(TBL_COMPANY_CARS, False, False)
-  Call ee.GetP46Cars(OL, p11d32.PAYEonline.P46DateFrom, p11d32.PAYEonline.P46DateTo, True)
-  If OL.count Then
+  Call ee.GetP46Cars(ol, p11d32.PAYEonline.P46DateFrom, p11d32.PAYEonline.P46DateTo, True)
+  If ol.count Then
     EmployeeHasp46Cars = True
   End If
 
@@ -1207,7 +1207,7 @@ ValidateP46Car_ERR:
   Resume
 
 End Sub
-Private Function ProceedWithEmployee(ee As Employee, Optional OL As ObjectList) As Boolean
+Private Function ProceedWithEmployee(ee As Employee, Optional ol As ObjectList) As Boolean
   Dim benEE As IBenefitClass
   
   ProceedWithEmployee = False
@@ -1228,7 +1228,7 @@ Private Function ProceedWithEmployee(ee As Employee, Optional OL As ObjectList) 
       End If
     End If
   Else
-    If (p11d32.PAYEonline.Type_Selected = POT_P46) And (Not (ee.GetP46Cars(OL, p11d32.PAYEonline.P46DateFrom, p11d32.PAYEonline.P46DateTo, True))) Then
+    If (p11d32.PAYEonline.Type_Selected = POT_P46) And (Not (ee.GetP46Cars(ol, p11d32.PAYEonline.P46DateFrom, p11d32.PAYEonline.P46DateTo, True))) Then
       ProceedWithEmployee = False
     Else
       ProceedWithEmployee = True
@@ -1237,7 +1237,7 @@ Private Function ProceedWithEmployee(ee As Employee, Optional OL As ObjectList) 
   
 End Function
 Private Function EmployeeIsReportable(ByVal ee As Employee)
-  Dim OL As ObjectList
+  Dim ol As ObjectList
   If p11d32.PAYEonline.Type_Selected = POT_P46 Then
     EmployeeIsReportable = EmployeeHasp46Cars(ee)
   Else
@@ -1262,7 +1262,7 @@ Private Function ValidateEmployees(ey As Employer, lEmployeesWithInvalidNI As Lo
   Dim iAnyCars As Integer
   Dim sTxt As String, lNum As Long
   Dim mycar As CompanyCar
-  Dim OL As ObjectList
+  Dim ol As ObjectList
   
     
   On Error GoTo ValidateEmployees_err
@@ -1287,7 +1287,7 @@ Private Function ValidateEmployees(ey As Employer, lEmployeesWithInvalidNI As Lo
     
     Call m_Prg.StepCaption("Validating employee:" & ee.FullName)
     
-    If Not ProceedWithEmployee(ee, OL) Then
+    If Not ProceedWithEmployee(ee, ol) Then
       GoTo NEXT_EMPLOYEE
     End If
     
@@ -1367,8 +1367,8 @@ Private Function ValidateEmployees(ey As Employer, lEmployeesWithInvalidNI As Lo
             
       Case POT_P46
         'validate cars data
-        For j = 1 To OL.count
-          Set mycar = OL.Item(j)
+        For j = 1 To ol.count
+          Set mycar = ol.Item(j)
           
           Call ValidateP46Car(mycar)
         Next

@@ -31,7 +31,6 @@ Begin VB.Form F_Testing
       _ExtentX        =   16113
       _ExtentY        =   13573
       _Version        =   393217
-      Enabled         =   -1  'True
       TextRTF         =   $"F_Testing.frx":0000
    End
    Begin VB.TextBox txtGoogleSheetId 
@@ -101,7 +100,7 @@ Attribute VB_Exposed = False
 Option Explicit
 Private m_googleSheet As GoogleSheet
 Private Const GOOGLE_CLIENT_ID As String = "154107348377-juocv2nkknla74td3h06934el9je9dru.apps.googleusercontent.com"
-Private Const GOOGLE_CLIENT_SECRET As String = "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"
+Private Const GOOGLE_CLIENT_SECRET As String = "AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAvMtiR1IXlUGG0iwZwm1/cAQAAAAsAAAAYQBiAGEAdABlAGMAIABlAG4AYwByAHkAcAB0AGUAZAAgAGQAYQB0AGEAAAAQZgAAAAEAACAAAAC2F04u+PSxeVhyeM1rk12jtxiYz2kPK1QoBKvUpZlQGwAAAAAOgAAAAAIAACAAAAB0+3zFx42mNhhgTnRWAmHpoOTOTDpjyiC9eCoja2L26VAAAADllFjkC78SluoceFZToeiO4pNPlnFQ5p6lj/TyUYX9U92jFwowKOJWF+52rHzDlb++XRWrCQ9jlVluZpGDz8UhCypFlVLY9RDNu/9O6fEv3kAAAABWE08GpEbdoFryHIfPQ3CwLOYROG1W0oNqCBHuwuNNvyjDm7n2KRx41VwGVBaSnEizHqp/REYkouXb09vkz2tL" '"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"
 Private Const GOOGLE_REDIRECT_URL As String = "http://localhost:5001"
 
 Private Sub cmdCancel_Click()
@@ -218,7 +217,12 @@ Private Sub ProcessMessage(Message As String)
     Call xmlhttp.Open("POST", url, False)
     xmlhttp.setRequestHeader "Content-Type", "application/x-www-form-urlencoded"
     xmlhttp.setRequestHeader "User-Agent", "Firefox 3.6.4"
-    data = "client_id=" & GOOGLE_CLIENT_ID & "&client_secret=" & GOOGLE_CLIENT_SECRET & "&redirect_uri=" & GOOGLE_REDIRECT_URL
+    
+    Dim secretDecrypted As String
+    
+    secretDecrypted = DecryptLMSecret(GOOGLE_CLIENT_SECRET)
+    
+    data = "client_id=" & GOOGLE_CLIENT_ID & "&client_secret=" & secretDecrypted & "&redirect_uri=" & GOOGLE_REDIRECT_URL
     data = data & "&grant_type=authorization_code"
     data = data & "&code=" & authCode
     

@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
-Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.ocx"
 Begin VB.Form F_Testing 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Testing"
@@ -31,12 +31,14 @@ Begin VB.Form F_Testing
       _ExtentX        =   16113
       _ExtentY        =   13573
       _Version        =   393217
+      Enabled         =   -1  'True
       TextRTF         =   $"F_Testing.frx":0000
    End
    Begin VB.TextBox txtGoogleSheetId 
       Height          =   375
       Left            =   1560
       TabIndex        =   2
+      Text            =   "1h4p4kJraA_WiVl5kUiQvW2kXxaXvvdQ7CInDHSTYxaI"
       Top             =   240
       Width           =   7575
    End
@@ -57,6 +59,14 @@ Begin VB.Form F_Testing
       TabIndex        =   0
       Top             =   960
       Width           =   1215
+   End
+   Begin VB.Label Label3 
+      Caption         =   "Note the google sheet is is per year and some of the import specs in the sheet need the year changing"
+      Height          =   495
+      Left            =   840
+      TabIndex        =   7
+      Top             =   720
+      Width           =   4095
    End
    Begin VB.Label lblMessage 
       ForeColor       =   &H000000FF&
@@ -123,7 +133,7 @@ Private Sub cmdOk_Click()
     Dim url As String
     url = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" & GOOGLE_CLIENT_ID & "&scope=https://www.googleapis.com/auth/spreadsheets&response_type=code&redirect_uri=" & GOOGLE_REDIRECT_URL
     Call ShellExecute(Me.hwnd, "open", url, 0, 0, 1)
-    lblMessage.Caption = "A new browser has started, plaase login to google"
+    lblMessage.caption = "A new browser has started, plaase login to google"
     GoTo err_end
   Else
     Call Run
@@ -177,7 +187,7 @@ Private Sub ProcessMessage(Message As String)
   Dim p0 As Long, p1 As Long
   Const MATCH As String = "GET /?code="
   Const MATCH_REFERRER As String = "Referer: http://localhost:5001"
-  lblMessage.Caption = ""
+  lblMessage.caption = ""
   
   p0 = InStr(1, Message, MATCH)
   
@@ -225,7 +235,7 @@ Private Sub ProcessMessage(Message As String)
     p11d32.Testing.GoogleAccessTokenExpiresAt = DateAdd("s", expiresIn - 500, Now)
     Call Run
   Else
-    lblMessage.Caption = "Please try again"
+    lblMessage.caption = "Please try again"
   End If
   
 

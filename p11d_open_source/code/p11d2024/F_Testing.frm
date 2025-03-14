@@ -99,13 +99,15 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 Private m_googleSheet As GoogleSheet
-Private Const GOOGLE_CLIENT_ID As String = "154107348377-juocv2nkknla74td3h06934el9je9dru.apps.googleusercontent.com"
 Private Const GOOGLE_REDIRECT_URL As String = "http://localhost:5001"
 
 Private Sub cmdCancel_Click()
   Call Unload(Me)
 End Sub
 
+Private Function ClientID() As String
+    ClientID = "154107348377-juocv2nkknla74td3h06934el9je9dru.apps.googleusercontent.com"
+End Function
 Private Sub cmdOk_Click()
   Dim results As String
   Dim googleSheetId As String
@@ -129,7 +131,7 @@ Private Sub cmdOk_Click()
   
   If (p11d32.Testing.GoggleAccessTokenExpired) Then
     Dim url As String
-    url = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" & GOOGLE_CLIENT_ID & "&scope=https://www.googleapis.com/auth/spreadsheets&response_type=code&redirect_uri=" & GOOGLE_REDIRECT_URL
+    url = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" & ClientID() & "&scope=https://www.googleapis.com/auth/spreadsheets&response_type=code&redirect_uri=" & GOOGLE_REDIRECT_URL
     Call ShellExecute(Me.hwnd, "open", url, 0, 0, 1)
     lblMessage.caption = "A new browser has started, plaase login to google"
     GoTo err_end
@@ -221,7 +223,7 @@ Private Sub ProcessMessage(Message As String)
     
     secretDecrypted = DecryptLMSecret("AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAvMtiR1IXlUGG0iwZwm1/cAQAAAAsAAAAYQBiAGEAdABlAGMAIABlAG4AYwByAHkAcAB0AGUAZAAgAGQAYQB0AGEAAAAQZgAAAAEAACAAAAC2F04u+PSxeVhyeM1rk12jtxiYz2kPK1QoBKvUpZlQGwAAAAAOgAAAAAIAACAAAAB0+3zFx42mNhhgTnRWAmHpoOTOTDpjyiC9eCoja2L26VAAAADllFjkC78SluoceFZToeiO4pNPlnFQ5p6lj/TyUYX9U92jFwowKOJWF+52rHzDlb++XRWrCQ9jlVluZpGDz8UhCypFlVLY9RDNu/9O6fEv3kAAAABWE08GpEbdoFryHIfPQ3CwLOYROG1W0oNqCBHuwuNNvyjDm7n2KRx41VwGVBaSnEizHqp/REYkouXb09vkz2tL")
     
-    data = "client_id=" & GOOGLE_CLIENT_ID & "&client_secret=" & secretDecrypted & "&redirect_uri=" & GOOGLE_REDIRECT_URL
+    data = "client_id=" & ClientID() & "&client_secret=" & secretDecrypted & "&redirect_uri=" & GOOGLE_REDIRECT_URL
     data = data & "&grant_type=authorization_code"
     data = data & "&code=" & authCode
     
